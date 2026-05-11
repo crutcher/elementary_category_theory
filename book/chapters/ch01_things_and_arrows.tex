@@ -19,7 +19,6 @@ Formal Restatement first, then work through the chapter as a commentary on it.
 \section{What Category Theory Is About}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\InformalLabel
 \subsection{Informally: The Central Idea}
 
 Category theory is the study of \term{things} and \term{arrows between things}.
@@ -41,7 +40,6 @@ close.
 This is a radical idea, and we will return to it many times.
 
 % ─── Expanding ──────────────────────────────────────────────────────────────
-\ExpandingLabel
 \subsection{Expanding: Three Everyday Pictures}
 
 Let's build the intuition with three examples that have nothing to do with
@@ -123,7 +121,6 @@ situations have the same shape.
 \end{example}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
-\FormalizingLabel
 \subsection{Formalizing: Inside Versus Outside}
 
 There is a habit of mind that category theory requires, and it is worth
@@ -177,7 +174,6 @@ shapes every definition we write.
 \label{sec:objects-morphisms}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\InformalLabel
 \subsection{Informally: Naming the Pieces}
 
 The \emph{things} in category theory have an official name: \term{objects}.
@@ -195,7 +191,6 @@ Four words: objects, morphisms, domain, codomain. Everything else in category
 theory is built from these four words.
 
 % ─── Expanding ──────────────────────────────────────────────────────────────
-\ExpandingLabel
 \subsection{Expanding: Reading Morphism Notation}
 
 Let's slow down and practice reading $f : A \to B$, because it will appear on
@@ -261,7 +256,6 @@ confusion that comes from reading diagrams too quickly.
 \end{readernote}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
-\FormalizingLabel
 \subsection{Formalizing: What Morphisms Are Not}
 
 Several natural assumptions about morphisms turn out to be wrong. Let's clear
@@ -287,7 +281,6 @@ Not every pair of objects is connected. Not every city has a direct train to
 every other city.
 
 % ─── Reorganizing ───────────────────────────────────────────────────────────
-\ReorganizingLabel
 \subsection{Reorganizing: The Earlier Examples in Formal Terms}
 
 Now that we have the vocabulary, let's restate the examples from the
@@ -314,7 +307,6 @@ In every case, the informal description maps directly onto the formal
 vocabulary. No facts changed; only the language did.
 
 % ─── Simplifying ────────────────────────────────────────────────────────────
-\SimplifyingLabel
 \subsection{Simplifying: Four Phrases, Four Terms}
 
 The informal sentences we used have formal counterparts:
@@ -338,7 +330,6 @@ English phrases with four mathematical terms. The terms carry the same meaning
 in any context.
 
 % ─── Formally ───────────────────────────────────────────────────────────────
-\FormallyLabel
 \subsection{Formally: Morphisms and Hom-Sets}
 
 A \term{morphism} $f : A \to B$ is determined by three data: its domain~$A$,
@@ -366,7 +357,6 @@ morphism between every pair of objects. The definition requires only that
 \label{sec:composition}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\InformalLabel
 \subsection{Informally: Chaining Arrows}
 
 If there is a morphism from $A$ to $B$, and a morphism from $B$ to $C$, then
@@ -388,7 +378,6 @@ We write the composed morphism as $g \circ f$, read ``$g$ after $f$.'' It goes
 from $A$ to $C$. The order reads right to left: first $f$, then $g$.
 
 % ─── Expanding ──────────────────────────────────────────────────────────────
-\ExpandingLabel
 \subsection{Expanding: Practicing Composition}
 
 \begin{dialog}
@@ -435,7 +424,6 @@ $A \to D$. This is not a coincidence --- it is a law called \term{associativity}
 \end{example}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
-\FormalizingLabel
 \subsection{Formalizing: Associativity}
 
 Associativity says that when composing a chain of three morphisms, the
@@ -470,7 +458,6 @@ Composition is also a \emph{partial} operation: $g \circ f$ is defined
 are the type-checking mechanism that tells you which compositions are legal.
 
 % ─── Reorganizing ───────────────────────────────────────────────────────────
-\ReorganizingLabel
 \subsection{Reorganizing: Recipe Composition in Formal Terms}
 
 In the recipe example, $f : \text{chop} \to \text{sauté}$ and
@@ -488,7 +475,6 @@ $h \circ g \circ f$. Associativity says the last one is unambiguous:
 $(h \circ g) \circ f = h \circ (g \circ f) = h \circ g \circ f$.
 
 % ─── Simplifying ────────────────────────────────────────────────────────────
-\SimplifyingLabel
 \subsection{Simplifying: The Composition Rule}
 
 The entire informal discussion of chaining compresses to two lines:
@@ -504,7 +490,6 @@ second line says that the order of grouping doesn't matter. Everything else
 we said was commentary on these two lines.
 
 % ─── Formally ───────────────────────────────────────────────────────────────
-\FormallyLabel
 \subsection{Formally: Composition as a Partial Operation}
 
 Composition is a family of functions
@@ -533,7 +518,6 @@ operation before you can understand its neutral element.
 \label{sec:identity}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\InformalLabel
 \subsection{Informally: Every Object Has a ``Stay Put'' Arrow}
 
 Every object has a special morphism that goes from \emph{itself to itself} and
@@ -554,7 +538,6 @@ identity gives back the original morphism unchanged. For any $f : A \to B$:
 \end{center}
 
 % ─── Expanding ──────────────────────────────────────────────────────────────
-\ExpandingLabel
 \subsection{Expanding: The ``Do Nothing'' Connection}
 
 \begin{example}{The Optional Rest Step}
@@ -604,7 +587,6 @@ look inside an object, something has gone wrong.
 \end{readernote}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
-\FormalizingLabel
 \subsection{Formalizing: Neutrality}
 
 The identity morphism is characterized entirely by the equations it satisfies.
@@ -620,7 +602,6 @@ These are called the \term{unit laws}. Together they say: composing with the
 identity on the appropriate side leaves any morphism unchanged.
 
 % ─── Reorganizing ───────────────────────────────────────────────────────────
-\ReorganizingLabel
 \subsection{Reorganizing: Restating the Examples Formally}
 
 \textbf{Transit.} The ``stay at Station A'' route is $\mathrm{id}_A \in
@@ -636,7 +617,6 @@ any step leaves that step unchanged.
 In both cases, the informal description maps exactly onto the unit laws.
 
 % ─── Simplifying ────────────────────────────────────────────────────────────
-\SimplifyingLabel
 \subsection{Simplifying: Two Laws, One Line}
 
 The two unit laws collapse to a single display:
@@ -649,7 +629,6 @@ proof shows that $\mathrm{id}_A$ is the \emph{only} morphism satisfying this
 condition.
 
 % ─── Formally ───────────────────────────────────────────────────────────────
-\FormallyLabel
 \subsection{Formally: Identity as Part of the Data}
 
 The identity is not derived --- it is specified. Part of the data of a category
@@ -692,7 +671,6 @@ and $f \circ \mathrm{id}_A = f$.
 \label{sec:commutative-diagrams}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\InformalLabel
 \subsection{Informally: When All Paths Agree}
 
 A \term{commutative diagram} is a diagram of objects and morphisms in which
@@ -713,7 +691,6 @@ This diagram \emph{commutes} when $g \circ f = h$. Two paths from $A$ to $C$;
 one composite result.
 
 % ─── Expanding ──────────────────────────────────────────────────────────────
-\ExpandingLabel
 \subsection{Expanding: Reading Commutative Diagrams}
 
 \begin{dialog}
@@ -784,7 +761,6 @@ composed morphisms are equal. Read them as equations, not just pictures.
 \end{readernote}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
-\FormalizingLabel
 \subsection{Formalizing: Diagrams as Equations}
 
 Every commutative diagram is shorthand for a collection of equations between
@@ -806,7 +782,6 @@ it does. When in doubt, check whether the author says ``the following diagram
 commutes'' or just ``consider the following diagram.''
 
 % ─── Reorganizing ───────────────────────────────────────────────────────────
-\ReorganizingLabel
 \subsection{Reorganizing: Diagrams and Their Equations}
 
 \textbf{Triangle.} The triangle with $f : A \to B$, $g : B \to C$,
@@ -837,7 +812,6 @@ $r \circ g = t \circ q$. The outer rectangle commutes:
 $r \circ g \circ f = t \circ s \circ p$. This is the \term{pasting lemma}.
 
 % ─── Simplifying ────────────────────────────────────────────────────────────
-\SimplifyingLabel
 \subsection{Simplifying: Commutativity in One Line}
 
 A diagram commutes if and only if: for every pair of objects $X$, $Y$ and
@@ -852,7 +826,6 @@ are equal.
 All of our examples are instances of this single condition.
 
 % ─── Formally ───────────────────────────────────────────────────────────────
-\FormallyLabel
 \subsection{Formally: The Pasting Lemma}
 
 \formalnote{Pasting lemma}
