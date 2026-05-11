@@ -78,7 +78,16 @@ Design rules:
 
 ---
 
-## Implementation plan for next edit batch
+## Pending feedback to integrate
+
+### preamble.tex — paper size (v0.8)
+- Switch geometry from 6×9in to A4 (`a4paper`, 210mm×297mm).
+- Proposed margins: top/bottom 25mm, inner 30mm, outer 25mm.
+- No content changes needed.
+
+---
+
+## Implementation plan for next edit batch (COMPLETED in v0.7)
 
 This batch requires a **new feature branch**. Changes are significant enough
 that the existing ch01 and preamble both need substantial revision.
