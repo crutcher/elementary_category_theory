@@ -10,7 +10,7 @@ feedback as the project evolves. See `history/` for the immutable record._
 - **Branch:** `claude/category-theory-book-mdgQ3`
 - **Last build round:** v0.1 (initial scaffold)
 - **Chapters written:** Preface, Chapter 1 (Things and Arrows)
-- **Chapters planned:** 2–8 (see roadmap below)
+- **Chapters planned:** 2+ (see roadmap below)
 
 ---
 
@@ -25,50 +25,112 @@ feedback as the project evolves. See `history/` for the immutable record._
 
 ---
 
-## Structural decisions pending (high priority)
+## Book goal (confirmed v0.5)
 
-### Cyclic return structure (v0.4) — MAJOR
+Full formal understanding of category theory, its complete suite of theorems,
+and then its connections to other branches of mathematics — in that order.
 
-The expansion arc needs a corresponding compression arc. Each section and
-chapter should complete a full cycle: Core → expand out → compress back →
-Axiomatic Core. The purpose is to train the reader to read the formal/axiomatic
-form fluently by the time they finish a chapter.
+Not a popularization. The goal is an **incremental retraining ramp**: long,
+smooth, mildly entertaining. Cyclic redundancy is a feature. Readers are
+expected to restart frequently; concept acquisition is optimized over coverage
+speed. Connections to other math fields appear only after CT foundations are
+built from scratch.
 
-**Proposed section shape:**
+---
+
+## Confirmed structural design (v0.4 + v0.5)
+
+### The learning cycle
+
+Each concept is walked through a cycle of labels drawn from this vocabulary:
+
 ```
-Core → Exp1 → Exp2 → Exp3 → [Compression2] → [Compression1] → [Axiomatic Core]
+INFORMALLY → EXPANDING → FORMALIZING → REORGANIZING → SIMPLIFYING → FORMALLY
 ```
 
-**Proposed chapter shape:**
-- Sections follow the above cycle
-- Chapter closes with a formal "Axiomatic Restatement" section:
-  all definitions and laws in pure notation, no prose
+- **INFORMALLY**: Intuition, everyday-language statement
+- **EXPANDING**: Examples, internal dialog, multiple modalities — walking in
+- **FORMALIZING**: Precise definitions and notation introduced
+- **REORGANIZING**: Earlier examples restated *in* the new formalism
+- **SIMPLIFYING**: Annotated compression — substituting notation for prose
+- **FORMALLY**: The CT-idiomatic form a trained reader reads fluently
 
-**Open sub-questions before applying:**
-1. Compression levels within sections, or only at chapter level?
-   (Section-level = more granular; chapter-level-only = less repetitive)
-2. Label names: "READING BACK" for section compressions?
-   "FORMAL RESTATEMENT" for chapter-end?
-3. Does the current summary box survive alongside the formal restatement?
-   (Proposal: yes — summary = human recap, restatement = canonical form)
+Design rules:
+- This is a pattern, not a rigid template. Use as many steps as the concept
+  warrants; skip steps that add no value for a given concept.
+- Labels come from the vocabulary above — don't invent new ones ad hoc.
+- The cycle is acknowledged openly to the reader.
 
-**Status:** Awaiting discussion/decision before any book edits.
+### Chapter bookends (when chapter has multiple cycles)
+
+- **Overview** (chapter intro): Informal/intuitive starting point — where
+  the reader is *before* the chapter. Collects the informal statements.
+- **Restatement** (chapter conclusion): CT-idiomatic compressed form —
+  where the reader arrives *after* all cycles. Collects the formal statements.
+- Overview and Restatement are mirror images: same content, different language.
+- When a chapter or section grouping has **only one cycle**, no bookends needed.
+
+### Chapter ending structure
+
+1. **Summary box** — human-language recap (for first-pass skimmers and review)
+2. **Formal Restatement section** — CT-idiomatic definitions and laws in pure
+   notation; no prose expansion; the conclusion of the chapter's cycle arc
+
+---
+
+## Implementation plan for next edit batch
+
+This batch requires a **new feature branch**. Changes are significant enough
+that the existing ch01 and preamble both need substantial revision.
+
+### preamble.tex changes
+
+1. **Font size**: `\documentclass[11pt]` → `[10pt]` (v0.3)
+2. **New label commands** for the full cycle vocabulary:
+   - `\InformalLabel` (replaces or aliases `\CoreLabel`)
+   - `\ExpandingLabel` (replaces `\ExpOneLabel`)
+   - `\FormalizingLabel` (replaces `\ExpTwoLabel` or `\ExpThreeLabel`)
+   - `\ReorganizingLabel`
+   - `\SimplifyingLabel`
+   - `\FormallyLabel`
+   - Keep old aliases for backward compat during transition
+3. **New environments**:
+   - `overviewbox` — chapter intro bookend
+   - `formalrestatement` — chapter conclusion bookend (distinct from summarybox)
+
+### ch00_preface.tex changes
+
+- Update the description of the section structure to reflect the full cycle
+  (expand + compress) and the re-reader optimization goal.
+- Be explicit that the cycle is intentional and openly labeled.
+
+### ch01_things_and_arrows.tex changes
+
+1. **Temperature notation** (v0.2): `$32°$` → `$32°\text{F}$` etc.
+   _(awaiting F vs C confirmation)_
+2. **Add chapter Overview** (intro bookend) — the informal statements of
+   objects, morphisms, composition, identity, commutative diagrams in plain
+   language, before the first section.
+3. **Retrofit sections** to use cycle labels and add compression/return steps:
+   - Each section that has 3+ expansion levels gets Reorganizing + Simplifying
+     steps before the Formally step.
+   - Sections with 1–2 expansion levels: add at minimum a Simplifying step.
+4. **Add Formal Restatement** (conclusion bookend) — the axioms of a category
+   stated in CT-idiomatic notation with commutative diagram form of the laws.
+5. **Keep the existing summary box** before the Formal Restatement.
 
 ---
 
 ## Open questions (accumulated)
 
-_From v0.1 self-assessment:_
-
-- [ ] Tone calibration: are Core sections accessible enough? The blunt opening
-      ("Category theory is the study of things and arrows between things") may
-      need one more sentence of context. Watch for reader feedback.
-- [ ] Composition notation: use right-to-left ($g \circ f$, standard math) or
-      also introduce left-to-right ($f ; g$, CS-friendly)? Deferred. Revisit
-      when writing Chapter 3 (Functors).
-- [ ] Commutative diagrams §1.5 Exp 1: the English/French sentence example may
-      be too abstract. Consider a second, more concrete example.
-- [ ] Appendix: "How to read a diagram" — a full annotated worked example.
+- [ ] Temperature notation: F or C? (v0.2) — **awaiting user confirmation**
+- [ ] Tone calibration: Core/Informal sections accessible enough? Watch for
+      reader feedback after next revision.
+- [ ] Composition notation: right-to-left ($g \circ f$) vs also introducing
+      left-to-right ($f ; g$)? Deferred to Chapter 3.
+- [ ] Commutative diagrams §1.5 Exp 1: English/French example may be too
+      abstract; consider a second concrete example in next revision.
+- [ ] Appendix: "How to read a diagram" — annotated worked example.
 - [ ] Appendix: Glossary.
 
 ---
@@ -85,20 +147,7 @@ _From v0.1 self-assessment:_
 | 6  | Limits and Colimits | Products, coproducts, equalizers, pullbacks |
 | 7  | Adjunctions | The fundamental relationship between functors |
 | 8  | Monads | Adjunctions that compose |
-
----
-
-## Pending feedback to integrate
-
-### preamble.tex — font size (v0.3)
-- Change `\documentclass[11pt,oneside]{book}` → `[10pt,oneside]`.
-- If still too large after render, escalate to 9.5pt via `fontsize` package.
-
-### Ch 1 §1.2 Exp 1 — temperature notation (v0.2)
-- Replace bare `$32°$` etc. with explicit `$32°\text{F}$` (Fahrenheit preferred;
-  values 32/68/98/212 are distinctive and carry mnemonic anchors).
-- Celsius alternative: 0/20/37/100 — equally valid, less US-centric.
-- **Awaiting confirmation of F vs C preference before applying.**
+| 9+ | Theorems and connections | Yoneda, adjoint functor theorems, connections to algebra/topology/logic |
 
 ---
 
@@ -106,8 +155,13 @@ _From v0.1 self-assessment:_
 
 | Date | Decision | Rationale |
 |------|----------|-----------|
-| 2026-05-11 | No borrowed math examples in Ch 1 | Core project constraint |
+| 2026-05-11 | No borrowed math examples until foundations built | Core project constraint |
 | 2026-05-11 | Four expansion levels with colored chip labels | Visually scannable |
 | 2026-05-11 | `\CoreLabel` before subsection heading | First thing seen when skimming |
-| 2026-05-11 | Right-to-left composition notation ($g \circ f$) | Standard math convention; revisit for CS audience |
-| 2026-05-11 | Feedback = dialog, not trigger for immediate rewrite | User directive; expensive cycles to minimize |
+| 2026-05-11 | Right-to-left composition ($g \circ f$) | Standard math; revisit Ch3 |
+| 2026-05-11 | Feedback = dialog, not trigger for immediate rewrite | User directive |
+| 2026-05-11 | Goal: full formal CT + theorems + math connections | User directive v0.5 |
+| 2026-05-11 | Full cycle: Informally→Expanding→Formalizing→Reorganizing→Simplifying→Formally | User directive v0.5 |
+| 2026-05-11 | Chapter bookends (Overview + Restatement) when multiple cycles | User directive v0.5 |
+| 2026-05-11 | Summary box + Formal Restatement both kept | User directive v0.5 |
+| 2026-05-11 | Cycle openly acknowledged to reader | User directive v0.5 |
