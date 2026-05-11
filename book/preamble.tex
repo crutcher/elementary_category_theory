@@ -20,19 +20,31 @@
 \usepackage{setspace}
 \setstretch{1.15}
 \usepackage{parskip}
-\setlength{\parskip}{0.6em}
+\setlength{\parskip}{0.5em}
 \setlength{\parindent}{0pt}
 
 % Colors
 \usepackage[dvipsnames,svgnames]{xcolor}
-\definecolor{CoreColor}{HTML}{1A3A5C}
-\definecolor{Exp1Color}{HTML}{1D6B3A}
-\definecolor{Exp2Color}{HTML}{7B3F00}
-\definecolor{Exp3Color}{HTML}{4A0072}
+
+% ── Cycle-arc colors ────────────────────────────────────────────────────────
+% Expanding outward:
+\definecolor{InformalColor}{HTML}{2C4B7C}   % medium navy — calm starting point
+\definecolor{ExpandingColor}{HTML}{1D6B3A}  % forest green — growing, opening
+\definecolor{FormalizingColor}{HTML}{7B3F00}% amber brown  — grounding, defining
+% Returning inward:
+\definecolor{ReorganizingColor}{HTML}{6B2D8B}% purple — restructuring
+\definecolor{SimplifyingColor}{HTML}{006868} % teal   — condensing
+\definecolor{FormallyColor}{HTML}{1A1A4A}   % dark navy — final, authoritative
+
+% Auxiliary colors
 \definecolor{DialogBg}{HTML}{F5F0E8}
 \definecolor{DialogBorder}{HTML}{C8A86B}
 \definecolor{NoteBg}{HTML}{EEF4FF}
 \definecolor{NoteBorder}{HTML}{6B8EC8}
+\definecolor{OverviewBg}{HTML}{EDF4F0}
+\definecolor{OverviewBorder}{HTML}{1D6B3A}
+\definecolor{RestBg}{HTML}{EEEEF8}
+\definecolor{RestBorder}{HTML}{1A1A4A}
 \definecolor{TermColor}{HTML}{1A3A5C}
 
 % Math
@@ -52,55 +64,82 @@
 \usepackage{tcolorbox}
 \tcbuselibrary{skins,breakable,theorems}
 
-% Section heading colors
+% Section heading colors (use InformalColor as the primary heading color)
 \usepackage{titlesec}
 \titleformat{\chapter}[display]
-  {\normalfont\Large\bfseries\color{CoreColor}}
+  {\normalfont\Large\bfseries\color{InformalColor}}
   {\chaptertitlename\ \thechapter}{12pt}{\Huge}
 \titleformat{\section}
-  {\normalfont\large\bfseries\color{CoreColor}}
+  {\normalfont\large\bfseries\color{InformalColor}}
   {\thesection}{1em}{}
 \titleformat{\subsection}
-  {\normalfont\normalsize\bfseries\color{Exp1Color}}
+  {\normalfont\normalsize\bfseries\color{InformalColor!70!black}}
   {\thesubsection}{1em}{}
 \titleformat{\subsubsection}
-  {\normalfont\normalsize\bfseries\color{Exp2Color}}
+  {\normalfont\normalsize\bfseries\color{FormalizingColor}}
   {\thesubsubsection}{1em}{}
 
-% A fourth level for Expansion 3
-\newcounter{deepexpand}[subsubsection]
-\newcommand{\deepexpandsection}[1]{%
-  \refstepcounter{deepexpand}%
-  \vspace{0.8em}%
-  {\noindent\normalfont\normalsize\bfseries\color{Exp3Color}%
-    Deep Expansion \thesubsubsection.\thedeepexpand\quad #1}%
-  \vspace{0.3em}\par%
+% Sub-level within Formally sections
+\newcounter{formalnote}[subsubsection]
+\newcommand{\formalnote}[1]{%
+  \refstepcounter{formalnote}%
+  \vspace{0.6em}%
+  {\noindent\normalfont\small\bfseries\color{FormallyColor}%
+    \thesubsubsection.\theformalnote\quad #1}%
+  \vspace{0.2em}\par%
 }
 
-% ── Expansion-level labels ──────────────────────────────────────────────────
-% These appear as colored tags before expansion sections to make the
-% staggered structure immediately visible to the reader.
+% ── Cycle-step label commands ────────────────────────────────────────────────
+% Each label is a colored chip placed before a subsection heading.
+% They signal which phase of the learning cycle the subsection occupies.
+% Labels are drawn from a small vocabulary and reused across chapters.
 
-\newcommand{\CoreLabel}{%
-  \noindent\colorbox{CoreColor}{\color{white}\footnotesize\bfseries\strut\ CORE\ }%
-  \vspace{0.3em}\par}
+\newcommand{\CycleLabel}[2]{%
+  \vspace{0.5em}%
+  \noindent\colorbox{#1}{\color{white}\footnotesize\bfseries\strut\ #2\ }%
+  \vspace{0.25em}\par%
+}
 
-\newcommand{\ExpOneLabel}{%
-  \noindent\colorbox{Exp1Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 1\ }%
-  \vspace{0.3em}\par}
+\newcommand{\InformalLabel}   {\CycleLabel{InformalColor}   {INFORMALLY}}
+\newcommand{\ExpandingLabel}  {\CycleLabel{ExpandingColor}  {EXPANDING}}
+\newcommand{\FormalizingLabel}{\CycleLabel{FormalizingColor}{FORMALIZING}}
+\newcommand{\ReorganizingLabel}{\CycleLabel{ReorganizingColor}{REORGANIZING}}
+\newcommand{\SimplifyingLabel}{\CycleLabel{SimplifyingColor}{SIMPLIFYING}}
+\newcommand{\FormallyLabel}   {\CycleLabel{FormallyColor}   {FORMALLY}}
 
-\newcommand{\ExpTwoLabel}{%
-  \noindent\colorbox{Exp2Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 2\ }%
-  \vspace{0.3em}\par}
+% ── Chapter bookend environments ─────────────────────────────────────────────
 
-\newcommand{\ExpThreeLabel}{%
-  \noindent\colorbox{Exp3Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 3\ }%
-  \vspace{0.3em}\par}
+% Overview box: appears at the top of a chapter that contains multiple cycles.
+% Describes in informal terms where the reader is before the chapter begins.
+\newtcolorbox{overviewbox}{
+  enhanced,
+  breakable,
+  colback=OverviewBg,
+  colframe=OverviewBorder,
+  fonttitle=\bfseries\small,
+  title={Chapter Overview},
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=OverviewBorder, colframe=OverviewBorder,
+    fontupper=\color{white}\bfseries\small},
+}
+
+% Formal restatement box: appears at the end of a chapter that contains
+% multiple cycles. Collects all definitions and laws in CT-idiomatic form.
+\newtcolorbox{formalrestatement}{
+  enhanced,
+  breakable,
+  colback=RestBg,
+  colframe=RestBorder,
+  fonttitle=\bfseries\small,
+  title={Formal Restatement},
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=RestBorder, colframe=RestBorder,
+    fontupper=\color{white}\bfseries\small},
+}
 
 % ── Internal-dialog box ─────────────────────────────────────────────────────
-% Represents the annotated internal monologue a reader should develop
-% while working through diagrams and definitions.
-
 \newtcolorbox{dialog}[1][]{
   enhanced,
   breakable,
@@ -115,7 +154,7 @@
   #1
 }
 
-% ── Margin note (reader annotation reminder) ────────────────────────────────
+% ── Reader-annotation box ────────────────────────────────────────────────────
 \newtcolorbox{readernote}[1][]{
   enhanced,
   breakable,
@@ -130,32 +169,32 @@
   #1
 }
 
-% ── Key-term command ────────────────────────────────────────────────────────
-\newcommand{\term}[1]{\textbf{\color{TermColor}#1}}
-
 % ── Example environment ─────────────────────────────────────────────────────
 \newtcolorbox{example}[2][]{
   enhanced,
   breakable,
   colback=white,
-  colframe=CoreColor!40,
+  colframe=InformalColor!40,
   fonttitle=\bfseries\small,
   title={Example: #2},
   left=6pt, right=6pt, top=4pt, bottom=4pt,
   #1
 }
 
-% ── Summary box ─────────────────────────────────────────────────────────────
+% ── Chapter summary box ──────────────────────────────────────────────────────
 \newtcolorbox{summarybox}[1][]{
   enhanced,
   breakable,
-  colback=CoreColor!5,
-  colframe=CoreColor,
+  colback=InformalColor!5,
+  colframe=InformalColor,
   fonttitle=\bfseries,
   title={Chapter Summary},
   left=8pt, right=8pt, top=6pt, bottom=6pt,
   #1
 }
+
+% ── Key-term command ────────────────────────────────────────────────────────
+\newcommand{\term}[1]{\textbf{\color{TermColor}#1}}
 
 % Hyperlinks (load last)
 \usepackage[hidelinks,
