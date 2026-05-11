@@ -59,7 +59,11 @@ _From v0.1 self-assessment:_
 
 ## Pending feedback to integrate
 
-_None yet. Awaiting user feedback on Chapter 1._
+### Ch 1 §1.2 Exp 1 — temperature notation (v0.2)
+- Replace bare `$32°$` etc. with explicit `$32°\text{F}$` (Fahrenheit preferred;
+  values 32/68/98/212 are distinctive and carry mnemonic anchors).
+- Celsius alternative: 0/20/37/100 — equally valid, less US-centric.
+- **Awaiting confirmation of F vs C preference before applying.**
 
 ---
 
