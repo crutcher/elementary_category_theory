@@ -106,8 +106,8 @@ that the existing ch01 and preamble both need substantial revision.
 
 ### ch01_things_and_arrows.tex changes
 
-1. **Temperature notation** (v0.2): `$32°$` → `$32°\text{F}$` etc.
-   _(awaiting F vs C confirmation)_
+1. **Temperature notation** (v0.2, v0.6): use Celsius —
+   `$0°\text{C}$`, `$20°\text{C}$`, `$37°\text{C}$`, `$100°\text{C}$`
 2. **Add chapter Overview** (intro bookend) — the informal statements of
    objects, morphisms, composition, identity, commutative diagrams in plain
    language, before the first section.
@@ -123,7 +123,7 @@ that the existing ch01 and preamble both need substantial revision.
 
 ## Open questions (accumulated)
 
-- [ ] Temperature notation: F or C? (v0.2) — **awaiting user confirmation**
+- [x] Temperature notation: Celsius confirmed (v0.6)
 - [ ] Tone calibration: Core/Informal sections accessible enough? Watch for
       reader feedback after next revision.
 - [ ] Composition notation: right-to-left ($g \circ f$) vs also introducing
