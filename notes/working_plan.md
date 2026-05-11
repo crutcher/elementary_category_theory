@@ -59,6 +59,10 @@ _From v0.1 self-assessment:_
 
 ## Pending feedback to integrate
 
+### preamble.tex — font size (v0.3)
+- Change `\documentclass[11pt,oneside]{book}` → `[10pt,oneside]`.
+- If still too large after render, escalate to 9.5pt via `fontsize` package.
+
 ### Ch 1 §1.2 Exp 1 — temperature notation (v0.2)
 - Replace bare `$32°$` etc. with explicit `$32°\text{F}$` (Fahrenheit preferred;
   values 32/68/98/212 are distinctive and carry mnemonic anchors).
