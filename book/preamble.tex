@@ -7,13 +7,12 @@
 
 % Page geometry
 \usepackage[
-  paperwidth=6in,
-  paperheight=9in,
-  top=0.85in,
-  bottom=0.85in,
-  inner=0.75in,
-  outer=0.65in,
-  marginparwidth=0in,
+  a4paper,
+  top=25mm,
+  bottom=25mm,
+  inner=30mm,
+  outer=25mm,
+  marginparwidth=0mm,
 ]{geometry}
 
 % Typography
@@ -89,23 +88,16 @@
   \vspace{0.2em}\par%
 }
 
-% ── Cycle-step label commands ────────────────────────────────────────────────
-% Each label is a colored chip placed before a subsection heading.
-% They signal which phase of the learning cycle the subsection occupies.
-% Labels are drawn from a small vocabulary and reused across chapters.
+% ── Cycle-step label commands (no-ops) ──────────────────────────────────────
+% The cycle structure is carried by subsection headings; chip labels removed.
 
-\newcommand{\CycleLabel}[2]{%
-  \vspace{0.5em}%
-  \noindent\colorbox{#1}{\color{white}\footnotesize\bfseries\strut\ #2\ }%
-  \vspace{0.25em}\par%
-}
-
-\newcommand{\InformalLabel}   {\CycleLabel{InformalColor}   {INFORMALLY}}
-\newcommand{\ExpandingLabel}  {\CycleLabel{ExpandingColor}  {EXPANDING}}
-\newcommand{\FormalizingLabel}{\CycleLabel{FormalizingColor}{FORMALIZING}}
-\newcommand{\ReorganizingLabel}{\CycleLabel{ReorganizingColor}{REORGANIZING}}
-\newcommand{\SimplifyingLabel}{\CycleLabel{SimplifyingColor}{SIMPLIFYING}}
-\newcommand{\FormallyLabel}   {\CycleLabel{FormallyColor}   {FORMALLY}}
+\newcommand{\CycleLabel}[2]{}
+\newcommand{\InformalLabel}{}
+\newcommand{\ExpandingLabel}{}
+\newcommand{\FormalizingLabel}{}
+\newcommand{\ReorganizingLabel}{}
+\newcommand{\SimplifyingLabel}{}
+\newcommand{\FormallyLabel}{}
 
 % ── Chapter bookend environments ─────────────────────────────────────────────
 
