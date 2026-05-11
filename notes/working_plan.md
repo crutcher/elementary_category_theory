@@ -25,6 +25,37 @@ feedback as the project evolves. See `history/` for the immutable record._
 
 ---
 
+## Structural decisions pending (high priority)
+
+### Cyclic return structure (v0.4) — MAJOR
+
+The expansion arc needs a corresponding compression arc. Each section and
+chapter should complete a full cycle: Core → expand out → compress back →
+Axiomatic Core. The purpose is to train the reader to read the formal/axiomatic
+form fluently by the time they finish a chapter.
+
+**Proposed section shape:**
+```
+Core → Exp1 → Exp2 → Exp3 → [Compression2] → [Compression1] → [Axiomatic Core]
+```
+
+**Proposed chapter shape:**
+- Sections follow the above cycle
+- Chapter closes with a formal "Axiomatic Restatement" section:
+  all definitions and laws in pure notation, no prose
+
+**Open sub-questions before applying:**
+1. Compression levels within sections, or only at chapter level?
+   (Section-level = more granular; chapter-level-only = less repetitive)
+2. Label names: "READING BACK" for section compressions?
+   "FORMAL RESTATEMENT" for chapter-end?
+3. Does the current summary box survive alongside the formal restatement?
+   (Proposal: yes — summary = human recap, restatement = canonical form)
+
+**Status:** Awaiting discussion/decision before any book edits.
+
+---
+
 ## Open questions (accumulated)
 
 _From v0.1 self-assessment:_
