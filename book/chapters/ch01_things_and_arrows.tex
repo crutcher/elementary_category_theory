@@ -1,0 +1,821 @@
+\chapter{Things and Arrows}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{What Category Theory Is About}
+\label{sec:what-ct-is-about}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\CoreLabel
+\subsection{Core: The Central Idea}
+
+Category theory is the study of \term{things} and \term{arrows between things}.
+
+That's it. That's the whole subject.
+
+Of course, ``things'' and ``arrows'' are deliberately vague words. The power
+of category theory comes precisely from that vagueness. A thing can be a
+recipe, a city, a sentence, a number, a proof, or a process. An arrow can be
+a road, a translation, a logical implication, a comparison, or a
+transformation of any kind.
+
+What category theory cares about is not \emph{what things are made of
+inside}, but \emph{how they connect to other things}. Two things that connect
+to everything else in exactly the same way are, for the purposes of category
+theory, \emph{the same thing}---even if they look completely different
+up close.
+
+This is a radical idea, and we will return to it many times.
+
+% ─── Expansion 1 ────────────────────────────────────────────────────────────
+\ExpOneLabel
+\subsection{Expansion 1: Three Everyday Pictures}
+
+Let's build the intuition with three examples that have nothing to do with
+mathematics.
+
+\begin{example}{The Transit Map}
+A city has train stations. Between stations there are train lines. If you want
+to get from Station~A to Station~C, and there is a line from A to B and a line
+from B to C, you can travel A~$\to$~B~$\to$~C.
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=2.5em]
+  A \arrow[r, "\text{line 1}"] & B \arrow[r, "\text{line 2}"] & C
+\end{tikzcd}
+\end{center}
+\medskip
+
+The \emph{things} are the stations. The \emph{arrows} are the train lines.
+Notice: we don't care what is inside a station---its architecture, its size,
+whether it has a coffee shop. We only care how it connects.
+\end{example}
+
+\begin{dialog}
+When I see a diagram like the one above, I ask myself three questions:
+\begin{enumerate}
+  \item \emph{What are the dots?} Here: train stations.
+  \item \emph{What are the arrows?} Here: train lines you can ride.
+  \item \emph{Can I follow a path?} Here: yes, A to B to C.
+\end{enumerate}
+These three questions apply to \emph{every} diagram in this book. Make them
+into a habit.
+\end{dialog}
+
+\begin{example}{The Recipe Steps}
+A recipe is a sequence of steps. ``Chop onions'' must happen before ``sauté
+onions.'' ``Sauté onions'' must happen before ``add to pot.''
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=2.5em]
+  \text{chop} \arrow[r, "\text{before}"] &
+  \text{sauté} \arrow[r, "\text{before}"] &
+  \text{add to pot}
+\end{tikzcd}
+\end{center}
+\medskip
+
+The \emph{things} are the steps. The \emph{arrows} mean ``must happen before.''
+If chopping must happen before sautéing, and sautéing before adding, then
+chopping must happen before adding---even though there is no single arrow
+drawn directly from ``chop'' to ``add to pot.''
+
+This indirect conclusion is not magic. It follows from the arrows we have.
+In category theory we will give this a formal name: \term{composition}.
+\end{example}
+
+\begin{example}{The Approval Chain}
+A company requires that budget requests be approved by a manager before going
+to the director, and by the director before going to the board.
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=2.5em]
+  \text{request} \arrow[r, "\text{manager}"] &
+  \text{approved} \arrow[r, "\text{director}"] &
+  \text{final approval}
+\end{tikzcd}
+\end{center}
+\medskip
+
+Again: \emph{things} (states of the request), \emph{arrows} (approvals that
+move the request forward). The pattern is identical to the transit map and the
+recipe. This is the first sign that something deeper is going on: very
+different situations share the same shape.
+
+Category theory is, among other things, the science of recognizing when two
+situations have the same shape.
+\end{example}
+
+% ─── Expansion 2 ────────────────────────────────────────────────────────────
+\ExpTwoLabel
+\subsection{Expansion 2: Inside vs.\ Outside}
+
+There is a habit of mind that category theory requires, and it is worth
+practicing from the very beginning.
+
+\textbf{Stop asking what things are made of.}
+
+When you look at a train station on a map, you do not ask how many
+platforms it has or which architect designed it. You ask: which lines does it
+connect to? Category theory extends this discipline to \emph{everything}. When
+we work with a thing in category theory, we are forbidden from looking
+``inside'' it. We can only look at what arrows arrive at it and what arrows
+leave it.
+
+This sounds limiting. In practice it is liberating.
+
+Here is why. Suppose you have two completely different-looking objects---a
+subway station and an airport terminal, say---but every route that goes through
+one also goes through the other, and vice versa. For the purposes of your
+journey, they are \emph{interchangeable}. Category theory gives you a way to
+say that precisely and work with it rigorously.
+
+\begin{readernote}
+Try this: pick any two things in your life that are functionally
+interchangeable but look different inside. A paperback and an e-book of the
+same novel. An email and a printed letter carrying the same message. A
+physical key and a key card opening the same door.
+
+In each case: the \emph{inside} differs, but the \emph{connections} (what
+can be done with the object, where it fits) are the same. In category theory
+we say these are \term{isomorphic}---a word we will define carefully later.
+\end{readernote}
+
+The discipline of ``look only at connections, not at insides'' is called
+working \term{externally} or working \term{up to isomorphism}. We will build
+to a precise definition. For now, just start training the habit: when you
+look at a thing, ask not \emph{what is it?} but \emph{what does it connect
+to?}
+
+% ─── Expansion 3 ────────────────────────────────────────────────────────────
+\ExpThreeLabel
+\subsection{Expansion 3: Historical and Philosophical Note}
+
+Category theory was introduced in 1945 by Samuel Eilenberg and Saunders
+Mac~Lane in a paper titled ``General Theory of Natural Equivalences.'' Their
+immediate goal was to make precise a certain kind of structural similarity they
+kept encountering in algebraic topology. But the language they invented turned
+out to be far more general.
+
+The philosopher's way to describe what category theory does is this: it
+replaces the question \emph{``what is X?''} with the question \emph{``what
+role does X play?''} This is sometimes called \term{structuralism} in the
+philosophy of mathematics---the view that mathematical objects have no
+intrinsic identity, only relational identity.
+
+From the structuralist perspective, there is no single ``correct'' natural
+number~2. There are many different formal systems in which something plays the
+role of~2. What makes them all \emph{the} number 2 is that they each stand in
+the same relationships to the things around them.
+
+This book does not require you to adopt a philosophical position. But it is
+worth knowing that category theory carries a viewpoint with it, and that
+viewpoint has consequences for how we write definitions, how we state theorems,
+and what we count as ``solving'' a problem.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Objects and Morphisms}
+\label{sec:objects-morphisms}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\CoreLabel
+\subsection{Core: Naming the Pieces}
+
+The \emph{things} in category theory have an official name: \term{objects}.
+
+The \emph{arrows} have an official name: \term{morphisms}.
+
+Every morphism goes \emph{from} one object \emph{to} another. We write
+\[
+  f : A \to B
+\]
+to mean ``there is a morphism named~$f$ going from object~$A$ to object~$B$.''
+We call $A$ the \term{domain} of~$f$ and $B$ the \term{codomain} of~$f$.
+
+That's the whole vocabulary for now: objects, morphisms, domain, codomain.
+Everything else in category theory is built from these four words.
+
+% ─── Expansion 1 ────────────────────────────────────────────────────────────
+\ExpOneLabel
+\subsection{Expansion 1: Reading Morphism Notation}
+
+Let's slow down and practice reading the notation $f : A \to B$, because it
+will appear on almost every page of this book.
+
+\begin{dialog}
+I see the expression $f : A \to B$. Here is what I say to myself:
+
+\begin{itemize}
+  \item ``$f$ is the name of a morphism.''
+  \item ``$A$ is where $f$ starts---its domain.''
+  \item ``$B$ is where $f$ ends---its codomain.''
+  \item ``The arrow $\to$ tells me this is a one-directional connection.''
+  \item ``I do \emph{not} assume I can go from $B$ back to $A$ just because
+        I can go from $A$ to $B$. Arrows have directions.''
+\end{itemize}
+
+If someone asks me to draw this, I draw a dot labeled $A$, a dot labeled $B$,
+and an arrow from $A$ to $B$ labeled $f$:
+
+\medskip
+\begin{center}
+\begin{tikzcd}
+  A \arrow[r, "f"] & B
+\end{tikzcd}
+\end{center}
+\medskip
+
+This picture and the expression $f : A \to B$ carry exactly the same
+information. I can translate between them instantly.
+\end{dialog}
+
+Let's look at some concrete examples with this vocabulary in place.
+
+\begin{example}{Morphisms as Comparisons}
+Suppose our objects are temperature readings: $32°$, $68°$, $98°$, $212°$.
+A morphism $f : 32° \to 212°$ could mean ``is colder than.'' A morphism
+$g : 68° \to 98°$ could mean ``is colder than.'' Notice that both $f$ and $g$
+are instances of the same \emph{kind} of arrow (``is colder than''), but they
+are different morphisms because they connect different objects.
+
+The label of a morphism and its domain and codomain together make it what it
+is. Two morphisms are the same only if they have the same name \emph{and} the
+same domain \emph{and} the same codomain.
+\end{example}
+
+\begin{example}{Morphisms as Translations}
+Suppose our objects are the phrases ``hello,'' ``hola,'' ``bonjour,'' ``ciao.''
+A morphism $t : \text{hello} \to \text{hola}$ could mean ``is a Spanish
+translation of.'' A morphism $u : \text{hello} \to \text{bonjour}$ could mean
+``is a French translation of.''
+
+Both start at the same object (``hello'') but end at different objects. They
+are different morphisms. The object ``hello'' has \emph{two outgoing
+morphisms} in this setup.
+\end{example}
+
+\begin{readernote}
+When you encounter a new example, before doing anything else, identify:
+\begin{enumerate}
+  \item What are the \emph{objects}? (the dots in the diagram)
+  \item What are the \emph{morphisms}? (the arrows)
+  \item For each morphism: what is its \emph{domain}? what is its
+        \emph{codomain}?
+\end{enumerate}
+Write these down, in words, every time. This routine takes thirty seconds and
+prevents ninety percent of the confusion that comes from working with
+diagrams too quickly.
+\end{readernote}
+
+% ─── Expansion 2 ────────────────────────────────────────────────────────────
+\ExpTwoLabel
+\subsection{Expansion 2: What Morphisms Are Not}
+
+Several natural assumptions about morphisms turn out to be wrong in general.
+Let's eliminate them now before they become habits.
+
+\textbf{Morphisms are not always functions.}
+In many examples, morphisms will be functions from one collection to another.
+But the word ``morphism'' does not mean ``function.'' A morphism is anything
+that fits the pattern: it has a domain, a codomain, and it goes from one to
+the other in a way consistent with the rules of its category. We will see
+morphisms that are proofs, comparisons, paths, transformations, and more.
+
+\textbf{Morphisms can have the same domain and codomain without being equal.}
+If $f : A \to B$ and $g : A \to B$, that does \emph{not} mean $f = g$. There
+can be many different morphisms between the same two objects. In the
+translation example above, if we added a second Spanish translation (say, a
+formal one and an informal one), we'd have two distinct morphisms from
+``hello'' to ``hola.''
+
+\textbf{A morphism $f : A \to B$ does not imply a morphism $B \to A$.}
+Going from $A$ to $B$ is not the same as going from $B$ to $A$, and the
+existence of one does not guarantee the existence of the other. In the recipe
+example, ``chop must happen before sauté'' does not imply ``sauté must happen
+before chop''---in fact, that would be a contradiction.
+
+\textbf{There may be no morphism between two objects.}
+In any given category, some pairs of objects may simply not be connected.
+That's fine. Not every city has a direct train to every other city.
+
+% ─── Expansion 3 ────────────────────────────────────────────────────────────
+\ExpThreeLabel
+\subsection{Expansion 3: Notation and Conventions}
+
+\deepexpandsection{Alternative Notation}
+
+In some literature you will see morphisms written differently:
+\begin{itemize}
+  \item $f \in \mathrm{Hom}(A, B)$ --- reads ``$f$ is a member of the
+        \term{hom-set} from $A$ to $B$.'' The hom-set $\mathrm{Hom}(A,B)$
+        is the collection of all morphisms with domain $A$ and codomain $B$.
+  \item $A \xrightarrow{f} B$ --- an inline arrow notation, used when we
+        want to show a morphism inside a sentence without breaking into
+        display math.
+  \item $\mathrm{Hom}_{\mathcal{C}}(A, B)$ --- the subscript $\mathcal{C}$
+        specifies \emph{which category} we mean, since the same objects can
+        appear in multiple categories with different morphism sets.
+\end{itemize}
+
+In this book we default to $f : A \to B$ and introduce the hom-set notation
+when we need to talk about the whole collection of morphisms between two
+objects at once.
+
+\deepexpandsection{The Category of This Section's Examples}
+
+The temperature example above is almost---but not quite---a category. We have
+objects ($32°$, $68°$, $98°$, $212°$) and we have morphisms (the ``colder
+than'' relations). Two things are missing: we need \emph{identity morphisms}
+and we need \emph{composition}. We will add both in the next two sections and
+then the example will be a full category.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Composition}
+\label{sec:composition}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\CoreLabel
+\subsection{Core: Chaining Arrows}
+
+If there is a morphism from $A$ to $B$, and a morphism from $B$ to $C$, then
+there must also be a morphism from $A$ to $C$.
+
+This is the rule of \term{composition}. It says: whenever two arrows line up
+end-to-end, you get a third arrow for free---the one that follows the same
+path from start to finish.
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3em, row sep=2em]
+  A \arrow[r, "f"] \arrow[rr, bend right=25, "g \circ f"'] & B \arrow[r, "g"] & C
+\end{tikzcd}
+\end{center}
+\medskip
+
+We write the composed morphism as $g \circ f$, read ``$g$ after $f$'' or
+``$g$ composed with $f$.'' It goes from $A$ to $C$.
+
+Notice the order: $g \circ f$ is read right to left. First $f$, then $g$.
+This will feel backwards at first. We'll practice until it feels natural.
+
+% ─── Expansion 1 ────────────────────────────────────────────────────────────
+\ExpOneLabel
+\subsection{Expansion 1: Practicing Composition}
+
+\begin{dialog}
+I see:
+\[
+  f : A \to B \qquad g : B \to C
+\]
+I ask: ``Do these line up?'' The codomain of $f$ is $B$. The domain of $g$
+is $B$. Yes, they match. So composition is possible.
+
+I write the composed morphism as $g \circ f : A \to C$.
+
+I read this as: ``first do $f$ (go from $A$ to $B$), then do $g$ (go from
+$B$ to $C$). The overall result goes from $A$ to $C$.''
+
+I always check: domain of composed = domain of first, codomain of composed
+= codomain of last.
+\[
+  (g \circ f) : A \to C
+  \qquad\text{domain = }A,\quad\text{codomain = }C.
+\]
+\end{dialog}
+
+\begin{example}{Composition in the Recipe}
+Recall our recipe morphisms:
+\[
+  f : \text{chop} \to \text{sauté}, \qquad g : \text{sauté} \to \text{add to pot}
+\]
+Composition gives:
+\[
+  g \circ f : \text{chop} \to \text{add to pot}
+\]
+This says: ``chopping must happen before adding to pot.'' We knew that
+intuitively. Composition is the formal way to say it.
+\end{example}
+
+\begin{example}{A Chain of Three}
+Suppose we have:
+\[
+  f : A \to B, \qquad g : B \to C, \qquad h : C \to D
+\]
+We can compose step by step:
+\[
+  g \circ f : A \to C, \qquad h \circ (g \circ f) : A \to D
+\]
+Or we can compose from the other end:
+\[
+  h \circ g : B \to D, \qquad (h \circ g) \circ f : A \to D
+\]
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=2.5em]
+  A \arrow[r, "f"] \arrow[rrr, bend right=35, "h \circ g \circ f"']
+  & B \arrow[r, "g"] \arrow[rr, bend left=30, "h \circ g"]
+  & C \arrow[r, "h"]
+  & D
+\end{tikzcd}
+\end{center}
+\medskip
+
+Both routes give the same composed morphism from $A$ to $D$. This is not a
+coincidence---it is a requirement called \term{associativity}, which we will
+examine closely in Expansion~2 below.
+\end{example}
+
+\begin{readernote}
+Every time you see two arrows that share a middle object, ask: ``What does
+their composition tell me?'' Draw the composed arrow (perhaps with a dashed
+line or a curved arrow) and label it. This keeps your diagram annotated and
+your thinking explicit.
+\end{readernote}
+
+% ─── Expansion 2 ────────────────────────────────────────────────────────────
+\ExpTwoLabel
+\subsection{Expansion 2: Associativity}
+
+Associativity means that when you compose three morphisms in a chain, it
+doesn't matter which composition you do first---you always get the same result.
+
+\[
+  h \circ (g \circ f) = (h \circ g) \circ f
+\]
+
+Why does this matter? Because it means we can write $h \circ g \circ f$
+without parentheses and there is no ambiguity. The chain of three arrows has a
+unique composite, regardless of how we group the steps.
+
+\begin{example}{Associativity in Transit}
+Suppose:
+\begin{itemize}
+  \item $f$: travel from Airport to Downtown
+  \item $g$: travel from Downtown to Stadium
+  \item $h$: travel from Stadium to Hotel
+\end{itemize}
+The trip ``Airport $\to$ Downtown $\to$ Stadium $\to$ Hotel'' is the same
+trip whether you think of it as:
+\begin{itemize}
+  \item (Airport $\to$ Downtown-Stadium) then Stadium $\to$ Hotel, or
+  \item Airport $\to$ Downtown then (Downtown $\to$ Stadium-Hotel).
+\end{itemize}
+Grouping the \emph{planning} differently does not change the \emph{journey}.
+Associativity just says this obvious fact is always true for morphisms.
+\end{example}
+
+Associativity has a deeper consequence that is easy to miss: it means that any
+\emph{finite chain} of composable arrows has a unique composite. We don't need
+to specify how to parenthesize it. The composite of $f_1, f_2, \ldots, f_n$
+(when they chain up in order) is well-defined.
+
+% ─── Expansion 3 ────────────────────────────────────────────────────────────
+\ExpThreeLabel
+\subsection{Expansion 3: Composition as the Primary Structure}
+
+\deepexpandsection{Why Composition Comes Before Identity}
+
+Many presentations introduce identity morphisms before composition. We
+reversed the order deliberately.
+
+Composition is the \emph{operative} structure of a category---it is what
+makes the arrows into more than just a list of isolated connections. Identity
+morphisms, as we will see in the next section, are a \emph{constraint} on
+composition: they are the neutral elements that leave composition unchanged.
+Logically, you must understand the operation before you can understand its
+neutral element.
+
+\deepexpandsection{Partial vs.\ Total Composition}
+
+In a category, composition is defined \emph{only} for pairs of morphisms where
+the codomain of the first equals the domain of the second. It is a
+\emph{partial} operation on morphisms, not a total one. This is different from
+addition of numbers, which is defined for every pair of numbers.
+
+Formally: given morphisms $f : A \to B$ and $g : C \to D$, the composite
+$g \circ f$ is defined \emph{if and only if} $B = C$ (the codomain of $f$
+equals the domain of $g$).
+
+This is why the domain and codomain of each morphism are so important to track.
+They are the ``type-checking'' mechanism that tells you which compositions are
+legal.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Identity Morphisms}
+\label{sec:identity}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\CoreLabel
+\subsection{Core: Every Object Has a ``Stay Put'' Arrow}
+
+Every object has a special morphism that goes from \emph{itself to itself} and
+does nothing. We call it the \term{identity morphism} on that object and write
+$\mathrm{id}_A : A \to A$.
+
+``Does nothing'' has a precise meaning: composing any morphism with the
+identity gives back the original morphism unchanged.
+
+\begin{center}
+\begin{tikzcd}[column sep=3em]
+  A \arrow[r, "f"] \arrow[loop left, "\mathrm{id}_A"]
+  & B \arrow[loop right, "\mathrm{id}_B"]
+\end{tikzcd}
+\end{center}
+
+For any morphism $f : A \to B$:
+\[
+  f \circ \mathrm{id}_A = f \qquad \text{and} \qquad \mathrm{id}_B \circ f = f
+\]
+
+Doing ``nothing'' and then $f$ gives $f$. Doing $f$ and then ``nothing'' gives
+$f$. The identity is the neutral element of composition.
+
+% ─── Expansion 1 ────────────────────────────────────────────────────────────
+\ExpOneLabel
+\subsection{Expansion 1: Seeing Identity in Everyday Situations}
+
+Identity morphisms can feel like a technicality. They are not. Let's see why
+they appear naturally.
+
+\begin{example}{The ``Do Nothing'' Step in a Recipe}
+Suppose you write a recipe that can optionally rest the dough for an hour. On
+a day when you're in a hurry, you do \emph{nothing} during that step---you
+skip it, and the dough is the same dough it was before.
+
+This ``do nothing'' is an identity morphism: it takes the dough as input
+and returns the dough unchanged. Every state that can appear in a process has
+this ``pass through unchanged'' option.
+\end{example}
+
+\begin{example}{The Zero-Distance Route}
+In the transit example, ``stay at Station A'' is a perfectly valid route: you
+start at A and end at A. It composes correctly with other routes:
+\[
+  (\text{stay at A}) \text{ then } (\text{A to B}) = (\text{A to B})
+\]
+\[
+  (\text{A to B}) \text{ then } (\text{stay at B}) = (\text{A to B})
+\]
+The ``stay put'' route is the identity morphism on Station A.
+\end{example}
+
+\begin{dialog}
+When I see a loop arrow on an object---an arrow that starts and ends at the
+same dot---my first question is: ``Is this the identity, or is it a
+non-trivial self-loop?''
+
+The identity is special because \emph{composing with it does nothing}. A
+non-trivial self-loop (there can be others) might actually change something.
+
+I can always tell them apart by testing: does composing with this arrow change
+any other morphism? If not, it's the identity. If yes, it's something else.
+\end{dialog}
+
+% ─── Expansion 2 ────────────────────────────────────────────────────────────
+\ExpTwoLabel
+\subsection{Expansion 2: Uniqueness of Identity}
+
+Each object has \emph{exactly one} identity morphism. This is not an
+assumption---it's a theorem. Here's the argument:
+
+Suppose $\mathrm{id}_A$ and $\mathrm{id}_A'$ are both identity morphisms on
+$A$ (i.e., both satisfy the neutrality law). Then:
+\[
+  \mathrm{id}_A
+  = \mathrm{id}_A \circ \mathrm{id}_A'
+  = \mathrm{id}_A'
+\]
+The first equality uses the fact that $\mathrm{id}_A'$ is a right identity.
+The second uses the fact that $\mathrm{id}_A$ is a left identity. Both are
+the same morphism.
+
+This is the first example in this book of a categorical proof: short,
+self-referential, and surprisingly powerful. We will see many more like it.
+
+\begin{readernote}
+Notice the structure of the proof: we used the identity \emph{laws} (equations
+that must hold) rather than looking inside any object. That's the categorical
+style. If a proof ever asks you to look inside an object, something has gone
+wrong.
+\end{readernote}
+
+% ─── Expansion 3 ────────────────────────────────────────────────────────────
+\ExpThreeLabel
+\subsection{Expansion 3: Identity as a Function, Formally}
+
+\deepexpandsection{Identity as an Assignment}
+
+The identity is not just ``a morphism per object''---it is an assignment:
+given any object $A$, we assign the morphism $\mathrm{id}_A : A \to A$.
+This assignment is part of the \emph{data} of a category. When we define a
+category formally (in the next chapter), we will include this assignment in
+the definition.
+
+\deepexpandsection{Connection to Monoids}
+
+For readers who encounter the word later: a \term{monoid} is a set with an
+associative binary operation and an identity element. The morphisms from a
+single object $A$ to itself, together with composition, form a monoid. The
+identity morphism is the identity element of that monoid. This connection
+between single-object categories and monoids is one of the first of many
+``hidden structures'' that category theory uncovers---but we will build to it
+properly rather than assuming it here.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Commutative Diagrams}
+\label{sec:commutative-diagrams}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\CoreLabel
+\subsection{Core: When All Paths Agree}
+
+A \term{commutative diagram} is a diagram of objects and morphisms in which
+every path between the same two endpoints gives the same composite morphism.
+
+The simplest example is a triangle:
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3em, row sep=2.5em]
+  A \arrow[r, "f"] \arrow[dr, "h"'] & B \arrow[d, "g"] \\
+  & C
+\end{tikzcd}
+\end{center}
+\medskip
+
+This diagram \emph{commutes} if $g \circ f = h$.
+
+There are two paths from $A$ to $C$: the path $A \to B \to C$ (composing $f$
+then $g$) and the direct path $A \to C$ (the morphism $h$). Commutativity
+says these give the same result.
+
+% ─── Expansion 1 ────────────────────────────────────────────────────────────
+\ExpOneLabel
+\subsection{Expansion 1: Reading a Commutative Diagram}
+
+\begin{dialog}
+I see a diagram with multiple paths between two objects. My procedure:
+
+\begin{enumerate}
+  \item \textbf{Identify} all the paths from each object to each other object.
+        I trace every possible route, like reading a map.
+  \item \textbf{Write} the composite morphism for each path, using the
+        $\circ$ notation.
+  \item \textbf{Ask}: are these composites equal? If yes, the diagram
+        (or at least those paths) commutes.
+  \item \textbf{Note} that a square diagram has two paths from top-left to
+        bottom-right, a pentagon has multiple paths from each vertex, and so on.
+\end{enumerate}
+\end{dialog}
+
+\begin{example}{A Commutative Square}
+The most common diagram in category theory is the commutative square:
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3.5em, row sep=2.5em]
+  A \arrow[r, "f"] \arrow[d, "p"'] & B \arrow[d, "q"] \\
+  C \arrow[r, "g"'] & D
+\end{tikzcd}
+\end{center}
+\medskip
+
+This commutes when $q \circ f = g \circ p$.
+
+In words: going right then down gives the same result as going down then right.
+
+\medskip
+
+Commutative square in everyday terms: suppose $A$ is a sentence in English,
+$B$ is a formal logical statement, $C$ is the same sentence translated into
+French, and $D$ is the same formal logical statement. Then:
+\begin{itemize}
+  \item $f$: formalize the English sentence.
+  \item $p$: translate the English sentence to French.
+  \item $q$: formalize the French sentence.
+  \item $g$: translate the English formalization to French formalization
+        (or: verify they match).
+\end{itemize}
+The square commutes if ``translate then formalize'' gives the same result as
+``formalize then translate.'' Whether this holds depends on the specific
+language and logic in question---it is a genuine mathematical question, not
+a foregone conclusion.
+\end{example}
+
+\begin{readernote}
+Whenever you encounter a diagram in this book (or anywhere in mathematics),
+write next to it: ``This commutes because \_\_\_\_\_\_'' and fill in the blank.
+If you can't fill it in, you don't yet understand the claim the diagram is
+making. Diagrams are \emph{assertions}---they say something is equal. Read
+them as equations, not just pictures.
+\end{readernote}
+
+% ─── Expansion 2 ────────────────────────────────────────────────────────────
+\ExpTwoLabel
+\subsection{Expansion 2: Diagrams as Equations}
+
+Every commutative diagram is shorthand for a collection of equations between
+composed morphisms. The diagram is often cleaner to read than the equations,
+which is why we use it. But the two are entirely equivalent.
+
+A triangle diagram asserts one equation. A square diagram asserts one
+equation (two paths from top-left to bottom-right). A more complex diagram
+with five or six objects might assert many equations simultaneously, one for
+each pair of objects with multiple paths between them.
+
+This is the real power of diagrammatic notation: a single picture can
+communicate a system of equations in a way that is easier to parse than
+writing all the equations in a list. As you read more category theory, you
+will find yourself preferring the diagram and translating to equations only
+when you need to compute.
+
+There is also a converse skill: when you have a collection of equations
+relating composed morphisms, you can often \emph{draw} them as a commutative
+diagram. Practicing this translation in both directions deepens understanding.
+
+% ─── Expansion 3 ────────────────────────────────────────────────────────────
+\ExpThreeLabel
+\subsection{Expansion 3: Diagrams in Formal Proofs}
+
+\deepexpandsection{The Pasting Lemma}
+
+One of the most useful facts about commutative diagrams is the \term{pasting
+lemma}: if you have two commutative squares sharing an edge, the outer
+rectangle also commutes.
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3em, row sep=2.5em]
+  A \arrow[r, "f"] \arrow[d, "p"']
+  & B \arrow[r, "g"] \arrow[d, "q"]
+  & C \arrow[d, "r"] \\
+  D \arrow[r, "s"']
+  & E \arrow[r, "t"']
+  & F
+\end{tikzcd}
+\end{center}
+\medskip
+
+If the left square commutes ($q \circ f = s \circ p$) and the right square
+commutes ($r \circ g = t \circ q$), then the outer rectangle commutes
+($r \circ g \circ f = t \circ s \circ p$).
+
+This lemma is used constantly in categorical proofs. Once you know it, you
+can build large commutative diagrams from smaller confirmed pieces, like
+tiling a floor.
+
+\deepexpandsection{Diagrams Without Commutativity}
+
+Not every diagram in category theory is required to commute. Sometimes we draw
+a diagram just to display objects and morphisms without asserting any
+equations. The convention in this book: if a diagram is stated to commute
+(either explicitly or by context), it does. Otherwise, assume it is merely
+depicting the structure.
+
+When in doubt, check whether the author says ``the following diagram commutes''
+or just ``consider the following diagram.'' This distinction matters.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Chapter Summary}
+\label{sec:ch1-summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Objects} are the things in a category. They have no specified internal
+structure---we work with them only through their connections.
+
+\textbf{Morphisms} ($f : A \to B$) are the arrows between objects. Each
+morphism has a domain and a codomain.
+
+\textbf{Composition}: if $f : A \to B$ and $g : B \to C$, then $g \circ f :
+A \to C$ is their composite. Composition is associative: $(h \circ g) \circ f
+= h \circ (g \circ f)$.
+
+\textbf{Identity}: every object $A$ has a morphism $\mathrm{id}_A : A \to A$
+that is neutral under composition: $f \circ \mathrm{id}_A = f$ and
+$\mathrm{id}_B \circ f = f$ for any $f : A \to B$.
+
+\textbf{Commutative diagrams} assert that all paths between the same two
+objects compose to the same morphism. They are equations in disguise.
+
+\medskip
+\textbf{The reader's three questions}, to be asked of every new example:
+\begin{enumerate}
+  \item What are the objects?
+  \item What are the morphisms (domain, codomain, name)?
+  \item Which diagrams commute, and what equations do they assert?
+\end{enumerate}
+\end{summarybox}
+
+\bigskip
+
+In the next chapter, we assemble all these pieces---objects, morphisms,
+composition, and identity---into a single package: a \term{category}.

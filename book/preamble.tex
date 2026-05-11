@@ -1,0 +1,163 @@
+% preamble.tex — shared LaTeX setup for Elementary Category Theory
+
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{microtype}
+
+% Page geometry
+\usepackage[
+  paperwidth=6in,
+  paperheight=9in,
+  top=0.85in,
+  bottom=0.85in,
+  inner=0.75in,
+  outer=0.65in,
+  marginparwidth=0in,
+]{geometry}
+
+% Typography
+\usepackage{setspace}
+\setstretch{1.15}
+\usepackage{parskip}
+\setlength{\parskip}{0.6em}
+\setlength{\parindent}{0pt}
+
+% Colors
+\usepackage[dvipsnames,svgnames]{xcolor}
+\definecolor{CoreColor}{HTML}{1A3A5C}
+\definecolor{Exp1Color}{HTML}{1D6B3A}
+\definecolor{Exp2Color}{HTML}{7B3F00}
+\definecolor{Exp3Color}{HTML}{4A0072}
+\definecolor{DialogBg}{HTML}{F5F0E8}
+\definecolor{DialogBorder}{HTML}{C8A86B}
+\definecolor{NoteBg}{HTML}{EEF4FF}
+\definecolor{NoteBorder}{HTML}{6B8EC8}
+\definecolor{TermColor}{HTML}{1A3A5C}
+
+% Math
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{mathtools}
+
+% Diagrams
+\usepackage{tikz}
+\usepackage{tikz-cd}
+\usetikzlibrary{arrows,arrows.meta,positioning,calc,decorations.pathmorphing}
+\tikzcdset{
+  arrow style=math font,
+  diagrams={>=stealth}
+}
+
+% Boxes and environments
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable,theorems}
+
+% Section heading colors
+\usepackage{titlesec}
+\titleformat{\chapter}[display]
+  {\normalfont\Large\bfseries\color{CoreColor}}
+  {\chaptertitlename\ \thechapter}{12pt}{\Huge}
+\titleformat{\section}
+  {\normalfont\large\bfseries\color{CoreColor}}
+  {\thesection}{1em}{}
+\titleformat{\subsection}
+  {\normalfont\normalsize\bfseries\color{Exp1Color}}
+  {\thesubsection}{1em}{}
+\titleformat{\subsubsection}
+  {\normalfont\normalsize\bfseries\color{Exp2Color}}
+  {\thesubsubsection}{1em}{}
+
+% A fourth level for Expansion 3
+\newcounter{deepexpand}[subsubsection]
+\newcommand{\deepexpandsection}[1]{%
+  \refstepcounter{deepexpand}%
+  \vspace{0.8em}%
+  {\noindent\normalfont\normalsize\bfseries\color{Exp3Color}%
+    Deep Expansion \thesubsubsection.\thedeepexpand\quad #1}%
+  \vspace{0.3em}\par%
+}
+
+% ── Expansion-level labels ──────────────────────────────────────────────────
+% These appear as colored tags before expansion sections to make the
+% staggered structure immediately visible to the reader.
+
+\newcommand{\CoreLabel}{%
+  \noindent\colorbox{CoreColor}{\color{white}\footnotesize\bfseries\strut\ CORE\ }%
+  \vspace{0.3em}\par}
+
+\newcommand{\ExpOneLabel}{%
+  \noindent\colorbox{Exp1Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 1\ }%
+  \vspace{0.3em}\par}
+
+\newcommand{\ExpTwoLabel}{%
+  \noindent\colorbox{Exp2Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 2\ }%
+  \vspace{0.3em}\par}
+
+\newcommand{\ExpThreeLabel}{%
+  \noindent\colorbox{Exp3Color}{\color{white}\footnotesize\bfseries\strut\ EXPANSION 3\ }%
+  \vspace{0.3em}\par}
+
+% ── Internal-dialog box ─────────────────────────────────────────────────────
+% Represents the annotated internal monologue a reader should develop
+% while working through diagrams and definitions.
+
+\newtcolorbox{dialog}[1][]{
+  enhanced,
+  breakable,
+  colback=DialogBg,
+  colframe=DialogBorder,
+  fonttitle=\bfseries\small,
+  title={Internal Dialog},
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=DialogBorder, colframe=DialogBorder,
+    fontupper=\color{white}\bfseries\small},
+  #1
+}
+
+% ── Margin note (reader annotation reminder) ────────────────────────────────
+\newtcolorbox{readernote}[1][]{
+  enhanced,
+  breakable,
+  colback=NoteBg,
+  colframe=NoteBorder,
+  fonttitle=\bfseries\small,
+  title={Reader's Annotation},
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NoteBorder, colframe=NoteBorder,
+    fontupper=\color{white}\bfseries\small},
+  #1
+}
+
+% ── Key-term command ────────────────────────────────────────────────────────
+\newcommand{\term}[1]{\textbf{\color{TermColor}#1}}
+
+% ── Example environment ─────────────────────────────────────────────────────
+\newtcolorbox{example}[2][]{
+  enhanced,
+  breakable,
+  colback=white,
+  colframe=CoreColor!40,
+  fonttitle=\bfseries\small,
+  title={Example: #2},
+  left=6pt, right=6pt, top=4pt, bottom=4pt,
+  #1
+}
+
+% ── Summary box ─────────────────────────────────────────────────────────────
+\newtcolorbox{summarybox}[1][]{
+  enhanced,
+  breakable,
+  colback=CoreColor!5,
+  colframe=CoreColor,
+  fonttitle=\bfseries,
+  title={Chapter Summary},
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+  #1
+}
+
+% Hyperlinks (load last)
+\usepackage[hidelinks,
+  pdfauthor={},
+  pdftitle={Elementary Category Theory}]{hyperref}
