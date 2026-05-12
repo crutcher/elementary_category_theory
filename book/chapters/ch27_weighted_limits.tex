@@ -1,0 +1,541 @@
+% ch27_weighted_limits.tex — Volume III Chapter 3
+
+\chapter{Weighted Limits and Colimits}
+
+\begin{overviewbox}
+Chapter~20 introduced weighted limits in the enriched setting: a $W$-weighted
+limit $\{W, F\}$ of $F : \mathcal{J} \to \mathcal{C}$ weighted by
+$W : \mathcal{J} \to \mathcal{V}$ represents the $\mathcal{V}$-functor
+$c \mapsto [\mathcal{J}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c, F-))$.
+Ordinary limits were the case $W = \Delta I$.
+
+This chapter uses the coend calculus of Chapter~26 to develop the full
+theory. We re-derive weighted limits and colimits via ends and coends, prove
+the central representability theorem, work out the principal examples
+(cotensor, conical, lax limit, comma object), and show how all of ordinary
+limits-and-colimits theory transports to the weighted setting. The chapter
+closes with a preview of weighted Kan extensions (Chapter~31): in the enriched
+world, \emph{every} (co)limit is a Kan extension and \emph{every} Kan
+extension is a weighted (co)limit.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Weighted Limits via Ends}
+\label{sec:wlim-end}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Fix a complete symmetric monoidal closed category $\mathcal{V}$ and a small
+$\mathcal{V}$-category $\mathcal{J}$. Let $F : \mathcal{J} \to \mathcal{C}$
+be a $\mathcal{V}$-functor (a \emph{diagram}) and $W : \mathcal{J} \to
+\mathcal{V}$ another $\mathcal{V}$-functor (a \emph{weight}).
+
+\begin{definition}[Weighted limit]
+\label{def:weighted-limit}
+The \term{weighted limit} of $F$ by $W$, written $\{W, F\}$ or $\lim^W F$,
+is an object of $\mathcal{C}$ — when it exists — together with a $\mathcal{V}$-natural
+isomorphism
+\begin{equation*}
+  \mathcal{C}(c, \{W, F\}) \;\cong\; [\mathcal{J}, \mathcal{V}]_\mathcal{V}(W,
+  \mathcal{C}(c, F-))
+\end{equation*}
+in $\mathcal{V}$, naturally in $c \in \mathcal{C}$.
+\end{definition}
+
+\begin{howtosay}
+$\{W, F\}$ \sayit{``the W-weighted limit of F''} or \sayit{``the limit of F
+weighted by W''}.
+\end{howtosay}
+
+\begin{theorem}[End formula for weighted limits]
+\label{thm:wlim-end-formula}
+The right-hand side of Definition~\ref{def:weighted-limit} is an end:
+\begin{equation*}
+  [\mathcal{J}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c, F-))
+  \;=\;
+  \int_{j \in \mathcal{J}} \mathcal{V}(W(j), \mathcal{C}(c, F j)).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+This is the end formula for $\mathcal{V}$-natural transformations
+(Chapter~26, Proposition on enriched ends). Apply it with $G = W$ and $H =
+\mathcal{C}(c, F-)$.
+\end{proof}
+
+Combining:
+\begin{equation*}
+  \mathcal{C}(c, \{W, F\})
+  \;\cong\;
+  \int_j \mathcal{V}(W j, \mathcal{C}(c, F j)).
+\end{equation*}
+
+\subsection{Reorganizing: Conical Limits as $\Delta I$-Weighted}
+
+\begin{proposition}[Ordinary limits as weighted limits]
+\label{prop:conical-as-weighted}
+For $\mathcal{V} = \mathbf{Set}$ and $W = \Delta\{*\}$ the terminal weight,
+$\{\Delta\{*\}, F\} = \lim F$, the ordinary (\term{conical}) limit.
+\end{proposition}
+
+\begin{proof}
+The end formula gives
+\begin{equation*}
+  \mathcal{C}(c, \{\Delta\{*\}, F\})
+  = \int_j \mathbf{Set}(\{*\}, \mathcal{C}(c, F j))
+  = \int_j \mathcal{C}(c, F j)
+  = \mathrm{Nat}(\Delta c, F)
+  = \mathrm{cones}(c, F),
+\end{equation*}
+the set of cones from $c$ to $F$. By the universal property of the limit,
+this is $\mathcal{C}(c, \lim F)$, so $\{\Delta\{*\}, F\} \cong \lim F$.
+\end{proof}
+
+\subsection{Formally: Other Weighted Limits Worth Naming}
+
+\begin{example_thm}[Cotensor]
+\label{ex:cotensor}
+For a single-object indexing category $\mathcal{J} = \mathbf{1}$ (terminal
+$\mathcal{V}$-category), $F$ is a single object $X \in \mathcal{C}$, $W$ is a
+single object $V \in \mathcal{V}$, and the weighted limit is the
+\term{cotensor} $V \pitchfork X$ (also written $X^V$ or $[V, X]_\mathcal{C}$):
+\begin{equation*}
+  \mathcal{C}(c, V \pitchfork X) \;\cong\; \mathcal{V}(V, \mathcal{C}(c, X)).
+\end{equation*}
+When $\mathcal{C} = \mathcal{V}$ self-enriched, this is the internal hom
+$[V, X]$.
+\end{example_thm}
+
+\begin{example_thm}[Lax limit]
+For $\mathcal{J} = \mathbf{2}$ (the walking arrow) and $W : \mathbf{2} \to
+\mathbf{Cat}$ sending the arrow to a specific 1-cell, the weighted limit is
+the \term{lax limit} or \emph{comma object}. In $\mathbf{Cat}$, this is the
+comma category $(F \downarrow G)$ when $F = W(0)$ and $G = W(1)$.
+\end{example_thm}
+
+\begin{example_thm}[Inserter, equifier, descent]
+More elaborate weights generate \emph{inserters} (a 1-cell making two given
+2-cells equal up to a new mediating 2-cell), \emph{equifiers} (objects that
+equify two 2-cells), and \emph{descent objects}. These are the standard
+\emph{flexible limits} of 2-category theory and arise as weighted limits
+with explicit small $\mathbf{Cat}$-valued weights.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Weighted Colimits via Coends}
+\label{sec:wcolim-coend}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Weighted colimit]
+\label{def:weighted-colimit}
+For a diagram $F : \mathcal{J} \to \mathcal{C}$ and weight $W :
+\mathcal{J}^{\mathrm{op}} \to \mathcal{V}$ (note the variance), the
+\term{weighted colimit} is an object $W \star F \in \mathcal{C}$ — when it
+exists — with a $\mathcal{V}$-natural isomorphism
+\begin{equation*}
+  \mathcal{C}(W \star F, c) \;\cong\; [\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(W,
+  \mathcal{C}(F-, c)).
+\end{equation*}
+\end{definition}
+
+\begin{howtosay}
+$W \star F$ \sayit{``W-weighted colimit of F''}. The star is the standard
+shorthand for the weighted colimit construction.
+\end{howtosay}
+
+\begin{theorem}[Coend formula for weighted colimits]
+\label{thm:wcolim-coend-formula}
+In a tensored $\mathcal{V}$-category $\mathcal{C}$ (where $V \otimes c$ exists
+for $V \in \mathcal{V}$ and $c \in \mathcal{C}$ with the adjunction
+$\mathcal{C}(V \otimes c, d) \cong \mathcal{V}(V, \mathcal{C}(c, d))$), the
+weighted colimit is given by the coend
+\begin{equation*}
+  W \star F \;\cong\; \int^{j} W(j) \otimes F(j).
+\end{equation*}
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Compute $\mathcal{C}(W \star F, c)$ using the proposed coend
+formula.}{Substitute the candidate into the hom-functor.}
+\proofstep{$\mathcal{C}\!\left(\int^j W(j) \otimes F(j), c\right) \cong
+\int_j \mathcal{C}(W(j) \otimes F(j), c)$.}{Hom-functor turns coends into
+ends in the first variable (continuity).}
+\proofstep{$\int_j \mathcal{C}(W(j) \otimes F(j), c) \cong
+\int_j \mathcal{V}(W(j), \mathcal{C}(F(j), c))$.}{By the tensor-cotensor
+adjunction of Definition assumption.}
+\proofstep{$\int_j \mathcal{V}(W(j), \mathcal{C}(F(j), c)) =
+[\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(F-, c))$.}{
+End formula for enriched natural transformations (Theorem~\ref{thm:wlim-end-formula}).}
+\proofstep{Therefore $\mathcal{C}\!\left(\int^j W(j) \otimes F(j), c\right)
+\cong \mathcal{C}(W \star F, c)$ $\mathcal{V}$-naturally in $c$.}{Composing
+the chain of isomorphisms.}
+\proofstep{By the Yoneda lemma, $\int^j W(j) \otimes F(j) \cong W \star F$.}{
+Two objects with $\mathcal{V}$-naturally isomorphic hom-out functors are
+isomorphic.}
+\end{prooflog}
+
+\begin{corollary}[Conical colimit as weighted]
+$\Delta I \star F \cong \operatorname{colim} F$ (the ordinary colimit), where
+$\Delta I : \mathcal{J}^{\mathrm{op}} \to \mathcal{V}$ is the constant unit.
+\end{corollary}
+
+\subsection{Reorganizing: Tensor as Weighted Colimit}
+
+\begin{example_thm}[Tensor]
+For $\mathcal{J} = \mathbf{1}$, $F$ a single object $X$, $W$ a single object
+$V$, the weighted colimit is the \term{tensor} $V \otimes X$ (also written
+$V \cdot X$ in $\mathbf{Set}$-enriched settings):
+\begin{equation*}
+  \mathcal{C}(V \otimes X, c) \;\cong\; \mathcal{V}(V, \mathcal{C}(X, c)).
+\end{equation*}
+This is the dual of cotensor (Example~\ref{ex:cotensor}); together they
+characterize $\mathcal{V}$-tensored-and-cotensored categories.
+\end{example_thm}
+
+\begin{example_thm}[Coend as weighted colimit of a profunctor]
+For $T : \mathcal{C}^{\mathrm{op}} \otimes \mathcal{C} \to \mathcal{V}$, treating
+$T$ as a diagram $\mathcal{C}^{\mathrm{op}} \otimes \mathcal{C} \to \mathcal{V}$
+and the hom-profunctor $\mathcal{C}(-, -)$ as the weight, the coend $\int^c
+T(c, c)$ is the weighted colimit of $T$ along the hom-weight.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Functoriality and Yoneda Reduction}
+\label{sec:wlim-functoriality}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{proposition}[Functoriality of weighted limits]
+\label{prop:wlim-functorial}
+$\{-, -\} : [\mathcal{J}, \mathcal{V}]^{\mathrm{op}} \otimes
+[\mathcal{J}, \mathcal{C}] \to \mathcal{C}$ is a $\mathcal{V}$-functor:
+weighted limits are functorial in both weight and diagram, contravariantly
+in the weight.
+\end{proposition}
+
+\begin{proof}
+The defining isomorphism $\mathcal{C}(c, \{W, F\}) \cong \int_j \mathcal{V}(Wj,
+\mathcal{C}(c, Fj))$ is $\mathcal{V}$-natural in $c$, but also in $W$
+(contravariantly) and $F$ (covariantly) by the universal property of the end.
+Apply Yoneda in $c$ to lift naturality from the hom-functors to $\{W, F\}$
+itself.
+\end{proof}
+
+\begin{theorem}[Yoneda reduction for weighted (co)limits]
+\label{thm:wlim-yoneda-reduction}
+For $F : \mathcal{J} \to \mathcal{C}$ and $j_0 \in \mathcal{J}$:
+\begin{align*}
+  \{\mathcal{J}(j_0, -), F\} &\;\cong\; F(j_0) \quad\text{(weighted limit)} \\
+  \mathcal{J}(-, j_0) \star F &\;\cong\; F(j_0) \quad\text{(weighted colimit)}
+\end{align*}
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{For the weighted limit: $\mathcal{C}(c, \{\mathcal{J}(j_0, -), F\})
+\cong \int_j \mathcal{V}(\mathcal{J}(j_0, j), \mathcal{C}(c, Fj))$.}{Apply the
+defining formula.}
+\proofstep{$\int_j \mathcal{V}(\mathcal{J}(j_0, j), \mathcal{C}(c, Fj))$ is the
+$\mathcal{V}$-natural transformations from $\mathcal{J}(j_0, -)$ to
+$\mathcal{C}(c, F-)$.}{By the end formula for $\mathcal{V}$-naturals.}
+\proofstep{By the (enriched) Yoneda lemma, this equals $\mathcal{C}(c, F(j_0))$.}{
+Yoneda applied to the $\mathcal{V}$-functor $\mathcal{C}(c, F-) : \mathcal{J} \to
+\mathcal{V}$.}
+\proofstep{So $\mathcal{C}(c, \{\mathcal{J}(j_0, -), F\}) \cong \mathcal{C}(c, F(j_0))$
+$\mathcal{V}$-naturally in $c$.}{Combining the above.}
+\proofstep{By Yoneda in $c$, $\{\mathcal{J}(j_0, -), F\} \cong F(j_0)$.}{
+Yoneda for objects.}
+\proofstep{For the weighted colimit: $\mathcal{C}(\mathcal{J}(-, j_0) \star F, c)
+\cong \int_j \mathcal{V}(\mathcal{J}(j, j_0), \mathcal{C}(F j, c))$.}{Apply
+the defining formula.}
+\proofstep{This is the $\mathcal{V}$-naturals $\mathcal{J}(-, j_0) \Rightarrow
+\mathcal{C}(F-, c)$.}{End formula again.}
+\proofstep{By contravariant Yoneda, equals $\mathcal{C}(F(j_0), c)$.}{Yoneda
+applied to $\mathcal{C}(F-, c) : \mathcal{J}^{\mathrm{op}} \to \mathcal{V}$.}
+\proofstep{Hence $\mathcal{J}(-, j_0) \star F \cong F(j_0)$.}{Yoneda for
+objects.}
+\end{prooflog}
+
+\begin{remark}[Representable weights pick out values]
+Theorem~\ref{thm:wlim-yoneda-reduction} says: \emph{representable weights
+evaluate the diagram}. This is the weighted analogue of the fact that
+``the limit over a singleton diagram is the object itself.''
+\end{remark}
+
+\subsection{Reorganizing: Bilinearity and Distributivity}
+
+\begin{proposition}[Colimits-into-limits commutation]
+\label{prop:bilinearity}
+For $W : \mathcal{J} \to \mathcal{V}$, $F : \mathcal{J} \to \mathcal{C}$, and
+$G : \mathcal{K} \to \mathcal{C}$:
+\begin{equation*}
+  \{W, \lim^V G \circ F^*\} \;\cong\; \lim^V \{W, G \circ F^*\}
+\end{equation*}
+whenever the relevant weighted limits exist. Symbolically: limits commute
+with limits (here weighted limits with weighted limits in the diagram).
+\end{proposition}
+
+\begin{proof}
+Apply the defining isomorphism, push the hom-functor through the inner
+limit (right adjoints preserve limits), and recognize the end-of-end as the
+end-over-the-product (Fubini for ends, Chapter~26).
+\end{proof}
+
+\begin{remark}
+The dual statement — weighted colimits commute with weighted colimits — also
+holds, by Fubini for coends. These two statements together make the
+\emph{calculus} of weighted (co)limits as smooth as the calculus of ordinary
+(co)limits, with one extra dimension of flexibility (the weight).
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Existence and Completeness}
+\label{sec:wlim-completeness}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Weighted completeness]
+\label{def:wcomplete}
+A $\mathcal{V}$-category $\mathcal{C}$ is \term{$\mathcal{V}$-complete} if
+$\{W, F\}$ exists for every small diagram $F : \mathcal{J} \to \mathcal{C}$
+and weight $W : \mathcal{J} \to \mathcal{V}$. Dually, \term{$\mathcal{V}$-cocomplete}
+for weighted colimits.
+\end{definition}
+
+\begin{theorem}[Weighted completeness from cotensors and conical limits]
+\label{thm:wcomplete-from-pieces}
+A tensored and cotensored $\mathcal{V}$-category $\mathcal{C}$ is
+$\mathcal{V}$-complete iff its underlying ordinary category is complete (has
+all small conical limits). In that case,
+\begin{equation*}
+  \{W, F\} \;\cong\; \lim_{j \in \mathcal{J}} W(j) \pitchfork F(j),
+\end{equation*}
+where the outer $\lim$ is the ordinary conical limit and $W(j) \pitchfork F(j)$
+is the cotensor.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Compute $\mathcal{C}(c, \{W, F\}) \cong \int_j \mathcal{V}(W j,
+\mathcal{C}(c, F j))$.}{End formula.}
+\proofstep{$\int_j \mathcal{V}(W j, \mathcal{C}(c, F j)) \cong \int_j
+\mathcal{C}(c, W(j) \pitchfork F(j))$.}{By the cotensor adjunction
+$\mathcal{V}(V, \mathcal{C}(c, X)) \cong \mathcal{C}(c, V \pitchfork X)$.}
+\proofstep{$\int_j \mathcal{C}(c, W(j) \pitchfork F(j)) \cong
+\mathcal{C}\!\left(c, \lim_j W(j) \pitchfork F(j)\right)$.}{Hom-functor is
+continuous; takes ends (limits) in to limits.}
+\proofstep{Therefore $\{W, F\} \cong \lim_j W(j) \pitchfork F(j)$ by Yoneda.}{
+Two objects with isomorphic hom-out are isomorphic.}
+\proofstep{Existence: if conical limits and cotensors exist, the right-hand
+side does, so does the weighted limit.}{Reduction.}
+\proofstep{Conversely, taking $W = \Delta I$ recovers conical limits; taking
+$\mathcal{J}$ discrete recovers cotensors.}{The two pieces are special
+weighted limits.}
+\end{prooflog}
+
+\begin{corollary}
+A symmetric monoidal closed complete category $\mathcal{V}$ is $\mathcal{V}$-complete
+when self-enriched. (Cotensors are internal homs.)
+\end{corollary}
+
+\subsection{Reorganizing: Cocompleteness Dually}
+
+\begin{theorem}[Weighted cocompleteness from tensors and conical colimits]
+\label{thm:wcocomplete}
+A tensored $\mathcal{V}$-category $\mathcal{C}$ with all conical colimits is
+$\mathcal{V}$-cocomplete, and
+\begin{equation*}
+  W \star F \;\cong\; \operatorname{colim}_j W(j) \otimes F(j).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+Dual to Theorem~\ref{thm:wcomplete-from-pieces}. Replace ends by coends,
+products by coproducts, $\pitchfork$ by $\otimes$, $\lim$ by $\operatorname{colim}$.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Weighted Kan Extensions: A Preview}
+\label{sec:wkan-preview}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The weighted-limit framework gives an immediate definition of Kan extensions
+in the enriched setting. We state the formula here; Chapter~31 develops the
+general theory.
+
+\begin{definition}[Weighted Kan extension]
+\label{def:wkan}
+For a $\mathcal{V}$-functor $K : \mathcal{C} \to \mathcal{D}$ and $F :
+\mathcal{C} \to \mathcal{E}$, the \term{(pointwise) left Kan extension}
+$\operatorname{Lan}_K F : \mathcal{D} \to \mathcal{E}$ is defined by the
+weighted colimit
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;=\; \mathcal{D}(K-, d) \star F.
+\end{equation*}
+Dually, the right Kan extension is the weighted limit
+\begin{equation*}
+  (\operatorname{Ran}_K F)(d) \;=\; \{\mathcal{D}(d, K-), F\}.
+\end{equation*}
+\end{definition}
+
+\begin{remark}[Coend form]
+Using the coend formula:
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;=\; \int^c \mathcal{D}(K c, d) \otimes F(c),
+  \qquad
+  (\operatorname{Ran}_K F)(d) \;=\; \int_c [\mathcal{D}(d, K c), F(c)],
+\end{equation*}
+the latter using cotensor $[-,-]$. These recover the formulas of Chapter~18
+(in the ordinary case) and Chapter~24's promised enriched versions.
+\end{remark}
+
+\begin{remark}[Every weighted (co)limit is a Kan extension]
+A weighted limit $\{W, F\}$ for $F : \mathcal{J} \to \mathcal{C}$ and $W :
+\mathcal{J} \to \mathcal{V}$ is the right Kan extension of $F$ along
+$W : \mathcal{J} \to \mathcal{V}$ evaluated at $I \in \mathcal{V}$:
+\begin{equation*}
+  \{W, F\} \;\cong\; (\operatorname{Ran}_W F)(I).
+\end{equation*}
+Dually for colimits. This identifies (weighted) limit theory with Kan
+extension theory — they are the same thing presented from different
+viewpoints.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:wlim-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define the weighted limit $\{W, F\}$ of $F : \mathcal{J} \to \mathcal{C}$ by $W : \mathcal{J} \to \mathcal{V}$.}{The object with $\mathcal{C}(c, \{W, F\}) \cong [\mathcal{J}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c, F-))$ in $\mathcal{V}$, naturally in $c$.}
+\qaitem{Write the end formula for the weighted limit.}{$\mathcal{C}(c, \{W, F\}) \cong \int_j \mathcal{V}(W j, \mathcal{C}(c, F j))$.}
+\qaitem{What is the conical limit as a weighted limit?}{$\lim F = \{\Delta I, F\}$ (or $\{\Delta\{*\}, F\}$ in the $\mathbf{Set}$-case): weighted by the constant unit.}
+\qaitem{What is the cotensor as a weighted limit?}{For $\mathcal{J} = \mathbf{1}$, $F$ a single object $X$, $W$ a single object $V$: $V \pitchfork X = \{V, X\}$, satisfying $\mathcal{C}(c, V \pitchfork X) \cong \mathcal{V}(V, \mathcal{C}(c, X))$.}
+\qaitem{Define the weighted colimit $W \star F$.}{For $W : \mathcal{J}^{\mathrm{op}} \to \mathcal{V}$, the object with $\mathcal{C}(W \star F, c) \cong [\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(F-, c))$ in $\mathcal{V}$.}
+\qaitem{Coend formula for the weighted colimit?}{$W \star F \cong \int^j W(j) \otimes F(j)$, in a tensored category.}
+\qaitem{Conical colimit as a weighted colimit?}{$\operatorname{colim} F = \Delta I \star F$.}
+\qaitem{What is the tensor $V \otimes X$ as a weighted colimit?}{For $\mathcal{J} = \mathbf{1}$, the colimit weighted by $V$ of the diagram at $X$. Satisfies $\mathcal{C}(V \otimes X, c) \cong \mathcal{V}(V, \mathcal{C}(X, c))$.}
+\qaitem{State the Yoneda reduction for weighted limits.}{$\{\mathcal{J}(j_0, -), F\} \cong F(j_0)$: representable weights pick out values.}
+\qaitem{Coend Yoneda reduction for weighted colimits?}{$\mathcal{J}(-, j_0) \star F \cong F(j_0)$.}
+\qaitem{What is a comma object as a weighted limit?}{The lax limit of a 2-cell, with weight given by a specific $\mathbf{Cat}$-valued functor $\mathbf{2} \to \mathbf{Cat}$.}
+\qaitem{When is a $\mathcal{V}$-category $\mathcal{V}$-complete?}{When $\{W, F\}$ exists for every small diagram $F$ and weight $W$.}
+\qaitem{How is weighted completeness reduced to cotensors plus conical limits?}{$\{W, F\} \cong \lim_j W(j) \pitchfork F(j)$ in a tensored/cotensored $\mathcal{V}$-category.}
+\qaitem{Dually for weighted cocompleteness?}{$W \star F \cong \operatorname{colim}_j W(j) \otimes F(j)$.}
+\qaitem{Why do weighted limits commute with weighted limits (limits commute with limits)?}{Because they are both ends, and ends commute by Fubini.}
+\qaitem{Why does the coend formula for weighted colimits require $\mathcal{C}$ to be tensored?}{Because the formula uses $W(j) \otimes F(j)$; without tensors, this is not a well-defined object of $\mathcal{C}$.}
+\qaitem{Define the (pointwise) left Kan extension in the weighted setting.}{$(\operatorname{Lan}_K F)(d) = \mathcal{D}(K-, d) \star F = \int^c \mathcal{D}(K c, d) \otimes F(c)$.}
+\qaitem{Right Kan extension in the weighted setting?}{$(\operatorname{Ran}_K F)(d) = \{\mathcal{D}(d, K-), F\} = \int_c [\mathcal{D}(d, K c), F(c)]$.}
+\qaitem{Is every weighted (co)limit a Kan extension?}{Yes: $\{W, F\} \cong (\operatorname{Ran}_W F)(I)$ and $W \star F \cong (\operatorname{Lan}_W F)(I)$, where $W$ is treated as a functor $\mathcal{J} \to \mathcal{V}$ and the Kan extensions are along it.}
+\qaitem{Why do representable weights ``evaluate'' the diagram?}{Because $\mathcal{J}(j_0, -)$ acts as the ``point at $j_0$'' under the Yoneda lemma; the weighted limit reduces by Yoneda to $F(j_0)$.}
+\qaitem{What is a homotopy limit in this framework?}{A weighted limit where the weight encodes higher coherence (e.g., simplicial structure). When $\mathcal{V} = \mathbf{sSet}$ and $W$ is a fibrant replacement of the constant simplicial set, $\{W, F\}$ is the homotopy limit.}
+\qaitem{What is the relationship between the end of a $\mathcal{V}$-functor and a weighted limit?}{An end is the weighted limit by the hom-profunctor: $\int_c T(c, c) = \{\mathcal{C}(-,-), T\}$ where $T : \mathcal{C}^{\mathrm{op}} \otimes \mathcal{C} \to \mathcal{V}$.}
+\qaitem{In $\mathbf{Set}$-enriched setting, what does ``tensored'' mean?}{$\mathbf{Set}$-tensored means having copowers: $S \cdot X = \coprod_S X$ exists. Every cocomplete category is $\mathbf{Set}$-tensored.}
+\qaitem{Why is the dual variance condition on $W$ for colimits ($\mathcal{J}^{\mathrm{op}}$ vs.\ $\mathcal{J}$) needed?}{Because the weighted colimit's defining isomorphism contains $\mathcal{C}(F-, c)$ which is contravariant in the diagram source; the weight must match this contravariance.}
+\qaitem{What is the underlying ordinary functor of $\{-, -\} : [\mathcal{J}, \mathcal{V}]^{\mathrm{op}} \otimes [\mathcal{J}, \mathcal{C}] \to \mathcal{C}$?}{The ordinary bifunctor taking $(W, F)$ to the weighted limit $\{W, F\}$.}
+\qaitem{If $\mathcal{V}$ is cartesian closed, what is the cotensor in $[\mathcal{C}, \mathcal{V}]$?}{$(V \pitchfork F)(c) = V \pitchfork F(c) = [V, F(c)]_\mathcal{V}$, computed pointwise.}
+\qaitem{What is a ``descent object'' as a weighted limit?}{A weighted limit of a coherence diagram (a cosimplicial object in $\mathcal{C}$, truncated). It encodes ``descent data'' from a cover to a base.}
+\qaitem{Why does flexible weighted limits theory work for 2-categories?}{Because $\mathbf{Cat}$ is closed under (small) products and cotensors with categories; tensors are categories indexed by a category.}
+\qaitem{What is the relationship between weighted (co)limits and ordinary natural transformations?}{Weighted limits represent ``natural transformations from the weight to the hom-functor''; the weight becomes a probe for the diagram.}
+\qaitem{Why does the chapter's title pair ``weighted'' with ``limits''?}{Because ordinary limits are the case $W = \Delta I$ (a single ``constant'' weight); weighted limits add the flexibility of an arbitrary weight, generalizing the limit notion to all of enriched/2-categorical settings.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Weighted limits via ends.}\quad $\{W, F\}$ is defined by
+$\mathcal{C}(c, \{W, F\}) \cong \int_j \mathcal{V}(W j, \mathcal{C}(c, F j))$.
+Conical limits are the case $W = \Delta I$.
+
+\textbf{Weighted colimits via coends.}\quad $W \star F = \int^j W(j) \otimes
+F(j)$ in a tensored $\mathcal{V}$-category. Conical colimits are the case
+$W = \Delta I$. Tensors are the case $\mathcal{J} = \mathbf{1}$.
+
+\textbf{Yoneda reduction.}\quad Representable weights evaluate the diagram:
+$\{\mathcal{J}(j_0, -), F\} \cong F(j_0)$ and $\mathcal{J}(-, j_0) \star F
+\cong F(j_0)$.
+
+\textbf{Weighted completeness from pieces.}\quad In a tensored/cotensored
+$\mathcal{V}$-category, weighted completeness is equivalent to conical
+completeness; $\{W, F\} \cong \lim_j W(j) \pitchfork F(j)$.
+
+\textbf{Functoriality and Fubini.}\quad Weighted (co)limits are functorial in
+both arguments. Limits commute with limits (Fubini for ends); colimits with
+colimits (Fubini for coends). This makes weighted-limit calculus mechanical.
+
+\textbf{Kan extension preview.}\quad The (pointwise) left Kan extension is
+$(\operatorname{Lan}_K F)(d) = \int^c \mathcal{D}(K c, d) \otimes F(c)$ and
+the right is $\int_c [\mathcal{D}(d, K c), F(c)]$. Every weighted (co)limit
+is a Kan extension; every Kan extension is a weighted (co)limit. Full
+development in Chapter~31.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Weighted limit.}\quad
+\begin{equation*}
+  \mathcal{C}(c, \{W, F\}) \;\cong\; \int_j \mathcal{V}(W j, \mathcal{C}(c, F j))
+  \quad\text{in } \mathcal{V}, \text{ naturally in } c.
+\end{equation*}
+
+\medskip
+\textbf{Weighted colimit.}\quad
+\begin{equation*}
+  W \star F \;\cong\; \int^j W(j) \otimes F(j),
+  \qquad
+  \mathcal{C}(W \star F, c) \;\cong\; \int_j \mathcal{V}(W j, \mathcal{C}(F j, c)).
+\end{equation*}
+
+\medskip
+\textbf{Conical (co)limits.}\quad $\lim F = \{\Delta I, F\}$; $\operatorname{colim} F
+= \Delta I \star F$.
+
+\medskip
+\textbf{Cotensor, tensor.}\quad $V \pitchfork X = \{V, X\}$ for $\mathcal{J} =
+\mathbf{1}$; $V \otimes X = V \star X$.
+
+\medskip
+\textbf{Yoneda reduction.}\quad $\{\mathcal{J}(j_0, -), F\} \cong F(j_0)$ and
+$\mathcal{J}(-, j_0) \star F \cong F(j_0)$.
+
+\medskip
+\textbf{Completeness reduction.}\quad In a tensored/cotensored $\mathcal{V}$-category,
+$\{W, F\} \cong \lim_j W(j) \pitchfork F(j)$ and $W \star F \cong \operatorname{colim}_j
+W(j) \otimes F(j)$. Weighted (co)completeness reduces to conical (co)completeness
+plus (co)tensors.
+
+\medskip
+\textbf{Kan extension formulas.}\quad
+\begin{align*}
+  (\operatorname{Lan}_K F)(d) &= \mathcal{D}(K-, d) \star F = \int^c \mathcal{D}(K c, d) \otimes F(c), \\
+  (\operatorname{Ran}_K F)(d) &= \{\mathcal{D}(d, K-), F\} = \int_c [\mathcal{D}(d, K c), F(c)].
+\end{align*}
+
+\medskip
+\textbf{Universal identification.}\quad Every weighted (co)limit is a Kan
+extension; every Kan extension is a weighted (co)limit.
+
+\medskip
+\noindent\textit{Chapter~28 makes the universality of Yoneda formal in this
+weighted/enriched setting: \emph{the Yoneda embedding is the free cocompletion}
+in the precise sense of weighted colimit theory.}
+\end{formalrestatement}

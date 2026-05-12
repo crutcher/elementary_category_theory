@@ -212,7 +212,7 @@
 
 \NewEnviron{qa}{%
   \setlength{\extrarowheight}{2pt}%
-  \begin{tabularx}{\linewidth}{@{}>{}\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{}\raggedright\arraybackslash}X@{}}
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{\raggedright\arraybackslash}X@{}}
     \BODY
   \end{tabularx}%
 }
@@ -238,9 +238,9 @@
 \NewEnviron{prooflog}{%
   \setlength{\extrarowheight}{3pt}%
   \begin{tabularx}{\linewidth}{%
-    @{}>{}\raggedright\arraybackslash}p{0.54\linewidth}%
+    @{}>{\raggedright\arraybackslash}p{0.54\linewidth}%
     @{\hspace{0.8em}}!{\color{InformalColor!30}\vrule}@{\hspace{0.8em}}%
-    >{}\raggedright\arraybackslash\itshape\small}X@{}}
+    >{\raggedright\arraybackslash\itshape\small}X@{}}
     \BODY
   \end{tabularx}%
 }

@@ -7,11 +7,14 @@ feedback as the project evolves. See `history/` for the immutable record._
 
 ## Current state
 
-- **Integration branch:** `main`
-- **Feature branch in progress:** `feature/volumes-v0.13`
-- **Last merged round:** v0.12 (Q/A exercises for Ch 1-10; new Ch 6-10)
-- **Chapters written:** Preface, Chapter 1-10
-- **In progress (v0.13):** Ch 11-12 (complete Vol I); Vol II recapitulation; Vol III formal spine
+- **Integration branch:** `main` (at `25620d1`)
+- **Feature branch in progress:** none — v0.13 landed on main 2026-05-12
+- **Last merged round:** v0.13 (Vol I Ch 11-12; full Vol II Ch 13-24; three-volume `\part{}` structure; `prooflog` env; exercise spacing)
+- **Chapters written:** Preface, Ch 1–24 (Vol I + Vol II complete)
+- **Unwritten:** Ch 25–36 (Vol III); `\part` and chapter inputs are commented out in `main.tex` (lines 48–62) until drafting begins.
+- **Build:** `cd book && make` is green; 193pp PDF, no undefined refs.
+- **Note (2026-05-12):** repo was recovered from two branches that couldn't land via the remote runner. A build-blocker in `preamble.tex` (malformed `tabularx` column specs in `qa` / `prooflog` envs) was fixed in the recovery; the working fix matches what's now on `origin/main`.
+- **Vol III preparation:** see `notes/vol3_planning.md` — per-chapter overlap/contribution analysis, drafting order, and open decisions to confirm before Ch 25 starts.
 - **Merged PRs**: #1 (v0.7), #2 (v0.10 typography), #3 (undefined ref fix),
   #4 (v0.10 → main), #5 (Ch 2+3), #7 (v0.11 Ch 4-5), #8 (v0.12)
 
@@ -132,6 +135,12 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 - [ ] Q/A layout calibration — two-column tabularx; visual check needed.
 - [ ] Appendix: "How to read a diagram" — annotated worked example.
 - [ ] Appendix: Glossary.
+- [ ] Vol III pedagogy: confirm prose density / cycle stages / chapter length
+      target before drafting Ch 25. See `vol3_planning.md` §6.
+- [ ] Vol III chapter scoping: confirm intended depth for Ch 28 (Formal Yoneda),
+      Ch 29 (Coherence), Ch 31 (Kan extensions), Ch 34 (AFTs unified) — each
+      risks recap of an already-thorough Vol II chapter. See `vol3_planning.md` §6.
+- [ ] Cosmetic: `tcolorbox nobreak` warning at `ch24:395` — defer.
 
 ---
 

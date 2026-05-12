@@ -1,0 +1,621 @@
+% ch25_2categories_bicategories.tex — Volume III Chapter 1
+
+\chapter{2-Categories and Bicategories}
+
+\begin{overviewbox}
+Chapter~22 introduced the 2-category $\mathbf{Cat}$ — objects are categories,
+1-cells are functors, 2-cells are natural transformations — and proved the
+interchange law for its vertical and horizontal compositions. This chapter
+develops the full theory of 2-categorical structure: strict 2-categories,
+\emph{bicategories} (where associativity and unitality hold only up to
+coherent 2-isomorphism), the three flavours of functor between them
+(\emph{strict}, \emph{pseudo}, \emph{lax}), and the higher cells
+(\emph{pseudonatural transformations} and \emph{modifications}) that organize
+them into a 3-categorical hierarchy.
+
+Two payoffs. First, examples beyond $\mathbf{Cat}$ — $\mathbf{Span}$,
+$\mathbf{Prof}$, $\mathbf{Rel}$, $\mathbf{Bimod}$ — none of which are
+strictly associative; bicategory language is mandatory to handle them.
+Second, the strictification theorem: every bicategory is biequivalent to a
+strict 2-category. This is the higher-categorical analogue of Mac Lane's
+coherence (Chapter~19) and explains why we may often pretend strictness is
+no loss of generality.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Strict 2-Categories Revisited}
+\label{sec:strict-2cat-revisited}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Strict 2-category]
+A \term{strict 2-category} $\mathcal{K}$ consists of:
+\begin{itemize}
+  \item A class of \emph{objects} (0-cells) $a, b, \ldots$
+  \item For each pair $a, b$, a category $\mathcal{K}(a, b)$ — the
+        \emph{hom-category}. Its objects are 1-cells $f : a \to b$; its
+        morphisms are 2-cells $\alpha : f \Rightarrow g$.
+  \item For each triple $a, b, c$, a \emph{composition functor}
+        $\circ : \mathcal{K}(b,c) \times \mathcal{K}(a,b) \to \mathcal{K}(a,c)$.
+  \item For each $a$, an identity 1-cell $1_a \in \mathcal{K}(a,a)$.
+\end{itemize}
+These satisfy \emph{strict} associativity and unit laws:
+$h \circ (g \circ f) = (h \circ g) \circ f$ and $1_b \circ f = f = f \circ 1_a$.
+\end{definition}
+
+The composition functor being a \emph{functor} (not merely a function) is
+what packages the interchange law: applied to 2-cells it gives horizontal
+composition, applied to identity 2-cells it gives whiskering, and functoriality
+in each variable says exactly that vertical and horizontal composites commute.
+
+\begin{remark}[2-categories as $\mathbf{Cat}$-enriched categories]
+A strict 2-category is precisely a category \emph{enriched over $\mathbf{Cat}$}
+with the cartesian product. Hom-categories are the $\mathcal{V}$-objects;
+composition functors are the $\mathcal{V}$-composition. All structure
+descends from Chapter~12's enriched-category machinery.
+\end{remark}
+
+\subsection{Formally}
+
+\begin{example_thm}
+$\mathbf{Cat}$ itself, with hom-categories $\mathbf{Cat}(\mathcal{A}, \mathcal{B})
+= [\mathcal{A}, \mathcal{B}]$ the functor category.
+\end{example_thm}
+
+\begin{example_thm}
+For each ordinary category $\mathcal{C}$, the \emph{locally discrete} 2-category
+$\mathcal{C}_{\mathrm{disc}}$: same objects and 1-cells; only identity 2-cells.
+This realises every category as a 2-category.
+\end{example_thm}
+
+\begin{example_thm}
+For each ordinary category $\mathcal{C}$ with all pullbacks, the 2-category
+$\mathbf{Cat}/\mathcal{C}$ of \emph{categories sliced over $\mathcal{C}$}:
+objects are functors into $\mathcal{C}$, 1-cells are triangles, 2-cells are
+natural transformations between the triangle's tops compatible with the
+projection.
+\end{example_thm}
+
+\begin{example_thm}[Monoidal categories as one-object 2-categories]
+A monoidal category $(\mathcal{V}, \otimes, I)$ is the same data as a strict
+2-category $B\mathcal{V}$ with a single object $\star$: 1-cells are objects
+of $\mathcal{V}$, composition is $\otimes$, 2-cells are morphisms of
+$\mathcal{V}$, the identity 1-cell is $I$. This works when $\otimes$ is
+strictly associative; otherwise the identification is up to a coherent
+isomorphism, which is the bicategorical case (\S\ref{sec:bicategories}).
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bicategories}
+\label{sec:bicategories-formal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+A bicategory is a 2-category in which the strict equality
+$h \circ (g \circ f) = (h \circ g) \circ f$ is replaced by an
+\emph{associator}: a specified invertible 2-cell
+$\alpha_{h,g,f} : (h \circ g) \circ f \xRightarrow{\;\cong\;} h \circ (g \circ f)$.
+Likewise the strict unit equations are replaced by invertible \emph{unitors}.
+Coherence axioms — the pentagon for associators, the triangle for unitors —
+guarantee that all reassociation diagrams commute, just as in the monoidal
+case of Chapter~19.
+
+\subsection{Formalizing}
+
+\begin{definition}[Bicategory]
+\label{def:bicategory}
+A \term{bicategory} $\mathcal{B}$ consists of:
+\begin{itemize}
+  \item Objects (0-cells) $a, b, \ldots$
+  \item For each pair $a, b$, a hom-category $\mathcal{B}(a,b)$.
+  \item Composition functors $\circ_{a,b,c} : \mathcal{B}(b,c) \times \mathcal{B}(a,b)
+        \to \mathcal{B}(a,c)$.
+  \item Identity 1-cells $1_a \in \mathcal{B}(a,a)$.
+  \item For each composable triple $(h, g, f)$, an invertible \term{associator}
+        $\alpha_{h,g,f} : (h \circ g) \circ f \xRightarrow{\;\cong\;}
+         h \circ (g \circ f)$, natural in $h, g, f$.
+  \item For each $f : a \to b$, invertible \term{unitors}
+        $\lambda_f : 1_b \circ f \xRightarrow{\;\cong\;} f$ and
+        $\rho_f : f \circ 1_a \xRightarrow{\;\cong\;} f$, natural in $f$.
+\end{itemize}
+These are required to satisfy the \term{pentagon} and \term{triangle} axioms:
+\begin{itemize}
+  \item Pentagon: for composable $k, h, g, f$, the two ways to reassociate
+        $((k \circ h) \circ g) \circ f \to k \circ (h \circ (g \circ f))$
+        via $\alpha$'s agree.
+  \item Triangle: $\rho_g \circ_h \mathrm{id}_h = \mathrm{id}_g \circ_h \lambda_h$
+        composed with $\alpha_{g,1_b,h}$ for $g : b \to c$, $h : a \to b$.
+\end{itemize}
+\end{definition}
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\alpha_{h,g,f}$ \sayit{``alpha sub h, g, f''} or \sayit{``the associator
+        at h, g, f''}.
+  \item $f \circ_h g$ \sayit{``f horizontal g''} — horizontal composition of
+        2-cells, the action of the composition \emph{functor} on morphisms.
+\end{itemize}
+\end{howtosay}
+
+A strict 2-category is the special case where all associators and unitors are
+identity 2-cells. Conversely:
+
+\begin{proposition}[Coherence for bicategories — preview]
+\label{prop:bicat-coherence}
+In any bicategory, every diagram built from associators and unitors commutes.
+\end{proposition}
+
+This is the analogue of Mac Lane's coherence theorem (Chapter~19) for the
+monoidal case. The proof, via strictification, appears in
+\S\ref{sec:strictification}.
+
+\subsection{Reorganizing: Monoidal Categories as One-Object Bicategories}
+
+\begin{proposition}
+A monoidal category $(\mathcal{V}, \otimes, I, \alpha, \lambda, \rho)$ is the
+same data as a bicategory with a single object.
+\end{proposition}
+
+\begin{proof}
+A one-object bicategory $\mathcal{B}$ with object $\star$ has a single
+hom-category $\mathcal{B}(\star, \star)$ whose objects (1-cells) and morphisms
+(2-cells) are precisely the objects and morphisms of a category $\mathcal{V}$.
+Composition $\circ : \mathcal{B}(\star,\star) \times \mathcal{B}(\star,\star)
+\to \mathcal{B}(\star,\star)$ is a functor $\otimes : \mathcal{V} \times
+\mathcal{V} \to \mathcal{V}$. The identity 1-cell is the unit $I$. The
+associator and unitors are precisely $\alpha$, $\lambda$, $\rho$. The pentagon
+and triangle axioms transfer identically. The correspondence is exact.
+\end{proof}
+
+\begin{remark}
+This is the same kind of one-object delooping as ``monoid = one-object
+category'' and ``group = one-object groupoid''. Each level of categorification
+adds one dimension to the diagram and one axis of coherence.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Pseudofunctors, Lax Functors, and Oplax Functors}
+\label{sec:pseudofunctors}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+For ordinary categories, functoriality is an equation: $F(g \circ f) = F(g)
+\circ F(f)$ and $F(1_a) = 1_{Fa}$. For bicategories, equality is too rigid:
+when $\mathcal{B}$ has non-strict associators, we cannot expect a map of
+bicategories to preserve composition on the nose. The right notion is
+preservation \emph{up to a coherent 2-isomorphism}.
+
+\begin{definition}[Pseudofunctor]
+\label{def:pseudofunctor}
+A \term{pseudofunctor} (also: \term{weak 2-functor}) $F : \mathcal{B} \to
+\mathcal{C}$ between bicategories consists of:
+\begin{itemize}
+  \item A function $F : \mathrm{ob}\,\mathcal{B} \to \mathrm{ob}\,\mathcal{C}$
+        on objects.
+  \item For each pair $a, b$, a functor $F_{a,b} : \mathcal{B}(a,b) \to
+        \mathcal{C}(Fa, Fb)$.
+  \item For each composable pair $(g, f)$, an invertible 2-cell
+        $\phi_{g,f} : F(g) \circ F(f) \xRightarrow{\;\cong\;} F(g \circ f)$ —
+        the \term{compositor}.
+  \item For each $a$, an invertible 2-cell $\phi_a : 1_{Fa} \xRightarrow{\;\cong\;}
+        F(1_a)$ — the \term{unitor}.
+\end{itemize}
+The compositor and unitor are required to be \emph{natural} in their arguments
+and to satisfy three coherence diagrams: one matching $F(\alpha)$ to the
+associator of $\mathcal{C}$ via $\phi$, and two matching $F(\lambda)$,
+$F(\rho)$ to the unitors via $\phi$.
+\end{definition}
+
+\begin{definition}[Lax and oplax functors]
+A \term{lax functor} $F : \mathcal{B} \to \mathcal{C}$ has the same data as a
+pseudofunctor except $\phi_{g,f}$ and $\phi_a$ are \emph{not required to be
+invertible} — they are merely 2-cells in the displayed direction. An
+\term{oplax functor} reverses the direction: $\phi_{g,f}^{\mathrm{op}} :
+F(g \circ f) \Rightarrow F(g) \circ F(f)$ and $\phi_a^{\mathrm{op}} : F(1_a)
+\Rightarrow 1_{Fa}$.
+\end{definition}
+
+\begin{remark}
+Lax functors with values in $\mathbf{Cat}$ have a striking interpretation
+that returns in Chapter~32: a lax functor $\mathbf{1} \to \mathbf{Cat}$ is
+precisely a \emph{monad}. The compositor $\phi$ is the multiplication
+$\mu$; the unitor $\phi_a$ is $\eta$; the coherence diagrams are exactly
+the monad associativity and unit axioms.
+\end{remark}
+
+\subsection{Reorganizing: When Pseudofunctors Are Strict}
+
+A \term{strict 2-functor} is a pseudofunctor whose $\phi_{g,f}$ and $\phi_a$
+are all identity 2-cells. Between strict 2-categories these are the ``honest''
+2-functors. Between bicategories, asking for strictness is too much; even the
+identity functor of a non-strict bicategory cannot be strict, because the
+associator is non-identity. \emph{Pseudo} is the natural notion.
+
+\subsection{Formally}
+
+\begin{example_thm}[Identity pseudofunctor]
+$\mathrm{Id}_\mathcal{B} : \mathcal{B} \to \mathcal{B}$ with $\phi_{g,f} =
+\mathrm{id}$ and $\phi_a = \mathrm{id}$. This is strict — but only because
+the source equals the target.
+\end{example_thm}
+
+\begin{example_thm}[Underlying ordinary category]
+The forgetful pseudofunctor $U : \mathcal{B} \to \mathcal{B}_0$ to the
+underlying ordinary category collapses 2-cells. It is \emph{lax}, with
+$\phi_{g,f} : g \circ_{\mathcal{B}} f \to g \circ_{\mathcal{B}_0} f$ given by
+quotienting; not invertible in general.
+\end{example_thm}
+
+\begin{example_thm}[Free monoidal functor]
+The free symmetric monoidal completion $\mathcal{V} \to \mathrm{Sym}(\mathcal{V})$
+is a pseudofunctor of monoidal-as-bicategories. Compositors arise from the
+canonical isomorphisms in the symmetric monoidal closure.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Pseudonatural Transformations and Modifications}
+\label{sec:pseudonat-modifications}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+For ordinary functors $F, G : \mathcal{A} \to \mathcal{B}$, a natural
+transformation $\eta : F \Rightarrow G$ is a family $\eta_a : Fa \to Ga$
+satisfying a square equality. For pseudofunctors $F, G : \mathcal{B} \to
+\mathcal{C}$ between bicategories, the square is replaced by an invertible
+2-cell.
+
+\begin{definition}[Pseudonatural transformation]
+\label{def:pseudonat}
+A \term{pseudonatural transformation} $\eta : F \Rightarrow G$ between
+pseudofunctors $F, G : \mathcal{B} \to \mathcal{C}$ consists of:
+\begin{itemize}
+  \item For each $a \in \mathcal{B}$, a 1-cell $\eta_a : Fa \to Ga$ in
+        $\mathcal{C}$.
+  \item For each 1-cell $f : a \to b$ in $\mathcal{B}$, an invertible 2-cell
+        \begin{equation*}
+          \eta_f : Gf \circ \eta_a \xRightarrow{\;\cong\;} \eta_b \circ Ff.
+        \end{equation*}
+\end{itemize}
+These satisfy two coherence axioms: \emph{respect for composition} ($\eta_{g
+\circ f}$ assembles from $\eta_g$ and $\eta_f$ via the compositors of $F, G$)
+and \emph{respect for identities} ($\eta_{1_a}$ matches the unitor data).
+\end{definition}
+
+\begin{definition}[Lax/oplax transformations]
+Drop the invertibility of $\eta_f$ to get a \term{lax} transformation; reverse
+its direction to get an \term{oplax} transformation.
+\end{definition}
+
+\subsection{Reorganizing}
+
+\begin{definition}[Modification]
+\label{def:modification}
+For two pseudonatural transformations $\eta, \eta' : F \Rightarrow G$, a
+\term{modification} $m : \eta \Rrightarrow \eta'$ is a family of 2-cells
+$m_a : \eta_a \Rightarrow \eta'_a$ in $\mathcal{C}$ — one for each object
+$a \in \mathcal{B}$ — satisfying compatibility with the structure 2-cells
+$\eta_f, \eta'_f$: for each $f : a \to b$, the equation
+\begin{equation*}
+  (\mathrm{id}_{\eta'_b} \circ_h Ff) \cdot m_a^{Gf} \;=\; m_b^{Ff} \cdot
+  (\mathrm{id}_{Gf} \circ_h \eta_a)
+\end{equation*}
+in $\mathcal{C}(Fa, Gb)$, with $m^{(-)}$ denoting whiskering of $m$ by
+the indicated 1-cell.
+\end{definition}
+
+\begin{proposition}[The tricategorical hierarchy]
+For any pair of bicategories $\mathcal{B}, \mathcal{C}$, pseudofunctors,
+pseudonatural transformations, and modifications form a (strict) 2-category
+$\mathrm{Bicat}(\mathcal{B}, \mathcal{C})$.
+\end{proposition}
+
+\begin{proof}[Sketch]
+1-cell composition is pasting of 2-cells; 2-cell vertical and horizontal
+compositions are inherited from $\mathcal{C}$. The interchange law and unit
+laws of the strict 2-category structure follow from the corresponding axioms
+in $\mathcal{C}$ together with the coherence axioms of pseudonaturality.
+\end{proof}
+
+\begin{remark}
+Globally, bicategories, pseudofunctors, pseudonatural transformations, and
+modifications form a \term{tricategory} $\mathbf{Bicat}$. The tricategorical
+structure is needed because composition of pseudofunctors is associative only
+up to a coherent pseudonatural transformation, not strictly.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Examples Beyond $\mathbf{Cat}$}
+\label{sec:bicat-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The strength of bicategory theory shows in examples where strict associativity
+fails. We sketch four.
+
+\subsection{$\mathbf{Span}(\mathcal{C})$}
+
+For a category $\mathcal{C}$ with finite limits, the bicategory
+$\mathbf{Span}(\mathcal{C})$ has:
+\begin{itemize}
+  \item Objects: objects of $\mathcal{C}$.
+  \item 1-cells $a \to b$: spans $a \xleftarrow{p} x \xrightarrow{q} b$.
+  \item 2-cells: morphisms of spans (a single map of apexes commuting with
+        both legs).
+  \item Composition: pullback. Given $a \leftarrow x \to b$ and $b \leftarrow
+        y \to c$, the composite is $a \leftarrow x \times_b y \to c$.
+\end{itemize}
+
+\begin{remark}
+Composition is associative only up to the canonical isomorphism between
+iterated pullbacks $(x \times_b y) \times_c z \cong x \times_b (y \times_c z)$
+— a genuine non-trivial associator. This is why $\mathbf{Span}$ cannot be
+made strict (its strict version would require choosing pullbacks coherently,
+which is rarely possible).
+\end{remark}
+
+\subsection{$\mathbf{Prof}$}
+
+The bicategory of \term{profunctors}:
+\begin{itemize}
+  \item Objects: small categories.
+  \item 1-cells $\mathcal{A} \to \mathcal{B}$: profunctors $P :
+        \mathcal{B}^{\mathrm{op}} \times \mathcal{A} \to \mathbf{Set}$.
+  \item 2-cells: natural transformations of profunctors.
+  \item Composition: the coend formula $(Q \circ P)(c, a) = \int^{b}
+        Q(c, b) \times P(b, a)$.
+\end{itemize}
+
+The associator for $\mathbf{Prof}$ encodes the Fubini theorem for coends
+(Chapter~26). Composition is not strict because the iterated coends
+$\int^b \int^c$ and $\int^c \int^b$ are isomorphic but distinct constructions.
+
+\subsection{$\mathbf{Rel}$}
+
+The bicategory of relations:
+\begin{itemize}
+  \item Objects: sets.
+  \item 1-cells $A \to B$: relations $R \subseteq A \times B$.
+  \item 2-cells: containment $R \subseteq R'$ (a poset structure).
+  \item Composition: relational composition.
+\end{itemize}
+
+$\mathbf{Rel}$ is in fact \emph{locally posetal} — every hom-category is a
+poset — and the composition is strictly associative on relations, so it can
+be presented as a strict 2-category. We keep it under ``bicategories'' for
+uniformity with $\mathbf{Span}$.
+
+\subsection{$\mathbf{Bimod}$}
+
+For commutative rings, the bicategory $\mathbf{Bimod}$:
+\begin{itemize}
+  \item Objects: commutative rings.
+  \item 1-cells $R \to S$: $(S, R)$-bimodules.
+  \item 2-cells: bimodule homomorphisms.
+  \item Composition: tensor product $M \otimes_S N$.
+\end{itemize}
+
+The associator is the canonical isomorphism $(M \otimes_S N) \otimes_T P
+\cong M \otimes_S (N \otimes_T P)$. Like $\mathbf{Span}$, this fails strict
+associativity because the tensor product is only associative up to a chosen
+isomorphism.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Biequivalences and Strictification}
+\label{sec:strictification}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Biequivalence]
+A pseudofunctor $F : \mathcal{B} \to \mathcal{C}$ is a \term{biequivalence}
+if it is:
+\begin{itemize}
+  \item \emph{Essentially surjective on objects}: every $c \in \mathcal{C}$
+        is equivalent (via 1-cells with invertible 2-cells) to some $Fb$;
+  \item \emph{Locally an equivalence}: each $F_{a,b} : \mathcal{B}(a,b) \to
+        \mathcal{C}(Fa, Fb)$ is an equivalence of categories.
+\end{itemize}
+\end{definition}
+
+\begin{remark}
+This is the analogue of ``fully faithful and essentially surjective $\Rightarrow$
+equivalence'' for ordinary functors, but at one categorical level higher. The
+witness data is a pair $(F, G, \eta, \varepsilon)$ where $\eta, \varepsilon$
+are pseudonatural \emph{equivalences} (themselves invertible up to invertible
+modifications).
+\end{remark}
+
+\subsection{Formally}
+
+\begin{theorem}[Strictification]
+\label{thm:strictification}
+Every bicategory $\mathcal{B}$ is biequivalent to a strict 2-category
+$\mathcal{B}^{\mathrm{st}}$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Define $\mathcal{B}^{\mathrm{st}}$ with the same objects as
+$\mathcal{B}$; 1-cells $a \to b$ are finite \emph{strings} of composable
+1-cells of $\mathcal{B}$ from $a$ to $b$ (including the empty string at $a$,
+acting as identity).}{We replace composites by formal strings to gain strict
+associativity.}
+\proofstep{2-cells from one string to another are 2-cells in $\mathcal{B}$
+between their respective composites $\widehat{(-)} : \mathrm{strings} \to
+\mathrm{1\text{-}cells}$.}{The map $\widehat{(-)}$ takes a string $(f_1,
+\ldots, f_n)$ to $f_n \circ \cdots \circ f_1$, left-associated.}
+\proofstep{Composition of strings is concatenation; identity 1-cell at $a$
+is the empty string.}{Both operations are strictly associative and unital
+\emph{at the level of strings}.}
+\proofstep{The pseudofunctor $\widehat{(-)} : \mathcal{B}^{\mathrm{st}} \to
+\mathcal{B}$ sends a string to its left-associated composite.}{Provides
+the candidate biequivalence.}
+\proofstep{Compositor of $\widehat{(-)}$: for strings $s, t$, the canonical
+$\widehat{t \cdot s} = \widehat{t} \circ \widehat{s}$ is built from
+associators in $\mathcal{B}$. Invertible by definition.}{The associator chain
+is well-defined by Mac Lane coherence (Proposition~\ref{prop:bicat-coherence}).}
+\proofstep{$\widehat{(-)}$ is essentially surjective: each 1-cell $f \in
+\mathcal{B}$ is the composite of the singleton string $(f)$.}{Trivially.}
+\proofstep{$\widehat{(-)}$ is locally an equivalence: 2-cells between
+strings, by construction, are 2-cells between their composites in
+$\mathcal{B}$; so $\widehat{(-)}_{a,b}$ is fully faithful, and surjective on
+objects by the singleton-string argument.}{Both fullness/faithfulness and
+essential surjectivity at the hom-category level.}
+\proofstep{Conclude: $\widehat{(-)} : \mathcal{B}^{\mathrm{st}} \to \mathcal{B}$
+is a biequivalence.}{By definition of biequivalence.}
+\end{prooflog}
+
+\begin{corollary}[Mac Lane coherence for bicategories]
+\label{cor:bicat-coherence}
+Every diagram of associators and unitors in $\mathcal{B}$ commutes.
+\end{corollary}
+
+\begin{proof}
+Such a diagram, transported via the strictification $\widehat{(-)}$, becomes
+a diagram in the strict 2-category $\mathcal{B}^{\mathrm{st}}$ where
+associators and unitors are identities. There, every diagram of identity
+2-cells commutes trivially. Pulling back via $\widehat{(-)}$ (which is faithful
+on 2-cells) gives commutativity in $\mathcal{B}$.
+\end{proof}
+
+\begin{remark}[Why strictification is not the whole story]
+Strictification does not say every bicategory \emph{equals} a strict
+2-category, only that it is biequivalent. The distinction matters when we
+demand strict preservation of structure (as in strict $\Omega$-spectra of
+algebraic topology). Mostly, however, the strictification theorem licenses
+the working mathematician to write as if all bicategories were strict — the
+``up to coherent isomorphism'' caveats can be left implicit.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:bicat-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a strict 2-category in one line.}{A category enriched over $\mathbf{Cat}$ (with cartesian product).}
+\qaitem{What is the hom-category of a strict 2-category $\mathcal{K}$?}{For each pair $a, b$, a category $\mathcal{K}(a,b)$ whose objects are 1-cells $a \to b$ and morphisms are 2-cells between them.}
+\qaitem{What additional data does a bicategory have beyond a strict 2-category?}{Invertible 2-cells: an associator $\alpha_{h,g,f}$ for each composable triple, and left/right unitors $\lambda_f, \rho_f$ for each 1-cell.}
+\qaitem{What axioms must the associator and unitors satisfy?}{The pentagon (for four-fold composites) and the triangle (for unitors).}
+\qaitem{What is the bicategorical analogue of Mac Lane's coherence theorem?}{Every diagram of associators and unitors in a bicategory commutes (Corollary~\ref{cor:bicat-coherence}).}
+\qaitem{What does a monoidal category correspond to as a bicategory?}{A one-object bicategory. The single hom-category is the underlying category of the monoidal category.}
+\qaitem{State the strictification theorem.}{Every bicategory is biequivalent to a strict 2-category.}
+\qaitem{What is a pseudofunctor?}{A map of bicategories preserving composition and identities up to invertible 2-cells (compositor $\phi_{g,f}$ and unitor $\phi_a$) satisfying coherence axioms.}
+\qaitem{What is a lax functor?}{Same data as a pseudofunctor, but $\phi_{g,f}$ and $\phi_a$ are not required to be invertible.}
+\qaitem{What is the difference between lax and oplax functors?}{Lax: $\phi_{g,f} : F(g) \circ F(f) \Rightarrow F(g \circ f)$. Oplax: arrows reversed.}
+\qaitem{A lax functor $\mathbf{1} \to \mathbf{Cat}$ from the terminal bicategory is what?}{A monad. The compositor is $\mu$, the unitor is $\eta$, and the coherence axioms are the monad laws.}
+\qaitem{What is a pseudonatural transformation?}{Between pseudofunctors $F, G$: a family of 1-cells $\eta_a : Fa \to Ga$ and an invertible 2-cell $\eta_f : Gf \circ \eta_a \cong \eta_b \circ Ff$ for each 1-cell $f$, satisfying coherence with composition and identities.}
+\qaitem{What is a modification?}{Between pseudonatural transformations $\eta, \eta' : F \Rightarrow G$: a family of 2-cells $m_a : \eta_a \Rightarrow \eta'_a$ compatible with the structure 2-cells of $\eta$ and $\eta'$.}
+\qaitem{Why are bicategories, pseudofunctors, pseudonatural transformations, and modifications a tricategory rather than a strict 3-category?}{Composition of pseudofunctors is associative only up to coherent pseudonatural transformation, not strictly.}
+\qaitem{What is $\mathbf{Span}(\mathcal{C})$?}{The bicategory whose objects are objects of $\mathcal{C}$, 1-cells are spans $a \leftarrow x \to b$, 2-cells are span morphisms, and composition is pullback.}
+\qaitem{Why is $\mathbf{Span}(\mathcal{C})$ not strictly associative?}{Pullbacks are only associative up to canonical isomorphism: $(x \times_b y) \times_c z \cong x \times_b (y \times_c z)$.}
+\qaitem{What is $\mathbf{Prof}$?}{The bicategory of profunctors: small categories, profunctors as 1-cells (functors $\mathcal{B}^{\mathrm{op}} \times \mathcal{A} \to \mathbf{Set}$), natural transformations as 2-cells, composition via coend.}
+\qaitem{What is the composition rule in $\mathbf{Prof}$?}{$(Q \circ P)(c,a) = \int^b Q(c,b) \times P(b,a)$, a coend.}
+\qaitem{What is $\mathbf{Rel}$?}{The locally posetal bicategory of sets with relations as 1-cells, containments as 2-cells, and relational composition.}
+\qaitem{What is $\mathbf{Bimod}$?}{The bicategory of commutative rings, $(S,R)$-bimodules as 1-cells, bimodule maps as 2-cells, and tensor product as composition.}
+\qaitem{Define biequivalence.}{A pseudofunctor that is essentially surjective on objects (up to equivalence) and locally an equivalence (each hom-functor is an equivalence of categories).}
+\qaitem{What is the analogue of ``fully faithful and essentially surjective'' for biequivalences?}{Locally an equivalence and essentially surjective on objects up to equivalence — the bicategorical version.}
+\qaitem{What is a strict 2-functor?}{A pseudofunctor whose compositors and unitors are identities.}
+\qaitem{Why can't the identity of a non-strict bicategory be strict?}{Because the associator is non-identity; strict preservation would require $F(\alpha) = \mathrm{id}$, contradicting non-strictness.}
+\qaitem{In $\mathbf{Bimod}$, what is the identity 1-cell at a ring $R$?}{The bimodule $R$ itself (the regular $(R,R)$-bimodule).}
+\qaitem{In $\mathbf{Span}(\mathbf{Set})$, what is the identity 1-cell at a set $A$?}{The span $A \leftarrow A \to A$ with both legs the identity.}
+\qaitem{What 2-categorical structure on $\mathbf{Cat}$ is implied by the interchange law?}{Strict 2-category. The interchange law is exactly the functoriality of horizontal composition, which is what makes $\mathbf{Cat}$ strictly $\mathbf{Cat}$-enriched.}
+\qaitem{Is a monoidal functor a pseudofunctor of one-object bicategories?}{Yes: a strong (= pseudo) monoidal functor is precisely a pseudofunctor of one-object bicategories; lax monoidal is lax; oplax is oplax.}
+\qaitem{What is the relationship between $\mathbf{Bicat}$ as a tricategory and $\mathbf{Cat}$ as a 2-category?}{$\mathbf{Cat}$ is a sub-2-category of $\mathbf{Bicat}$: strict 2-categories with strict 2-functors and strict 2-natural transformations.}
+\qaitem{In what sense does strictification leave us in no loss of generality?}{Up to biequivalence: every bicategorical statement can be checked in the strictified 2-category. The ``up to coherent iso'' caveats can be left implicit.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Strict 2-categories.}\quad Categories enriched over $\mathbf{Cat}$:
+objects, hom-categories, composition functors, with strict associativity and
+unitality. $\mathbf{Cat}$ itself, locally discrete 2-categories, and
+$\mathbf{Cat}/\mathcal{C}$ are examples.
+
+\textbf{Bicategories.}\quad Generalization where associativity and unitality
+hold only up to coherent invertible 2-cells (associators $\alpha$, unitors
+$\lambda, \rho$) satisfying pentagon and triangle axioms. Monoidal categories
+are exactly one-object bicategories.
+
+\textbf{Pseudofunctors, lax/oplax functors.}\quad Maps of bicategories
+preserving composition up to invertible 2-cells (pseudo); up to (not
+necessarily invertible) 2-cells in one direction (lax) or the other (oplax).
+A lax functor $\mathbf{1} \to \mathbf{Cat}$ is a monad.
+
+\textbf{Pseudonatural transformations and modifications.}\quad Natural
+transformations between pseudofunctors with invertible 2-cell components
+$\eta_f$ instead of square equalities; modifications between pseudonatural
+transformations. Together, bicategories form a tricategory $\mathbf{Bicat}$.
+
+\textbf{Examples beyond $\mathbf{Cat}$.}\quad $\mathbf{Span}(\mathcal{C})$
+(pullback composition), $\mathbf{Prof}$ (coend composition), $\mathbf{Rel}$
+(locally posetal), $\mathbf{Bimod}$ (tensor over a ring).
+
+\textbf{Strictification.}\quad Every bicategory is biequivalent to a strict
+2-category, via the string-replacement construction. As a corollary, every
+diagram of associators and unitors commutes (Mac Lane coherence for
+bicategories). The strictification licenses the convention of treating
+bicategories as strict in informal arguments.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Bicategory data.}\quad Objects; hom-categories $\mathcal{B}(a,b)$;
+composition functors $\circ_{a,b,c}$; identity 1-cells $1_a$; invertible
+2-cells $\alpha_{h,g,f}, \lambda_f, \rho_f$. Pentagon and triangle axioms.
+
+\medskip
+\textbf{Pseudofunctor.}\quad Object map; hom-functors $F_{a,b}$;
+invertible 2-cells $\phi_{g,f} : F(g) \circ F(f) \cong F(g \circ f)$ and
+$\phi_a : 1_{Fa} \cong F(1_a)$; coherence with $\alpha, \lambda, \rho$.
+Lax: drop invertibility. Oplax: reverse direction.
+
+\medskip
+\textbf{Pseudonatural transformation $\eta : F \Rightarrow G$.}\quad 1-cells
+$\eta_a : Fa \to Ga$ and invertible 2-cells $\eta_f : Gf \circ \eta_a \cong
+\eta_b \circ Ff$ satisfying compatibility with $\phi^F, \phi^G$.
+
+\medskip
+\textbf{Modification $m : \eta \Rrightarrow \eta'$.}\quad 2-cells $m_a :
+\eta_a \Rightarrow \eta'_a$ compatible with $\eta_f, \eta'_f$.
+
+\medskip
+\textbf{Biequivalence.}\quad Pseudofunctor that is essentially surjective on
+objects (up to equivalence) and locally an equivalence.
+
+\medskip
+\textbf{Strictification (Theorem~\ref{thm:strictification}).}\quad For every
+bicategory $\mathcal{B}$ there is a strict 2-category $\mathcal{B}^{\mathrm{st}}$
+and a biequivalence $\widehat{(-)} : \mathcal{B}^{\mathrm{st}} \to \mathcal{B}$.
+
+\medskip
+\textbf{Mac Lane coherence (Corollary~\ref{cor:bicat-coherence}).}\quad In any
+bicategory, every diagram of associators and unitors commutes.
+
+\medskip
+\noindent\textit{Chapter~26 introduces \emph{ends and coends}, the foundational
+universal constructions for working with profunctors, weighted limits, and
+enriched Yoneda. Coends will be the calculus that powers most of the remaining
+chapters of Volume III.}
+\end{formalrestatement}

@@ -1,0 +1,590 @@
+% ch26_ends_and_coends.tex — Volume III Chapter 2
+
+\chapter{Ends and Coends}
+
+\begin{overviewbox}
+Volume II made repeated unsupported promises about \emph{ends} and
+\emph{coends}: profunctor composition (Chapter~14) used the formula
+$(Q \circ P)(c,a) = \int^b Q(c,b) \times P(b,a)$ without explaining the
+integral sign; the Kan extension colimit formula
+$(\operatorname{Lan}_p F)(e) = \int^c \mathcal{E}(p(c), e) \cdot F(c)$ likewise
+sidestepped what $\int^c$ means; the enriched Yoneda lemma (Chapter~20)
+even \emph{stated} its conclusion as an end $\int_c \mathcal{V}(G(c), H(c))$.
+
+This chapter delivers on those promises. Ends and coends are the universal
+constructions for ``mixed-variance'' functors $T : \mathcal{C}^{\mathrm{op}}
+\times \mathcal{C} \to \mathcal{D}$ — limits or colimits that, on the diagonal,
+``contract'' the two copies of $\mathcal{C}$ into one. They are the
+foundational vocabulary of formal category theory: weighted limits, enriched
+Kan extensions, Day convolution, and the formal Yoneda lemma are all
+expressed in coend calculus. After this chapter, the rest of Volume III
+flows.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Dinatural Transformations}
+\label{sec:dinatural}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Let $T : \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$ be a
+functor — a \emph{mixed-variance} or \emph{bifunctor} in the contravariant-
+then-covariant sense. The objects of interest are the diagonal values
+$T(c, c)$ and how they fit together across $\mathcal{C}$.
+
+\begin{definition}[Dinatural transformation]
+\label{def:dinatural}
+A \term{dinatural transformation} $\alpha : T \xRightarrow{..} S$ between two
+such functors $T, S : \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to
+\mathcal{D}$ is a family of morphisms $\alpha_c : T(c,c) \to S(c,c)$,
+one for each $c \in \mathcal{C}$, such that for every $f : c \to c'$ the
+hexagon
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny, row sep=small]
+  & T(c, c) \arrow[r, "\alpha_c"] & S(c, c) \arrow[dr, "{S(\mathrm{id}, f)}"] & \\
+  T(c', c) \arrow[ur, "{T(f, \mathrm{id})}"] \arrow[dr, "{T(\mathrm{id}, f)}" '] & & & S(c, c') \\
+  & T(c', c') \arrow[r, "\alpha_{c'}" '] & S(c', c') \arrow[ur, "{S(f, \mathrm{id})}" '] &
+\end{tikzcd}
+\end{equation*}
+commutes. We call this the \term{hexagonal} or \term{dinaturality} condition.
+\end{definition}
+
+\begin{howtosay}
+$\alpha : T \xRightarrow{..} S$ \sayit{``dinatural alpha from T to S''}, with
+the dotted arrow signaling that the naturality holds in the hexagonal
+(dinatural) sense rather than the square (natural) sense.
+\end{howtosay}
+
+\begin{remark}[When the hexagon collapses to a square]
+If $T$ and $S$ are constant in their first argument — i.e., they factor
+through the projection $\mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to
+\mathcal{C}$ — the hexagon collapses to an ordinary naturality square. Thus
+ordinary natural transformations are the special case of dinatural
+transformations between covariant functors. The dinatural notion is strictly
+more general.
+\end{remark}
+
+\subsection{Reorganizing: Wedges as Dinatural Cones}
+
+\begin{definition}[Wedge]
+\label{def:wedge}
+A \term{wedge} from an object $d \in \mathcal{D}$ to a functor
+$T : \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$ is a
+dinatural transformation $\omega : \Delta d \xRightarrow{..} T$ from the
+constant functor at $d$. Concretely: a family $\omega_c : d \to T(c, c)$
+such that for every $f : c \to c'$ the square
+\begin{equation*}
+\begin{tikzcd}
+  d \arrow[r, "\omega_{c'}"] \arrow[d, "\omega_c" '] & T(c', c') \arrow[d, "{T(f, \mathrm{id})}"] \\
+  T(c, c) \arrow[r, "{T(\mathrm{id}, f)}" '] & T(c, c')
+\end{tikzcd}
+\end{equation*}
+commutes. (The hexagon for $\Delta d$ collapses because $\Delta d$ has no
+non-trivial action.) Dually, a \term{cowedge} from $T$ to $d$ is a dinatural
+$\nu : T \xRightarrow{..} \Delta d$, i.e., a family $\nu_c : T(c, c) \to d$
+satisfying the analogous square.
+\end{definition}
+
+A wedge replaces ``a cone from $d$'' (in the limit picture) and a cowedge
+replaces ``a cone over $d$'' (in the colimit picture), now for the
+mixed-variance functor $T$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The End}
+\label{sec:end}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[End]
+\label{def:end}
+Let $T : \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$. An
+\term{end} of $T$ is an object $\int_c T(c, c) \in \mathcal{D}$ together with
+a universal wedge $\pi : \Delta \int_c T(c,c) \xRightarrow{..} T$: for every
+wedge $\omega : \Delta d \xRightarrow{..} T$ there exists a unique morphism
+$\hat\omega : d \to \int_c T(c,c)$ with $\pi_c \circ \hat\omega = \omega_c$
+for all $c$.
+\end{definition}
+
+\begin{howtosay}
+$\int_c T(c, c)$ \sayit{``the end over c of T(c, c)''} or just \sayit{``end of
+T''}. The subscript $c$ on the integral sign marks the bound variable; it does
+not denote a particular value of $c$.
+\end{howtosay}
+
+\subsection{Reorganizing: Ends as Equalizers}
+
+\begin{theorem}[End as an equalizer]
+\label{thm:end-as-equalizer}
+The end $\int_c T(c, c)$, when $\mathcal{D}$ has products and equalizers and
+$\mathcal{C}$ is small, exists and is computed as the equalizer
+\begin{equation*}
+  \int_c T(c, c)
+  \;\xrightarrow{e}\;
+  \prod_c T(c, c)
+  \;\rightrightarrows\;
+  \prod_{f : c \to c'} T(c, c')
+\end{equation*}
+where the two parallel arrows are induced respectively by $T(\mathrm{id}, f)$
+and $T(f, \mathrm{id})$, indexed over all morphisms $f$ of $\mathcal{C}$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{An element of $\prod_c T(c,c)$ is a family $(\omega_c)_c$ with
+$\omega_c \in T(c,c)$.}{Universal property of the product.}
+\proofstep{The two parallel arrows send $(\omega_c)$ to the families
+$(T(\mathrm{id}, f) \omega_c)_{f}$ and $(T(f, \mathrm{id}) \omega_{c'})_{f}$
+in $\prod_{f} T(c, c')$.}{By definition of the induced maps into the
+product over morphisms.}
+\proofstep{The equalizer condition $T(\mathrm{id}, f) \omega_c = T(f,
+\mathrm{id}) \omega_{c'}$ for every $f : c \to c'$ is precisely the wedge
+condition of Definition~\ref{def:wedge}.}{Direct comparison of the equations.}
+\proofstep{So the equalizer is the universal object equipped with a wedge
+$\pi_c : E \to T(c,c)$ for each $c$, satisfying exactly the wedge
+condition.}{Equalizer universal property.}
+\proofstep{Therefore the equalizer is the end.}{By Definition~\ref{def:end}.}
+\end{prooflog}
+
+\begin{corollary}
+Ends exist whenever $\mathcal{D}$ is complete (has small limits) and
+$\mathcal{C}$ is small. They are limits — limits of a specific diagram of
+shape determined by $T$.
+\end{corollary}
+
+\subsection{Formally: Examples}
+
+\begin{example_thm}[Natural transformations as an end]
+\label{ex:nat-as-end}
+For functors $F, G : \mathcal{C} \to \mathcal{D}$, define
+$T(c, c') = \mathcal{D}(F c, G c')$. Then
+\begin{equation*}
+  \int_c \mathcal{D}(Fc, Gc) \;\cong\; \mathrm{Nat}(F, G).
+\end{equation*}
+The end's wedge $\pi_c : \mathrm{Nat}(F, G) \to \mathcal{D}(Fc, Gc)$ is
+evaluation at $c$; the wedge condition is exactly the naturality square.
+\end{example_thm}
+
+\begin{example_thm}[Enriched natural transformations]
+For $\mathcal{V}$-functors $G, H : \mathcal{C} \to \mathcal{V}$ between
+$\mathcal{V}$-categories, the object of $\mathcal{V}$-natural transformations
+is the end
+\begin{equation*}
+  [\mathcal{C}, \mathcal{V}]_\mathcal{V}(G, H) \;=\; \int_c \mathcal{V}(G c, H c)
+\end{equation*}
+in $\mathcal{V}$ (cf.\ Chapter~20). This is the enriched generalization of
+Example~\ref{ex:nat-as-end}.
+\end{example_thm}
+
+\begin{example_thm}[Center of a category]
+For a category $\mathcal{C}$ viewed as a one-object 2-category, the end
+$\int_c \mathcal{C}(c, c)$ over $\mathcal{C}$ itself (with $T(c, c') =
+\mathcal{C}(c, c')$) is the monoid of \term{natural endomorphisms} of the
+identity functor — the \emph{center} of $\mathcal{C}$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Coend}
+\label{sec:coend}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Coend]
+\label{def:coend}
+The \term{coend} $\int^c T(c, c) \in \mathcal{D}$ of a functor $T :
+\mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$ is an object
+equipped with a universal cowedge $\iota : T \xRightarrow{..} \Delta \int^c
+T(c, c)$: for every cowedge $\nu : T \xRightarrow{..} \Delta d$ there is a
+unique morphism $\hat\nu : \int^c T(c,c) \to d$ with $\hat\nu \circ \iota_c
+= \nu_c$ for all $c$.
+\end{definition}
+
+\begin{theorem}[Coend as a coequalizer]
+\label{thm:coend-as-coequalizer}
+When $\mathcal{D}$ has coproducts and coequalizers and $\mathcal{C}$ is small,
+the coend exists and is the coequalizer
+\begin{equation*}
+  \coprod_{f : c \to c'} T(c', c) \;\rightrightarrows\; \coprod_c T(c, c)
+  \;\xrightarrow{\;\iota\;}\; \int^c T(c, c).
+\end{equation*}
+The two parallel arrows are induced by $T(f, \mathrm{id}) : T(c', c) \to
+T(c, c)$ and $T(\mathrm{id}, f) : T(c', c) \to T(c', c')$.
+\end{theorem}
+
+\begin{proof}
+Dual to Theorem~\ref{thm:end-as-equalizer}, with products replaced by
+coproducts, equalizers by coequalizers, and the universal property reversed.
+A cowedge from $T$ to $d$ is precisely a family $(\nu_c)$ satisfying
+$\nu_c \circ T(f, \mathrm{id}) = \nu_{c'} \circ T(\mathrm{id}, f)$ for each
+$f$, which is the coequalizer condition.
+\end{proof}
+
+\subsection{Reorganizing: The Tensor-Product Picture}
+
+The coend $\int^c T(c, c)$ admits a useful informal reading as a \emph{tensor
+product}. For $\mathcal{D} = \mathbf{Set}$ and $T(c, c') = P(c) \times Q(c')$
+with $P$ contravariant and $Q$ covariant,
+\begin{equation*}
+  \int^c P(c) \times Q(c)
+  \;\cong\;
+  \frac{\coprod_c P(c) \times Q(c)}{\sim}
+\end{equation*}
+where $\sim$ identifies $(P(f)(p), q) \sim (p, Q(f)(q))$ for $f : c \to c'$.
+This is the standard quotient defining a tensor product. In general,
+``$\int^c$'' is the tensor product over $\mathcal{C}$ in the same sense that
+tensor products of modules are coequalizers over a ring.
+
+\subsection{Formally: Examples}
+
+\begin{example_thm}[Profunctor composition]
+\label{ex:profunctor-composition}
+For profunctors $P : \mathcal{A} \to \mathcal{B}$ (i.e., $P :
+\mathcal{B}^{\mathrm{op}} \times \mathcal{A} \to \mathbf{Set}$) and $Q :
+\mathcal{B} \to \mathcal{C}$, their composition is
+\begin{equation*}
+  (Q \circ P)(c, a) \;=\; \int^{b \in \mathcal{B}} Q(c, b) \times P(b, a).
+\end{equation*}
+This is the formula promised in Chapter~14. The coend identifies pairs
+$(P(f)(p), q) \sim (p, Q(f)(q))$ along the morphism $f : b \to b'$, the
+correct ``mixing'' of $P$'s output with $Q$'s input.
+\end{example_thm}
+
+\begin{example_thm}[Left Kan extension]
+\label{ex:lan-coend}
+For $F : \mathcal{C} \to \mathcal{E}$ and $K : \mathcal{C} \to \mathcal{D}$,
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;\cong\; \int^c \mathcal{D}(Kc, d) \cdot F(c)
+\end{equation*}
+where $S \cdot X$ for $S \in \mathbf{Set}$ and $X \in \mathcal{E}$ denotes
+the copower $\coprod_{S} X$. This is the formula from Chapter~18, now with
+the integral sign defined.
+\end{example_thm}
+
+\begin{example_thm}[Geometric realization]
+The geometric realization of a simplicial set $X : \Delta^{\mathrm{op}} \to
+\mathbf{Set}$ is
+\begin{equation*}
+  |X| \;=\; \int^{[n] \in \Delta} X_n \cdot \Delta^n
+\end{equation*}
+where $\Delta^n$ is the topological $n$-simplex and $\cdot$ is the topological
+copower $S \cdot Y = \coprod_S Y$. The coend identifies face and degeneracy
+maps with their topological counterparts.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Coend Calculus}
+\label{sec:coend-calculus}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The reason ends and coends earn the integral notation is that they obey
+calculus-like rules: a Fubini theorem for swapping the order of integration,
+a substitution rule, and a Yoneda reduction. These rules turn coend
+manipulations into mechanical computations.
+
+\subsection{Fubini}
+
+\begin{theorem}[Fubini for ends]
+\label{thm:fubini-end}
+For a functor $T : (\mathcal{C} \times \mathcal{D})^{\mathrm{op}} \times
+(\mathcal{C} \times \mathcal{D}) \to \mathcal{E}$,
+\begin{equation*}
+  \int_{(c, d)} T((c, d), (c, d))
+  \;\cong\;
+  \int_c \int_d T((c, d), (c, d))
+  \;\cong\;
+  \int_d \int_c T((c, d), (c, d))
+\end{equation*}
+whenever the relevant limits exist.
+\end{theorem}
+
+\begin{theorem}[Fubini for coends]
+\label{thm:fubini-coend}
+Dually,
+\begin{equation*}
+  \int^{(c, d)} T((c, d), (c, d))
+  \;\cong\;
+  \int^c \int^d T((c, d), (c, d))
+  \;\cong\;
+  \int^d \int^c T((c, d), (c, d)).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Sketch]
+Both statements follow from the fact that ends are limits and coends are
+colimits, and limits/colimits over a product category factor through limits/
+colimits over each factor (Fubini for ordinary limits). The end of a
+mixed-variance functor uses the same Fubini at the level of equalizer
+diagrams.
+\end{proof}
+
+\subsection{Yoneda Reduction}
+
+\begin{theorem}[Yoneda reduction — coend form]
+\label{thm:yoneda-reduction-coend}
+For a (covariant) functor $F : \mathcal{C} \to \mathbf{Set}$,
+\begin{equation*}
+  \int^c \mathcal{C}(c, c') \times F(c) \;\cong\; F(c').
+\end{equation*}
+Dually for $G : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$,
+\begin{equation*}
+  \int^c G(c) \times \mathcal{C}(c', c) \;\cong\; G(c').
+\end{equation*}
+\end{theorem}
+
+\begin{howtosay}
+This is called the \term{ninja Yoneda lemma}: the variable $c$ is
+``integrated out'' against the representable $\mathcal{C}(c, c')$, leaving
+only the value at $c'$. The name comes from how silently and decisively the
+coend disappears.
+\end{howtosay}
+
+\begin{prooflog}
+\proofstep{Compute the coend explicitly as the coequalizer
+$\coprod_{f : c \to d} \mathcal{C}(d, c') \times F(c) \rightrightarrows
+\coprod_c \mathcal{C}(c, c') \times F(c)$.}{By Theorem~\ref{thm:coend-as-coequalizer}.}
+\proofstep{The two parallel arrows identify $(\mathcal{C}(d, c') \ni g, F(c)
+\ni x) \sim (g \circ f, x)$ vs.\ $(g, F(f)(x))$ along $f : c \to d$.}{Direct
+substitution.}
+\proofstep{Define $\phi : \coprod_c \mathcal{C}(c, c') \times F(c) \to
+F(c')$ by $(g, x) \mapsto F(g)(x)$.}{The candidate map to $F(c')$.}
+\proofstep{$\phi$ respects the equivalence relation: $\phi(g \circ f, x)
+= F(g \circ f)(x) = F(g)(F(f)(x)) = \phi(g, F(f)(x))$.}{By functoriality of
+$F$.}
+\proofstep{Therefore $\phi$ factors through the coend to give $\hat\phi :
+\int^c \mathcal{C}(c, c') \times F(c) \to F(c')$.}{By the universal property
+of the coequalizer.}
+\proofstep{Construct the inverse $\psi : F(c') \to \int^c \mathcal{C}(c, c')
+\times F(c)$ by $x \mapsto [\mathrm{id}_{c'}, x]$ (the equivalence class).}{
+The standard ``identity-and-itself'' element.}
+\proofstep{$\hat\phi \circ \psi = \mathrm{id}_{F(c')}$: $\hat\phi([\mathrm{id},
+x]) = F(\mathrm{id})(x) = x$.}{Identity action.}
+\proofstep{$\psi \circ \hat\phi = \mathrm{id}$ on classes: for $(g, x)$ with
+$g : c \to c'$, $\psi(\phi(g, x)) = [\mathrm{id}_{c'}, F(g)(x)] \sim
+[g, x]$ via the relation at $f = g$.}{The relation collapses every class to
+a singleton with identity.}
+\proofstep{Both composites are the identity; isomorphism established.}{
+Yoneda reduction.}
+\end{prooflog}
+
+\begin{remark}[Why this is Yoneda]
+Theorem~\ref{thm:yoneda-reduction-coend} is the Yoneda lemma in disguise.
+The ordinary Yoneda lemma says elements of $F(c')$ correspond to natural
+transformations $\mathcal{C}(c', -) \Rightarrow F$, which are an end:
+$F(c') \cong \int_c \mathbf{Set}(\mathcal{C}(c', c), F(c))$. Taking the
+hom-set adjunction backwards (using that the coend is the colimit and the
+end is the limit) gives the coend formulation. The two forms are duals:
+ends pair with hom-functors covariantly; coends pair with hom-functors
+contravariantly.
+\end{remark}
+
+\subsection{The Co-Yoneda Lemma}
+
+\begin{theorem}[Co-Yoneda / density]
+\label{thm:co-yoneda}
+For any functor $F : \mathcal{C} \to \mathbf{Set}$,
+\begin{equation*}
+  F \;\cong\; \int^c \mathcal{C}(c, -) \cdot F(c)
+\end{equation*}
+as functors $\mathcal{C} \to \mathbf{Set}$. Every functor is a colimit of
+representables.
+\end{theorem}
+
+\begin{proof}
+At each $c' \in \mathcal{C}$, applying the formula gives $\int^c
+\mathcal{C}(c, c') \times F(c) \cong F(c')$ by
+Theorem~\ref{thm:yoneda-reduction-coend}. Naturality in $c'$ is automatic
+because the coend is functorial in its non-integrated arguments.
+\end{proof}
+
+This is the precise statement that ``the presheaf category is the free
+cocompletion of $\mathcal{C}$'' (Chapter~18, Chapter~24): every presheaf is
+canonically a colimit of representables, witnessed by the coend formula.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Ends and Coends in Enriched Settings}
+\label{sec:enriched-ends-coends}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The development so far has assumed $\mathcal{D}$ is an ordinary category. In
+the enriched setting, $\mathcal{D} = \mathcal{V}$ for a complete or cocomplete
+monoidal category $\mathcal{V}$, and the functor $T$ is a $\mathcal{V}$-functor.
+The definitions transpose verbatim:
+
+\begin{definition}[Enriched end and coend]
+\label{def:enriched-end-coend}
+For a $\mathcal{V}$-functor $T : \mathcal{C}^{\mathrm{op}} \otimes \mathcal{C}
+\to \mathcal{V}$ (where $\mathcal{C}^{\mathrm{op}} \otimes \mathcal{C}$ is
+the tensor product of $\mathcal{V}$-categories), the \term{enriched end}
+$\int_c T(c, c)$ is the equalizer in $\mathcal{V}$ of two maps
+$\prod_c T(c, c) \to \prod_{c, c'} \mathcal{V}(\mathcal{C}(c, c'), T(c, c'))$
+encoding the wedge condition in $\mathcal{V}$. Dually for coend.
+\end{definition}
+
+\begin{proposition}[Enriched natural transformations as enriched end]
+For $\mathcal{V}$-functors $G, H : \mathcal{C} \to \mathcal{V}$,
+\begin{equation*}
+  [\mathcal{C}, \mathcal{V}]_\mathcal{V}(G, H) \;=\; \int_c \mathcal{V}(G c, H c).
+\end{equation*}
+\end{proposition}
+
+This is the statement that closed (and complete enough) Chapter~20 made
+without proof; the foundation is now in place.
+
+\subsection{Reorganizing}
+
+In an enriched setting, the coend calculus rules — Fubini and Yoneda
+reduction — continue to hold with the same proofs, replacing ``set
+products'' by ``$\mathcal{V}$-tensors'' and ``set sums'' by
+``$\mathcal{V}$-cotensors''. The ninja Yoneda lemma in enriched form reads
+\begin{equation*}
+  \int^c \mathcal{C}(c, c') \otimes F(c) \;\cong\; F(c')
+\end{equation*}
+in $\mathcal{V}$, where $\otimes$ is the $\mathcal{V}$-tensor.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:end-coend-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is a dinatural transformation $\alpha : T \xRightarrow{..} S$?}{A family $\alpha_c : T(c,c) \to S(c,c)$ satisfying a hexagonal coherence condition involving both $T(f, \mathrm{id})$ and $T(\mathrm{id}, f)$ for each $f : c \to c'$.}
+\qaitem{What is a wedge from $d$ to $T$?}{A dinatural transformation $\Delta d \xRightarrow{..} T$, equivalently a family $\omega_c : d \to T(c, c)$ satisfying $T(\mathrm{id}, f) \omega_c = T(f, \mathrm{id}) \omega_{c'}$ for every $f : c \to c'$.}
+\qaitem{Define the end of $T : \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$.}{An object $\int_c T(c,c) \in \mathcal{D}$ together with a universal wedge $\pi : \Delta \int_c T(c,c) \xRightarrow{..} T$.}
+\qaitem{Express the end as an equalizer.}{$\int_c T(c,c) = \mathrm{eq}(\prod_c T(c,c) \rightrightarrows \prod_{f : c \to c'} T(c, c'))$, where the two arrows are induced by $T(\mathrm{id}, f)$ and $T(f, \mathrm{id})$.}
+\qaitem{When does an end exist?}{When $\mathcal{D}$ is complete (has small limits) and $\mathcal{C}$ is small. Ends are limits.}
+\qaitem{Show that natural transformations form an end.}{$\mathrm{Nat}(F, G) = \int_c \mathcal{D}(Fc, Gc)$: the wedge condition is the naturality square.}
+\qaitem{What is the coend of $T$?}{An object $\int^c T(c,c)$ with universal cowedge $\iota : T \xRightarrow{..} \Delta \int^c T(c,c)$ — dual to the end.}
+\qaitem{Express the coend as a coequalizer.}{$\int^c T(c,c) = \mathrm{coeq}(\coprod_{f : c \to c'} T(c', c) \rightrightarrows \coprod_c T(c, c))$.}
+\qaitem{What is the tensor-product picture of a coend in $\mathbf{Set}$?}{$\int^c P(c) \times Q(c) \cong (\coprod_c P(c) \times Q(c))/\sim$, where $(P(f)(p), q) \sim (p, Q(f)(q))$ for $f : c \to c'$.}
+\qaitem{Write the profunctor composition formula.}{$(Q \circ P)(c, a) = \int^b Q(c, b) \times P(b, a)$ for $P : \mathcal{B}^{\mathrm{op}} \times \mathcal{A} \to \mathbf{Set}$, $Q : \mathcal{C}^{\mathrm{op}} \times \mathcal{B} \to \mathbf{Set}$.}
+\qaitem{Write the left Kan extension formula as a coend.}{$(\operatorname{Lan}_K F)(d) = \int^c \mathcal{D}(Kc, d) \cdot F(c)$, where $S \cdot X$ is the copower.}
+\qaitem{State the Fubini theorem for coends.}{$\int^{(c,d)} T = \int^c \int^d T = \int^d \int^c T$, when the coends exist.}
+\qaitem{State the Yoneda reduction (ninja Yoneda).}{$\int^c \mathcal{C}(c, c') \times F(c) \cong F(c')$ for $F : \mathcal{C} \to \mathbf{Set}$.}
+\qaitem{Why is the ninja Yoneda lemma equivalent to ordinary Yoneda?}{Both express the same fact that $F$ is determined by its values at all $c$ via the representables $\mathcal{C}(c, -)$; one as an end (Hom-out of representables), the other as a coend (tensor with representables).}
+\qaitem{State the co-Yoneda / density theorem in coend form.}{For $F : \mathcal{C} \to \mathbf{Set}$, $F(-) \cong \int^c \mathcal{C}(c, -) \cdot F(c)$. Every functor is a colimit of representables.}
+\qaitem{What is the contravariant Yoneda reduction?}{$\int^c G(c) \times \mathcal{C}(c', c) \cong G(c')$ for $G : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{Why does the hexagonal condition collapse to a square for wedges?}{Because the constant functor $\Delta d$ has trivial action, so $\Delta d(f, \mathrm{id}) = \Delta d(\mathrm{id}, f) = \mathrm{id}_d$; the hexagon's two ``$\Delta d$ sides'' become the identity.}
+\qaitem{What is the center of a category as an end?}{$Z(\mathcal{C}) = \int_c \mathcal{C}(c, c)$, the monoid of natural endomorphisms of $\mathrm{Id}_\mathcal{C}$.}
+\qaitem{Geometric realization as a coend?}{$|X| = \int^{[n] \in \Delta} X_n \cdot \Delta^n$, where $X : \Delta^{\mathrm{op}} \to \mathbf{Set}$, $\Delta^n$ is the topological $n$-simplex, and $\cdot$ is the copower.}
+\qaitem{Define the enriched end.}{For $T : \mathcal{C}^{\mathrm{op}} \otimes \mathcal{C} \to \mathcal{V}$, the equalizer in $\mathcal{V}$ of $\prod_c T(c,c) \rightrightarrows \prod_{c,c'} \mathcal{V}(\mathcal{C}(c,c'), T(c,c'))$.}
+\qaitem{What is the enriched object of $\mathcal{V}$-natural transformations?}{$[\mathcal{C}, \mathcal{V}]_\mathcal{V}(G, H) = \int_c \mathcal{V}(Gc, Hc)$ in $\mathcal{V}$.}
+\qaitem{When are ordinary natural transformations the special case of dinatural ones?}{When $T$ and $S$ factor through the projection to $\mathcal{C}$ (i.e., are covariant), the hexagonal condition collapses to the naturality square.}
+\qaitem{What is a cowedge?}{A dinatural transformation $T \xRightarrow{..} \Delta d$: a family $\nu_c : T(c, c) \to d$ with $\nu_c \circ T(f, \mathrm{id}) = \nu_{c'} \circ T(\mathrm{id}, f)$.}
+\qaitem{What is the relationship between ends/coends and ordinary limits/colimits?}{Ends are limits and coends are colimits of specific diagrams. The integral notation captures the ``contraction along the diagonal'' aspect that ordinary limit notation hides.}
+\qaitem{Why does the Yoneda reduction fail without an integration variable?}{Because the reduction $\int^c \mathcal{C}(c, c') \cdot F(c) \cong F(c')$ is exactly the substitution of $c = c'$ that the integral notation indicates; without integration, the formula collapses to a single class and loses naturality.}
+\qaitem{Coend version of currying for $\mathbf{Set}$-valued profunctors?}{$[\mathcal{A}^{\mathrm{op}}, [\mathcal{B}, \mathbf{Set}]] \simeq [\mathcal{A}^{\mathrm{op}} \times \mathcal{B}, \mathbf{Set}]$ — both expressible via coends/ends in symmetric ways.}
+\qaitem{Why is Fubini for coends ``the same'' as Fubini for double colimits?}{Because a coend is the colimit of a specific double diagram, and Fubini for colimits says colimits over $\mathcal{C} \times \mathcal{D}$ may be computed iteratively.}
+\qaitem{Write the coend formula for ``functor evaluation at $a$'' using representables.}{$F(a) \cong \int^c \mathcal{C}(c, a) \cdot F(c)$ — special case of Yoneda reduction with $c' = a$.}
+\qaitem{If $\mathcal{C}$ is discrete, what is $\int^c F(c) \times G(c)$?}{$\coprod_c F(c) \times G(c)$ — no morphisms means no identifications, so the coend reduces to the coproduct.}
+\qaitem{Why is the coend the ``right'' way to write profunctor composition?}{Because both projections from $T(c, c) = Q(c, b) \times P(b, a)$ — the contravariant action of $b$ on $Q$ and the covariant action of $b$ on $P$ — must be identified, exactly the coend's quotient relation.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Dinatural transformations.}\quad For mixed-variance functors $T, S :
+\mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{D}$, a family
+$\alpha_c : T(c,c) \to S(c,c)$ satisfying a hexagonal coherence. The constant
+case collapses to wedges and cowedges — the dinatural analogues of cones.
+
+\textbf{End.}\quad $\int_c T(c, c)$ is the universal wedge to $T$; equivalently,
+the equalizer of two maps from $\prod_c T(c, c)$ to $\prod_{c \to c'} T(c, c')$.
+Natural transformations are ends: $\mathrm{Nat}(F, G) = \int_c \mathcal{D}(Fc, Gc)$.
+
+\textbf{Coend.}\quad $\int^c T(c, c)$ is the universal cowedge from $T$;
+equivalently, the coequalizer of two maps to $\coprod_c T(c, c)$. Profunctor
+composition and left Kan extensions are coends.
+
+\textbf{The coend calculus.}\quad Fubini for ends and coends (swap order of
+integration); Yoneda reduction (the ``ninja Yoneda lemma'':
+$\int^c \mathcal{C}(c, c') \times F(c) \cong F(c')$); the co-Yoneda /
+density theorem (every functor is a colimit of representables).
+
+\textbf{Enriched ends and coends.}\quad The same definitions transpose to
+$\mathcal{V}$-functors, with $\mathcal{V}$-products and $\mathcal{V}$-coproducts
+replacing set products and sums. The enriched natural transformations object
+of Chapter~20 is the enriched end $\int_c \mathcal{V}(Gc, Hc)$.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Dinatural transformation $T \xRightarrow{..} S$.}\quad Family $\alpha_c
+: T(c,c) \to S(c,c)$ with hexagonal coherence: $S(\mathrm{id}, f) \alpha_c
+T(f, \mathrm{id}) = S(f, \mathrm{id}) \alpha_{c'} T(\mathrm{id}, f)$ for each
+$f : c \to c'$.
+
+\medskip
+\textbf{End.}\quad
+\begin{equation*}
+  \int_c T(c, c) \;=\; \mathrm{eq}\bigl(
+    \textstyle\prod_c T(c, c) \rightrightarrows
+    \textstyle\prod_{f : c \to c'} T(c, c')
+  \bigr).
+\end{equation*}
+
+\medskip
+\textbf{Coend.}\quad
+\begin{equation*}
+  \int^c T(c, c) \;=\; \mathrm{coeq}\bigl(
+    \textstyle\coprod_{f : c \to c'} T(c', c) \rightrightarrows
+    \textstyle\coprod_c T(c, c)
+  \bigr).
+\end{equation*}
+
+\medskip
+\textbf{Natural transformations as end.}\quad
+$\mathrm{Nat}(F, G) = \int_c \mathcal{D}(Fc, Gc)$.
+
+\medskip
+\textbf{Fubini.}\quad
+$\int_{(c,d)} T = \int_c \int_d T = \int_d \int_c T$; coend version dual.
+
+\medskip
+\textbf{Yoneda reduction (ninja Yoneda).}\quad
+$\int^c \mathcal{C}(c, c') \times F(c) \cong F(c')$ for $F : \mathcal{C} \to
+\mathbf{Set}$; dually, $\int^c G(c) \times \mathcal{C}(c', c) \cong G(c')$
+for $G : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.
+
+\medskip
+\textbf{Co-Yoneda / density.}\quad
+$F \cong \int^c \mathcal{C}(c, -) \cdot F(c)$.
+
+\medskip
+\textbf{Profunctor composition.}\quad
+$(Q \circ P)(c, a) = \int^b Q(c, b) \times P(b, a)$.
+
+\medskip
+\textbf{Left Kan extension formula.}\quad
+$(\operatorname{Lan}_K F)(d) = \int^c \mathcal{D}(Kc, d) \cdot F(c)$.
+
+\medskip
+\textbf{Enriched end.}\quad For $T : \mathcal{C}^{\mathrm{op}} \otimes \mathcal{C}
+\to \mathcal{V}$, $\int_c T(c, c) \in \mathcal{V}$ defined via equalizer of
+$\mathcal{V}$-products encoding the $\mathcal{V}$-wedge condition.
+
+\medskip
+\noindent\textit{Chapter~27 uses the coend calculus to develop \emph{weighted
+limits and colimits} in full generality. The Yoneda reduction is the
+calculation tool that powers most of the enriched-categorical theory to
+follow.}
+\end{formalrestatement}

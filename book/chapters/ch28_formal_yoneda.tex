@@ -1,0 +1,506 @@
+% ch28_formal_yoneda.tex — Volume III Chapter 4
+
+\chapter{The Formal Yoneda Lemma}
+
+\begin{overviewbox}
+Yoneda has appeared three times: as a hom-set bijection (Chapter~9), as a
+representability principle (Chapter~15), and in enriched form (Chapter~20).
+These three statements are facets of one theorem. With ends and coends in
+hand (Chapter~26) and weighted (co)limits available (Chapter~27), we can
+unify them.
+
+The \emph{formal} Yoneda lemma states a single isomorphism in any sufficiently
+complete enriched setting:
+\[
+  [\mathcal{C}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(a, -), F)
+  \;=\; \int_c \mathcal{V}(\mathcal{C}(a, c), F c)
+  \;\cong\; F(a).
+\]
+The proof is now mechanical: apply the ninja Yoneda lemma. From this we
+derive: the \term{density theorem} (every presheaf is a coend of representables);
+the \term{free cocompletion} property of the presheaf category; the
+\term{coend Yoneda} and \term{end Yoneda} forms; and the \emph{ninja
+duality} between left and right Kan extensions through the Yoneda embedding.
+The chapter closes with the formal Yoneda lemma in the 2-categorical
+language of $\mathbf{Prof}$.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Unified Statement}
+\label{sec:unified-yoneda}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Yoneda lemma, unified form]
+\label{thm:yoneda-unified}
+Let $\mathcal{V}$ be a complete symmetric monoidal closed category and
+$\mathcal{C}$ a small $\mathcal{V}$-category. For any $\mathcal{V}$-functor
+$F : \mathcal{C} \to \mathcal{V}$ and object $a \in \mathcal{C}$, there is a
+$\mathcal{V}$-natural isomorphism
+\begin{equation*}
+  \mathrm{Yo}_F^a \;:\; \int_c \mathcal{V}(\mathcal{C}(a, c), F c)
+  \;\xrightarrow{\;\cong\;}\; F(a)
+\end{equation*}
+in $\mathcal{V}$, natural in $a$ and in $F$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{The end on the left is precisely the $\mathcal{V}$-object of
+$\mathcal{V}$-natural transformations: $[\mathcal{C}, \mathcal{V}]_\mathcal{V}
+(\mathcal{C}(a, -), F)$.}{End formula for enriched naturals (Chapter~26).}
+\proofstep{We construct a candidate map $\mathrm{Yo}_F^a : [\mathcal{C}, \mathcal{V}]_\mathcal{V}
+(\mathcal{C}(a, -), F) \to F(a)$ by evaluation at $a$: precompose with the
+identity $\mathcal{V}$-morphism $j_a : I \to \mathcal{C}(a, a)$.}{This is the
+forward direction; explicit on representables.}
+\proofstep{Construct the inverse via the $\mathcal{V}$-functoriality of $F$:
+given $x : I \to F(a)$ in $\mathcal{V}$, define $\widetilde x_c :
+\mathcal{C}(a, c) \to F(c)$ as the composite $\mathcal{C}(a, c) \cong I \otimes
+\mathcal{C}(a, c) \xrightarrow{x \otimes \mathrm{id}} F(a) \otimes \mathcal{C}(a, c)
+\xrightarrow{F_{a,c}} F(c)$.}{Uses the $\mathcal{V}$-functor structure
+$F_{a,c} : F(a) \otimes \mathcal{C}(a, c) \to F(c)$.}
+\proofstep{The family $(\widetilde x_c)_c$ is a wedge to $T(c, c') =
+\mathcal{V}(\mathcal{C}(a, c), F c')$ — i.e., it satisfies the dinatural
+condition.}{By the $\mathcal{V}$-functor axioms of $F$ applied to morphisms
+$c \to c'$ in $\mathcal{C}$.}
+\proofstep{So $(\widetilde x_c)$ factors through the end to give a morphism
+$\widetilde x : I \to \int_c \mathcal{V}(\mathcal{C}(a, c), F c)$.}{Universal
+property of the end.}
+\proofstep{$\mathrm{Yo}_F^a \circ \widetilde{(-)} = \mathrm{id}_{F(a)}$:
+evaluating $\widetilde x$ at $a$ gives $F_{a,a}(x \otimes j_a) = x$ by the
+$\mathcal{V}$-functor unit axiom.}{Unit-of-$F$.}
+\proofstep{$\widetilde{(-)} \circ \mathrm{Yo}_F^a = \mathrm{id}$: starting
+from a $\mathcal{V}$-natural transformation, evaluating at $a$ then
+transporting via $F_{a,-}$ reproduces the original transformation, by the
+$\mathcal{V}$-functor composition axiom (the naturality of $\theta$ matches
+$F$'s action exactly).}{Composition axiom of $F$.}
+\proofstep{Both composites are identities, so $\mathrm{Yo}_F^a$ is an iso
+in $\mathcal{V}$.}{Yoneda established at $a$.}
+\proofstep{Naturality in $a$ and $F$ is automatic: all constructions
+(end, evaluation, $F$'s action) are $\mathcal{V}$-natural in both arguments.}{
+Standard.}
+\end{prooflog}
+
+\subsection{Reorganizing: The Three Forms Recovered}
+
+\begin{corollary}[Three forms of Yoneda]
+\label{cor:three-yonedas}
+Theorem~\ref{thm:yoneda-unified} specializes to:
+\begin{itemize}
+  \item \textbf{Set-Yoneda} (Chapter~9): $\mathcal{V} = \mathbf{Set}$,
+        $\mathcal{C}$ ordinary locally small. Then $\mathrm{Nat}
+        (\mathcal{C}(a, -), F) \cong F(a)$.
+  \item \textbf{Enriched Yoneda} (Chapter~20): $\mathcal{V}$ symmetric
+        monoidal closed, $\mathcal{C}$ a $\mathcal{V}$-category. The
+        statement above.
+  \item \textbf{Coend Yoneda} (the ninja Yoneda): the dual form,
+        $\int^c \mathcal{C}(c, a) \otimes F(c) \cong F(a)$, obtained by
+        the end-coend duality for hom-objects.
+\end{itemize}
+\end{corollary}
+
+\begin{remark}
+The ``three forms'' are not three different theorems. They are one theorem
+expressed in different language: ends (the explicit hom-set / hom-object
+form), set-natural transformations (the original statement), and coends (the
+``tensor-out'' dualization). Each is the others' shadow.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Yoneda Embedding}
+\label{sec:formal-yoneda-embedding}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Enriched Yoneda embedding]
+\label{def:formal-yoneda-embedding}
+For a small $\mathcal{V}$-category $\mathcal{C}$, the \term{Yoneda embedding}
+is the $\mathcal{V}$-functor
+\begin{equation*}
+  Y \;:\; \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V},
+  \qquad
+  a \mapsto \mathcal{C}(-, a).
+\end{equation*}
+\end{definition}
+
+\begin{theorem}[Yoneda embedding is fully faithful]
+\label{thm:yoneda-ff}
+The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ is a fully faithful $\mathcal{V}$-functor: it
+induces $\mathcal{V}$-isomorphisms
+\begin{equation*}
+  Y_{a, b} \;:\; \mathcal{C}(a, b) \;\xrightarrow{\;\cong\;}\;
+  [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(-, a), \mathcal{C}(-, b)).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+By Theorem~\ref{thm:yoneda-unified} applied to $F = \mathcal{C}(-, b) :
+\mathcal{C}^{\mathrm{op}} \to \mathcal{V}$ at the object $a$:
+\begin{equation*}
+  [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(-, a), \mathcal{C}(-, b))
+  \;\cong\; \mathcal{C}(a, b).
+\end{equation*}
+That this isomorphism is exactly the hom-functor of $Y$ (i.e., $Y_{a,b}$) is
+the content of the construction.
+\end{proof}
+
+\subsection{Reorganizing: The Universal Property}
+
+\begin{theorem}[Free cocompletion]
+\label{thm:free-cocompletion}
+For any cocomplete $\mathcal{V}$-category $\mathcal{E}$ and $\mathcal{V}$-functor
+$F : \mathcal{C} \to \mathcal{E}$, there is an essentially unique
+colimit-preserving (i.e., $\mathcal{V}$-cocontinuous) $\mathcal{V}$-functor
+\begin{equation*}
+  \widetilde F \;:\; [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V} \to \mathcal{E}
+\end{equation*}
+with $\widetilde F \circ Y \cong F$. Explicitly, on a presheaf $P$:
+\begin{equation*}
+  \widetilde F (P) \;=\; P \star F \;=\; \int^c P(c) \otimes F(c).
+\end{equation*}
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Define $\widetilde F (P) = \int^c P(c) \otimes F(c)$ (a weighted
+colimit with $P$ as weight).}{Coend formula.}
+\proofstep{$\widetilde F$ is a $\mathcal{V}$-functor by functoriality of
+weighted colimits in the weight (Chapter~27).}{Functoriality.}
+\proofstep{$\widetilde F \circ Y(a) = \widetilde F(\mathcal{C}(-, a)) =
+\int^c \mathcal{C}(c, a) \otimes F(c) \cong F(a)$.}{By the coend Yoneda lemma
+(Theorem~\ref{thm:yoneda-unified} dual / ninja Yoneda).}
+\proofstep{$\widetilde F$ preserves all small colimits because coends commute
+with colimits (in their non-integration arguments).}{Coend = colimit, and
+colimits commute with colimits.}
+\proofstep{For uniqueness, suppose $G : [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]
+_\mathcal{V} \to \mathcal{E}$ is colimit-preserving with $G \circ Y \cong F$.}{
+Compare to any candidate.}
+\proofstep{Every presheaf is a coend of representables: $P \cong \int^c P(c)
+\otimes Y(c)$ (co-Yoneda).}{Density theorem in coend form.}
+\proofstep{Applying $G$: $G(P) \cong G\!\left(\int^c P(c) \otimes Y(c)\right)
+\cong \int^c P(c) \otimes G(Y(c)) \cong \int^c P(c) \otimes F(c) = \widetilde F(P)$.}{
+$G$ preserves colimits; $G \circ Y = F$.}
+\proofstep{Therefore $G \cong \widetilde F$, essentially uniquely.}{Uniqueness.}
+\end{prooflog}
+
+\begin{corollary}[{Universal property of $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$}]
+\label{cor:presheaf-universal}
+The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ exhibits the presheaf category as the free
+$\mathcal{V}$-cocompletion of $\mathcal{C}$: it is initial among $\mathcal{V}$-functors
+from $\mathcal{C}$ into cocomplete $\mathcal{V}$-categories.
+\end{corollary}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Density Theorem}
+\label{sec:density}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Density / co-Yoneda]
+\label{thm:density-formal}
+For any $\mathcal{V}$-functor $P : \mathcal{C}^{\mathrm{op}} \to \mathcal{V}$,
+\begin{equation*}
+  P \;\cong\; \int^c P(c) \otimes \mathcal{C}(-, c)
+\end{equation*}
+as $\mathcal{V}$-functors. Every presheaf is canonically a coend of
+representables.
+\end{theorem}
+
+\begin{proof}
+At each $a \in \mathcal{C}$, the right-hand side evaluates to
+$\int^c P(c) \otimes \mathcal{C}(a, c) \cong P(a)$ by ninja Yoneda
+(Chapter~26, Theorem~\ref{thm:yoneda-reduction-coend}). Naturality in $a$ is
+automatic.
+\end{proof}
+
+\subsection{Reorganizing: The Yoneda Embedding is Dense}
+
+\begin{definition}[Dense functor]
+\label{def:dense}
+A $\mathcal{V}$-functor $K : \mathcal{C} \to \mathcal{D}$ is \term{dense} if
+the canonical map
+\begin{equation*}
+  \int^c \mathcal{D}(K c, -) \otimes K c \;\longrightarrow\; \mathrm{Id}_\mathcal{D}
+\end{equation*}
+is an isomorphism — i.e., the identity functor of $\mathcal{D}$ is the left
+Kan extension of $K$ along itself.
+\end{definition}
+
+\begin{corollary}
+\label{cor:yoneda-dense}
+The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ is dense.
+\end{corollary}
+
+\begin{proof}
+The density condition at a presheaf $P$ becomes
+\begin{equation*}
+  \int^c [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(-, c), P)
+  \otimes \mathcal{C}(-, c) \;\cong\; P.
+\end{equation*}
+By the Yoneda lemma applied to the inner $[\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}(\mathcal{C}(-, c), P) \cong P(c)$, this reduces to
+$\int^c P(c) \otimes \mathcal{C}(-, c) \cong P$ — which is the density
+theorem.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjoint Functors via Yoneda}
+\label{sec:adjoints-via-yoneda}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The Yoneda lemma gives a clean formulation of when a functor has an adjoint.
+
+\begin{theorem}[Adjoint as represented hom-functor]
+\label{thm:adjoint-as-rep}
+A $\mathcal{V}$-functor $G : \mathcal{D} \to \mathcal{C}$ has a left adjoint
+iff for every $c \in \mathcal{C}$, the $\mathcal{V}$-functor
+\begin{equation*}
+  \mathcal{C}(c, G-) \;:\; \mathcal{D} \to \mathcal{V}
+\end{equation*}
+is representable. In that case, the representing object is $L(c)$, where
+$L \dashv G$.
+\end{theorem}
+
+\begin{proof}
+\emph{($\Rightarrow$):} If $L \dashv G$, then $\mathcal{C}(c, G-) \cong
+\mathcal{D}(L c, -)$, manifestly representable by $L c$. \\
+\emph{($\Leftarrow$):} If $\mathcal{C}(c, G-)$ is represented by $L c$, the
+correspondence $c \mapsto L c$ is functorial (by uniqueness of representing
+objects), and the isomorphism is exactly the adjoint hom-bijection.
+\end{proof}
+
+\begin{corollary}[Right Kan extension formula for adjoints]
+\label{cor:adjoint-as-ran}
+A right adjoint $G : \mathcal{D} \to \mathcal{C}$ is the right Kan extension
+of itself along the Yoneda embedding:
+\begin{equation*}
+  G \;\cong\; \operatorname{Ran}_Y (G \circ Y^{-1}) \quad\text{informally},
+\end{equation*}
+or, more precisely: every right adjoint is, up to natural isomorphism,
+$\operatorname{Ran}_Y F$ for some $F : \mathcal{C} \to \mathcal{C}$, where
+$Y$ is the Yoneda embedding of an appropriate source.
+\end{corollary}
+
+\subsection{Reorganizing: Universal Constructions as Kan Extensions}
+
+The combination of Theorem~\ref{thm:adjoint-as-rep}, the free cocompletion
+Theorem~\ref{thm:free-cocompletion}, and the weighted Kan extension formulas
+(Chapter~27) yields the slogan:
+\begin{quote}
+\emph{Every universal construction is the left Kan extension of an evident
+functor along the Yoneda embedding.}
+\end{quote}
+
+\begin{example_thm}[Free abelian group]
+The free abelian group functor $\mathbf{Set} \to \mathbf{Ab}$ is
+$\operatorname{Lan}_Y (\mathbb{Z}[-])$ where $\mathbb{Z}[-]$ sends a finite
+set to the free abelian group on it and $Y$ is the Yoneda embedding of
+finite sets into $\mathbf{Set}$. Computing the coend formula recovers the
+standard construction.
+\end{example_thm}
+
+\begin{example_thm}[Geometric realization]
+$|-| : \mathbf{sSet} \to \mathbf{Top}$ is $\operatorname{Lan}_Y(\Delta^\bullet)$
+where $\Delta^\bullet : \Delta \to \mathbf{Top}$ sends $[n]$ to the topological
+$n$-simplex, and $Y : \Delta \to \mathbf{sSet}$ is the Yoneda embedding
+$[n] \mapsto \Delta[n]$. This recovers the coend formula $|X| = \int^{[n]}
+X_n \cdot \Delta^n$ from Chapter~26.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Yoneda in $\mathbf{Prof}$}
+\label{sec:yoneda-prof}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The bicategory $\mathbf{Prof}$ (Chapter~25, \S~5.2) houses profunctors as
+1-cells. Its unit at $\mathcal{C}$ is the hom-profunctor $\mathcal{C}(-, -) :
+\mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathbf{Set}$.
+
+\begin{theorem}[Yoneda lemma in $\mathbf{Prof}$]
+\label{thm:yoneda-prof}
+For a small category $\mathcal{C}$, the hom-profunctor $\mathcal{C}(-, -) :
+\mathcal{C} \to \mathcal{C}$ is the \emph{identity 1-cell} of $\mathbf{Prof}$
+at $\mathcal{C}$, in the sense that for any profunctor $P : \mathcal{C}
+\to \mathcal{D}$:
+\begin{equation*}
+  P \circ \mathcal{C}(-, -) \;\cong\; P, \qquad \mathcal{D}(-, -) \circ P \;\cong\; P.
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+The left identity: $(P \circ \mathcal{C}(-,-))(d, c) = \int^{c'} P(d, c')
+\times \mathcal{C}(c', c) \cong P(d, c)$ by the ninja Yoneda lemma applied
+to $P(d, -)$. The right identity is the dual computation.
+\end{proof}
+
+\begin{remark}[Yoneda is unitality]
+This is the most distilled form of Yoneda's content: \emph{the hom-functor
+is the identity of profunctor composition}. All the other forms of Yoneda
+follow from this single fact, because profunctor composition is the coend
+and the unit is the hom-profunctor.
+\end{remark}
+
+\subsection{Reorganizing: Cauchy Completeness}
+
+\begin{definition}[Cauchy completeness]
+\label{def:cauchy-complete}
+A small $\mathcal{V}$-category $\mathcal{C}$ is \term{Cauchy complete} (or
+\emph{Karoubian} in the $\mathbf{Set}$-case) if every $\mathcal{V}$-profunctor
+$P : \mathcal{C} \to \mathbf{1}$ representable in $\mathbf{Prof}$ is
+representable by an object of $\mathcal{C}$ — equivalently, every \emph{absolute}
+weighted colimit exists in $\mathcal{C}$.
+\end{definition}
+
+\begin{remark}
+Cauchy completion is the universal Cauchy-complete enlargement of $\mathcal{C}$.
+It is the most refined version of the ``presheaf category as free cocompletion''
+theme: not all colimits, but exactly the colimits that are forced by
+profunctor representability.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:formal-yoneda-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{State the unified Yoneda lemma.}{For $F : \mathcal{C} \to \mathcal{V}$ a $\mathcal{V}$-functor and $a \in \mathcal{C}$: $\int_c \mathcal{V}(\mathcal{C}(a, c), F c) \cong F(a)$ in $\mathcal{V}$, $\mathcal{V}$-naturally in $a$ and $F$.}
+\qaitem{What is the ``end form'' of natural transformations?}{$[\mathcal{C}, \mathcal{V}]_\mathcal{V}(G, H) = \int_c \mathcal{V}(G c, H c)$.}
+\qaitem{What is the ``coend form'' of Yoneda (ninja Yoneda)?}{$\int^c \mathcal{C}(c, a) \otimes F(c) \cong F(a)$.}
+\qaitem{How does ordinary Set-Yoneda emerge from the unified statement?}{Take $\mathcal{V} = \mathbf{Set}$, $\mathcal{C}$ locally small. The end becomes $\mathrm{Nat}(\mathcal{C}(a, -), F)$ and the conclusion is $\mathrm{Nat}(\mathcal{C}(a, -), F) \cong F(a)$.}
+\qaitem{Define the (enriched) Yoneda embedding.}{$Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$, $a \mapsto \mathcal{C}(-, a)$.}
+\qaitem{Why is the Yoneda embedding fully faithful?}{Because $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(-, a), \mathcal{C}(-, b)) \cong \mathcal{C}(a, b)$ by the unified Yoneda lemma applied to $F = \mathcal{C}(-, b)$.}
+\qaitem{State the free cocompletion theorem.}{For any cocomplete $\mathcal{V}$-category $\mathcal{E}$ and $F : \mathcal{C} \to \mathcal{E}$, there is an essentially unique colimit-preserving $\widetilde F : [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V} \to \mathcal{E}$ with $\widetilde F \circ Y \cong F$.}
+\qaitem{What is the explicit formula for $\widetilde F$ on a presheaf $P$?}{$\widetilde F(P) = \int^c P(c) \otimes F(c) = P \star F$.}
+\qaitem{State the density theorem in coend form.}{$P \cong \int^c P(c) \otimes \mathcal{C}(-, c)$. Every presheaf is canonically a coend of representables.}
+\qaitem{What does ``dense functor'' mean?}{A $\mathcal{V}$-functor $K : \mathcal{C} \to \mathcal{D}$ such that the canonical map $\int^c \mathcal{D}(K c, -) \otimes K c \to \mathrm{Id}_\mathcal{D}$ is an iso — equivalently, $\mathrm{Id}_\mathcal{D} = \operatorname{Lan}_K K$.}
+\qaitem{Why is the Yoneda embedding dense?}{Because the density condition reduces, via the Yoneda lemma, to the density theorem itself.}
+\qaitem{When does $G : \mathcal{D} \to \mathcal{C}$ have a left adjoint?}{Iff $\mathcal{C}(c, G-) : \mathcal{D} \to \mathcal{V}$ is representable for every $c \in \mathcal{C}$.}
+\qaitem{What is the relationship between universal constructions and Kan extensions?}{Every universal construction is a left Kan extension along the Yoneda embedding of an appropriate sub-category.}
+\qaitem{Express the free abelian group functor as a Kan extension.}{$F_{\mathrm{ab}} = \operatorname{Lan}_Y (\mathbb{Z}[-])$, where $Y : \mathbf{FinSet} \to \mathbf{Set}$ and $\mathbb{Z}[-] : \mathbf{FinSet} \to \mathbf{Ab}$.}
+\qaitem{Express geometric realization as a Kan extension.}{$|-| = \operatorname{Lan}_Y(\Delta^\bullet)$, $Y : \Delta \to \mathbf{sSet}$, $\Delta^\bullet : \Delta \to \mathbf{Top}$.}
+\qaitem{What is the identity 1-cell of $\mathbf{Prof}$ at $\mathcal{C}$?}{The hom-profunctor $\mathcal{C}(-, -)$.}
+\qaitem{State Yoneda as the unitality of $\mathbf{Prof}$.}{For any profunctor $P : \mathcal{C} \to \mathcal{D}$: $P \circ \mathcal{C}(-,-) \cong P$ and $\mathcal{D}(-,-) \circ P \cong P$.}
+\qaitem{Why is ``Yoneda is unitality'' the most distilled form?}{Because all other Yoneda statements (representable functor, hom-bijection, density) follow from this single profunctor-composition fact.}
+\qaitem{What is a Cauchy complete category?}{A category in which every absolute weighted colimit exists; equivalently, every profunctor to the terminal category that is representable in $\mathbf{Prof}$ is representable by an object.}
+\qaitem{What is the Karoubian (idempotent splitting) view of Cauchy completion?}{In the $\mathbf{Set}$-enriched case, Cauchy completion is the splitting of all idempotents.}
+\qaitem{Why is Cauchy completion less than full cocompletion?}{Because only \emph{absolute} colimits are forced; the presheaf category (full cocompletion) typically contains many more objects than the Cauchy completion.}
+\qaitem{What is the relationship between $\widetilde F$ and Lan$_Y F$?}{They are equal: $\widetilde F = \operatorname{Lan}_Y F$. The free cocompletion is the left Kan extension along Yoneda.}
+\qaitem{Why does the colimit-preserving extension $\widetilde F$ exist and is unique?}{Existence: the coend formula constructs it. Uniqueness: every presheaf is a coend of representables (density), so any colimit-preserving extension is determined on representables and is then forced by coend preservation.}
+\qaitem{What does ``natural in $F$'' mean in the unified Yoneda statement?}{The isomorphism $\int_c \mathcal{V}(\mathcal{C}(a, c), F c) \cong F(a)$ is a natural transformation between two $\mathcal{V}$-functors $[\mathcal{C}, \mathcal{V}]_\mathcal{V} \to \mathcal{V}$: the end of the hom and evaluation at $a$.}
+\qaitem{What does the Yoneda embedding ``embed'' a category into?}{The presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$, by viewing each object $a$ as the representable presheaf $\mathcal{C}(-, a)$.}
+\qaitem{Why is the Yoneda embedding a $\mathcal{V}$-functor, not just an ordinary functor?}{Because the action on hom-objects is the $\mathcal{V}$-natural enrichment of the action on objects; the $\mathcal{V}$-structure is preserved.}
+\qaitem{What is the dual of the free cocompletion theorem?}{The free completion theorem: for any complete $\mathcal{V}$-category $\mathcal{E}$ and $F : \mathcal{C}^{\mathrm{op}} \to \mathcal{E}$, the right Kan extension $\operatorname{Ran}_{Y^{\mathrm{op}}} F : [\mathcal{C}, \mathcal{V}]_\mathcal{V} \to \mathcal{E}$ is the essentially unique limit-preserving extension.}
+\qaitem{In what sense is Yoneda ``trivial''?}{Once expressed as the unitality of $\mathbf{Prof}$ or as the ninja Yoneda formula via coend, the proof is mechanical: substitute the identity, apply functoriality, conclude.}
+\qaitem{What is the ``coherence'' the unified statement encodes?}{The compatibility of three pictures: hom-natural transformations as ends; representability as Yoneda; density as the co-Yoneda formula. All are facets of a single coend/end identity.}
+\qaitem{Why is this chapter called ``Formal Yoneda'' rather than just ``Yoneda Revisited''?}{Because the statement is now formal in the sense of formal category theory: it works in any enriched / 2-categorical setting where ends, coends, and weighted (co)limits make sense.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{The unified Yoneda lemma.}\quad For a $\mathcal{V}$-functor $F :
+\mathcal{C} \to \mathcal{V}$ and $a \in \mathcal{C}$:
+\[
+  \int_c \mathcal{V}(\mathcal{C}(a, c), F c) \;\cong\; F(a)
+\]
+in $\mathcal{V}$. This unifies the set-, enriched-, and coend-forms of
+Yoneda into one statement.
+
+\textbf{The Yoneda embedding.}\quad $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ is fully faithful: the Yoneda lemma identifies
+$\mathcal{C}(a, b)$ with $\mathcal{V}$-natural transformations
+$\mathcal{C}(-, a) \Rightarrow \mathcal{C}(-, b)$.
+
+\textbf{Free cocompletion.}\quad $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$
+is the free $\mathcal{V}$-cocompletion of $\mathcal{C}$: every
+$\mathcal{V}$-functor $F : \mathcal{C} \to \mathcal{E}$ to a cocomplete
+$\mathcal{V}$-category extends uniquely (up to iso) to a colimit-preserving
+$\widetilde F = \operatorname{Lan}_Y F$, given by the coend formula
+$\widetilde F(P) = \int^c P(c) \otimes F(c)$.
+
+\textbf{Density.}\quad Every presheaf is a coend of representables: $P \cong
+\int^c P(c) \otimes \mathcal{C}(-, c)$. The Yoneda embedding is dense: the
+identity functor of the presheaf category is the left Kan extension of $Y$
+along itself.
+
+\textbf{Adjoints via representability.}\quad A $\mathcal{V}$-functor $G$ has
+a left adjoint iff $\mathcal{C}(c, G-)$ is representable for every $c$. Every
+adjoint construction is a Kan extension along Yoneda.
+
+\textbf{Yoneda in $\mathbf{Prof}$.}\quad The hom-profunctor is the identity
+1-cell of $\mathbf{Prof}$ at $\mathcal{C}$. This is the most distilled form
+of Yoneda's content; all other forms follow.
+
+\textbf{Cauchy completeness.}\quad The category where exactly the absolute
+weighted colimits exist; in $\mathbf{Set}$-enriched, the splitting of
+idempotents.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Unified Yoneda.}\quad For $F : \mathcal{C} \to \mathcal{V}$ a
+$\mathcal{V}$-functor:
+\[
+  \int_c \mathcal{V}(\mathcal{C}(a, c), F c) \;\cong\; F(a)
+  \qquad
+  \int^c \mathcal{C}(c, a) \otimes F(c) \;\cong\; F(a)
+\]
+$\mathcal{V}$-naturally in $a$ and $F$.
+
+\medskip
+\textbf{Yoneda embedding.}\quad $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$, $a \mapsto \mathcal{C}(-, a)$. Fully faithful as a
+$\mathcal{V}$-functor.
+
+\medskip
+\textbf{Free cocompletion.}\quad For cocomplete $\mathcal{E}$ and $F :
+\mathcal{C} \to \mathcal{E}$, $\widetilde F = \operatorname{Lan}_Y F$ is the
+essentially unique colimit-preserving extension with $\widetilde F \circ Y
+\cong F$. Formula: $\widetilde F(P) = \int^c P(c) \otimes F(c)$.
+
+\medskip
+\textbf{Density.}\quad $P \cong \int^c P(c) \otimes \mathcal{C}(-, c)$ for
+any $\mathcal{V}$-functor $P : \mathcal{C}^{\mathrm{op}} \to \mathcal{V}$.
+$Y$ is dense: $\mathrm{Id}_{[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]} =
+\operatorname{Lan}_Y Y$.
+
+\medskip
+\textbf{Adjoint as represented hom.}\quad $G : \mathcal{D} \to \mathcal{C}$
+has $L \dashv G$ iff $\mathcal{C}(c, G-) \cong \mathcal{D}(L c, -)$ for each $c$.
+
+\medskip
+\textbf{Yoneda as unitality in $\mathbf{Prof}$.}\quad $\mathcal{C}(-, -)$ is
+the identity 1-cell at $\mathcal{C}$ in $\mathbf{Prof}$: $P \circ \mathcal{C}(-,-)
+\cong P$ for all profunctors out of $\mathcal{C}$ (and dually).
+
+\medskip
+\noindent\textit{Chapter~29 returns to monoidal categories with the
+strictification theorem in full generality (Mac Lane coherence), now in the
+2-categorical / bicategorical language of Chapter~25.}
+\end{formalrestatement}
