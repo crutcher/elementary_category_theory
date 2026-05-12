@@ -1,0 +1,520 @@
+% ch11_kan_extensions.tex
+
+\chapter{Kan Extensions}
+
+\begin{overviewbox}
+You have learned how to move objects between categories (functors), how to compare
+functors (natural transformations), how to build objects universally (limits and
+colimits), and how to relate whole categories (adjunctions). There is one
+construction that quietly underlies all of these: the \textbf{Kan extension}.
+
+When a functor $F : \mathcal{C} \to \mathcal{D}$ cannot be defined on a larger
+category $\mathcal{E}$ without additional choices, a Kan extension asks: what is
+the \emph{best possible approximation} to extending $F$ along a functor
+$p : \mathcal{C} \to \mathcal{E}$? The answer turns out to subsume limits,
+colimits, and adjunctions as special cases. Saunders Mac Lane wrote that Kan
+extensions are ``perhaps the most important concept of category theory.''
+
+This chapter builds Kan extensions from that intuition outward: we start with
+the idea of approximation, develop the colimit formula for left Kan extensions,
+the limit formula for right Kan extensions, and then reveal how Kan extensions
+themselves are adjoint functors between functor categories.
+\end{overviewbox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Extending Along a Functor}
+
+\subsection{Informally}
+
+Suppose you have a small category $\mathcal{C}$, a functor
+$p : \mathcal{C} \to \mathcal{E}$, and a functor $F : \mathcal{C} \to \mathcal{D}$.
+You would like a functor $G : \mathcal{E} \to \mathcal{D}$ that ``agrees with $F$
+on $\mathcal{C}$,'' meaning $G \circ p \cong F$.
+
+\begin{center}
+\begin{tikzcd}
+\mathcal{C}
+  \arrow[r, "p"]
+  \arrow[dr, "F"']
+& \mathcal{E}
+  \arrow[d, dashed, "G"]
+\\
+& \mathcal{D}
+\end{tikzcd}
+\end{center}
+
+Most of the time there is no \emph{unique} such $G$. Many functors could fill the
+dashed arrow. So we ask a softer question: among all functors
+$G : \mathcal{E} \to \mathcal{D}$ equipped with a natural transformation
+$\alpha : F \Rightarrow G \circ p$, is there a \emph{universal} one — one that every
+other such pair factors through uniquely?
+
+That universal pair is called the \term{left Kan extension} of $F$ along $p$,
+written $\operatorname{Lan}_p F$. Its universal property says: any natural
+transformation $F \Rightarrow G \circ p$ factors uniquely through the canonical
+transformation $\eta : F \Rightarrow (\operatorname{Lan}_p F) \circ p$.
+
+Dually, the \term{right Kan extension} $\operatorname{Ran}_p F$ is equipped with
+a natural transformation $\varepsilon : (\operatorname{Ran}_p F) \circ p \Rightarrow F$,
+and any transformation $G \circ p \Rightarrow F$ factors uniquely through $\varepsilon$.
+
+\begin{dialog}
+``Is this just like an adjunction?''
+
+Exactly. The Kan extension is defined by a universal property, and universal
+properties always define adjoints in disguise. We will make that precise in
+Section~\ref{sec:kan-as-adjoint}.
+\end{dialog}
+
+\subsection{Expanding}
+
+Let us think about what ``best approximation'' means concretely. The functor $p$
+maps objects of $\mathcal{C}$ into $\mathcal{E}$. If $e \in \mathcal{E}$ happens
+to equal $p(c)$ for some $c$, then $G(e)$ had better relate to $F(c)$. But what
+if $e$ is not in the image of $p$ at all?
+
+A natural answer is: look at all the ways $e$ can be ``approached'' by objects
+in the image of $p$. Form a diagram indexed by those approaches, evaluate $F$ on
+the objects of $\mathcal{C}$ involved, and take the colimit of that diagram.
+The colimit assembles all the relevant information about $e$ from $F$'s perspective.
+
+This is the \textbf{colimit formula}:
+\[
+  (\operatorname{Lan}_p F)(e) \;=\; \operatorname{colim}_{(c,\, p(c) \to e)\,\in\, (p \downarrow e)} F(c).
+\]
+The comma category $(p \downarrow e)$ has objects $(c, \phi)$ where
+$c \in \mathcal{C}$ and $\phi : p(c) \to e$ is a morphism in $\mathcal{E}$.
+It collects all the ``windows into $e$'' through the image of $p$.
+
+Dually, the right Kan extension uses a limit:
+\[
+  (\operatorname{Ran}_p F)(e) \;=\; \lim_{(c,\, e \to p(c))\,\in\, (e \downarrow p)} F(c).
+\]
+
+\begin{dialog}
+``Why colimit for left and limit for right?''
+
+Left Kan extensions are left adjoints, and left adjoints preserve colimits — so
+the formula is built from colimits. Right Kan extensions are right adjoints, and
+right adjoints preserve limits — so the formula uses limits. The direction of the
+arrow in the comma category tracks which side you are on.
+\end{dialog}
+
+\subsection{Formalizing}
+
+\begin{definition}
+Let $p : \mathcal{C} \to \mathcal{E}$ and $F : \mathcal{C} \to \mathcal{D}$ be
+functors. A \term{left Kan extension} of $F$ along $p$ is a functor
+$\operatorname{Lan}_p F : \mathcal{E} \to \mathcal{D}$ together with a natural
+transformation
+\[
+  \eta : F \;\Rightarrow\; (\operatorname{Lan}_p F) \circ p,
+\]
+called the \term{unit}, satisfying the following universal property: for every
+functor $G : \mathcal{E} \to \mathcal{D}$ and every natural transformation
+$\alpha : F \Rightarrow G \circ p$, there exists a unique natural transformation
+$\bar{\alpha} : \operatorname{Lan}_p F \Rightarrow G$ such that
+$(\bar{\alpha} \circ p) \cdot \eta = \alpha$.
+
+\begin{howtosay}
+$\operatorname{Lan}_p F$ is read ``the left Kan extension of $F$ along $p$.''
+The subscript $p$ names the functor you are extending along.
+\end{howtosay}
+\end{definition}
+
+\begin{definition}
+A \term{right Kan extension} of $F$ along $p$ is a functor
+$\operatorname{Ran}_p F : \mathcal{E} \to \mathcal{D}$ together with a natural
+transformation
+\[
+  \varepsilon : (\operatorname{Ran}_p F) \circ p \;\Rightarrow\; F,
+\]
+called the \term{counit}, satisfying the dual universal property: for every functor
+$G : \mathcal{E} \to \mathcal{D}$ and every natural transformation
+$\beta : G \circ p \Rightarrow F$, there exists a unique natural transformation
+$\bar{\beta} : G \Rightarrow \operatorname{Ran}_p F$ such that
+$\varepsilon \cdot (\bar{\beta} \circ p) = \beta$.
+\end{definition}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{The Colimit Formula}
+
+\subsection{Formalizing}
+
+The existence of left Kan extensions, and an explicit formula for computing them,
+rests on the colimit formula stated informally above. We now make it precise.
+
+\begin{definition}
+The \term{comma category} $(p \downarrow e)$, for a functor
+$p : \mathcal{C} \to \mathcal{E}$ and an object $e \in \mathcal{E}$, has:
+\begin{itemize}
+  \item \textbf{Objects:} pairs $(c, \phi)$ where $c \in \mathcal{C}$ and
+    $\phi : p(c) \to e$ in $\mathcal{E}$.
+  \item \textbf{Morphisms:} $(c, \phi) \to (c', \phi')$ is a morphism
+    $f : c \to c'$ in $\mathcal{C}$ such that $\phi' \circ p(f) = \phi$.
+\end{itemize}
+There is a forgetful functor $\pi : (p \downarrow e) \to \mathcal{C}$
+sending $(c, \phi) \mapsto c$.
+\end{definition}
+
+\begin{theorem}[Colimit Formula for Left Kan Extensions]
+If $\mathcal{D}$ has all small colimits and $\mathcal{C}$ is small, then
+$\operatorname{Lan}_p F$ exists and is given pointwise by
+\[
+  (\operatorname{Lan}_p F)(e) \;\cong\; \operatorname{colim}\bigl(F \circ \pi_{e}\bigr),
+\]
+where $\pi_e : (p \downarrow e) \to \mathcal{C}$ is the forgetful functor.
+\end{theorem}
+
+The colimit is over a diagram that assembles all $F(c)$ for all morphisms
+$p(c) \to e$. As $e$ varies, these diagrams fit together naturally to make
+$\operatorname{Lan}_p F$ a functor.
+
+\begin{theorem}[Limit Formula for Right Kan Extensions]
+Dually, if $\mathcal{D}$ has all small limits, then $\operatorname{Ran}_p F$ exists
+and is given pointwise by
+\[
+  (\operatorname{Ran}_p F)(e) \;\cong\; \lim\bigl(F \circ \pi^e\bigr),
+\]
+where $\pi^e : (e \downarrow p) \to \mathcal{C}$ is the forgetful functor from the
+comma category $(e \downarrow p)$ whose objects are $(c, \phi : e \to p(c))$.
+\end{theorem}
+
+\subsection{Reorganizing: Limits and Colimits Are Kan Extensions}
+
+The colimit formula makes a striking observation possible. Take $\mathcal{E} = \mathbf{1}$,
+the category with one object and one morphism, and let $p : \mathcal{C} \to \mathbf{1}$
+be the unique functor. Then:
+\begin{itemize}
+  \item The comma category $(p \downarrow \star)$, for the single object $\star \in \mathbf{1}$,
+    is isomorphic to $\mathcal{C}$ itself (every morphism $p(c) \to \star$ is the
+    identity).
+  \item So $(\operatorname{Lan}_p F)(\star) = \operatorname{colim}_{\mathcal{C}} F$.
+\end{itemize}
+
+\begin{center}
+\begin{tikzcd}
+\mathcal{C}
+  \arrow[r, "p"]
+  \arrow[dr, "F"']
+& \mathbf{1}
+  \arrow[d, dashed, "\operatorname{Lan}_p F"]
+\\
+& \mathcal{D}
+\end{tikzcd}
+\end{center}
+
+In other words, \emph{colimits are left Kan extensions along the unique functor
+to the terminal category}, and limits are right Kan extensions along the same functor.
+Kan extensions are more general: they push a functor along an arbitrary functor,
+not just along the collapse to a point.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Kan Extensions as Adjoints}
+\label{sec:kan-as-adjoint}
+
+\subsection{Formalizing}
+
+Fix categories $\mathcal{C}$, $\mathcal{D}$, $\mathcal{E}$ and a functor
+$p : \mathcal{C} \to \mathcal{E}$. There is a \term{restriction functor}
+\[
+  (-) \circ p \;:\; [\mathcal{E}, \mathcal{D}] \;\longrightarrow\; [\mathcal{C}, \mathcal{D}]
+\]
+that sends a functor $G : \mathcal{E} \to \mathcal{D}$ to the composite
+$G \circ p : \mathcal{C} \to \mathcal{D}$.
+
+\begin{theorem}
+When Kan extensions exist, they form adjoint pairs with the restriction functor:
+\begin{align*}
+  \operatorname{Lan}_p &\dashv (-) \circ p, \\
+  (-) \circ p &\dashv \operatorname{Ran}_p.
+\end{align*}
+In explicit terms, there are natural bijections:
+\begin{align*}
+  [\mathcal{E}, \mathcal{D}](\operatorname{Lan}_p F,\, G)
+    &\;\cong\; [\mathcal{C}, \mathcal{D}](F,\, G \circ p), \\
+  [\mathcal{C}, \mathcal{D}](G \circ p,\, F)
+    &\;\cong\; [\mathcal{E}, \mathcal{D}](G,\, \operatorname{Ran}_p F).
+\end{align*}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The hom-set bijection for $\operatorname{Lan}_p \dashv (-) \circ p$ is precisely
+the universal property of the left Kan extension: natural transformations
+$\operatorname{Lan}_p F \Rightarrow G$ are in natural bijection with natural
+transformations $F \Rightarrow G \circ p$, mediated by pre- or post-composition
+with the unit $\eta$.
+\end{proof}
+
+This is the key insight: \emph{forming a left Kan extension is left adjoint to
+restricting along $p$}. The construction that was built by universal property
+is, in the language of the previous chapters, exactly an adjunction between
+functor categories.
+
+\subsection{Simplifying}
+
+The four main constructions of the book now appear as Kan extensions:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lll}
+\hline
+\textbf{Construction} & \textbf{As a Kan extension} & \textbf{Along} \\
+\hline
+Colimit of $F$ & $\operatorname{Lan}_p F$  & $p : \mathcal{C} \to \mathbf{1}$ \\
+Limit of $F$   & $\operatorname{Ran}_p F$  & $p : \mathcal{C} \to \mathbf{1}$ \\
+Left adjoint of $G$ & $\operatorname{Lan}_Y \operatorname{id}$ & Yoneda embedding $Y$ \\
+Right adjoint of $G$ & $\operatorname{Ran}_Y \operatorname{id}$ & Yoneda embedding $Y$ \\
+\hline
+\end{tabular}
+\end{center}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Density and the Density Corollary}
+
+\subsection{Formalizing}
+
+A functor $p : \mathcal{C} \to \mathcal{E}$ is called \term{dense} if every
+object of $\mathcal{E}$ is a colimit of objects in the image of $p$. The precise
+statement involves Kan extensions:
+
+\begin{definition}
+A functor $p : \mathcal{C} \to \mathcal{E}$ is \term{dense} if the left Kan
+extension of $p$ along itself is naturally isomorphic to the identity:
+\[
+  \operatorname{Lan}_p p \;\cong\; \operatorname{Id}_{\mathcal{E}}.
+\]
+\end{definition}
+
+The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{op}, \mathbf{Set}]$ is
+dense. This gives the \textbf{density corollary}: every presheaf is a canonical
+colimit of representable presheaves.
+
+\begin{theorem}[Density of the Yoneda Embedding]
+For any small category $\mathcal{C}$ and any presheaf $F \in [\mathcal{C}^{op}, \mathbf{Set}]$:
+\[
+  F \;\cong\; \operatorname{colim}_{(c,\, Y(c) \to F)\,\in\, (Y \downarrow F)} Y(c).
+\]
+\end{theorem}
+
+In words: every presheaf $F$ is the colimit of all representable presheaves
+mapping into it. The ``shape'' of a presheaf is entirely determined by how
+representables map into it — which is the content of the Yoneda lemma stated
+from a new angle.
+
+\begin{dialog}
+``So the Yoneda lemma and Kan extensions are the same thing?''
+
+Not quite, but they are deeply connected. The Yoneda lemma says that
+$[\mathcal{C}^{op}, \mathbf{Set}](Y(c), F) \cong F(c)$. The density formula
+says that $F$ is the left Kan extension of itself along $Y$. Together, they
+say that presheaf categories are the canonical home where every object is
+freely built from representables.
+\end{dialog}
+
+\subsection{Formally}
+
+\begin{theorem}[Every Functor is a Left Kan Extension]
+For any functor $F : \mathcal{C} \to \mathcal{D}$:
+\[
+  F \;\cong\; \operatorname{Lan}_{\operatorname{Id}_\mathcal{C}} F.
+\]
+That is, $F$ is its own left Kan extension along the identity. More substantively,
+if $Y : \mathcal{C} \to \hat{\mathcal{C}}$ is the Yoneda embedding, then:
+\[
+  \operatorname{Lan}_Y F \;\cong\; F^+,
+\]
+where $F^+ : \hat{\mathcal{C}} \to \mathcal{D}$ is the unique (up to isomorphism)
+colimit-preserving extension of $F$ to the presheaf category.
+\end{theorem}
+
+This is the universal property of the presheaf category: $\hat{\mathcal{C}}$ is
+the free cocompletion of $\mathcal{C}$.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is the left Kan extension $\operatorname{Lan}_p F$ of $F$ along $p$?}
+       {A functor $\operatorname{Lan}_p F : \mathcal{E} \to \mathcal{D}$ with a unit
+        $\eta : F \Rightarrow (\operatorname{Lan}_p F) \circ p$, universal among all
+        such pairs.}
+
+\qaitem{What is the universal property of the unit $\eta$?}
+       {Any $\alpha : F \Rightarrow G \circ p$ factors uniquely through $\eta$
+        via a natural transformation $\bar{\alpha} : \operatorname{Lan}_p F \Rightarrow G$.}
+
+\qaitem{How do you read $\operatorname{Lan}_p F$?}
+       {``The left Kan extension of $F$ along $p$.'' The subscript names the
+        functor you are extending along.}
+
+\qaitem{What is the colimit formula for $(\operatorname{Lan}_p F)(e)$?}
+       {$\operatorname{colim}\bigl(F \circ \pi_e\bigr)$, where $\pi_e : (p \downarrow e) \to \mathcal{C}$
+        is the forgetful functor from the comma category.}
+
+\qaitem{What are the objects of the comma category $(p \downarrow e)$?}
+       {Pairs $(c, \phi)$ where $c \in \mathcal{C}$ and $\phi : p(c) \to e$ in $\mathcal{E}$.}
+
+\qaitem{What are the morphisms in $(p \downarrow e)$?}
+       {A morphism $(c, \phi) \to (c', \phi')$ is $f : c \to c'$ in $\mathcal{C}$
+        such that $\phi' \circ p(f) = \phi$.}
+
+\qaitem{What is the limit formula for $(\operatorname{Ran}_p F)(e)$?}
+       {$\lim\bigl(F \circ \pi^e\bigr)$, where $\pi^e : (e \downarrow p) \to \mathcal{C}$
+        is the forgetful functor from the comma category whose objects have
+        $\phi : e \to p(c)$.}
+
+\qaitem{How does a colimit of $F : \mathcal{C} \to \mathcal{D}$ arise as a Kan extension?}
+       {As $(\operatorname{Lan}_p F)(\star)$ where $p : \mathcal{C} \to \mathbf{1}$
+        is the unique functor.}
+
+\qaitem{What is the adjunction involving $\operatorname{Lan}_p$?}
+       {$\operatorname{Lan}_p \dashv (-) \circ p$, as functors between functor
+        categories $[\mathcal{C}, \mathcal{D}]$ and $[\mathcal{E}, \mathcal{D}]$.}
+
+\qaitem{What is the adjunction involving $\operatorname{Ran}_p$?}
+       {$(-) \circ p \dashv \operatorname{Ran}_p$.}
+
+\qaitem{What does it mean for a functor $p : \mathcal{C} \to \mathcal{E}$ to be dense?}
+       {$\operatorname{Lan}_p p \cong \operatorname{Id}_{\mathcal{E}}$; every object
+        of $\mathcal{E}$ is a canonical colimit of objects in the image of $p$.}
+
+\qaitem{Is the Yoneda embedding $Y : \mathcal{C} \to \hat{\mathcal{C}}$ dense?}
+       {Yes. Every presheaf is a colimit of representable presheaves.}
+
+\qaitem{What is the density corollary?}
+       {Every presheaf $F$ is the colimit of all representables $Y(c)$ over
+        the comma category $(Y \downarrow F)$.}
+
+\qaitem{What is the free cocompletion of $\mathcal{C}$?}
+       {The presheaf category $\hat{\mathcal{C}} = [\mathcal{C}^{op}, \mathbf{Set}]$:
+        the universal category that receives $\mathcal{C}$ and has all colimits.}
+
+\qaitem{If $\mathcal{D}$ has all colimits, what is the unique colimit-preserving
+        extension of $F : \mathcal{C} \to \mathcal{D}$ to $\hat{\mathcal{C}}$?}
+       {$\operatorname{Lan}_Y F$, the left Kan extension of $F$ along the Yoneda embedding.}
+
+\qaitem{What does $\operatorname{Lan}_p F$ compute at $e$ when every object of
+        $\mathcal{E}$ is in the image of $p$?}
+       {It essentially evaluates $F$ at a preimage of $e$; when $p$ is an
+        isomorphism the formula recovers $F \circ p^{-1}$.}
+
+\qaitem{Can $\operatorname{Lan}_p F$ fail to exist?}
+       {Yes, when $\mathcal{D}$ lacks the required colimits. The colimit formula
+        requires $\mathcal{D}$ to have all small colimits.}
+
+\qaitem{What is the restriction functor?}
+       {$(-) \circ p : [\mathcal{E}, \mathcal{D}] \to [\mathcal{C}, \mathcal{D}]$,
+        precomposing every functor $\mathcal{E} \to \mathcal{D}$ with $p$.}
+
+\qaitem{Which Kan extension is left adjoint to restriction, and which is right?}
+       {$\operatorname{Lan}_p$ is left adjoint; $\operatorname{Ran}_p$ is right adjoint.}
+
+\qaitem{What does it mean that ``every concept is a Kan extension''?}
+       {Limits, colimits, adjoints, and many other universal constructions can each
+        be expressed as a Kan extension of an appropriate functor along an appropriate
+        functor.}
+
+\qaitem{How does the right Kan extension $\operatorname{Ran}_p F$ relate to adjoints?}
+       {If $F$ has a right adjoint $G$, and $p = F$, then $\operatorname{Ran}_F \operatorname{Id}
+        \cong G$; right adjoints can be computed as right Kan extensions along the
+        left adjoint.}
+
+\qaitem{What structure does the comma category $(p \downarrow e)$ have as $e$ varies?}
+       {It varies functorially: a morphism $e \to e'$ in $\mathcal{E}$ induces a
+        functor $(p \downarrow e) \to (p \downarrow e')$ by composing with the morphism.}
+
+\qaitem{What is the unit $\eta$ for a left Kan extension?}
+       {A natural transformation $\eta : F \Rightarrow (\operatorname{Lan}_p F) \circ p$;
+        it is the canonical ``comparison'' map from $F$ to its extension composed with $p$.}
+
+\qaitem{What is the counit $\varepsilon$ for a right Kan extension?}
+       {A natural transformation $\varepsilon : (\operatorname{Ran}_p F) \circ p \Rightarrow F$;
+        the canonical comparison in the other direction.}
+
+\qaitem{If $p$ is an equivalence of categories, what can you say about
+        $\operatorname{Lan}_p F$?}
+       {It is isomorphic to $F \circ p^{-1}$ (the composite with a quasi-inverse),
+        and the unit $\eta$ is a natural isomorphism.}
+
+\qaitem{What condition on $p$ makes every functor $F$ compute its Kan extension
+        without taking genuine colimits?}
+       {If $p$ is fully faithful, then $(\operatorname{Lan}_p F)(p(c)) \cong F(c)$:
+        the extension recovers $F$ exactly on the image of $p$.}
+
+\qaitem{What is a pointwise Kan extension?}
+       {A Kan extension computed by the colimit (or limit) formula at each object
+        separately. Most Kan extensions in practice are pointwise.}
+
+\qaitem{Why are pointwise Kan extensions better-behaved?}
+       {They are preserved by representable functors; equivalently, they interact
+        well with limits and colimits in $\mathcal{D}$.}
+
+\qaitem{How does sheafification relate to Kan extensions?}
+       {Sheafification is the left Kan extension of the inclusion of sheaves into
+        presheaves, along the identity on presheaves — equivalently, the left adjoint
+        to the forgetful functor from sheaves to presheaves.}
+
+\qaitem{What single adjunction encodes both $\operatorname{Lan}_p$ and $\operatorname{Ran}_p$?}
+       {There is no single adjunction; they form two separate adjunctions:
+        $\operatorname{Lan}_p \dashv (-)\circ p \dashv \operatorname{Ran}_p$,
+        making $(-) \circ p$ a functor with a left and a right adjoint.}
+\end{qa}
+\end{exercisesbox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{summarybox}
+A \textbf{Kan extension} of $F : \mathcal{C} \to \mathcal{D}$ along
+$p : \mathcal{C} \to \mathcal{E}$ is the best approximation to extending $F$
+to $\mathcal{E}$. The \textbf{left Kan extension} $\operatorname{Lan}_p F$ is
+computed by a colimit over the comma category $(p \downarrow e)$ at each
+object $e \in \mathcal{E}$; the \textbf{right Kan extension} $\operatorname{Ran}_p F$
+by a limit. Both are adjoints to the restriction functor $(-) \circ p$.
+
+Limits and colimits are the special case where $\mathcal{E} = \mathbf{1}$.
+The Yoneda embedding is dense, giving the density corollary: every presheaf
+is canonically a colimit of representables. The presheaf category is the free
+cocompletion of $\mathcal{C}$.
+\end{summarybox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Left Kan extension.} Given $p : \mathcal{C} \to \mathcal{E}$ and
+$F : \mathcal{C} \to \mathcal{D}$, the pair $(\operatorname{Lan}_p F, \eta)$
+where $\operatorname{Lan}_p F : \mathcal{E} \to \mathcal{D}$ and
+$\eta : F \Rightarrow (\operatorname{Lan}_p F) \circ p$ is terminal in the category
+of such pairs, yielding a natural bijection
+\[
+  [\mathcal{E}, \mathcal{D}](\operatorname{Lan}_p F,\, G) \;\cong\;
+  [\mathcal{C}, \mathcal{D}](F,\, G \circ p).
+\]
+
+\textbf{Colimit formula.} If $\mathcal{C}$ is small and $\mathcal{D}$ is cocomplete:
+\[
+  (\operatorname{Lan}_p F)(e) \;=\; \operatorname{colim}\bigl((p \downarrow e)
+  \xrightarrow{\pi_e} \mathcal{C} \xrightarrow{F} \mathcal{D}\bigr).
+\]
+
+\textbf{Right Kan extension.} Dually, $(\operatorname{Ran}_p F, \varepsilon)$ with
+$\varepsilon : (\operatorname{Ran}_p F) \circ p \Rightarrow F$, and:
+\[
+  [\mathcal{C}, \mathcal{D}](G \circ p,\, F) \;\cong\;
+  [\mathcal{E}, \mathcal{D}](G,\, \operatorname{Ran}_p F).
+\]
+
+\textbf{Limit formula.} If $\mathcal{D}$ is complete:
+\[
+  (\operatorname{Ran}_p F)(e) \;=\; \lim\bigl((e \downarrow p)
+  \xrightarrow{\pi^e} \mathcal{C} \xrightarrow{F} \mathcal{D}\bigr).
+\]
+
+\textbf{Adjunction triple.} $\operatorname{Lan}_p \dashv (-) \circ p \dashv \operatorname{Ran}_p$
+as functors $[\mathcal{C}, \mathcal{D}] \rightleftarrows [\mathcal{E}, \mathcal{D}]$.
+
+\textbf{Density.} $p$ is dense iff $\operatorname{Lan}_p p \cong \operatorname{Id}_\mathcal{E}$.
+The Yoneda embedding $Y : \mathcal{C} \to \hat{\mathcal{C}}$ is dense;
+$\hat{\mathcal{C}}$ is the free cocompletion of $\mathcal{C}$.
+\end{formalrestatement}

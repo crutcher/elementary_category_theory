@@ -255,7 +255,11 @@
   \end{tabularx}%
 }
 % \qa is taken by a tabularx/array internal; use \qaitem instead.
-\newcommand{\qaitem}[2]{#1 & #2 \\[0.3em]}
+% Spacing: ~3x original (0.3em) + thin rule between pairs.
+\newcommand{\qaitem}[2]{%
+  #1 & #2 \\[0.3em]%
+  \noalign{{\color{DialogBorder!50}\hrule height 0.3pt}\vspace{0.6em}}%
+}
 
 % ── Chapter summary box ──────────────────────────────────────────────────────
 \newtcolorbox{summarybox}[1][]{
@@ -271,6 +275,28 @@
 
 % ── Key-term command ────────────────────────────────────────────────────────
 \newcommand{\term}[1]{\textbf{\color{TermColor}#1}}
+
+% ── Volume / Part naming ─────────────────────────────────────────────────────
+% Use "Volume" instead of "Part" for \part{} divisions.
+\renewcommand{\partname}{Volume}
+
+% ── Proof log (Volume II style) ──────────────────────────────────────────────
+% Two-column proof layout: proof steps on the left, justifications on the right.
+% Use \proofstep{step}{justification} inside a prooflog environment.
+\usepackage{booktabs}
+\NewEnviron{prooflog}{%
+  \setlength{\extrarowheight}{3pt}%
+  \begin{tabularx}{\linewidth}{%
+    @{}>{\raggedright\arraybackslash}p{0.54\linewidth}%
+    @{\hspace{0.8em}}!{\color{InformalColor!30}\vrule}@{\hspace{0.8em}}%
+    >{\raggedright\arraybackslash\itshape\small}X@{}}
+    \BODY
+  \end{tabularx}%
+}
+\newcommand{\proofstep}[2]{%
+  #1 & #2 \\[0.3em]%
+  \noalign{{\color{InformalColor!20}\hrule height 0.2pt}\vspace{0.3em}}%
+}
 
 % Hyperlinks (load last)
 \usepackage[hidelinks,
