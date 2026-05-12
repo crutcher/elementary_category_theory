@@ -86,6 +86,20 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{mathtools}
 
+% ── Theorem environments ─────────────────────────────────────────────────────
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[chapter]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{proposition}[theorem]{Proposition}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example_thm}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+
+% Proof environment is provided by amsthm
+
 % Diagrams
 \usepackage{tikz}
 \usepackage{tikz-cd}
@@ -168,71 +182,21 @@
 }
 
 % ── Internal-dialog box ─────────────────────────────────────────────────────
-\newtcolorbox{dialog}[1][]{
-  enhanced,
-  breakable,
-  colback=DialogBg,
-  colframe=DialogBorder,
-  fonttitle=\bfseries\small,
-  title={Internal Dialog},
-  left=6pt, right=6pt, top=4pt, bottom=4pt,
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={colback=DialogBorder, colframe=DialogBorder,
-    fontupper=\color{white}\bfseries\small},
-  #1
-}
+\newtcolorbox{dialog}[1][]{enhanced,breakable,colback=DialogBg,colframe=DialogBorder,fonttitle=\bfseries\small,title={Internal Dialog},left=6pt, right=6pt, top=4pt, bottom=4pt,attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=DialogBorder, colframe=DialogBorder,fontupper=\color{white}\bfseries\small},#1}
 
 % ── Reader-annotation box ────────────────────────────────────────────────────
-\newtcolorbox{readernote}[1][]{
-  enhanced,
-  breakable,
-  colback=NoteBg,
-  colframe=NoteBorder,
-  fonttitle=\bfseries\small,
-  title={Reader's Annotation},
-  left=6pt, right=6pt, top=4pt, bottom=4pt,
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={colback=NoteBorder, colframe=NoteBorder,
-    fontupper=\color{white}\bfseries\small},
-  #1
-}
+\newtcolorbox{readernote}[1][]{enhanced,breakable,colback=NoteBg,colframe=NoteBorder,fonttitle=\bfseries\small,title={Reader's Annotation},left=6pt, right=6pt, top=4pt, bottom=4pt,attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=NoteBorder, colframe=NoteBorder,fontupper=\color{white}\bfseries\small},#1}
 
 % ── Example environment ─────────────────────────────────────────────────────
-\newtcolorbox{example}[2][]{
-  enhanced,
-  breakable,
-  colback=white,
-  colframe=InformalColor!40,
-  fonttitle=\bfseries\small,
-  title={Example: #2},
-  left=6pt, right=6pt, top=4pt, bottom=4pt,
-  #1
-}
+\newtcolorbox{example}[2][]{enhanced,breakable,colback=white,colframe=InformalColor!40,fonttitle=\bfseries\small,title={Example: #2},left=6pt, right=6pt, top=4pt, bottom=4pt,#1}
 
 % ── "How to Say This" callout ────────────────────────────────────────────────
-% Used when introducing notation that has multiple conventional readings
-% or pronunciations across the literature.
-\newtcolorbox{howtosay}[1][]{
-  enhanced,
-  breakable,
-  colback=NoteBg!60,
-  colframe=NoteBorder!70,
-  fonttitle=\bfseries\footnotesize,
-  title={How to Say This},
-  left=6pt, right=6pt, top=3pt, bottom=3pt,
-  attach boxed title to top left={yshift=-2mm, xshift=4mm},
-  boxed title style={colback=NoteBorder!70, colframe=NoteBorder!70,
-    fontupper=\color{white}\bfseries\footnotesize},
-  #1
-}
+\newtcolorbox{howtosay}[1][]{enhanced,breakable,colback=NoteBg!60,colframe=NoteBorder!70,fonttitle=\bfseries\footnotesize,title={How to Say This},left=6pt, right=6pt, top=3pt, bottom=3pt,attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=NoteBorder!70, colframe=NoteBorder!70,fontupper=\color{white}\bfseries\footnotesize},#1}
 
 % Inline pronunciation hint, for notation with a single common reading.
 \newcommand{\sayit}[1]{\textit{\,(read: #1)}}
 
 % ── Exercises (Little-Schemer Q/A style) ────────────────────────────────────
-% A two-column Q/A list. Use \qaitem{question}{answer} inside a qa environment.
-% The pair is rendered as a single row in a tabularx, with the question
-% on the left and the answer on the right, separated by a vertical rule.
 \usepackage{tabularx}
 \usepackage{array}
 
@@ -246,11 +210,9 @@
   left=8pt, right=8pt, top=6pt, bottom=6pt,
 }
 
-% tabularx pre-scans its body, so we wrap it with \NewEnviron from environ
-% (loaded by tcolorbox) which stashes the body in \BODY for one-shot use.
 \NewEnviron{qa}{%
   \setlength{\extrarowheight}{2pt}%
-  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{\raggedright\arraybackslash}X@{}}
+  \begin{tabularx}{\linewidth}{@{}>{}\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{}\raggedright\arraybackslash}X@{}}
     \BODY
   \end{tabularx}%
 }
@@ -262,34 +224,23 @@
 }
 
 % ── Chapter summary box ──────────────────────────────────────────────────────
-\newtcolorbox{summarybox}[1][]{
-  enhanced,
-  breakable,
-  colback=InformalColor!5,
-  colframe=InformalColor,
-  fonttitle=\bfseries,
-  title={Chapter Summary},
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-  #1
-}
+\newtcolorbox{summarybox}[1][]{enhanced,breakable,colback=InformalColor!5,colframe=InformalColor,fonttitle=\bfseries,title={Chapter Summary},left=8pt, right=8pt, top=6pt, bottom=6pt,#1}
 
 % ── Key-term command ────────────────────────────────────────────────────────
 \newcommand{\term}[1]{\textbf{\color{TermColor}#1}}
 
 % ── Volume / Part naming ─────────────────────────────────────────────────────
-% Use "Volume" instead of "Part" for \part{} divisions.
 \renewcommand{\partname}{Volume}
 
 % ── Proof log (Volume II style) ──────────────────────────────────────────────
 % Two-column proof layout: proof steps on the left, justifications on the right.
-% Use \proofstep{step}{justification} inside a prooflog environment.
 \usepackage{booktabs}
 \NewEnviron{prooflog}{%
   \setlength{\extrarowheight}{3pt}%
   \begin{tabularx}{\linewidth}{%
-    @{}>{\raggedright\arraybackslash}p{0.54\linewidth}%
+    @{}>{}\raggedright\arraybackslash}p{0.54\linewidth}%
     @{\hspace{0.8em}}!{\color{InformalColor!30}\vrule}@{\hspace{0.8em}}%
-    >{\raggedright\arraybackslash\itshape\small}X@{}}
+    >{}\raggedright\arraybackslash\itshape\small}X@{}}
     \BODY
   \end{tabularx}%
 }
