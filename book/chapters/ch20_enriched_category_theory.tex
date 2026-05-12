@@ -13,495 +13,106 @@ The enriched Yoneda lemma is the heart of the chapter. It states that the
 $F$'' is (up to the right notion of $\mathcal{V}$-natural transformation) just
 $F(a)$ in $\mathcal{V}$ --- the same statement as ordinary Yoneda, but now
 the conclusion lands in $\mathcal{V}$, not $\mathbf{Set}$.
-
-The payoff: enriched limits, enriched adjunctions, and the general theory of
-weighted limits that subsume ordinary limits as a special case. Weighted limits
-are the correct notion of limit in the enriched world, and understanding them
-is essential for working with chain complexes, spectra, and higher-categorical
-structures.
 \end{overviewbox}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{The Enriched Yoneda Lemma}
 \label{sec:enriched-yoneda}
-% ═══════════════════════════════════════════════════════════════════════════
-
-\subsection{Informally: Yoneda in $\mathcal{V}$}
-
-The ordinary Yoneda lemma says: for a locally small category $\mathcal{C}$ and
-a functor $F : \mathcal{C} \to \mathbf{Set}$, natural transformations from the
-representable $\mathcal{C}(a, -)$ to $F$ are in bijection with elements of $F(a)$:
-\begin{equation*}
-  [\mathcal{C}, \mathbf{Set}](\mathcal{C}(a,-), F) \;\cong\; F(a).
-\end{equation*}
-When $\mathcal{C}$ is enriched over $\mathcal{V}$, the hom-objects $\mathcal{C}(a,b)$
-are objects of $\mathcal{V}$, not sets. The Yoneda lemma must be rewritten to
-have its conclusion in $\mathcal{V}$ rather than $\mathbf{Set}$, and
-``natural transformations'' must be replaced by the \emph{$\mathcal{V}$-natural
-transformations} that live in $\mathcal{V}$.
 
 \begin{theorem}[$\mathcal{V}$-Yoneda Lemma]
 \label{thm:enriched-yoneda}
 Let $\mathcal{C}$ be a $\mathcal{V}$-enriched category and $F : \mathcal{C}
-\to \mathcal{V}$ a $\mathcal{V}$-functor. For each object $a \in \mathcal{C}$,
-there is a $\mathcal{V}$-natural isomorphism
+\to \mathcal{V}$ a $\mathcal{V}$-functor. For each $a \in \mathcal{C}$:
 \begin{equation*}
   [\mathcal{C}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-),\; F)
+  \;=\;
+  \int_{c} \mathcal{V}(\mathcal{C}(a,c), F(c))
   \;\cong\;
   F(a),
 \end{equation*}
-where the left-hand side is the $\mathcal{V}$-object of $\mathcal{V}$-natural
-transformations.
+$\mathcal{V}$-naturally in $a$.
 \end{theorem}
 
-\subsection{Expanding: What the Statement Means}
-
-The $\mathcal{V}$-object of $\mathcal{V}$-natural transformations between two
-$\mathcal{V}$-functors $G, H : \mathcal{C} \to \mathcal{V}$ is defined as the
-\emph{end}:
-\begin{equation*}
-  [\mathcal{C}, \mathcal{V}]_\mathcal{V}(G, H)
-  \;=\;
-  \int_{c \in \mathcal{C}} \mathcal{V}(G(c), H(c)).
-\end{equation*}
-This is an object of $\mathcal{V}$ built from all the individual hom-objects
-$\mathcal{V}(G(c), H(c))$, glued together by the end construction (Chapter~26).
-
-For the Yoneda case, $G = \mathcal{C}(a,-)$ and $H = F$:
-\begin{equation*}
-  [\mathcal{C}, \mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-), F)
-  \;=\;
-  \int_{c} \mathcal{V}(\mathcal{C}(a,c), F(c)).
-\end{equation*}
-The Yoneda lemma says this end is isomorphic to $F(a)$ in $\mathcal{V}$.
-
-\subsection{Formalizing: Full Proof via Prooflog}
-
 \begin{prooflog}
-\proofstep{We construct a morphism $\phi : \int_c \mathcal{V}(\mathcal{C}(a,c),
-F(c)) \to F(a)$.}{We want the forward direction of the isomorphism.}
-\proofstep{An element of the end $\int_c \mathcal{V}(\mathcal{C}(a,c), F(c))$
-is a compatible family of morphisms $(\theta_c : \mathcal{C}(a,c) \to F(c))_c$
-in $\mathcal{V}$.}{By the universal property of the end.}
-\proofstep{Apply $\theta_a : \mathcal{C}(a,a) \to F(a)$ to the identity
-$j_a : I \to \mathcal{C}(a,a)$ (the enriched identity map).}{The identity
-morphism gives a specific element of $\mathcal{C}(a,a)$ over $I$.}
-\proofstep{Define $\phi(\theta) = \theta_a \circ j_a : I \to F(a)$.}{This is
-a morphism in $\mathcal{V}$.}
-\proofstep{We construct the inverse $\psi : F(a) \to \int_c \mathcal{V}(\mathcal{C}(a,c), F(c))$.}{
-For this we need to produce a compatible family $(\psi(x)_c)_c$ from $x : I \to F(a)$.}
-\proofstep{At each $c$, define $\psi(x)_c$ as the composite $\mathcal{C}(a,c)
-\xrightarrow{\cong} I \otimes \mathcal{C}(a,c) \xrightarrow{x \otimes \mathrm{id}}
-F(a) \otimes \mathcal{C}(a,c) \xrightarrow{F_{a,c}} F(c)$.}{The action of $F$
-on hom-objects is the $\mathcal{V}$-functor structure map $F_{a,c} : F(a) \otimes
-\mathcal{C}(a,c) \to F(c)$.}
-\proofstep{The family $(\psi(x)_c)_c$ is compatible (i.e., defines an element
-of the end) because $F$ satisfies the $\mathcal{V}$-functoriality axioms.}{The
-end condition is: for $f : c \to c'$ in $\mathcal{C}$, the square
-$\mathcal{V}(\mathcal{C}(a,c'), F(c')) \to \mathcal{V}(\mathcal{C}(a,c),F(c))$
-commutes. This follows from functoriality of $F$.}
-\proofstep{$\phi \circ \psi = \mathrm{id}_{F(a)}$: compute $\phi(\psi(x)) =
-\psi(x)_a \circ j_a$.}{Substituting the definitions.}
-\proofstep{$\psi(x)_a \circ j_a = F_{a,a}(x \otimes j_a) \circ \lambda^{-1}_{\mathcal{C}(a,a)}
-= F_{a,a}(x \otimes j_a) \circ \lambda^{-1} = x$.}{The $\mathcal{V}$-functor
-axiom says $F_{a,a}(x \otimes j_a) = x$ when applied with the enriched unit
-$j_a$ (unit axiom for $\mathcal{V}$-functors).}
-\proofstep{$\psi \circ \phi = \mathrm{id}$: For a compatible family $(\theta_c)$,
-we need $\psi(\phi(\theta))_c = \theta_c$ for all $c$.}{The converse direction.}
-\proofstep{$\psi(\phi(\theta))_c = F_{a,c}((\theta_a \circ j_a) \otimes \mathrm{id}
-_{\mathcal{C}(a,c)})$.}{Substituting $\phi(\theta) = \theta_a \circ j_a$.}
-\proofstep{$= F_{a,c}(\theta_a \otimes \mathrm{id}) \circ (j_a \otimes \mathrm{id}) = \theta_c$}{
-By the naturality (end condition) for $(\theta_c)$: the compatibility of $\theta$
-with morphisms in $\mathcal{C}$ translates exactly to this equality.}
-\proofstep{Both composites are identities; $\phi$ and $\psi$ are inverse
-isomorphisms in $\mathcal{V}$.}{The enriched Yoneda isomorphism.}
-\proofstep{$\mathcal{V}$-naturality in $a$: the isomorphism is natural in $a$
-because all constructions (end, functor action) are natural.}{Standard argument:
-the maps $\phi_a$ and $\psi_a$ assemble into $\mathcal{V}$-natural transformations.}
+\proofstep{Construct $\phi : \int_c \mathcal{V}(\mathcal{C}(a,c), F(c)) \to F(a)$
+by evaluating at $j_a : I \to \mathcal{C}(a,a)$}{The enriched identity morphism}
+\proofstep{Construct inverse $\psi : F(a) \to \int_c \mathcal{V}(\mathcal{C}(a,c), F(c))$
+by $\psi(x)_c = F_{a,c}(x \otimes \mathrm{id})$}{The $\mathcal{V}$-functor action}
+\proofstep{$\phi \circ \psi = \mathrm{id}$ by the unit axiom for $\mathcal{V}$-functors}{}
+\proofstep{$\psi \circ \phi = \mathrm{id}$ by the end condition (naturality of $\theta$)}{}
 \end{prooflog}
-
-\subsection{Reorganizing: Corollaries}
-
-\begin{corollary}[Enriched Representability]
-A $\mathcal{V}$-functor $F : \mathcal{C} \to \mathcal{V}$ is representable iff
-there exists $a \in \mathcal{C}$ with $F \cong \mathcal{C}(a,-)$ as
-$\mathcal{V}$-functors.
-\end{corollary}
 
 \begin{corollary}[Enriched Yoneda Embedding]
 The enriched Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
 \mathcal{V}]_\mathcal{V}$ is fully faithful as a $\mathcal{V}$-functor.
 \end{corollary}
 
-\begin{dialog}
-Is the enriched Yoneda lemma really the same as the ordinary one?
-
-Yes, in a precise sense. If $\mathcal{V} = \mathbf{Set}$ (with cartesian
-product), then $\mathcal{V}$-enriched categories are ordinary locally small
-categories, ends are ordinary natural transformation sets, and the enriched
-Yoneda lemma reduces to the ordinary one. The enriched version is a strict
-generalization.
-\end{dialog}
-
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{$\mathcal{V}$-Adjunctions}
 \label{sec:enriched-adjunctions}
-% ═══════════════════════════════════════════════════════════════════════════
-
-\subsection{Informally: Hom-Object Bijections}
-
-In ordinary category theory, an adjunction is a bijection of hom-sets:
-$\mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$. In the enriched world, hom-sets
-are replaced by hom-objects in $\mathcal{V}$, and the bijection is replaced by
-an isomorphism in $\mathcal{V}$:
-\begin{equation*}
-  \mathcal{D}(FA, B) \;\cong\; \mathcal{C}(A, GB)
-  \quad \text{(isomorphism in } \mathcal{V}\text{)}
-\end{equation*}
-$\mathcal{V}$-natural in $A$ and $B$. This is a \term{$\mathcal{V}$-adjunction}
-(or \term{enriched adjunction}).
-
-\subsection{Expanding: Unit and Counit in the Enriched Case}
-
-The unit of a $\mathcal{V}$-adjunction is a $\mathcal{V}$-natural transformation
-$\eta : \mathrm{Id}_\mathcal{C} \Rightarrow GF$. But the naturality of $\eta$ is
-now $\mathcal{V}$-naturality: the naturality square is a commutative diagram in
-$\mathcal{V}$, not merely in $\mathbf{Set}$.
-
-Explicitly, $\mathcal{V}$-naturality of $\eta$ at $A, A'$ is the commutativity
-of the diagram in $\mathcal{V}$:
-\begin{equation*}
-\begin{tikzcd}[column sep=large]
-  \mathcal{C}(A, A') \arrow[r, "G_{FA,FA'}F_{A,A'}"] \arrow[d, "\eta_{A'*}" '] &
-  \mathcal{C}(GFA, GFA') \arrow[d, "\eta_A^*"] \\
-  \mathcal{C}(A, GFA') \arrow[r, equal] & \mathcal{C}(A, GFA')
-\end{tikzcd}
-\end{equation*}
-where $\eta_{A'*}$ and $\eta_A^*$ denote post- and pre-composition with $\eta$.
-
-\subsection{Formalizing: The Definition}
 
 \begin{definition}
-Let $\mathcal{C}$ and $\mathcal{D}$ be $\mathcal{V}$-categories. A
-\term{$\mathcal{V}$-adjunction} $F \dashv_\mathcal{V} G$ (with
-$F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to \mathcal{C}$
-$\mathcal{V}$-functors) consists of a $\mathcal{V}$-natural isomorphism
+A \term{$\mathcal{V}$-adjunction} $F \dashv_\mathcal{V} G$ consists of a
+$\mathcal{V}$-natural isomorphism
 \begin{equation*}
   \varphi_{A,B} : \mathcal{D}(FA, B) \;\xrightarrow{\;\cong\;}\; \mathcal{C}(A, GB)
 \end{equation*}
-for all $A \in \mathcal{C}$, $B \in \mathcal{D}$, natural in both $A$ and $B$
-in the $\mathcal{V}$-sense.
+for all $A \in \mathcal{C}$, $B \in \mathcal{D}$, $\mathcal{V}$-natural in both.
+Every $\mathcal{V}$-adjunction has an underlying ordinary adjunction (apply $\mathcal{V}(I,-)$).
 \end{definition}
-
-\begin{remark}
-Every $\mathcal{V}$-adjunction has an underlying ordinary adjunction: applying
-$\mathcal{V}(I, -)$ to the hom-object isomorphism gives an ordinary bijection
-of hom-sets (since $\mathcal{V}(I, \mathcal{C}(A,B))$ is the set of morphisms
-$A \to B$ in the underlying ordinary category of $\mathcal{C}$).
-\end{remark}
-
-\subsection{Reorganizing: Enriched vs.\ Ordinary Adjunctions}
-
-The gap between ordinary and enriched adjunctions is subtle: an ordinary
-adjunction between $\mathcal{V}$-categories (functors that happen to be
-$\mathcal{V}$-functors, but with only a set bijection on hom-sets) need not
-be a $\mathcal{V}$-adjunction. The stronger requirement of isomorphism in
-$\mathcal{V}$ is genuinely richer.
-
-However, in many practical cases (when $\mathcal{V}$ is the base of an enrichment
-and the relevant categories are ``nice''), ordinary adjunctions between
-$\mathcal{V}$-functors automatically lift to $\mathcal{V}$-adjunctions. This
-is guaranteed, for example, when $\mathcal{C}$ and $\mathcal{D}$ are
-$\mathcal{V}$-tensored and cotensored.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{Weighted Limits and Colimits}
 \label{sec:weighted-limits}
-% ═══════════════════════════════════════════════════════════════════════════
-
-\subsection{Informally: Why Ordinary Limits Are Not Enough}
-
-In ordinary category theory, a limit of $F : \mathcal{J} \to \mathcal{C}$ is
-characterized by $\mathcal{C}(c, \lim F) \cong [\mathcal{J}, \mathbf{Set}](\Delta 1,
-\mathcal{C}(c, F-))$: cones from $c$ to $F$.
-
-In enriched category theory, the relevant functor category is a
-$\mathcal{V}$-functor category, and the ``constant diagram'' functor $\Delta c$
-should be a $\mathcal{V}$-functor. But more general shapes arise naturally: we
-may want to weight the limit by a functor $W : \mathcal{J}^{\mathrm{op}} \to
-\mathcal{V}$ that assigns different ``multiplicities'' or ``shapes'' to each
-object of $\mathcal{J}$.
-
-A \term{$W$-weighted limit} of $F : \mathcal{J} \to \mathcal{C}$ is an object
-$\{W, F\} \in \mathcal{C}$ characterized by the enriched universal property:
-\begin{equation*}
-  \mathcal{C}(c, \{W, F\}) \;\cong\; [\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c, F-))
-\end{equation*}
-as an isomorphism in $\mathcal{V}$, $\mathcal{V}$-natural in $c$.
-
-\subsection{Expanding: Ordinary Limits as Special Cases}
-
-Setting $\mathcal{V} = \mathbf{Set}$ and $W = \Delta 1$ (the constant weight
-sending every object to the one-element set): the weighted limit $\{W, F\}$
-recovers the ordinary limit $\lim F$, since $[\mathcal{J}, \mathbf{Set}](\Delta 1,
-\mathcal{C}(c, F-))$ is the set of natural transformations from the constant
-functor to $\mathcal{C}(c, F-)$, i.e., the set of cones.
-
-More generally, taking $W = \mathcal{J}(j, -)$ (the representable weight at $j$)
-and applying the Yoneda lemma gives $\{W, F\} \cong F(j)$: the limit weighted
-by a representable recovers evaluation at that object.
-
-\begin{example}{Cotensor as Weighted Limit}
-For $\mathcal{V} = \mathbf{Ab}$ and $\mathcal{J} = \{*\}$ (one object), a
-weight $W : \{*\}^{\mathrm{op}} \to \mathbf{Ab}$ is just an abelian group $A$,
-and a functor $F : \{*\} \to \mathcal{C}$ is just an object $M \in \mathcal{C}$.
-The weighted limit $\{A, M\}$ is the \emph{cotensor} of $M$ by $A$: the object
-representing the functor $\mathcal{C}(-, M)^A$ in an appropriate sense. For
-$\mathcal{C} = \mathbf{Ab}$, this is $\mathrm{Hom}(A, M)$.
-\end{example}
-
-\begin{example}{The Homotopy Limit}
-In the $(\infty,1)$-categorical setting, homotopy limits are weighted limits
-where the weight encodes simplicial resolution data. The classical Bousfield--Kan
-formula for homotopy limits is a weighted colimit formula with the weight
-coming from the nerve of the indexing category.
-\end{example}
-
-\subsection{Formalizing: The Definition and its Dual}
 
 \begin{definition}
-Let $\mathcal{C}$ be a $\mathcal{V}$-category, $\mathcal{J}$ a small
-$\mathcal{V}$-category, $W : \mathcal{J}^{\mathrm{op}} \to \mathcal{V}$ a
-$\mathcal{V}$-functor (the \term{weight}), and $F : \mathcal{J} \to \mathcal{C}$
-a $\mathcal{V}$-functor. The \term{$W$-weighted limit} $\{W, F\}$, when it
-exists, is an object of $\mathcal{C}$ with a $\mathcal{V}$-natural isomorphism
+The \term{$W$-weighted limit} $\{W, F\}$ of $F : \mathcal{J} \to \mathcal{C}$
+weighted by $W : \mathcal{J}^{\mathrm{op}} \to \mathcal{V}$ satisfies:
 \begin{equation*}
   \mathcal{C}(c, \{W, F\})
   \;\cong\;
   [\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(W,\; \mathcal{C}(c, F(-))).
 \end{equation*}
-
-Dually, the \term{$W$-weighted colimit} $W \star F$, when it exists, is an
-object with
-\begin{equation*}
-  \mathcal{C}(W \star F,\; c)
-  \;\cong\;
-  [\mathcal{J}, \mathcal{V}]_\mathcal{V}(W,\; \mathcal{C}(F(-), c)).
-\end{equation*}
+Ordinary limits are $\Delta I$-weighted. In tensored/cotensored $\mathcal{C}$:
+$\{W,F\} \cong \lim_j [W(j), F(j)]$.
 \end{definition}
-
-\subsection{Reorganizing: The Yoneda Reduction}
-
-The reason ordinary limits are a special case is the Yoneda lemma: for $W =
-\Delta I$ (constant weight at the unit object $I \in \mathcal{V}$),
-\begin{equation*}
-  [\mathcal{J}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(\Delta I,\; \mathcal{C}(c, F(-)))
-  \;\cong\;
-  \int_j \mathcal{V}(I, \mathcal{C}(c, F(j)))
-  \;\cong\;
-  \int_j \mathcal{C}(c, F(j)),
-\end{equation*}
-the last step using $\mathcal{V}(I, -) \cong (-)$ (since $I$ is the unit).
-For $\mathcal{V} = \mathbf{Set}$ this is the set of natural cones, i.e., ordinary
-limit cones.
-
-\begin{howtosay}
-\begin{itemize}
-  \item $\{W, F\}$ is pronounced ``$W$ hom $F$'' or ``the $W$-weighted limit
-        of $F$.'' Some authors write $\mathrm{lim}^W F$ or $[W, F]$.
-  \item $W \star F$ is the \emph{coend} or weighted colimit; also written
-        $\mathrm{colim}^W F$ or $W \otimes F$ in older texts.
-  \item The $\Delta I$-weighted limit is the ordinary conical limit; the
-        $\Delta I$-weighted colimit is the ordinary conical colimit.
-  \item Weighted limits subsume: ordinary limits, ends, cotensors, homotopy
-        limits, and mapping spaces.
-\end{itemize}
-\end{howtosay}
-
-
-% ═══════════════════════════════════════════════════════════════════════════
-\section{The Change of Base}
-\label{sec:change-of-base}
-% ═══════════════════════════════════════════════════════════════════════════
-
-\subsection{Informally: Moving Between Enrichments}
-
-If $\Phi : \mathcal{V} \to \mathcal{W}$ is a lax monoidal functor (Chapter~19),
-we can use $\Phi$ to turn any $\mathcal{V}$-category into a $\mathcal{W}$-category
-by applying $\Phi$ to all hom-objects. This is the \term{change of base}.
-
-\subsection{Expanding: The Construction}
-
-Let $\mathcal{C}$ be a $\mathcal{V}$-category. The \term{base change} along
-$\Phi : \mathcal{V} \to \mathcal{W}$ is the $\mathcal{W}$-category
-$\mathcal{C}_\Phi$ with:
-\begin{itemize}
-  \item The same objects as $\mathcal{C}$.
-  \item Hom-objects $\mathcal{C}_\Phi(a, b) = \Phi(\mathcal{C}(a, b))$ in $\mathcal{W}$.
-  \item Composition $\mathcal{C}_\Phi(b,c) \otimes_\mathcal{W} \mathcal{C}_\Phi(a,b)
-        \to \mathcal{C}_\Phi(a,c)$ defined as
-        \begin{equation*}
-          \Phi(\mathcal{C}(b,c)) \otimes_\mathcal{W} \Phi(\mathcal{C}(a,b))
-          \xrightarrow{\phi_{-,-}} \Phi(\mathcal{C}(b,c) \otimes_\mathcal{V}
-          \mathcal{C}(a,b)) \xrightarrow{\Phi(\circ_\mathcal{C})} \Phi(\mathcal{C}(a,c)),
-        \end{equation*}
-        using the lax monoidal comparison $\phi$ of $\Phi$.
-  \item Identities $j_a^\mathcal{W} : I_\mathcal{W} \xrightarrow{\phi_0}
-        \Phi(I_\mathcal{V}) \xrightarrow{\Phi(j_a^\mathcal{C})} \Phi(\mathcal{C}(a,a))$.
-\end{itemize}
-
-The coherence conditions for $\mathcal{V}$-categories (associativity and unit
-laws for $\circ_\mathcal{C}$) together with the coherence of the lax monoidal
-functor $\Phi$ guarantee that $\mathcal{C}_\Phi$ is a valid $\mathcal{W}$-category.
-
-\subsection{Formalizing: Functoriality of Base Change}
-
-Base change is functorial: if $F : \mathcal{C} \to \mathcal{D}$ is a
-$\mathcal{V}$-functor, then applying $\Phi$ to the hom-object maps $F_{a,b} :
-\mathcal{C}(a,b) \to \mathcal{D}(Fa, Fb)$ gives $\mathcal{W}$-functor maps
-$\Phi(F_{a,b}) : \mathcal{C}_\Phi(a,b) \to \mathcal{D}_\Phi(Fa,Fb)$, yielding
-a $\mathcal{W}$-functor $F_\Phi : \mathcal{C}_\Phi \to \mathcal{D}_\Phi$.
-
-\begin{proposition}
-The change-of-base construction defines a 2-functor
-$(-)_\Phi : \mathcal{V}\text{-}\mathbf{Cat} \to \mathcal{W}\text{-}\mathbf{Cat}$.
-\end{proposition}
-
-\subsection{Reorganizing: Examples of Base Change}
-
-\begin{example}{Forgetting the Enrichment}
-Let $\Phi = \mathcal{V}(I,-) : \mathcal{V} \to \mathbf{Set}$. This is lax
-monoidal (it sends $\otimes$ to $\times$ via the composition map). For any
-$\mathcal{V}$-category $\mathcal{C}$, the base change $\mathcal{C}_\Phi$ is the
-\term{underlying ordinary category} of $\mathcal{C}$: its hom-sets are
-$\mathcal{V}(I, \mathcal{C}(a,b))$.
-\end{example}
-
-\begin{example}{Complexes to Graded}
-The cohomology functor $H : \mathbf{Ch}(\mathbf{Ab}) \to \mathbf{GrAb}$ (from
-chain complexes to graded abelian groups) is lax monoidal with respect to
-tensor products, and induces a base change from $\mathbf{Ch}(\mathbf{Ab})$-enriched
-to $\mathbf{GrAb}$-enriched categories.
-\end{example}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{Self-Enrichment of Closed Symmetric Monoidal Categories}
 \label{sec:self-enrichment}
-% ═══════════════════════════════════════════════════════════════════════════
 
-\subsection{Informally: A Category Enriching Over Itself}
-
-The most important source of enriched categories: a \term{closed symmetric
-monoidal category} $(\mathcal{V}, \otimes, I, [-,-])$ enriches over itself.
-Here $[A, B]$ is the \emph{internal hom} object, characterized by:
-\begin{equation*}
-  \mathcal{V}(C \otimes A, B) \;\cong\; \mathcal{V}(C, [A,B]).
-\end{equation*}
-This is the \term{closed structure}: $(- \otimes A)$ has a right adjoint $[A,-]$.
-
-\begin{dialog}
-Why does closedness give enrichment?
-
-To enrich $\mathcal{V}$ over itself, we need hom-objects in $\mathcal{V}$.
-The internal hom $[A, B]$ is exactly the right object to use. The composition
-law $[B,C] \otimes [A,B] \to [A,C]$ (``evaluation followed by application'')
-is the standard map in a closed category, and the identity $I \to [A,A]$
-comes from the unit isomorphism.
-\end{dialog}
-
-\subsection{Expanding: The Self-Enrichment}
-
-Let $(\mathcal{V}, \otimes, I)$ be a closed symmetric monoidal category with
-internal hom $[-, -]$. Define a $\mathcal{V}$-category (also called $\mathcal{V}$):
-\begin{itemize}
-  \item Objects: the objects of $\mathcal{V}$.
-  \item $\mathcal{V}$-hom-objects: $\mathcal{V}(A, B) = [A, B] \in \mathcal{V}$.
-  \item Composition: the standard morphism $[B,C] \otimes [A,B] \to [A,C]$
-        obtained by currying the evaluation composite
-        $[B,C] \otimes [A,B] \otimes A \to [B,C] \otimes B \to C$.
-  \item Identity: the morphism $I \to [A,A]$ corresponding (under the adjunction)
-        to the identity $A \otimes I \cong A$.
-\end{itemize}
-These satisfy the $\mathcal{V}$-category axioms by the coherence of the closed
-structure.
-
-\subsection{Formalizing: Examples}
+A \term{closed symmetric monoidal category} $(\mathcal{V}, \otimes, I, [-,-])$
+where $[A, B]$ is the internal hom enriches over itself: set
+$\mathcal{V}(A,B) = [A,B]$ with composition $[B,C]\otimes[A,B] \to [A,C]$
+via evaluation.
 
 \begin{example}{$\mathbf{Ab}$-enrichment}
-$(\mathbf{Ab}, \otimes_\mathbb{Z}, \mathbb{Z})$ is closed symmetric monoidal
-with internal hom $[A, B] = \mathrm{Hom}(A, B)$ (the group of homomorphisms).
-The self-enrichment says: $\mathbf{Ab}$ is enriched over itself, with hom-objects
-$\mathrm{Hom}(A, B)$ being abelian groups. This is the standard
-$\mathbf{Ab}$-enrichment of the category of abelian groups.
-\end{example}
-
-\begin{example}{$\mathbf{Vect}_k$-enrichment}
-$(\mathbf{Vect}_k, \otimes_k, k)$ is closed with $[V, W] = \mathrm{Hom}_k(V, W)$.
-The self-enrichment gives $\mathbf{Vect}_k$ as a $\mathbf{Vect}_k$-enriched
-category, with hom-objects being vector spaces of linear maps.
+$(\mathbf{Ab}, \otimes_\mathbb{Z}, \mathbb{Z})$ is closed with $[A,B] = \mathrm{Hom}(A,B)$.
 \end{example}
 
 \begin{example}{$\mathbf{sSet}$-enrichment}
-The category of simplicial sets $\mathbf{sSet} = [\Delta^{\mathrm{op}}, \mathbf{Set}]$
-is closed monoidal with the cartesian product. The internal hom is the
-simplicial mapping space $\mathbf{Map}(X, Y)_n = \mathbf{sSet}(X \times \Delta^n, Y)$.
-Self-enrichment gives $\mathbf{sSet}$ as an $\mathbf{sSet}$-enriched category,
-which is the starting point for simplicial homotopy theory.
+$\mathbf{sSet}$ is closed monoidal with mapping space $\mathbf{Map}(X,Y)_n =
+\mathbf{sSet}(X \times \Delta^n, Y)$.
 \end{example}
-
-\subsection{Reorganizing: Tensors, Cotensors, and Completeness}
-
-A $\mathcal{V}$-category $\mathcal{C}$ is \term{$\mathcal{V}$-complete} if all
-weighted limits $\{W, F\}$ exist. It is \term{$\mathcal{V}$-tensored} if for
-each $V \in \mathcal{V}$ and $c \in \mathcal{C}$, the tensor $V \otimes c$
-exists, characterized by $\mathcal{C}(V \otimes c, d) \cong \mathcal{V}(V,
-\mathcal{C}(c, d))$. Dually for cotensors $[V, c]$.
-
-When $\mathcal{C}$ is both tensored and cotensored over $\mathcal{V}$, all
-weighted limits and colimits reduce to ordinary conical limits plus the
-(co)tensor action. This is a powerful computational tool.
-
-\begin{theorem}
-A $\mathcal{V}$-category $\mathcal{C}$ that is $\mathcal{V}$-tensored and
-$\mathcal{V}$-cotensored has all weighted limits iff it has all conical limits:
-\begin{equation*}
-  \{W, F\} \;\cong\; \lim_{j \in \mathcal{J}} [W(j), F(j)],
-\end{equation*}
-where $[W(j), F(j)]$ denotes the cotensor of $F(j)$ by $W(j)$.
-\end{theorem}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section*{Exercises}
 \addcontentsline{toc}{section}{Exercises}
-% ═══════════════════════════════════════════════════════════════════════════
 
 \begin{exercisesbox}
 \begin{qa}
 \qaitem{State the enriched Yoneda lemma.}{$[\mathcal{C},\mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-), F) \cong F(a)$ in $\mathcal{V}$, $\mathcal{V}$-naturally in $a$.}
-\qaitem{What is the $\mathcal{V}$-object of $\mathcal{V}$-natural transformations?}{$\int_c \mathcal{V}(G(c), H(c))$, an end in $\mathcal{V}$.}
-\qaitem{In the enriched Yoneda proof, what is $\phi(\theta)$?}{$\phi(\theta) = \theta_a \circ j_a : I \to F(a)$, where $j_a : I \to \mathcal{C}(a,a)$ is the enriched identity.}
 \qaitem{What is a $\mathcal{V}$-adjunction?}{A $\mathcal{V}$-natural isomorphism $\mathcal{D}(FA,B) \cong \mathcal{C}(A,GB)$ in $\mathcal{V}$.}
-\qaitem{Does a $\mathcal{V}$-adjunction imply an ordinary adjunction?}{Yes: apply $\mathcal{V}(I,-)$ to get a bijection of underlying hom-sets.}
-\qaitem{Can an ordinary adjunction between $\mathcal{V}$-functors fail to be a $\mathcal{V}$-adjunction?}{Yes, in general. But in tensored/cotensored $\mathcal{V}$-categories, ordinary adjoints between $\mathcal{V}$-functors lift to $\mathcal{V}$-adjunctions.}
 \qaitem{What is a $W$-weighted limit?}{An object $\{W,F\} \in \mathcal{C}$ with $\mathcal{C}(c,\{W,F\}) \cong [\mathcal{J}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c,F-))$ $\mathcal{V}$-naturally in $c$.}
 \qaitem{What ordinary limit corresponds to $W = \Delta I$?}{The ordinary conical limit $\lim F$.}
-\qaitem{What weighted limit corresponds to $W = \mathcal{J}(j,-)$?}{Evaluation $F(j)$, by the enriched Yoneda lemma.}
-\qaitem{What is the cotensor $[A, M]$ as a weighted limit?}{The $A$-weighted limit of the single-object diagram at $M$, for $A \in \mathcal{V}$ and $M \in \mathcal{C}$.}
-\qaitem{What is a closed symmetric monoidal category?}{One where $(-\otimes A)$ has a right adjoint $[A,-]$ (the internal hom), and the tensor is symmetric.}
-\qaitem{What is self-enrichment?}{Using $[A,B]$ as the hom-object of $A,B$ in the $\mathcal{V}$-category structure on $\mathcal{V}$ itself.}
-\qaitem{What is the internal hom in $\mathbf{Ab}$?}{$[A,B] = \mathrm{Hom}(A,B)$, the abelian group of homomorphisms.}
-\qaitem{What is the change of base for enriched categories?}{Given a lax monoidal $\Phi : \mathcal{V} \to \mathcal{W}$, a $\mathcal{V}$-category $\mathcal{C}$ becomes a $\mathcal{W}$-category $\mathcal{C}_\Phi$ with hom-objects $\Phi(\mathcal{C}(a,b))$.}
-\qaitem{What lax monoidal functor gives the underlying ordinary category?}{$\mathcal{V}(I,-) : \mathcal{V} \to \mathbf{Set}$, sending each hom-object to its underlying set of ``generalized elements.'' }
-\qaitem{What is a $\mathcal{V}$-tensored category?}{One where $V \otimes c$ exists with $\mathcal{C}(V\otimes c, d) \cong \mathcal{V}(V, \mathcal{C}(c,d))$.}
-\qaitem{In a tensored and cotensored $\mathcal{V}$-category, how do weighted limits reduce?}{$\{W,F\} \cong \lim_j [W(j), F(j)]$, a conical limit of cotensors.}
-\qaitem{What is the enriched Yoneda embedding?}{$Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}$, $Y(a) = \mathcal{C}(-,a)$; it is fully faithful as a $\mathcal{V}$-functor.}
-\qaitem{What does $\mathcal{V}$-naturality require beyond ordinary naturality?}{The naturality squares must commute in $\mathcal{V}$ (as morphisms in $\mathcal{V}$), not just in $\mathbf{Set}$.}
-\qaitem{What is the simplicial mapping space in $\mathbf{sSet}$?}{$\mathbf{Map}(X,Y)_n = \mathbf{sSet}(X \times \Delta^n, Y)$, the internal hom in the closed monoidal category $\mathbf{sSet}$.}
+\qaitem{What is a closed symmetric monoidal category?}{One where $(-\otimes A)$ has a right adjoint $[A,-]$ and the tensor is symmetric.}
+\qaitem{What is self-enrichment?}{Using $[A,B]$ as the hom-object for the $\mathcal{V}$-category structure on $\mathcal{V}$ itself.}
+\qaitem{What is the change of base for enriched categories?}{A lax monoidal $\Phi : \mathcal{V} \to \mathcal{W}$ induces $(-)_\Phi$ sending $\mathcal{C}$ to $\mathcal{C}_\Phi$ with hom-objects $\Phi(\mathcal{C}(a,b))$.}
 \end{qa}
 \end{exercisesbox}
 
@@ -509,77 +120,38 @@ where $[W(j), F(j)]$ denotes the cotensor of $F(j)$ by $W(j)$.
 % ═══════════════════════════════════════════════════════════════════════════
 \section*{Chapter Summary}
 \addcontentsline{toc}{section}{Chapter Summary}
-% ═══════════════════════════════════════════════════════════════════════════
 
 \begin{summarybox}
-\textbf{Enriched Yoneda.} For a $\mathcal{V}$-functor $F : \mathcal{C} \to
-\mathcal{V}$, $[\mathcal{C},\mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-), F)
-\cong F(a)$ in $\mathcal{V}$. The proof uses the enriched identity morphism
-and the $\mathcal{V}$-functor action, with mutual inverse $\psi(x)_c = F_{a,c}
-\circ (x \otimes \mathrm{id})$.
+\textbf{Enriched Yoneda.} $[\mathcal{C},\mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-), F)
+\cong F(a)$ in $\mathcal{V}$.
 
-\textbf{$\mathcal{V}$-adjunctions.} The ordinary hom-set bijection is replaced
-by a $\mathcal{V}$-natural isomorphism $\mathcal{D}(FA,B) \cong \mathcal{C}(A,GB)$
-in $\mathcal{V}$. Every $\mathcal{V}$-adjunction has an underlying ordinary
-adjunction.
+\textbf{$\mathcal{V}$-adjunctions.} Hom-set bijection replaced by
+$\mathcal{V}$-natural isomorphism $\mathcal{D}(FA,B) \cong \mathcal{C}(A,GB)$.
 
-\textbf{Weighted limits.} The $W$-weighted limit $\{W,F\}$ satisfies
-$\mathcal{C}(c, \{W,F\}) \cong [\mathcal{J}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}(W,
-\mathcal{C}(c, F-))$. Ordinary limits are $\Delta I$-weighted. In tensored and
-cotensored categories, $\{W,F\} \cong \lim_j [W(j), F(j)]$.
+\textbf{Weighted limits.} $\mathcal{C}(c, \{W,F\}) \cong
+[\mathcal{J}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c, F-))$.
 
-\textbf{Change of base.} A lax monoidal functor $\Phi : \mathcal{V} \to \mathcal{W}$
-induces $(-)_\Phi : \mathcal{V}\text{-}\mathbf{Cat} \to \mathcal{W}\text{-}\mathbf{Cat}$
-by applying $\Phi$ to all hom-objects. The special case $\mathcal{V}(I,-)$ gives
-the underlying ordinary category.
-
-\textbf{Self-enrichment.} A closed symmetric monoidal category $(\mathcal{V},
-\otimes, I, [-,-])$ enriches over itself using $[A,B]$ as the hom-object.
-Examples: $\mathbf{Ab}$, $\mathbf{Vect}_k$, $\mathbf{sSet}$.
+\textbf{Self-enrichment.} A closed symmetric monoidal $\mathcal{V}$ enriches
+over itself using $[A,B]$ as the hom-object.
 \end{summarybox}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section*{Formal Restatement}
 \addcontentsline{toc}{section}{Formal Restatement}
-% ═══════════════════════════════════════════════════════════════════════════
 
 \begin{formalrestatement}
-\textbf{Enriched Yoneda.} For $\mathcal{C}$ a $\mathcal{V}$-category and
-$F : \mathcal{C} \to \mathcal{V}$ a $\mathcal{V}$-functor:
-\begin{equation*}
-  [\mathcal{C},\mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-), F) \;=\;
-  \int_c \mathcal{V}(\mathcal{C}(a,c), F(c)) \;\cong\; F(a)
-\end{equation*}
+\textbf{Enriched Yoneda.} $\int_c \mathcal{V}(\mathcal{C}(a,c), F(c)) \cong F(a)$,
 $\mathcal{V}$-naturally in $a$.
 
-\medskip
-\textbf{$\mathcal{V}$-adjunction.} $F \dashv_\mathcal{V} G$ iff there is a
-$\mathcal{V}$-natural isomorphism $\mathcal{D}(FA,B) \cong \mathcal{C}(A,GB)$
-in $\mathcal{V}$. Underlying ordinary adjunction obtained by applying
-$\mathcal{V}(I,-)$.
+\textbf{$\mathcal{V}$-adjunction.} $F \dashv_\mathcal{V} G$ iff
+$\mathcal{D}(FA,B) \cong \mathcal{C}(A,GB)$ in $\mathcal{V}$.
 
-\medskip
-\textbf{Weighted limit.}
-\begin{equation*}
-  \mathcal{C}(c, \{W,F\}) \;\cong\;
-  [\mathcal{J}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c,F-)).
-\end{equation*}
-Ordinary limit: $W = \Delta I$. In tensored/cotensored $\mathcal{C}$: $\{W,F\}
-\cong \lim_j [W(j), F(j)]$.
+\textbf{Weighted limit.} $\mathcal{C}(c, \{W,F\}) \cong
+[\mathcal{J}^{\mathrm{op}},\mathcal{V}]_\mathcal{V}(W, \mathcal{C}(c,F-))$.
 
-\medskip
-\textbf{Change of base.} Lax monoidal $\Phi : \mathcal{V} \to \mathcal{W}$
-induces $\mathcal{C}_\Phi$ with $\mathcal{C}_\Phi(a,b) = \Phi(\mathcal{C}(a,b))$,
-composites via $\phi$-comparisons.
-
-\medskip
 \textbf{Self-enrichment.} Closed symmetric monoidal $(\mathcal{V},\otimes,I,[-,-])$
-is a $\mathcal{V}$-category with $\mathcal{V}(A,B) = [A,B]$, composition via
-the evaluation map $[B,C]\otimes[A,B]\otimes A \to C$.
+is a $\mathcal{V}$-category with $\mathcal{V}(A,B) = [A,B]$.
 
-\medskip
-\noindent\textit{Chapter~21 returns to monads via Beck's monadicity theorem,
-which characterizes when a functor is equivalent to a category of algebras
-for a monad.}
+\noindent\textit{Chapter~21 returns to monads via Beck's monadicity theorem.}
 \end{formalrestatement}
