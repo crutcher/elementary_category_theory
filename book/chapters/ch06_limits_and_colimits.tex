@@ -1,0 +1,677 @@
+\chapter{Limits and Colimits}
+
+\begin{overviewbox}
+Chapter 5 introduced the universal-property pattern through its two
+simplest cases (initial and terminal objects) and previewed a richer
+case (products and coproducts). This chapter develops the systematic
+generalization: \emph{limits} and \emph{colimits}.
+
+The picture is this. A \term{diagram} in a category $\mathcal{C}$ is just
+a functor $D : \mathcal{J} \to \mathcal{C}$ from some small ``shape''
+category $\mathcal{J}$. A \term{limit} of $D$ is a universal way to
+choose a single object of $\mathcal{C}$ that ``sees the whole diagram
+through the projections''; a \term{colimit} is the dual --- a universal
+way to ``glue the whole diagram together along the inclusions.''
+
+Once this template is in place, products, coproducts, equalizers,
+coequalizers, pullbacks and pushouts all become instances of the same
+construction with different choices of $\mathcal{J}$. Every theorem we
+prove about limits will instantly give a theorem about each of these
+specific cases.
+
+We end with the slogan: \emph{limits in a functor category are computed
+pointwise}. This is the first taste of why functor categories are so
+well-behaved.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Diagrams as Functors}
+\label{sec:diagrams-as-functors}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Picture-Then-Functor}
+
+When we draw a diagram in $\mathcal{C}$, we are picking some objects and
+some morphisms in $\mathcal{C}$ and arranging them. We do not draw every
+object and every morphism; we draw a finite (or small) selection that
+``has a shape.'' The shape itself is a category --- a category of
+\emph{slots} or \emph{positions} for the objects, with arrows between
+slots in the appropriate places.
+
+A functor $D : \mathcal{J} \to \mathcal{C}$ then fills the slots: each
+object of $\mathcal{J}$ becomes an object of $\mathcal{C}$, each arrow
+becomes a morphism of $\mathcal{C}$, and the functoriality conditions
+guarantee that the picture in $\mathcal{C}$ has the right relationships
+between its parts.
+
+\subsection{Expanding: The Shape Categories}
+
+\begin{example}{Two-Object Diagram for a Product}
+The shape is the discrete category on two objects, $\bullet \;\; \bullet$.
+A functor from this category to $\mathcal{C}$ is a choice of two objects
+of $\mathcal{C}$ --- nothing more. This is the shape we use for binary
+products.
+\end{example}
+
+\begin{example}{Parallel Pair for an Equalizer}
+The shape is a category with two objects and two parallel non-identity
+arrows:
+\[
+\begin{tikzcd}
+  \bullet \arrow[r, shift left] \arrow[r, shift right] & \bullet
+\end{tikzcd}
+\]
+A functor from this category to $\mathcal{C}$ picks two objects and two
+parallel morphisms $f, g : A \to B$ between them. This is the shape we
+use for equalizers.
+\end{example}
+
+\begin{example}{Cospan for a Pullback}
+The shape is a category with three objects arranged so that two arrows
+meet at a common target:
+\[
+\begin{tikzcd}
+  \bullet \arrow[r] & \bullet & \bullet \arrow[l]
+\end{tikzcd}
+\]
+A functor from this category to $\mathcal{C}$ picks a cospan
+$A \to C \leftarrow B$ in $\mathcal{C}$. This is the shape we use for
+pullbacks.
+\end{example}
+
+\begin{dialog}
+The standard moves are: pick a shape $\mathcal{J}$, then study \emph{all}
+$\mathcal{J}$-shaped diagrams in $\mathcal{C}$ at once. The functor
+formalism gives us a clean language for ``a $\mathcal{J}$-shaped diagram
+in $\mathcal{C}$'': it is exactly an object of $[\mathcal{J},
+\mathcal{C}]$.
+\end{dialog}
+
+\subsection{Formalizing: Indexing Category and Diagram}
+
+A \term{shape} or \term{index category} is a small category $\mathcal{J}$.
+A \term{diagram of shape $\mathcal{J}$ in $\mathcal{C}$} is a functor
+\begin{equation*}
+  D : \mathcal{J} \to \mathcal{C}.
+\end{equation*}
+Two such diagrams are equivalent in the sense of the functor category
+$[\mathcal{J}, \mathcal{C}]$: a morphism between them is a natural
+transformation.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``diagram'' refers either to the picture or to the underlying
+        functor $D$. We use both interchangeably.
+  \item Common shapes have names: \emph{discrete} (no arrows),
+        \emph{parallel pair}, \emph{cospan}, \emph{span}, \emph{walking
+        arrow} (just $\bullet \to \bullet$), the natural numbers
+        $\mathbb{N}$ viewed as a category, etc.
+  \item The phrase ``$D$-shaped diagram'' usually means a diagram whose
+        index category equals (or resembles) the shape used by $D$.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Simplifying: From Pictures to Functors and Back}
+
+Every commutative-diagram picture we draw can be encoded as a functor
+$D : \mathcal{J} \to \mathcal{C}$ for some $\mathcal{J}$. Going from a
+picture to a functor is mechanical: the slots and arrows of the picture
+\emph{are} $\mathcal{J}$, and the labels of the slots and arrows give the
+action of $D$. Going from a functor to a picture is also mechanical: draw
+$\mathcal{J}$ on a chalkboard, then write $D$'s values inside each slot
+and on each arrow.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cones and Limits}
+\label{sec:cones-and-limits}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: An Apex Watching the Diagram}
+
+A \term{cone over $D$} is a single object $X$ of $\mathcal{C}$, together
+with a family of morphisms --- one $\lambda_j : X \to D(j)$ for each object
+$j$ of $\mathcal{J}$ --- that respects all the arrows of $\mathcal{J}$.
+The word ``cone'' comes from the picture: $X$ sits as an apex above the
+diagram, with rays $\lambda_j$ reaching down to each slot.
+
+A \term{limit} of $D$ is a \emph{universal} cone: a cone $L$ such that
+every other cone factors through $L$ in a unique way.
+
+\subsection{Expanding: The Naturality Condition for Cones}
+
+\begin{example}{Cone over a Two-Object Diagram (Product)}
+A diagram of shape ``two objects, no arrows'' picks $A$ and $B$ in
+$\mathcal{C}$. A cone over it is an object $X$ together with two
+morphisms $X \to A$ and $X \to B$. There is no naturality constraint
+because there are no non-identity arrows in the shape. So a cone is just
+a pair $(f, g)$ with $f : X \to A$, $g : X \to B$. The limit, when it
+exists, is the product $A \times B$ together with its projections.
+\end{example}
+
+\begin{example}{Cone over a Parallel Pair (Equalizer)}
+A diagram of shape ``parallel pair'' picks $f, g : A \to B$. A cone over
+it is an object $X$ with morphisms $\lambda_A : X \to A$ and $\lambda_B :
+X \to B$ such that $f \circ \lambda_A = \lambda_B$ and $g \circ \lambda_A
+= \lambda_B$. Combining: $f \circ \lambda_A = g \circ \lambda_A$. So
+$\lambda_A$ is a morphism into $A$ that ``equalizes'' $f$ and $g$, and
+$\lambda_B$ is then forced.
+\end{example}
+
+\begin{example}{Cone over a Cospan (Pullback)}
+A diagram of shape $\bullet \to \bullet \leftarrow \bullet$ picks
+$f : A \to C$ and $g : B \to C$. A cone over it is an object $X$ with
+morphisms $\lambda_A : X \to A$, $\lambda_B : X \to B$, and
+$\lambda_C : X \to C$ such that $f \circ \lambda_A = \lambda_C$ and
+$g \circ \lambda_B = \lambda_C$. The morphism $\lambda_C$ is redundant
+(forced by either of the others), so a pullback cone is really a pair
+$(\lambda_A, \lambda_B)$ with $f \circ \lambda_A = g \circ \lambda_B$.
+\end{example}
+
+\begin{dialog}
+A cone over $D$ packages a candidate limiting object $X$ with all the
+``projection-like'' morphisms going down to each $D(j)$. The naturality
+constraint is what makes the rays compatible with the structure of the
+diagram.
+\end{dialog}
+
+\subsection{Formalizing: Cones and the Limit}
+
+Let $\Delta_X : \mathcal{J} \to \mathcal{C}$ denote the \term{constant
+functor} at $X$: every object goes to $X$, every morphism goes to
+$\mathrm{id}_X$.
+
+A \term{cone over $D$ with apex $X$} is a natural transformation
+\begin{equation*}
+  \lambda : \Delta_X \Rightarrow D.
+\end{equation*}
+Unpacking: a family $\lambda_j : X \to D(j)$ for each object $j$, such
+that for every $\alpha : j \to k$ in $\mathcal{J}$,
+\begin{equation*}
+  D(\alpha) \circ \lambda_j = \lambda_k.
+\end{equation*}
+This is the naturality square for $\lambda$: it commutes because the
+$\Delta_X$ side is just $\mathrm{id}_X$.
+
+A \term{limit of $D$} is a cone $\lambda : \Delta_L \Rightarrow D$ with
+the universal property: for every cone $\mu : \Delta_X \Rightarrow D$,
+there is a \emph{unique} morphism $u : X \to L$ in $\mathcal{C}$ such
+that $\mu_j = \lambda_j \circ u$ for every $j$.
+
+We write $\lim D$ for the limit object (when one exists), and call the
+$\lambda_j$ the \term{limit projections} or \term{limit legs}.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\lim D$ --- ``limit of $D$,'' sometimes written
+        $\lim_{\mathcal{J}} D$ to emphasize the indexing category.
+  \item $\Delta_X$ --- ``Delta sub $X$'' or ``the constant functor at $X$.''
+  \item $\lambda_j : L \to D(j)$ --- the \emph{$j$-th leg} or
+        \emph{projection} of the limit cone.
+  \item Limits are sometimes written $\lim_\leftarrow$ or with an
+        underset arrow: the convention $\varprojlim$ also appears.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Products, Equalizers, Pullbacks Restated}
+
+\begin{align*}
+  \text{Product of $A, B$:} & \;\; \lim D \text{ where } D : \text{discrete on } 2 \to \mathcal{C}, \\
+    & \;\; D(1) = A,\; D(2) = B. \\
+  \text{Equalizer of $f, g$:} & \;\; \lim D \text{ where } D : (\bullet \rightrightarrows \bullet) \to \mathcal{C}, \\
+    & \;\; D \text{ sends the two arrows to } f \text{ and } g. \\
+  \text{Pullback of $f, g$ over $C$:} & \;\; \lim D \text{ where } D : (\bullet \to \bullet \leftarrow \bullet) \to \mathcal{C}, \\
+    & \;\; D \text{ encodes the cospan } f, g.
+\end{align*}
+
+Each of these is the same universal-property pattern of \S5.3, with a
+specific shape for $\mathcal{J}$.
+
+\subsection{Simplifying: The Limit Schema}
+
+\begin{equation*}
+  \boxed{\;
+  \forall (X, \mu),\;
+  \exists !\, u : X \to L,\;
+  \mu_j = \lambda_j \circ u \;\;\text{for every } j.
+  \;}
+\end{equation*}
+
+\subsection{Formally: Uniqueness and Functoriality of Limits}
+
+\formalnote{Uniqueness up to unique isomorphism}
+By the general theorem of \S5.4, any two limits of the same diagram are
+related by a unique isomorphism compatible with the legs. We may speak
+of \emph{the} limit of $D$.
+
+\formalnote{The limit functor}
+When $\mathcal{C}$ has all $\mathcal{J}$-shaped limits, the assignment
+$D \mapsto \lim D$ extends to a functor
+\begin{equation*}
+  \lim : [\mathcal{J}, \mathcal{C}] \to \mathcal{C}.
+\end{equation*}
+Its action on a morphism of diagrams (a natural transformation
+$\eta : D \Rightarrow D'$) sends $\lim D$ to $\lim D'$ via the unique
+mediating morphism guaranteed by the limit universal property.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Equalizers, Pullbacks, and the Zoo of Limits}
+\label{sec:limit-zoo}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: One Pattern, Many Names}
+
+We have already seen products, equalizers, and pullbacks emerge as
+specific limits. This section catalogues the standard limit shapes
+explicitly, so the names become familiar.
+
+\subsection{Expanding: Each Shape, Its Universal Property}
+
+\begin{example}{Equalizer of $f, g : A \to B$}
+The equalizer is an object $E$ together with a morphism $e : E \to A$
+satisfying $f \circ e = g \circ e$, universal among such pairs:
+\[
+\begin{tikzcd}
+  E \arrow[r, "e"] & A \arrow[r, shift left, "f"] \arrow[r, shift right, "g"'] & B
+\end{tikzcd}
+\]
+For every $h : X \to A$ with $f \circ h = g \circ h$, there is a unique
+$u : X \to E$ with $e \circ u = h$.
+\end{example}
+
+\begin{example}{Pullback of $f, g$ over $C$}
+The pullback (sometimes called \emph{fibered product}) is an object $P$
+with morphisms $p_A : P \to A$ and $p_B : P \to B$ satisfying
+$f \circ p_A = g \circ p_B$, universal among such squares:
+\[
+\begin{tikzcd}
+  P \arrow[r, "p_B"] \arrow[d, "p_A"'] & B \arrow[d, "g"] \\
+  A \arrow[r, "f"'] & C
+\end{tikzcd}
+\]
+For every commuting square $(h, k)$ with $f \circ h = g \circ k$, there
+is a unique $u : X \to P$ with $p_A \circ u = h$ and $p_B \circ u = k$.
+\end{example}
+
+\begin{example}{The Limit of $\mathbf{1}$-shaped Diagrams}
+The shape $\mathbf{1}$ (one object, no non-identity morphisms) sends to
+just one object $A$. A cone is a morphism $X \to A$. The limit is $A$
+itself with $\lambda = \mathrm{id}_A$.
+\end{example}
+
+\begin{example}{The Limit of $\mathbf{0}$-shaped Diagrams (Terminal Object)}
+The shape $\mathbf{0}$ (empty category) has no objects and no morphisms.
+The functor $D : \mathbf{0} \to \mathcal{C}$ picks nothing. A cone over
+$D$ is an object $X$ with no constraints --- just an object. The limit is
+the \emph{terminal object} $\mathbf{1}$: the universal object with a
+unique map from every other object. So terminal = limit over the empty
+diagram.
+\end{example}
+
+\subsection{Formalizing: A Single Universal Property, Five Names}
+
+For a diagram $D$ of shape $\mathcal{J}$:
+
+\begin{align*}
+  \mathcal{J} \text{ empty:} & \;\; \lim D = \mathbf{1} \;\text{(terminal object)} \\
+  \mathcal{J} = \mathbf{1}:  & \;\; \lim D = D(\text{the only object}) \\
+  \mathcal{J} = \text{discrete on } n: & \;\; \lim D = \prod_{i=1}^n D(i) \;\text{($n$-ary product)} \\
+  \mathcal{J} = \bullet \rightrightarrows \bullet: & \;\; \lim D = \mathrm{Eq}(f, g) \;\text{(equalizer)} \\
+  \mathcal{J} = \bullet \to \bullet \leftarrow \bullet: & \;\; \lim D = A \times_C B \;\text{(pullback)}
+\end{align*}
+
+\subsection{Reorganizing: The Limit Construction in $\mathbf{Set}$}
+
+When $\mathcal{C} = \mathbf{Set}$, the limit of $D : \mathcal{J} \to
+\mathbf{Set}$ has a concrete description. Define
+\begin{equation*}
+  \lim D = \left\{ (x_j)_{j \in \mathrm{Ob}(\mathcal{J})}
+  \;\Big|\; x_j \in D(j),\;
+  D(\alpha)(x_j) = x_k \text{ for every } \alpha : j \to k \right\}.
+\end{equation*}
+The legs $\lambda_j$ are the obvious projections. One can check this
+satisfies the universal property. So in $\mathbf{Set}$ ``limit'' is
+``compatible tuples.''
+
+\subsection{Simplifying: When Do Limits Exist?}
+
+A category has \emph{finite limits} if it has limits for every diagram
+whose shape $\mathcal{J}$ has finitely many objects and morphisms.
+Equivalently (the limit zoo collapses): a category has finite limits iff
+it has a terminal object, all binary products, and all equalizers.
+
+A category has \emph{all (small) limits} if it has limits for every
+small-shaped diagram. Such a category is called \term{(small-)complete}.
+
+\subsection{Formally: The Equalizer Construction in $\mathbf{Set}$}
+
+\formalnote{Equalizers in $\mathbf{Set}$}
+For $f, g : A \to B$ in $\mathbf{Set}$:
+\begin{equation*}
+  \mathrm{Eq}(f, g) = \{a \in A \mid f(a) = g(a)\},\;\;
+  e : \mathrm{Eq}(f, g) \hookrightarrow A.
+\end{equation*}
+Pullbacks have a similar concrete description:
+\begin{equation*}
+  A \times_C B = \{(a, b) \in A \times B \mid f(a) = g(b)\}.
+\end{equation*}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Colimits as Dual Limits}
+\label{sec:colimits}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Glue Instead of Project}
+
+The dual of a limit is a colimit. Where a limit is an apex \emph{above}
+the diagram with rays going \emph{down}, a colimit is a vertex \emph{below}
+the diagram with rays going \emph{up}. Where a limit's universal property
+is about \emph{mapping in}, a colimit's is about \emph{mapping out}.
+
+Roughly, a colimit \emph{glues together} the objects in the diagram along
+the morphisms in the diagram. In $\mathbf{Set}$, this gluing is
+realized as a quotient of a disjoint union by an equivalence relation.
+
+\subsection{Expanding: Standard Colimit Shapes}
+
+\begin{example}{Coproducts}
+For the discrete two-object shape: the colimit is the coproduct $A + B$
+together with inclusions $\iota_1, \iota_2$.
+\end{example}
+
+\begin{example}{Coequalizers}
+For the parallel-pair shape with $f, g : A \to B$: the colimit is the
+\term{coequalizer} of $f$ and $g$ --- the universal object $Q$ with a
+morphism $q : B \to Q$ such that $q \circ f = q \circ g$. In $\mathbf{Set}$,
+$Q$ is $B$ modulo the equivalence relation generated by $f(a) \sim g(a)$
+for all $a \in A$.
+\end{example}
+
+\begin{example}{Pushouts}
+For the span shape $\bullet \leftarrow \bullet \to \bullet$ with
+$f : C \to A$ and $g : C \to B$: the colimit is the \term{pushout},
+written $A +_C B$ or $A \sqcup_C B$. In $\mathbf{Set}$, it is
+$(A \sqcup B) / \sim$, where $f(c) \sim g(c)$ for all $c \in C$.
+\end{example}
+
+\subsection{Formalizing: Cocones and Colimits}
+
+A \term{cocone under $D$ with co-apex $X$} is a natural transformation
+\begin{equation*}
+  \mu : D \Rightarrow \Delta_X.
+\end{equation*}
+Unpacking: morphisms $\mu_j : D(j) \to X$ for each $j$, with
+$\mu_k \circ D(\alpha) = \mu_j$ for every $\alpha : j \to k$.
+
+A \term{colimit of $D$} is a universal cocone: $\mu : D \Rightarrow
+\Delta_C$ such that every cocone $\nu : D \Rightarrow \Delta_X$ factors
+uniquely as $\nu_j = u \circ \mu_j$ for some unique $u : C \to X$.
+
+We write $\mathrm{colim}\, D$ (also $\lim_\to$ or $\varinjlim D$) for the
+colimit.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\mathrm{colim}\, D$ --- ``colimit of $D$''
+  \item $\varinjlim D$ or $\lim_\to$ --- the arrow-direction notation
+  \item ``cocone'' is sometimes written ``co-cone''
+  \item Specific names: coproduct, coequalizer, pushout, initial object
+        (colimit over empty)
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Duality, Once Stated}
+
+A colimit of $D : \mathcal{J} \to \mathcal{C}$ is a limit of
+$D^{\mathrm{op}} : \mathcal{J}^{\mathrm{op}} \to \mathcal{C}^{\mathrm{op}}$.
+Therefore every theorem we prove about limits has a dual for colimits, by
+reversing arrows. We will prove things about limits and rely on duality
+for the colimit side without comment.
+
+\subsection{Simplifying: The Colimit Schema}
+
+\begin{equation*}
+  \boxed{\;
+  \forall (X, \nu),\;
+  \exists !\, u : C \to X,\;
+  \nu_j = u \circ \mu_j \;\;\text{for every } j.
+  \;}
+\end{equation*}
+
+\subsection{Formally: Cocomplete Categories}
+
+\formalnote{Cocompleteness}
+A category is \term{cocomplete} if it has all small colimits. Equivalently,
+it has an initial object, all small coproducts, and all coequalizers.
+
+\formalnote{The free constructions}
+Many ``free'' constructions in mathematics --- free monoid on a set, free
+group on a set, free $R$-module on a set --- are colimits in disguise.
+Free constructions go hand-in-hand with adjunctions (Chapter~7).
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Preservation and Reflection of Limits}
+\label{sec:preservation}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Which Functors Behave Nicely?}
+
+Once we have limits and colimits, the natural question is: which functors
+\emph{respect} them? A functor that respects limits is invaluable, because
+we can compute the limit in the source and then apply the functor, rather
+than computing inside the target.
+
+Three properties matter: \emph{preservation} (the functor sends limits to
+limits), \emph{reflection} (the functor turns limits-in-target back into
+limits-in-source), and \emph{creation} (the strongest, which we discuss
+formally).
+
+\subsection{Expanding: A Functor That Preserves Products}
+
+\begin{example}{The Forgetful Functor $U : \mathbf{Mon} \to \mathbf{Set}$}
+$U$ sends a monoid to its underlying set, and a monoid homomorphism to
+the underlying function. It preserves products: $U(M_1 \times M_2) =
+U(M_1) \times U(M_2)$, with projections sent to projections. We will see
+in Chapter~7 that $U$ is the right adjoint of a free-monoid functor, and
+right adjoints preserve all limits.
+\end{example}
+
+\begin{example}{A Functor That Does Not Preserve Limits}
+The functor $\mathbf{Set} \to \mathbf{Set}$ that sends $X$ to the
+two-element set $\{0, 1\}$ regardless of $X$ does not preserve products:
+$\{0,1\} = F(A \times B) \neq F(A) \times F(B) = \{0,1\} \times \{0,1\}$
+which has four elements. Constant functors typically do not preserve
+limits.
+\end{example}
+
+\subsection{Formalizing: Preservation, Reflection, Creation}
+
+Let $F : \mathcal{C} \to \mathcal{D}$ be a functor, $D : \mathcal{J} \to
+\mathcal{C}$ a diagram, and $\lambda : \Delta_L \Rightarrow D$ a limiting
+cone over $D$.
+
+\begin{itemize}
+  \item $F$ \term{preserves} the limit of $D$ if $F \lambda :
+        \Delta_{F(L)} \Rightarrow F \circ D$ is a limiting cone over
+        $F \circ D$.
+  \item $F$ \term{reflects} the limit of $D$ if: whenever
+        $\lambda' : \Delta_X \Rightarrow D$ is a cone over $D$ in
+        $\mathcal{C}$ and $F \lambda'$ is limiting over $F \circ D$,
+        then $\lambda'$ was limiting over $D$ already.
+  \item $F$ \term{creates} the limit of $D$ if every limiting cone over
+        $F \circ D$ in $\mathcal{D}$ uniquely lifts to a cone over $D$
+        in $\mathcal{C}$, and the lifted cone is itself a limit of $D$.
+\end{itemize}
+
+Preservation says ``limits in $\mathcal{C}$ map to limits in $\mathcal{D}$.''
+Reflection says ``limits in $\mathcal{D}$ come from limits in $\mathcal{C}$.''
+Creation says ``the limit in $\mathcal{C}$ is determined by the limit in
+$\mathcal{D}$.''
+
+\subsection{Reorganizing: A Slogan and Two Anchors}
+
+\textbf{Anchor 1.}\quad Right adjoints preserve limits (Chapter~7).
+
+\textbf{Anchor 2.}\quad Fully faithful functors reflect limits.
+
+These two facts together account for an enormous fraction of the
+limit-preservation phenomena one meets in practice.
+
+\subsection{Simplifying: The Preservation Schema}
+
+\begin{equation*}
+  F \text{ preserves } \lim D
+  \;\iff\;
+  F(\lim D) \cong \lim (F \circ D),
+\end{equation*}
+\emph{naturally and via the canonical mediating morphism}, not merely up
+to abstract isomorphism.
+
+\subsection{Formally: Limits in Functor Categories}
+
+\formalnote{Limits are computed pointwise}
+For a small category $\mathcal{J}$ and any category $\mathcal{D}$ with
+$\mathcal{J}$-limits, the functor category $[\mathcal{C}, \mathcal{D}]$
+has $\mathcal{J}$-limits, and they are computed pointwise:
+\begin{equation*}
+  (\lim D)(C) \cong \lim_{j} D(j)(C)
+\end{equation*}
+for each object $C$ of $\mathcal{C}$. The evaluation functors
+$\mathrm{ev}_C : [\mathcal{C}, \mathcal{D}] \to \mathcal{D}$ jointly create
+all limits. This is one of the most-used facts in category theory:
+calculations in functor categories reduce to calculations object-by-object
+in the target.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is a diagram in $\mathcal{C}$, formally?}{A functor $D : \mathcal{J} \to \mathcal{C}$ from a small category $\mathcal{J}$.}
+\qaitem{What plays the role of ``the shape''?}{The index category $\mathcal{J}$.}
+\qaitem{What is the constant functor $\Delta_X$?}{The functor sending every object to $X$ and every arrow to $\mathrm{id}_X$.}
+\qaitem{What is a cone over $D$ with apex $X$?}{A natural transformation $\Delta_X \Rightarrow D$.}
+\qaitem{Unpacked, what data does a cone consist of?}{A morphism $\lambda_j : X \to D(j)$ for every $j$, compatible with the arrows of $\mathcal{J}$.}
+\qaitem{What is a limit of $D$?}{A universal cone over $D$.}
+\qaitem{Why is the limit unique up to unique iso?}{It satisfies a universal property; \S5.4 applies.}
+\qaitem{Empty index category: what is the limit?}{The terminal object.}
+\qaitem{Singleton index category: what is the limit?}{The unique object that $D$ picks out.}
+\qaitem{Discrete two-object index: what is the limit?}{The (binary) product.}
+\qaitem{Parallel pair index: what is the limit?}{The equalizer.}
+\qaitem{Cospan index: what is the limit?}{The pullback.}
+\qaitem{What is a cocone under $D$?}{A natural transformation $D \Rightarrow \Delta_X$.}
+\qaitem{What is a colimit?}{A universal cocone.}
+\qaitem{Empty index: what is the colimit?}{The initial object.}
+\qaitem{Discrete two-object index: colimit?}{The coproduct.}
+\qaitem{Parallel pair: colimit?}{The coequalizer.}
+\qaitem{Span index: colimit?}{The pushout.}
+\qaitem{Why call the colimit ``a glue''?}{It glues the diagram's objects together along the diagram's arrows.}
+\qaitem{In $\mathbf{Set}$, how is the pullback realized?}{As $\{(a,b) \in A \times B \mid f(a) = g(b)\}$.}
+\qaitem{In $\mathbf{Set}$, how is the equalizer realized?}{As $\{a \in A \mid f(a) = g(a)\}$ with the inclusion into $A$.}
+\qaitem{In $\mathbf{Set}$, how is the coequalizer realized?}{As $B$ modulo the equivalence relation generated by $f(a) \sim g(a)$.}
+\qaitem{What does ``$\mathcal{C}$ is complete'' mean?}{$\mathcal{C}$ has all small limits.}
+\qaitem{What is the minimal checklist for completeness?}{Terminal object, all binary products, all equalizers.}
+\qaitem{What is ``$\mathcal{C}$ is cocomplete''?}{Has all small colimits.}
+\qaitem{Minimal checklist for cocompleteness?}{Initial object, all binary coproducts, all coequalizers.}
+\qaitem{What does ``$F$ preserves limits'' mean?}{$F$ sends limiting cones to limiting cones.}
+\qaitem{What is ``$F$ reflects limits''?}{If $F\lambda$ is a limit, then $\lambda$ was already a limit.}
+\qaitem{Where are limits computed in $[\mathcal{C}, \mathcal{D}]$?}{Pointwise, in $\mathcal{D}$.}
+\qaitem{What is the formula for $(\lim D)(C)$ pointwise?}{$\lim_{j} D(j)(C)$.}
+\qaitem{Why is ``pointwise'' so useful?}{It reduces hard calculations in functor categories to easier ones in the target category.}
+\qaitem{Are products limits over what shape?}{The discrete category on two (or more) objects.}
+\qaitem{Why is duality a labour-saver here?}{We prove a theorem about limits, and get a colimit theorem free by reversing arrows.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+A \textbf{diagram} in $\mathcal{C}$ is a functor $D : \mathcal{J} \to
+\mathcal{C}$ from a small shape category. A \textbf{cone} over $D$ is a
+natural transformation $\Delta_X \Rightarrow D$; a \textbf{cocone} under
+$D$ is $D \Rightarrow \Delta_X$.
+
+A \textbf{limit} of $D$ is a universal cone; a \textbf{colimit} is a
+universal cocone. Products, equalizers, pullbacks (and their duals)
+are all limits/colimits of specific shapes.
+
+Limits and colimits are unique up to unique isomorphism, and they are
+\textbf{computed pointwise} in functor categories.
+
+A category is \textbf{complete} if it has all small limits, and
+\textbf{cocomplete} if it has all small colimits. Equivalently:
+terminal/initial + binary products/coproducts + equalizers/coequalizers.
+
+A functor \textbf{preserves} a limit when it sends limiting cones to
+limiting cones; it \textbf{reflects} when target-limits descend to
+source-limits.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Diagram.}\quad
+A diagram of shape $\mathcal{J}$ in $\mathcal{C}$ is a functor
+$D : \mathcal{J} \to \mathcal{C}$.
+
+\medskip
+\textbf{Cone.}\quad
+A cone over $D$ with apex $X$ is a natural transformation
+$\lambda : \Delta_X \Rightarrow D$:
+\begin{equation*}
+  \lambda_j : X \to D(j),\;\;
+  D(\alpha) \circ \lambda_j = \lambda_k
+  \;\text{for every } \alpha : j \to k.
+\end{equation*}
+
+\medskip
+\textbf{Limit.}\quad
+$L$ is a limit of $D$, with cone $\lambda$, iff for every cone
+$\mu : \Delta_X \Rightarrow D$:
+\begin{equation*}
+  \exists !\, u : X \to L \;\text{with}\;
+  \mu_j = \lambda_j \circ u \text{ for all } j.
+\end{equation*}
+
+\medskip
+\textbf{Colimit.}\quad
+$C$ is a colimit of $D$, with cocone $\mu$, iff for every cocone
+$\nu : D \Rightarrow \Delta_X$:
+\begin{equation*}
+  \exists !\, u : C \to X \;\text{with}\;
+  \nu_j = u \circ \mu_j \text{ for all } j.
+\end{equation*}
+
+\medskip
+\textbf{Completeness.}\quad
+$\mathcal{C}$ is (small-)complete iff it has all small limits, iff it has
+a terminal object, all binary products, and all equalizers. Dually for
+cocompleteness.
+
+\medskip
+\textbf{Pointwise limits.}\quad
+$[\mathcal{C}, \mathcal{D}]$ has $\mathcal{J}$-limits whenever
+$\mathcal{D}$ does, and:
+\begin{equation*}
+  (\lim_j D_j)(C) = \lim_j (D_j(C)).
+\end{equation*}
+
+\medskip
+\noindent\textit{Chapter~7 develops adjunctions, the most important
+source of limit-preserving and colimit-preserving functors.}
+\end{formalrestatement}

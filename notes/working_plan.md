@@ -8,14 +8,12 @@ feedback as the project evolves. See `history/` for the immutable record._
 ## Current state
 
 - **Integration branch:** `main`
-- **Feature branch under review:** `feature/ch04-ch05-and-style`
-- **Last build round:** v0.11 (Ch 4, Ch 5, font→8pt, multi-line eqns,
-  howtosay callouts)
-- **Chapters written:** Preface, Chapter 1–5
-- **Chapters planned:** 6 (Limits and Colimits), 7 (Adjunctions),
-  8 (Monads), 9+ (Theorems and connections to other math)
+- **Feature branch under review:** `feature/exercises-and-ch06-ch09`
+- **Last build round:** v0.12 (Q/A exercises for Ch 1-10; new Ch 6-10)
+- **Chapters written:** Preface, Chapter 1-10
+- **Chapters planned (future):** 11+ connections to other math fields
 - **Merged PRs**: #1 (v0.7 cycle structure), #2 (v0.10 typography into rebuild branch),
-  #3 (undefined ref fix), #4 (v0.10 → main), #5 (Ch 2 + Ch 3)
+  #3 (undefined ref fix), #4 (v0.10 -> main), #5 (Ch 2 + Ch 3), #7 (v0.11 Ch 4-5)
 
 ---
 
@@ -75,10 +73,11 @@ Design rules:
 - Overview and Restatement are mirror images: same content, different language.
 - When a chapter or section grouping has **only one cycle**, no bookends needed.
 
-### Chapter ending structure
+### Chapter ending structure (v0.12 onward)
 
-1. **Summary box** — human-language recap (for first-pass skimmers and review)
-2. **Formal Restatement section** — CT-idiomatic definitions and laws in pure
+1. **Exercises section** — ~30 Q/A pairs in Little Schemer two-column style
+2. **Summary box** — human-language recap (for first-pass skimmers and review)
+3. **Formal Restatement section** — CT-idiomatic definitions and laws in pure
    notation; no prose expansion; the conclusion of the chapter's cycle arc
 
 ---
@@ -87,7 +86,8 @@ Design rules:
 
 These apply going forward; existing chapters may be retrofitted in batches.
 
-- **Font size**: 8pt body via `extbook` document class (v0.11)
+- **Font size**: 8pt body via `fix-cm` + redefined size commands (book class)
+  (v0.11 + v0.11 patch)
 - **Paper**: A4 with 25/25/30/25mm margins (v0.10)
 - **Multi-line equations**: use `align*` / `gather` for grouped equations
   and multi-stage proofs (v0.11)
@@ -95,22 +95,22 @@ These apply going forward; existing chapters may be retrofitted in batches.
   readings, `howtosay` tcolorbox for notation with multiple conventions (v0.11)
 - **Cycle vocabulary**: Informally → Expanding → Formalizing → Reorganizing
   → Simplifying → Formally; carried by subsection headings, no chip labels (v0.7/v0.9)
-- **Chapter bookends**: Overview at top, Summary + Formal Restatement at bottom
+- **Chapter bookends**: Overview at top, Exercises + Summary + Formal Restatement at bottom (v0.12)
 - **Examples**: no borrowed mathematical examples until foundations are built
 - **Temperature notation**: Celsius (0°C, 20°C, 37°C, 100°C)
+- **Exercises**: Little Schemer-style Q/A in a two-column `qa` environment
+  (v0.12). ~30 Q/A pairs per chapter, ramping from trivial to probing.
 
 ---
 
-## Pending: retrofit of Ch 1–3
+## Pending: retrofit of Ch 1-5 style
 
 The v0.11 style directives (multi-line equations, `howtosay` callouts) apply
-to new content (Ch 4, Ch 5). The existing chapters (1, 2, 3, preface) contain
-material that would benefit from a retrofit pass:
+to new content. The existing chapters (1, 2, 3, preface) contain material
+that would benefit from a retrofit pass:
 
 - Multi-equation passages that could combine into `align*` blocks
-- Notation introductions (`f : A \to B`, `\mathrm{Hom}`, `\circ`, `\mathrm{id}_A`,
-  `g \circ f`, `\mathcal{C}^{\mathrm{op}}`, `F : \mathcal{C} \to \mathcal{D}`,
-  `F(g \circ f) = F(g) \circ F(f)`) that could carry `howtosay` callouts
+- Notation introductions that could carry `howtosay` callouts
 
 Defer to its own batch; do not mix retrofits with new-content writing.
 
@@ -129,6 +129,7 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 - [ ] Is 8pt too small for body text? (v0.11) — pending render check.
 - [ ] `howtosay` callout length calibration — currently varies by notation
       richness. Watch for reader feedback.
+- [ ] Q/A layout calibration — two-column tabularx; visual check needed.
 - [ ] Appendix: "How to read a diagram" — annotated worked example.
 - [ ] Appendix: Glossary.
 
@@ -143,10 +144,12 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 | 3  | Functors | Maps between categories |
 | 4  | Natural Transformations | Maps between functors (v0.11) |
 | 5  | Universal Properties | Initial/terminal, the universal pattern, products/coproducts preview (v0.11) |
-| 6  | Limits and Colimits | Products, coproducts, equalizers, pullbacks |
-| 7  | Adjunctions | The fundamental relationship between functors |
-| 8  | Monads | Adjunctions that compose |
-| 9+ | Theorems and connections | Yoneda, adjoint functor theorems, connections to algebra/topology/logic |
+| 6  | Limits and Colimits | Diagrams, cones, completeness, preservation (v0.12) |
+| 7  | Adjunctions | Hom-set bijection, unit/counit, RAPL/LAPC (v0.12) |
+| 8  | Monads | Adjunctions give monads, Eilenberg–Moore, Kleisli (v0.12) |
+| 9  | The Yoneda Lemma | Hom-functors, representability, the Yoneda embedding (v0.12) |
+| 10 | Adjoint Functor Theorems | GAFT, SAFT, existence of adjoints (v0.12) |
+| 11+ | Connections | algebra, topology, logic — to come |
 
 ---
 
@@ -165,7 +168,9 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 | 2026-05-11 | Summary box + Formal Restatement both kept | User directive v0.5 |
 | 2026-05-11 | Cycle openly acknowledged to reader | User directive v0.5 |
 | 2026-05-11 | A4 paper, chip labels removed (no-ops) | User directive v0.8/v0.9 |
-| 2026-05-12 | Font size 10pt → 8pt via `extbook` | User directive v0.11 |
+| 2026-05-12 | Font size 10pt → 8pt via fix-cm size redefinitions (not extsizes) | v0.11 + patch |
 | 2026-05-12 | Multi-line equation environments preferred | User directive v0.11 |
 | 2026-05-12 | `howtosay` callouts / `\sayit` inline for notation pronunciation | User directive v0.11 |
-| 2026-05-12 | Defer retrofit of Ch 1–3 to its own batch | Avoid mixing retrofit with new-content writing |
+| 2026-05-12 | Defer retrofit of Ch 1–5 to its own batch | Avoid mixing retrofit with new-content writing |
+| 2026-05-12 | Little Schemer Q/A exercises in every chapter | User directive v0.12 |
+| 2026-05-12 | Ordering: Ch 8 = Monads, Ch 9 = Yoneda, Ch 10 = AFT | Natural progression: monads from adjunctions, Yoneda before AFT |

@@ -609,6 +609,47 @@ separate concept.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What four pieces of data specify a category?}{Objects, morphisms, composition, and identities (one per object).}
+\qaitem{What two laws do those pieces obey?}{Associativity of composition, and the unit law for identities.}
+\qaitem{Is ``a set with extra structure'' enough to be a category?}{No. A category is data plus laws; the morphisms and composition are part of the structure.}
+\qaitem{In $\mathbf{0}$, how many morphisms are there?}{Zero. No objects, no morphisms.}
+\qaitem{In $\mathbf{1}$, how many morphisms?}{One: the identity on the unique object.}
+\qaitem{In $\mathbf{2}$, how many morphisms in total?}{Three: two identities and one non-identity arrow.}
+\qaitem{Why does $\mathbf{2}$ have no other arrows?}{There is nothing to compose the existing arrow with that would create a new one.}
+\qaitem{What is a preorder, viewed as a category?}{A category where every hom-set has at most one element.}
+\qaitem{In a preorder-category, when is $A \to B$ inhabited?}{When $A \leq B$ in the preorder.}
+\qaitem{What does antisymmetry give you on top of a preorder?}{Iso-equality: $A \cong B$ implies $A = B$ on the nose.}
+\qaitem{What is a monoid, viewed as a category?}{A category with one object, whose morphisms compose like the monoid operation.}
+\qaitem{In a one-object category, what is the identity morphism?}{The unit of the monoid.}
+\qaitem{What is an isomorphism in a category?}{A morphism with a two-sided inverse.}
+\qaitem{Why must inverses be two-sided?}{Because a one-sided inverse need not be unique or behave well under composition.}
+\qaitem{If $g \circ f = \mathrm{id}_A$ and $f \circ g = \mathrm{id}_B$, what is $g$ called?}{The inverse of $f$ (and vice versa).}
+\qaitem{Are inverses unique when they exist?}{Yes. If $g$ and $g'$ are both inverses of $f$, then $g = g'$.}
+\qaitem{Why is uniqueness of inverses important?}{It lets us speak of \emph{the} inverse, written $f^{-1}$.}
+\qaitem{What does $A \cong B$ mean?}{There exists an isomorphism between $A$ and $B$.}
+\qaitem{Is $\cong$ reflexive? Symmetric? Transitive?}{Yes to all three.}
+\qaitem{What is the opposite category $\mathcal{C}^{\mathrm{op}}$?}{Same objects as $\mathcal{C}$, but every arrow reversed; composition is reversed too.}
+\qaitem{If $f : A \to B$ in $\mathcal{C}$, what is it in $\mathcal{C}^{\mathrm{op}}$?}{An arrow $B \to A$.}
+\qaitem{Why is $(\mathcal{C}^{\mathrm{op}})^{\mathrm{op}} = \mathcal{C}$?}{Reversing arrows twice puts them back the way they were.}
+\qaitem{What is the principle of duality?}{Every theorem about $\mathcal{C}$ yields a theorem about $\mathcal{C}^{\mathrm{op}}$ by reversing arrows.}
+\qaitem{What is a contravariant operation, in opposite-category terms?}{An ordinary (covariant) operation from $\mathcal{C}^{\mathrm{op}}$.}
+\qaitem{Why is a small category called ``small''?}{Its collection of objects (and morphisms) is a set, not a proper class.}
+\qaitem{Is $\mathbf{Set}$ small?}{No. The collection of all sets is too large to be a set.}
+\qaitem{Can a category have a proper class of objects?}{Yes; such categories are called \emph{large}.}
+\qaitem{If $f$ is an iso and $f \circ g$ is defined, can you cancel $f$ from $f \circ g = f \circ h$?}{Yes. Compose with $f^{-1}$ on the left.}
+\qaitem{If $f$ is \emph{not} an iso, can you still cancel?}{Not in general.}
+\qaitem{Where does the cycle ``Informally $\to$ Expanding $\to$ \ldots $\to$ Formally'' end up in a Chapter?}{In the Formal Restatement at the chapter's end.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
 \section*{Chapter Summary}
 \addcontentsline{toc}{section}{Chapter Summary}
 % ═══════════════════════════════════════════════════════════════════════════

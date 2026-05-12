@@ -1,0 +1,513 @@
+\chapter{Monads}
+
+\begin{overviewbox}
+In Chapter 7 we saw that an adjunction $L \dashv R$ packages a
+``construction'' (the left adjoint) together with a ``forgetful''
+(the right adjoint). What does this construction \emph{leave behind} on
+the source category? The endofunctor $R \circ L : \mathcal{C} \to
+\mathcal{C}$, together with the unit $\eta : \mathrm{Id} \Rightarrow R L$
+and a ``multiplication'' $\mu = R \varepsilon L : R L R L \Rightarrow R L$
+arising from the counit.
+
+This package --- an endofunctor with a unit and a compatible
+multiplication --- is called a \term{monad}. Monads are the categorical
+formalization of \emph{algebraic structure} carried by a functor. They
+appear in algebra (the free-monoid monad, the free-group monad), in
+topology (free topological monoids), in logic and computer science (the
+list monad, the Maybe monad, the state monad), and in geometry (sheaf
+constructions).
+
+The story of this chapter: define monads in their own right, show how
+every adjunction gives rise to a monad, study \emph{algebras for a monad}
+(the Eilenberg--Moore category), and conclude with the relationship to
+the original adjunction. Along the way we develop the Kleisli
+construction, the categorical home of effectful computation.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monads as Algebraic Endofunctors}
+\label{sec:monads-defn}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Endofunctor + Unit + Multiplication}
+
+A \term{monad} on a category $\mathcal{C}$ consists of three things:
+\begin{itemize}
+  \item An endofunctor $T : \mathcal{C} \to \mathcal{C}$. Think: ``a way
+        of building richer objects from $\mathcal{C}$-objects.''
+  \item A unit $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow T$. Think:
+        ``the inclusion of $A$ into $T(A)$ as the generators.''
+  \item A multiplication $\mu : T \circ T \Rightarrow T$. Think:
+        ``compose nested $T$-structures into one.''
+\end{itemize}
+These satisfy three laws: a unit law (twice) and an associativity law,
+to be made precise below.
+
+The classic example: $T(X) = X^*$, the free-monoid (list) functor on
+$\mathbf{Set}$. The unit $\eta_X : X \to X^*$ sends $x$ to the singleton
+list $[x]$. The multiplication $\mu_X : (X^*)^* \to X^*$ concatenates a
+list of lists into a single list.
+
+\subsection{Expanding: Examples That Matter}
+
+\begin{example}{The List Monad on $\mathbf{Set}$}
+$T(X) = X^*$ (finite sequences from $X$).
+\begin{itemize}
+  \item Unit $\eta_X(x) = [x]$.
+  \item Multiplication $\mu_X([[a_1, \ldots], [b_1, \ldots], \ldots]) =
+        [a_1, \ldots, b_1, \ldots, \ldots]$.
+\end{itemize}
+The laws say: the unit at the front or back of a list does nothing
+($\mu \circ \eta T = \mathrm{id} = \mu \circ T \eta$), and concatenating
+nested lists is associative ($\mu \circ T \mu = \mu \circ \mu T$).
+\end{example}
+
+\begin{example}{The Maybe Monad}
+$T(X) = X + \{*\}$ (a copy of $X$ plus a distinguished ``failure'' value).
+\begin{itemize}
+  \item Unit $\eta_X(x) = x \in X \subset X + \{*\}$.
+  \item Multiplication $\mu_X$ flattens nested options: an outer $*$
+        becomes $*$; an outer value that is itself $*$ becomes $*$;
+        an outer value that is an inner real value is unwrapped.
+\end{itemize}
+The Maybe monad is the standard formalism for ``computations that may
+fail.''
+\end{example}
+
+\begin{example}{The Powerset Monad}
+$T(X) = \mathcal{P}(X)$, the powerset.
+\begin{itemize}
+  \item Unit $\eta_X(x) = \{x\}$.
+  \item Multiplication $\mu_X$ takes a set of sets to its union.
+\end{itemize}
+The Kleisli morphisms (\S 8.4) for this monad are exactly relations:
+functions $X \to \mathcal{P}(Y)$ are relations $X \rightharpoonup Y$.
+\end{example}
+
+\begin{dialog}
+The three examples share a common shape: build something on $X$, ``flatten''
+when you build it twice, and have a way to include $X$ into $T(X)$ as the
+trivial case.
+\end{dialog}
+
+\subsection{Formalizing: The Definition}
+
+A \term{monad on $\mathcal{C}$} is a triple $(T, \eta, \mu)$ where:
+\begin{itemize}
+  \item $T : \mathcal{C} \to \mathcal{C}$ is a functor.
+  \item $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow T$ is a natural
+        transformation.
+  \item $\mu : T \circ T \Rightarrow T$ is a natural transformation.
+\end{itemize}
+And satisfying:
+\begin{align*}
+  \mu \circ \mu T &= \mu \circ T \mu
+    && \text{(associativity)} \\
+  \mu \circ \eta T &= \mathrm{id}_T
+    && \text{(left unit)} \\
+  \mu \circ T \eta &= \mathrm{id}_T
+    && \text{(right unit).}
+\end{align*}
+The first equation lives in $T^3 \Rightarrow T$; the others in
+$T \Rightarrow T$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $T$ --- ``the monad'' (loosely; really it's the whole triple).
+  \item $\eta$ --- ``eta,'' the \term{unit} or \term{return}.
+  \item $\mu$ --- ``mu,'' the \term{multiplication} or \term{join} (the
+        latter in CS).
+  \item ``return'' and ``join'' are the names used in functional
+        programming for $\eta$ and $\mu$.
+  \item The composition $T \circ T$ is sometimes written $T^2$, and the
+        $n$-fold composition $T^n$ for any $n$.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: The Three Laws as Diagrams}
+
+\textbf{Associativity.}
+\[
+\begin{tikzcd}[column sep=3.5em]
+  T^3 \arrow[r, "T \mu"] \arrow[d, "\mu T"'] & T^2 \arrow[d, "\mu"] \\
+  T^2 \arrow[r, "\mu"'] & T
+\end{tikzcd}
+\]
+
+\textbf{Unit laws.}
+\[
+\begin{tikzcd}[column sep=3em, row sep=2em]
+  T \arrow[r, "\eta T"] \arrow[dr, "\mathrm{id}_T"'] & T^2 \arrow[d, "\mu"] & T \arrow[l, "T \eta"'] \arrow[dl, "\mathrm{id}_T"] \\
+  & T &
+\end{tikzcd}
+\]
+
+\subsection{Simplifying: The Monad Schema}
+
+A monad is a \emph{monoid object} in the category of endofunctors of
+$\mathcal{C}$ under composition. The unit object of this monoidal
+category is $\mathrm{Id}$, the tensor product is functor composition, and
+the associativity/unitality of $(T, \eta, \mu)$ are exactly the
+associativity/unit laws of a monoid in this monoidal category.
+
+This is why one sometimes hears the slogan ``a monad is a monoid in the
+category of endofunctors.'' The slogan is true. Whether it is helpful at
+first reading is a matter of taste.
+
+\subsection{Formally: Naturality of $\eta$ and $\mu$}
+
+\formalnote{Naturality is automatic if you write down the right diagrams}
+The naturality of $\eta$ says that for $f : A \to B$,
+$T(f) \circ \eta_A = \eta_B \circ f$. The naturality of $\mu$ says that
+for $f : A \to B$, $T(f) \circ \mu_A = \mu_B \circ T^2(f)$. Both follow
+from $\eta, \mu$ being natural transformations between functors of the
+appropriate type.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions Give Monads}
+\label{sec:adj-to-monad}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: $R L$ Is Always a Monad}
+
+Take any adjunction $L \dashv R$ between $\mathcal{C}$ and $\mathcal{D}$.
+Set $T = R \circ L$. Then $T$ is an endofunctor of $\mathcal{C}$, and the
+adjunction's unit $\eta : \mathrm{Id} \Rightarrow R L = T$ is the unit of
+a monad. The multiplication is the whiskering of the counit:
+\begin{equation*}
+  \mu := R \varepsilon L : R L R L = T^2 \Rightarrow R L = T.
+\end{equation*}
+The triangle identities of the adjunction translate directly to the
+monad laws.
+
+\subsection{Expanding: The Free-Monoid Adjunction $\rightsquigarrow$ The List Monad}
+
+The classical example: $L : \mathbf{Set} \to \mathbf{Mon}$, $R :
+\mathbf{Mon} \to \mathbf{Set}$, $L \dashv R$. Then $R L$ on $\mathbf{Set}$
+sends a set $X$ to the underlying set of the free monoid on $X$, which is
+$X^*$. The induced monad is the list monad.
+
+In general, whenever you see a free/forgetful adjunction, you get a monad
+whose algebras (in a sense to be defined below) are the original
+structured objects.
+
+\subsection{Formalizing: The Theorem}
+
+\textbf{Theorem.}\quad Let $L \dashv R$ be an adjunction with unit $\eta$
+and counit $\varepsilon$. Define $T = R L$ and $\mu = R \varepsilon L$.
+Then $(T, \eta, \mu)$ is a monad on $\mathcal{C}$.
+
+\textbf{Proof sketch.} The unit law $\mu \circ \eta T = \mathrm{id}_T$
+expands to $R \varepsilon L \circ \eta R L$, which by the triangle
+identity for $R$ equals $\mathrm{id}_{R L}$. Similarly for $\mu \circ T
+\eta$. Associativity uses the naturality of $\varepsilon$ together with
+the fact that $L$ and $R$ are functors. \qed
+
+\subsection{Reorganizing: Every Adjunction Has a Monad}
+
+\begin{itemize}
+  \item Free monoid $\dashv$ Forgetful $\rightsquigarrow$ List monad.
+  \item Free group $\dashv$ Forgetful $\rightsquigarrow$ Free-group monad.
+  \item Discrete $\dashv$ Forgetful $\rightsquigarrow$ Identity monad
+        (essentially trivial).
+  \item Stone--\v{C}ech $\dashv$ Forgetful (for compact Hausdorff spaces)
+        $\rightsquigarrow$ Stone--\v{C}ech monad on $\mathbf{Top}$.
+\end{itemize}
+
+\subsection{Simplifying: $T = R L$, $\mu = R \varepsilon L$, $\eta$ as Given}
+
+That is the recipe. Memorize the recipe.
+
+\subsection{Formally: Comonads from Adjunctions}
+
+\formalnote{The dual: comonads}
+Just as $R L$ is a monad on $\mathcal{C}$, the composite $L R$ is a
+\emph{comonad} on $\mathcal{D}$: a functor with a \term{counit}
+$\varepsilon : L R \Rightarrow \mathrm{Id}$ and a \term{comultiplication}
+$\delta : L R \Rightarrow L R L R$ satisfying the dual laws. Comonads
+formalize ``contexts'' or ``streams'' in computer science.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Algebras and the Eilenberg--Moore Category}
+\label{sec:em-category}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Monad Is an Algebraic Theory; Algebras Are Its Models}
+
+A monad on $\mathcal{C}$ encodes a kind of algebraic structure. The
+\term{algebras for the monad} are the objects of $\mathcal{C}$ carrying
+that structure.
+
+Concretely: an algebra for the list monad on $\mathbf{Set}$ is an object
+$X$ equipped with a structure map $\alpha : X^* \to X$ ``compatible with
+list operations.'' This compatibility makes $\alpha$ a way of
+\emph{multiplying} a list of $X$-elements into a single $X$-element ---
+i.e., $X$ becomes a monoid. The algebras for the list monad are
+\emph{monoids}.
+
+More generally: the algebras for the monad induced by an adjunction
+recover the right-hand category, up to equivalence (when nice conditions
+hold). This is the \emph{monadicity} story.
+
+\subsection{Expanding: What Is an Algebra?}
+
+\begin{example}{A List-Monad Algebra Is a Monoid}
+Given $(X, \alpha : X^* \to X)$ satisfying the laws:
+\begin{itemize}
+  \item $\alpha \circ \eta_X = \mathrm{id}_X$ (unit): the singleton list
+        $[x]$ multiplies to $x$.
+  \item $\alpha \circ \mu_X = \alpha \circ T \alpha$ (associativity):
+        flattening and then multiplying equals multiplying each list
+        and then multiplying the results.
+\end{itemize}
+From $\alpha$ we recover the monoid operations: the identity is
+$\alpha([\,])$ (the empty list), and the binary operation is
+$x \cdot y = \alpha([x, y])$. These operations satisfy the monoid
+axioms; conversely any monoid yields a list-algebra structure.
+\end{example}
+
+\begin{example}{A Powerset-Monad Algebra Is a Complete Sup-Semilattice}
+For the powerset monad $T(X) = \mathcal{P}(X)$ on $\mathbf{Set}$, an
+algebra structure $\alpha : \mathcal{P}(X) \to X$ assigns to each subset
+a supremum, in a way satisfying the laws --- exactly the structure of a
+complete sup-semilattice.
+\end{example}
+
+\subsection{Formalizing: $T$-Algebras and the EM Category}
+
+For a monad $(T, \eta, \mu)$ on $\mathcal{C}$, a \term{$T$-algebra} is a
+pair $(X, \alpha)$ where:
+\begin{itemize}
+  \item $X$ is an object of $\mathcal{C}$.
+  \item $\alpha : T(X) \to X$ is a morphism, the \term{structure map}.
+\end{itemize}
+Subject to:
+\begin{align*}
+  \alpha \circ \eta_X &= \mathrm{id}_X
+    && \text{(unit)} \\
+  \alpha \circ \mu_X &= \alpha \circ T \alpha
+    && \text{(associativity).}
+\end{align*}
+
+A morphism of $T$-algebras $f : (X, \alpha) \to (Y, \beta)$ is a morphism
+$f : X \to Y$ of $\mathcal{C}$ such that $f \circ \alpha = \beta \circ T(f)$.
+
+The category of $T$-algebras and their morphisms is the
+\term{Eilenberg--Moore category} of $T$, written $\mathcal{C}^T$ or
+$T\text{-}\mathbf{Alg}$.
+
+\subsection{Reorganizing: The EM Adjunction}
+
+The Eilenberg--Moore category comes with a canonical adjunction
+$F^T \dashv U^T$:
+\begin{itemize}
+  \item $U^T : \mathcal{C}^T \to \mathcal{C}$ sends $(X, \alpha)$ to $X$
+        and a morphism to its underlying morphism.
+  \item $F^T : \mathcal{C} \to \mathcal{C}^T$ sends $X$ to
+        $(T(X), \mu_X)$, the \emph{free $T$-algebra} on $X$.
+\end{itemize}
+The monad induced by $F^T \dashv U^T$ is exactly the original $T$. This
+is the \emph{universal} adjunction with this monad: any adjunction giving
+rise to $T$ factors uniquely through the EM adjunction.
+
+\subsection{Simplifying: The Algebra Slogan}
+
+Algebras for a monad are the objects on which the monad's structure can
+be ``evaluated.''
+
+\subsection{Formally: Monadicity}
+
+\formalnote{Monadicity}
+An adjunction $L \dashv R : \mathcal{D} \to \mathcal{C}$ is \term{monadic}
+if the canonical comparison functor $K : \mathcal{D} \to \mathcal{C}^T$
+(sending $B$ to $(R(B), R \varepsilon_B)$) is an equivalence of
+categories. Many ``algebraic'' adjunctions are monadic: monoids over
+sets, groups over sets, rings over sets, $R$-modules over abelian groups.
+The Beck monadicity theorem gives a precise criterion (which we will not
+prove here).
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Kleisli Category}
+\label{sec:kleisli}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Effectful Maps as a New Category}
+
+Many ``computations with effects'' have the type $X \to T(Y)$ rather than
+$X \to Y$. A list-valued function $X \to Y^*$. A partial function $X \to
+Y_*$. A relation $X \to \mathcal{P}(Y)$. These should be the morphisms
+of \emph{some} category. They are: the \term{Kleisli category} of $T$.
+
+\subsection{Expanding: Composition of Effectful Maps}
+
+If $f : X \to T(Y)$ and $g : Y \to T(Z)$, how do we compose them? Not
+naively, because the target of $f$ is $T(Y)$, not $Y$. We need to ``lift''
+$g$ to $T(Y) \to T^2(Z)$, then flatten via $\mu$:
+\begin{equation*}
+  g *_K f := \mu_Z \circ T(g) \circ f \;\;:\;\; X \to T(Z).
+\end{equation*}
+This is \term{Kleisli composition}. The identity at $X$ is the unit $\eta_X
+: X \to T(X)$.
+
+\subsection{Formalizing: The Kleisli Category}
+
+For a monad $(T, \eta, \mu)$ on $\mathcal{C}$, the \term{Kleisli category}
+$\mathcal{C}_T$ has:
+\begin{itemize}
+  \item Objects: same as $\mathcal{C}$.
+  \item Morphisms $X \to Y$: morphisms $X \to T(Y)$ in $\mathcal{C}$.
+  \item Composition: Kleisli composition as above.
+  \item Identities: $\eta_X : X \to T(X)$ as the identity at $X$.
+\end{itemize}
+
+\textbf{Theorem.}\quad $\mathcal{C}_T$ is a category. The Kleisli
+adjunction $F_T \dashv U_T$ between $\mathcal{C}$ and $\mathcal{C}_T$
+gives rise to the same monad $T$. Among all adjunctions giving rise to
+$T$, the Kleisli adjunction is the \emph{initial} one (every other such
+adjunction factors uniquely through it), while the EM adjunction is the
+\emph{terminal} one.
+
+\subsection{Reorganizing: EM vs. Kleisli}
+
+Both categories give the same monad $T$. They sit at opposite ends:
+\begin{itemize}
+  \item Kleisli $\mathcal{C}_T$: ``the smallest category whose adjunction
+        yields $T$.''
+  \item Eilenberg--Moore $\mathcal{C}^T$: ``the largest such category.''
+\end{itemize}
+Between them sit all adjunctions giving rise to $T$. The original
+adjunction $L \dashv R$ that we started from sits somewhere in this
+sandwich.
+
+\subsection{Simplifying: Kleisli for Programmers}
+
+In Haskell-flavoured pseudocode:
+\begin{equation*}
+  g *_K f = \lambda x.\; \text{``run $f$ on $x$, then run $g$ on the result, flattened.''}
+\end{equation*}
+This is the \texttt{>>=} (``bind'') operator. The Kleisli category
+formalizes ``programs with $T$-effects.''
+
+\subsection{Formally: Kleisli for the List Monad}
+
+\formalnote{Kleisli for lists}
+For the list monad, $\mathcal{C}_T = \mathbf{Set}_T$ has objects sets and
+morphisms $X \to Y$ given by functions $X \to Y^*$. Kleisli composition
+of $f : X \to Y^*$ and $g : Y \to Z^*$ is: apply $f$ to $x \in X$,
+yielding a list $[y_1, \ldots, y_n]$; apply $g$ to each $y_i$, yielding
+lists $[z_{i1}, \ldots]$; concatenate them all into one list in $Z^*$.
+This is the categorical version of nondeterministic computation.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is a monad on $\mathcal{C}$?}{A triple $(T, \eta, \mu)$ with $T$ an endofunctor, $\eta : \mathrm{Id} \Rightarrow T$, $\mu : T^2 \Rightarrow T$, satisfying associativity and unit laws.}
+\qaitem{What is $\eta$ called?}{The unit (or ``return'').}
+\qaitem{What is $\mu$ called?}{The multiplication (or ``join'').}
+\qaitem{State the associativity law.}{$\mu \circ \mu T = \mu \circ T \mu$.}
+\qaitem{State the two unit laws.}{$\mu \circ \eta T = \mathrm{id}_T = \mu \circ T \eta$.}
+\qaitem{Which functor on $\mathbf{Set}$ gives the list monad?}{The free-monoid functor $X \mapsto X^*$.}
+\qaitem{What is the unit for the list monad?}{$x \mapsto [x]$.}
+\qaitem{What is the multiplication for the list monad?}{Concatenation of lists of lists.}
+\qaitem{What is the Maybe monad?}{$T(X) = X + \{*\}$ with $\eta$ the inclusion and $\mu$ the flattening of nested options.}
+\qaitem{What is the powerset monad?}{$T(X) = \mathcal{P}(X)$ with $\eta = \{-\}$ and $\mu = \bigcup$.}
+\qaitem{How does every adjunction give a monad?}{Set $T = R L$, $\eta$ = adjunction unit, $\mu = R \varepsilon L$.}
+\qaitem{Which adjunction gives the list monad?}{Free monoid (left) $\dashv$ Forgetful (right) on $\mathbf{Set} \rightleftarrows \mathbf{Mon}$.}
+\qaitem{What is a $T$-algebra?}{A pair $(X, \alpha : T X \to X)$ satisfying $\alpha \circ \eta = \mathrm{id}$ and $\alpha \circ \mu = \alpha \circ T \alpha$.}
+\qaitem{What are the algebras for the list monad?}{Monoids.}
+\qaitem{What are the algebras for the powerset monad?}{Complete sup-semilattices.}
+\qaitem{What is a morphism of $T$-algebras?}{A morphism $f$ of underlying objects such that $f \circ \alpha = \beta \circ T f$.}
+\qaitem{What is the Eilenberg--Moore category?}{The category of $T$-algebras and algebra morphisms, denoted $\mathcal{C}^T$.}
+\qaitem{What is the free $T$-algebra on $X$?}{$(T(X), \mu_X)$, the algebra given by the monad's own multiplication.}
+\qaitem{What adjunction does EM provide?}{$F^T \dashv U^T : \mathcal{C}^T \to \mathcal{C}$, where $U^T$ forgets the structure and $F^T$ is the free algebra.}
+\qaitem{What monad does $F^T \dashv U^T$ produce?}{The original $T$.}
+\qaitem{What is the Kleisli category $\mathcal{C}_T$?}{Same objects as $\mathcal{C}$; morphisms $X \to Y$ are morphisms $X \to T(Y)$.}
+\qaitem{What is Kleisli composition?}{$g *_K f = \mu \circ T(g) \circ f$.}
+\qaitem{What is the identity in the Kleisli category?}{$\eta_X : X \to T(X)$.}
+\qaitem{What is the role of $\eta$ in the Kleisli category?}{The identity morphism on each object.}
+\qaitem{How does EM compare to Kleisli?}{EM is the terminal (largest) adjunction giving $T$; Kleisli is the initial (smallest).}
+\qaitem{Is every monad induced by some adjunction?}{Yes, via either EM or Kleisli.}
+\qaitem{What is a comonad?}{The dual of a monad: $(W, \varepsilon, \delta)$ with $\varepsilon : W \Rightarrow \mathrm{Id}$, $\delta : W \Rightarrow W^2$.}
+\qaitem{Slogan: ``A monad is a monoid in \ldots''?}{``\ldots\ the category of endofunctors with composition as tensor.''}
+\qaitem{What does monadicity mean?}{The original adjunction is equivalent to its EM adjunction.}
+\qaitem{Why care about Kleisli in computer science?}{Kleisli composition formalizes ``programs with effects''; bind in Haskell is Kleisli composition.}
+\qaitem{What is the trivial monad?}{The identity functor with $\eta = \mu = \mathrm{id}$.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+A \textbf{monad} on $\mathcal{C}$ is a triple $(T, \eta, \mu)$: an
+endofunctor with a unit and a multiplication satisfying associativity
+and unit laws. ``A monoid in the category of endofunctors.''
+
+Every adjunction $L \dashv R$ gives a monad $T = R L$ with multiplication
+$\mu = R \varepsilon L$. Conversely, every monad is the monad of some
+adjunction --- two canonical choices: \textbf{Eilenberg--Moore} (terminal)
+and \textbf{Kleisli} (initial).
+
+A \textbf{$T$-algebra} is a structure map $\alpha : T X \to X$ subject to
+the monad laws. The category of $T$-algebras is the Eilenberg--Moore
+category $\mathcal{C}^T$. The \textbf{Kleisli category} $\mathcal{C}_T$
+has morphisms $X \to T(Y)$ with Kleisli composition.
+
+For the list monad: algebras are monoids, Kleisli morphisms are
+list-valued (nondeterministic) functions.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Monad.}\quad
+$(T, \eta, \mu)$ on $\mathcal{C}$ with $T : \mathcal{C} \to \mathcal{C}$,
+$\eta : \mathrm{Id} \Rightarrow T$, $\mu : T^2 \Rightarrow T$, satisfying
+\begin{align*}
+  \mu \circ \mu T = \mu \circ T \mu, \qquad
+  \mu \circ \eta T = \mathrm{id}_T = \mu \circ T \eta.
+\end{align*}
+
+\medskip
+\textbf{Adjunction $\Rightarrow$ monad.}\quad
+$L \dashv R$ yields $(R L, \eta, R \varepsilon L)$.
+
+\medskip
+\textbf{$T$-algebra.}\quad
+$(X, \alpha : T X \to X)$ with $\alpha \circ \eta_X = \mathrm{id}_X$ and
+$\alpha \circ \mu_X = \alpha \circ T \alpha$.
+
+\medskip
+\textbf{EM category.}\quad
+$\mathcal{C}^T$, the category of $T$-algebras and algebra morphisms;
+canonically adjoint to $\mathcal{C}$, producing $T$.
+
+\medskip
+\textbf{Kleisli category.}\quad
+$\mathcal{C}_T$, with $\mathrm{Hom}_{\mathcal{C}_T}(X, Y) = \mathrm{Hom}_\mathcal{C}(X, T Y)$
+and Kleisli composition $g *_K f = \mu \circ T(g) \circ f$.
+
+\medskip
+\textbf{Slogan.}\quad ``A monad is a monoid in the category of endofunctors.''
+
+\medskip
+\noindent\textit{Chapter~9 develops the Yoneda Lemma --- the master
+theorem that ties together representable functors, naturality, and
+universal properties.}
+\end{formalrestatement}

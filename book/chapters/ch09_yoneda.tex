@@ -1,0 +1,524 @@
+\chapter{The Yoneda Lemma}
+
+\begin{overviewbox}
+We come now to the most quoted single theorem of category theory:
+the \term{Yoneda Lemma}. The statement is short. The consequences are
+vast.
+
+The starting point is the family of \term{hom-functors}. For each object
+$A$ of $\mathcal{C}$, the functor $\mathrm{Hom}(A, -) : \mathcal{C} \to
+\mathbf{Set}$ records ``how the rest of $\mathcal{C}$ maps out of $A$.''
+This is a functor that captures $A$ \emph{from outside}: not what $A$ is
+made of, but how it sits in the web of morphisms.
+
+The Yoneda Lemma says, in one line:
+\begin{equation*}
+  \mathrm{Nat}(\mathrm{Hom}(A, -), F) \;\cong\; F(A).
+\end{equation*}
+Read: ``Natural transformations from $\mathrm{Hom}(A, -)$ into any functor
+$F$ are in bijection with elements of $F(A)$.'' The bijection is given by
+``evaluate the transformation at the identity $\mathrm{id}_A$.''
+
+From this short statement flow many fundamental facts:
+\begin{itemize}
+  \item An object is completely determined by its hom-functor (up to iso).
+        This is the \term{Yoneda embedding} of $\mathcal{C}$ into
+        $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$.
+  \item Universal properties can be cleanly recast as
+        \term{representability}: a functor is representable iff it is
+        isomorphic to some $\mathrm{Hom}(A, -)$.
+  \item Many ``natural'' constructions in mathematics are, after Yoneda,
+        just \emph{evaluation at the right object}.
+\end{itemize}
+We give the lemma, prove it, and then walk through its three signature
+applications.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Hom-Functors and Representability}
+\label{sec:hom-functors}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: An Object Seen Through Its Outgoing Maps}
+
+Fix an object $A$ in $\mathcal{C}$. For each object $B$, the hom-set
+$\mathrm{Hom}(A, B)$ tells us ``how many ways there are to map $A$ into
+$B$, and what they look like.'' As $B$ varies, these hom-sets fit
+together into a functor $\mathrm{Hom}(A, -) : \mathcal{C} \to
+\mathbf{Set}$, with action on a morphism $g : B \to C$ given by
+postcomposition: $g_* (f) = g \circ f$.
+
+The functor $\mathrm{Hom}(A, -)$ \emph{is} $A$, seen from outside.
+Everything about how $A$ relates to other objects is recorded there.
+
+\subsection{Expanding: The Two Hom-Functors}
+
+\begin{example}{Covariant Hom-Functor}
+$\mathrm{Hom}(A, -) : \mathcal{C} \to \mathbf{Set}$ sends:
+\begin{itemize}
+  \item Object $B$ to the set $\mathrm{Hom}(A, B)$.
+  \item Morphism $g : B \to C$ to the function
+        $g_* = (g \circ -) : \mathrm{Hom}(A, B) \to \mathrm{Hom}(A, C)$.
+\end{itemize}
+Functoriality is immediate: $(g \circ f)_* = g_* \circ f_*$ and
+$(\mathrm{id})_* = \mathrm{id}$, both by associativity and identity laws.
+\end{example}
+
+\begin{example}{Contravariant Hom-Functor}
+$\mathrm{Hom}(-, A) : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ sends:
+\begin{itemize}
+  \item Object $B$ to the set $\mathrm{Hom}(B, A)$.
+  \item Morphism $g : B \to C$ (in $\mathcal{C}$, reversed in
+        $\mathcal{C}^{\mathrm{op}}$) to the function $g^* = (- \circ g)
+        : \mathrm{Hom}(C, A) \to \mathrm{Hom}(B, A)$, given by
+        \emph{pre}composition.
+\end{itemize}
+\end{example}
+
+\begin{dialog}
+Two hom-functors per object, one covariant and one contravariant. The
+covariant one is ``maps out of $A$''; the contravariant is ``maps into
+$A$.''
+\end{dialog}
+
+\subsection{Formalizing: Representable Functors}
+
+A functor $F : \mathcal{C} \to \mathbf{Set}$ is \term{representable} if
+there exists an object $A$ of $\mathcal{C}$ and a natural isomorphism
+\begin{equation*}
+  F \;\cong\; \mathrm{Hom}(A, -).
+\end{equation*}
+The object $A$ is called a \term{representing object} for $F$ (it is
+unique up to isomorphism when it exists).
+
+Dually, $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is representable
+if $F \cong \mathrm{Hom}(-, A)$ for some $A$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``representable'' --- the functor is ``representable by $A$.''
+  \item $\mathrm{Hom}(A, -)$ --- ``the covariant hom out of $A$,''
+        ``$A$'s functor of points,'' or simply ``the representable at $A$.''
+  \item $\mathrm{Hom}(-, A)$ --- ``the contravariant hom into $A$,'' or
+        ``the representable presheaf at $A$.''
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Universal Properties as Representability}
+
+Most universal properties can be repackaged as ``the functor of $X$ with
+such-and-such property is representable.'' For example: a product
+$A \times B$ represents the functor $X \mapsto \mathrm{Hom}(X, A) \times
+\mathrm{Hom}(X, B)$. A pullback represents the functor of pairs of
+morphisms agreeing under composition. This packaging is uniform, and it
+is the door to the Yoneda Lemma.
+
+\subsection{Simplifying: The Hom-Functor Recipe}
+
+To check whether $F : \mathcal{C} \to \mathbf{Set}$ is representable, look
+for an $A$ such that $F(B) \cong \mathrm{Hom}(A, B)$ in a way natural in $B$.
+If such an $A$ exists, $F$ is representable; the universal element of $F$
+is the image of $\mathrm{id}_A$ in $F(A)$ under the corresponding isomorphism.
+
+\subsection{Formally: Naturality of the Hom-Functor}
+
+\formalnote{$\mathrm{Hom}$ as a bifunctor}
+The two-sided $\mathrm{Hom}(-, -) : \mathcal{C}^{\mathrm{op}} \times
+\mathcal{C} \to \mathbf{Set}$ is a bifunctor: contravariant in the first
+slot, covariant in the second. The covariant and contravariant
+hom-functors are obtained by fixing the appropriate slot.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Yoneda Lemma}
+\label{sec:yoneda-statement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Natural Transformation Is Just an Element}
+
+Suppose we are given a functor $F : \mathcal{C} \to \mathbf{Set}$ and an
+object $A$ of $\mathcal{C}$. How many natural transformations $\alpha :
+\mathrm{Hom}(A, -) \Rightarrow F$ are there?
+
+Pick any natural transformation $\alpha$. Its component at $A$ is a
+function $\alpha_A : \mathrm{Hom}(A, A) \to F(A)$. Apply it to the special
+element $\mathrm{id}_A \in \mathrm{Hom}(A, A)$:
+\begin{equation*}
+  x = \alpha_A(\mathrm{id}_A) \in F(A).
+\end{equation*}
+The Yoneda Lemma says: this single element $x$ determines $\alpha$
+\emph{completely}, and conversely every $x \in F(A)$ arises this way from
+a unique $\alpha$.
+
+\subsection{Expanding: The Bijection}
+
+Given $x \in F(A)$, define $\alpha^x : \mathrm{Hom}(A, -) \Rightarrow F$
+by:
+\begin{equation*}
+  \alpha^x_B(f : A \to B) := F(f)(x) \in F(B).
+\end{equation*}
+That is, transport $x$ from $F(A)$ to $F(B)$ along $F(f)$.
+
+The two assignments
+\begin{align*}
+  \alpha \;\mapsto\; \alpha_A(\mathrm{id}_A) \quad\text{and}\quad
+  x \;\mapsto\; \alpha^x
+\end{align*}
+are inverse to each other. They establish a bijection between natural
+transformations $\mathrm{Hom}(A, -) \Rightarrow F$ and elements of $F(A)$.
+
+\subsection{Formalizing: The Statement}
+
+\textbf{The Yoneda Lemma.}\quad For any functor $F : \mathcal{C} \to
+\mathbf{Set}$ and any object $A$ of $\mathcal{C}$, there is a bijection
+\begin{equation*}
+  \boxed{\;
+    \mathrm{Nat}(\mathrm{Hom}(A, -),\; F)
+    \;\xrightarrow{\;\cong\;}\;
+    F(A),
+    \quad
+    \alpha \;\mapsto\; \alpha_A(\mathrm{id}_A).
+  \;}
+\end{equation*}
+This bijection is natural in both $A$ (contravariantly) and $F$ (covariantly).
+
+\textbf{Proof.}\quad The map ``$\alpha \mapsto \alpha_A(\mathrm{id}_A)$''
+is well-defined. We exhibit an inverse: given $x \in F(A)$, define
+$\alpha^x_B(f) := F(f)(x)$. Naturality of $\alpha^x$ comes for free from
+functoriality of $F$:
+\begin{align*}
+  \alpha^x_C(g \circ f)
+    &= F(g \circ f)(x)
+       && \text{(definition)} \\
+    &= F(g)(F(f)(x))
+       && \text{(functoriality)} \\
+    &= F(g)(\alpha^x_B(f))
+       && \text{(definition)}.
+\end{align*}
+This is the naturality square at the morphism $g : B \to C$ applied to
+$f$.
+
+To see ``$\alpha \mapsto \alpha_A(\mathrm{id}_A) \mapsto \alpha^{\alpha_A(\mathrm{id}_A)}$''
+is the identity, fix any $f : A \to B$. We need
+$\alpha^{\alpha_A(\mathrm{id}_A)}_B(f) = \alpha_B(f)$:
+\begin{align*}
+  \alpha^{\alpha_A(\mathrm{id}_A)}_B(f)
+    &= F(f)(\alpha_A(\mathrm{id}_A))
+       && \text{(definition of $\alpha^{(-)}$)} \\
+    &= \alpha_B(f \circ \mathrm{id}_A)
+       && \text{(naturality of $\alpha$ at $f$)} \\
+    &= \alpha_B(f).
+\end{align*}
+The reverse composite ``$x \mapsto \alpha^x \mapsto \alpha^x_A(\mathrm{id}_A)$''
+gives $F(\mathrm{id}_A)(x) = x$. So we have inverse bijections. \qed
+
+\subsection{Reorganizing: The Contravariant Version}
+
+Dually, for a contravariant functor $F : \mathcal{C}^{\mathrm{op}} \to
+\mathbf{Set}$:
+\begin{equation*}
+  \mathrm{Nat}(\mathrm{Hom}(-, A),\; F) \;\cong\; F(A).
+\end{equation*}
+The bijection again sends $\alpha$ to $\alpha_A(\mathrm{id}_A)$.
+
+\subsection{Simplifying: The One-Line Slogan}
+
+\begin{equation*}
+  \boxed{\;\;
+    \mathrm{Nat}(\mathrm{Hom}(A,-), F) \;\cong\; F(A)
+    \;\;\text{(natural in $A$, $F$).}
+  \;\;}
+\end{equation*}
+
+\subsection{Formally: Naturality of the Yoneda Isomorphism}
+
+\formalnote{Naturality in $F$ and $A$}
+The bijection of the Yoneda Lemma is natural in two variables. For a
+morphism $f : A' \to A$ in $\mathcal{C}$, we get a natural transformation
+$f^* : \mathrm{Hom}(A, -) \Rightarrow \mathrm{Hom}(A', -)$ given by
+precomposition, and the Yoneda bijection respects this. For a natural
+transformation $\theta : F \Rightarrow G$, we similarly get compatible
+maps. These coherences are what allow Yoneda to upgrade to the Yoneda
+\emph{embedding}.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Yoneda Embedding}
+\label{sec:yoneda-embedding}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Category Inside a Bigger Category}
+
+Apply Yoneda with $F = \mathrm{Hom}(B, -)$ for a second object $B$:
+\begin{equation*}
+  \mathrm{Nat}(\mathrm{Hom}(A, -),\; \mathrm{Hom}(B, -)) \;\cong\; \mathrm{Hom}(B, A).
+\end{equation*}
+So natural transformations between the hom-functors of $A$ and $B$ are
+exactly the morphisms $B \to A$ in $\mathcal{C}$. The hom-functors faithfully
+encode $\mathcal{C}$.
+
+This gives us a functor: take each object $A$ to its (contravariant)
+hom-functor $\mathrm{Hom}(-, A)$. The Yoneda Lemma says this functor is
+fully faithful. We have embedded $\mathcal{C}$ inside the much larger
+category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ of presheaves on
+$\mathcal{C}$.
+
+\subsection{Expanding: The Embedding in Detail}
+
+Define
+\begin{equation*}
+  \mathit{Y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]
+\end{equation*}
+by $\mathit{Y}(A) = \mathrm{Hom}(-, A)$ on objects, and
+$\mathit{Y}(g : A \to A') = (- \circ g)_*$ on morphisms (postcomposition
+with $g$ in each component).
+
+By the Yoneda Lemma applied to $F = \mathrm{Hom}(-, A')$:
+\begin{equation*}
+  \mathrm{Hom}_{[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]}(\mathit{Y}(A), \mathit{Y}(A'))
+  \;\cong\; \mathrm{Hom}(-, A')(A) = \mathrm{Hom}(A, A').
+\end{equation*}
+So $\mathit{Y}$ is fully faithful: it gives a bijection between morphisms
+in $\mathcal{C}$ and natural transformations between the representable
+presheaves. Hence $\mathcal{C}$ sits inside
+$[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ as a full subcategory, via the
+Yoneda embedding.
+
+\subsection{Formalizing: The Embedding Theorem}
+
+\textbf{Theorem (Yoneda Embedding).}\quad The functor
+\begin{equation*}
+  \mathit{Y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}],
+  \quad
+  A \mapsto \mathrm{Hom}(-, A)
+\end{equation*}
+is fully faithful. It identifies $\mathcal{C}$ with the full subcategory
+of representable presheaves.
+
+\subsection{Reorganizing: Three Consequences}
+
+\textbf{1. Objects are determined by their hom-functors.}\quad
+If $\mathrm{Hom}(-, A) \cong \mathrm{Hom}(-, B)$ as presheaves, then
+$A \cong B$. (A fully faithful functor reflects isomorphism.)
+
+\textbf{2. Universal properties name objects up to canonical iso.}\quad
+A universal property describes an object as the representing object of a
+functor. By Yoneda, this object is unique up to canonical iso.
+
+\textbf{3. ``$\mathbf{Set}$ is the universe of presheaves.''}\quad
+$[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is the ``free completion'' of
+$\mathcal{C}$ under colimits, in a precise sense. Every presheaf is a
+colimit of representables.
+
+\subsection{Simplifying: The Yoneda Slogan}
+
+\begin{equation*}
+  \boxed{\;\;
+    \mathcal{C} \hookrightarrow [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}],
+    \;\;
+    A \mapsto \mathrm{Hom}(-, A).
+  \;\;}
+\end{equation*}
+
+\subsection{Formally: Presheaves and Probing}
+
+\formalnote{Presheaves}
+A \term{presheaf on $\mathcal{C}$} is a functor $\mathcal{C}^{\mathrm{op}}
+\to \mathbf{Set}$. Yoneda says $\mathcal{C}$ embeds in its category of
+presheaves. The full subcategory of representable presheaves is
+$\mathit{Y}(\mathcal{C})$, equivalent to $\mathcal{C}$ itself.
+
+\formalnote{Probing with representables}
+For any presheaf $F$, the Yoneda Lemma says $F(A) \cong
+\mathrm{Nat}(\mathit{Y} A, F)$. So evaluating $F$ at $A$ is the same as
+``probing'' $F$ with the representable at $A$. This is the perspective
+that motivates the slogan ``points of a sheaf are maps from a
+representable.''
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Applications of Yoneda}
+\label{sec:yoneda-apps}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Three Patterns, One Theorem}
+
+We have three signature uses of Yoneda. Each is a translation: ``a
+property of an object'' becomes ``a property of the corresponding
+representable.''
+
+\subsection{Expanding: Three Applications}
+
+\begin{example}{Application 1: Adjunctions Restated}
+$L \dashv R$ iff $\mathrm{Hom}(L A, B) \cong \mathrm{Hom}(A, R B)$
+naturally. By Yoneda, this is the same as a natural isomorphism
+$\mathrm{Hom}(L A, -) \cong \mathrm{Hom}(A, R -)$, or alternatively
+$\mathrm{Hom}(-, R B) \cong \mathrm{Hom}(L -, B)$. So adjunction is a
+relation between hom-functors, exposed by Yoneda.
+\end{example}
+
+\begin{example}{Application 2: Equality of Functors}
+To show two functors $F, G : \mathcal{C} \to \mathcal{D}$ are isomorphic,
+it suffices to show $\mathrm{Hom}(-, F(A)) \cong \mathrm{Hom}(-, G(A))$
+naturally in $A$. By Yoneda, this is equivalent to $F(A) \cong G(A)$
+canonically, hence to $F \cong G$ as functors. Many ``$F = G$'' arguments
+in practice are Yoneda arguments in disguise.
+\end{example}
+
+\begin{example}{Application 3: Representability Lifts}
+If $F$ is representable, then $F$ preserves all (small) limits that exist
+in $\mathcal{C}$. (This is a special case of the fact from Chapter~6 that
+$\mathrm{Hom}(A, -)$ preserves limits.) So representability is a strong
+constraint: it forces a functor to be limit-preserving.
+\end{example}
+
+\subsection{Formalizing: Density of Representables}
+
+\textbf{Theorem (Density).}\quad Every presheaf $F : \mathcal{C}^{\mathrm{op}}
+\to \mathbf{Set}$ is canonically a colimit of representables. More
+specifically, $F$ is the colimit of the diagram
+\begin{equation*}
+  \mathrm{el}(F) \to \mathcal{C} \xrightarrow{\mathit{Y}}
+  [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}],
+\end{equation*}
+where $\mathrm{el}(F)$ is the category of elements of $F$ (pairs $(A, x)$
+with $x \in F(A)$).
+
+\subsection{Reorganizing: The Yoneda Toolkit}
+
+To use Yoneda effectively:
+\begin{enumerate}
+  \item Translate the problem about objects of $\mathcal{C}$ into a
+        problem about representable presheaves.
+  \item Use the embedding's full-faithfulness or the Yoneda bijection.
+  \item Translate back if needed.
+\end{enumerate}
+
+This is the move ``check on representables.'' It is sometimes called
+\emph{the Yoneda manoeuvre} or simply \emph{by Yoneda}.
+
+\subsection{Simplifying: The Yoneda Maxim}
+
+\begin{quote}
+\textit{To know an object, know its hom-functor. To know a functor, know
+how it acts on representables. To compare two things, compare them on
+representables.}
+\end{quote}
+
+\subsection{Formally: The Co-Yoneda Lemma}
+
+\formalnote{Co-Yoneda}
+The dual statement: for a presheaf $F$, the canonical map from the colimit
+$\int^A F(A) \times \mathrm{Hom}(-, A)$ to $F$ is an isomorphism. This is
+the formal statement of ``every presheaf is a colimit of representables.''
+The notation $\int^A$ here is a coend, a kind of co-limit indexed over a
+``twisted'' diagram. Coends are beyond the scope of this chapter.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is $\mathrm{Hom}(A, -)$?}{The functor $\mathcal{C} \to \mathbf{Set}$ sending $B$ to the set of morphisms $A \to B$.}
+\qaitem{Is $\mathrm{Hom}(A, -)$ covariant or contravariant?}{Covariant.}
+\qaitem{What is $\mathrm{Hom}(-, A)$?}{The functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ sending $B$ to morphisms $B \to A$.}
+\qaitem{How does $\mathrm{Hom}(A, -)$ act on $g : B \to C$?}{Postcomposition: $f \mapsto g \circ f$.}
+\qaitem{How does $\mathrm{Hom}(-, A)$ act on $g : B \to C$?}{Precomposition: $f \mapsto f \circ g$.}
+\qaitem{What does it mean for $F$ to be representable?}{$F \cong \mathrm{Hom}(A, -)$ for some $A$.}
+\qaitem{Is the representing object unique?}{Yes, up to isomorphism.}
+\qaitem{State the Yoneda Lemma.}{$\mathrm{Nat}(\mathrm{Hom}(A, -), F) \cong F(A)$.}
+\qaitem{What is the explicit bijection?}{$\alpha \mapsto \alpha_A(\mathrm{id}_A)$.}
+\qaitem{What is the inverse map?}{$x \mapsto \alpha^x$ where $\alpha^x_B(f) = F(f)(x)$.}
+\qaitem{Why is the inverse $\alpha^x$ natural?}{Because $F$ is a functor: $F(g \circ f) = F(g) F(f)$.}
+\qaitem{What does $\alpha_A(\mathrm{id}_A)$ represent?}{The ``universal element'' that determines $\alpha$.}
+\qaitem{Yoneda for contravariant functors: state it.}{$\mathrm{Nat}(\mathrm{Hom}(-, A), F) \cong F(A)$ for $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{What is the Yoneda embedding?}{The functor $A \mapsto \mathrm{Hom}(-, A)$ from $\mathcal{C}$ into $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$.}
+\qaitem{Is the Yoneda embedding faithful?}{Yes.}
+\qaitem{Is it full?}{Yes (this is what the Yoneda Lemma supplies).}
+\qaitem{So the Yoneda embedding is what?}{Fully faithful.}
+\qaitem{What is a presheaf on $\mathcal{C}$?}{A functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{What is a representable presheaf?}{One of the form $\mathrm{Hom}(-, A)$.}
+\qaitem{Consequence: when are two objects isomorphic?}{Iff their representables are isomorphic as presheaves.}
+\qaitem{Hom-functors preserve what?}{All small limits.}
+\qaitem{Therefore representable functors preserve what?}{All small limits.}
+\qaitem{What does the density theorem say?}{Every presheaf is canonically a colimit of representables.}
+\qaitem{What is the slogan for using Yoneda?}{``Check on representables.''}
+\qaitem{Yoneda restatement of adjunction $L \dashv R$?}{$\mathrm{Hom}(L A, -) \cong \mathrm{Hom}(A, R -)$ as natural transformations.}
+\qaitem{Yoneda restatement of $A \cong B$?}{$\mathrm{Hom}(A, -) \cong \mathrm{Hom}(B, -)$ naturally.}
+\qaitem{What is the ``category of elements'' of a presheaf $F$?}{The category with objects $(A, x)$, $x \in F(A)$, and morphisms $f : A \to A'$ with $F(f)(x') = x$.}
+\qaitem{Why is the Yoneda Lemma considered ``deep''?}{It links naturality, representability, and elements in a single short statement.}
+\qaitem{What was the most surprising consequence to you?}{Often: that universal properties identify objects up to unique iso \emph{via Yoneda}.}
+\qaitem{Does Yoneda hold for general $\mathcal{V}$-enriched categories?}{Yes; it generalizes essentially verbatim, with $\mathbf{Set}$ replaced by $\mathcal{V}$.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+The \textbf{hom-functors} $\mathrm{Hom}(A, -)$ and $\mathrm{Hom}(-, A)$
+record how an object $A$ relates to all others. A functor is
+\textbf{representable} if it is naturally isomorphic to such a hom-functor.
+
+The \textbf{Yoneda Lemma}: natural transformations from
+$\mathrm{Hom}(A, -)$ to any functor $F$ are in bijection with elements
+of $F(A)$. Explicitly: $\alpha \mapsto \alpha_A(\mathrm{id}_A)$.
+
+The \textbf{Yoneda Embedding} $A \mapsto \mathrm{Hom}(-, A)$ is fully
+faithful, embedding $\mathcal{C}$ into the presheaf category
+$[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$.
+
+Consequence: objects are determined by their hom-functors (up to iso),
+representable functors preserve limits, and every presheaf is a colimit
+of representables (\textbf{density}).
+
+The slogan: \textbf{check on representables}.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Hom-functor.}\quad
+$\mathrm{Hom}(A, -) : \mathcal{C} \to \mathbf{Set}$ sends $B$ to
+$\mathrm{Hom}(A, B)$ and $g : B \to C$ to $g_* = (g \circ -)$.
+
+\medskip
+\textbf{Representability.}\quad
+$F : \mathcal{C} \to \mathbf{Set}$ is representable iff
+$F \cong \mathrm{Hom}(A, -)$ for some $A$.
+
+\medskip
+\textbf{Yoneda Lemma.}\quad
+For $F : \mathcal{C} \to \mathbf{Set}$ and $A \in \mathcal{C}$:
+\begin{equation*}
+  \mathrm{Nat}(\mathrm{Hom}(A, -),\; F) \;\cong\; F(A),
+  \quad \alpha \;\mapsto\; \alpha_A(\mathrm{id}_A).
+\end{equation*}
+The bijection is natural in $A$ and $F$.
+
+\medskip
+\textbf{Yoneda Embedding.}\quad
+$\mathit{Y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$,
+$A \mapsto \mathrm{Hom}(-, A)$. Fully faithful.
+
+\medskip
+\textbf{Density.}\quad
+Every presheaf $F$ is a colimit of representables, indexed by
+$\mathrm{el}(F)$.
+
+\medskip
+\noindent\textit{Chapter~10 uses representability and Yoneda to develop
+the Adjoint Functor Theorems --- general existence theorems for left and
+right adjoints.}
+\end{formalrestatement}

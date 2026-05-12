@@ -1,0 +1,474 @@
+\chapter{Adjoint Functor Theorems}
+
+\begin{overviewbox}
+Chapter 7 explained \emph{what} adjunctions are and showed that they are
+ubiquitous. But it left open a hard question: given a functor $R$, how do
+we know whether it has a left adjoint? In examples we often guess the
+left adjoint and verify the bijection. But for many naturally occurring
+functors there is no obvious candidate.
+
+This chapter develops the \term{Adjoint Functor Theorems} (AFTs):
+existence theorems that say, under suitable conditions, the answer is
+yes. The two main statements are:
+
+\begin{itemize}
+  \item \term{The General Adjoint Functor Theorem (GAFT)}.\quad
+        If $R$ preserves all small limits and satisfies a smallness
+        condition (the \emph{solution-set condition}), then $R$ has a
+        left adjoint.
+  \item \term{The Special Adjoint Functor Theorem (SAFT)}.\quad
+        If $R$ preserves all small limits, and its source category is
+        \emph{well-powered, complete, and has a small cogenerating set},
+        then $R$ has a left adjoint.
+\end{itemize}
+
+The dual statements give criteria for right adjoints. Behind both
+theorems lies the same idea: a left adjoint $L A$ would have to be the
+``initial object'' in the category of $A$-pointed targets; the theorems
+provide conditions guaranteeing this initial object exists.
+
+This is the natural climax of the book to date. We have built the cycle
+all the way from objects and morphisms through limits, adjunctions, and
+Yoneda. The Adjoint Functor Theorems use \emph{all} of this machinery.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Adjoint Functor Question}
+\label{sec:aft-question}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Existence Without Construction}
+
+When we have an explicit construction of a left adjoint (free monoid,
+free group, free abelian group, abelianization, \ldots), we can check
+the hom-set bijection directly. But the categorical perspective sometimes
+gives us a functor $R$ \emph{first}, and asks whether a left adjoint
+\emph{exists}, without telling us how to build one.
+
+For example: ``Does the inclusion of compact Hausdorff spaces into all
+topological spaces have a left adjoint?'' Yes --- it is the
+Stone--\v{C}ech compactification. But this is a hard theorem to prove
+directly; one might want a general criterion that gives existence for
+free.
+
+The Adjoint Functor Theorems are exactly such criteria.
+
+\subsection{Expanding: A Reformulation via Initial Objects}
+
+Suppose we want a left adjoint $L A$ for a fixed object $A$ of $\mathcal{C}$.
+Define the \term{comma category} $(A \downarrow R)$:
+\begin{itemize}
+  \item Objects: pairs $(B, f)$ with $B \in \mathcal{D}$ and $f : A \to R B$.
+  \item Morphisms $(B, f) \to (B', f')$: morphisms $g : B \to B'$ in
+        $\mathcal{D}$ such that $R(g) \circ f = f'$.
+\end{itemize}
+The object $L A$ together with the unit $\eta_A : A \to R(L A)$ is an
+\emph{initial object} of $(A \downarrow R)$: every other pair $(B, f)$
+admits a unique morphism from $(L A, \eta_A)$ to itself. So:
+\begin{quote}
+\textit{Existence of $L A$ $\;\iff\;$ existence of an initial object in
+the comma category $(A \downarrow R)$.}
+\end{quote}
+
+So the existence of a left adjoint reduces to: do certain comma
+categories all have initial objects?
+
+\subsection{Formalizing: The Reduction}
+
+\textbf{Theorem.}\quad A functor $R : \mathcal{D} \to \mathcal{C}$ has a
+left adjoint $L$ iff for every $A \in \mathcal{C}$, the comma category
+$(A \downarrow R)$ has an initial object. In that case, the initial object
+of $(A \downarrow R)$ is $(L A, \eta_A)$, where $\eta$ is the unit.
+
+This is the universal-arrow form of the adjunction (\S 7.1, the third
+equivalent definition).
+
+\subsection{Reorganizing: When Does $(A \downarrow R)$ Have an Initial Object?}
+
+In general, having an initial object is a \emph{strong} condition --- many
+categories have none. But $(A \downarrow R)$ inherits structure from
+$\mathcal{C}$ and $\mathcal{D}$. The strategy of the AFTs is:
+
+\begin{itemize}
+  \item \textbf{Get limits in $(A \downarrow R)$.}\quad If $R$ preserves
+        limits in $\mathcal{D}$ and $\mathcal{C}$ has the right
+        properties, then $(A \downarrow R)$ has small limits.
+  \item \textbf{Take a weakly initial set.}\quad A \emph{set} of objects
+        from which every other object has a morphism. Limits over the
+        weakly initial set yield an initial object.
+\end{itemize}
+
+The smallness condition --- existence of a weakly initial set --- is
+exactly the \term{solution-set condition} of GAFT.
+
+\subsection{Simplifying: The Strategy in One Sentence}
+
+\textit{To show $R$ has a left adjoint, show $R$ preserves small limits
+and that for each $A$ the ``cone of targets'' over $A$ is small.}
+
+\subsection{Formally: Comma Categories Live Above Both Sides}
+
+\formalnote{Comma categories}
+The comma category $(A \downarrow R)$ has projection functors to both
+$\mathcal{C}$ (constant at $A$, essentially) and $\mathcal{D}$ (sending
+$(B, f)$ to $B$). Limits in $(A \downarrow R)$ are computed by taking
+limits of the underlying objects and morphisms; the universal property of
+the projection makes this work.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The General Adjoint Functor Theorem}
+\label{sec:gaft}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Limits + Smallness $\Rightarrow$ Adjoint}
+
+GAFT is the most general of the adjoint-functor theorems.
+
+\textbf{Theorem (Freyd's General Adjoint Functor Theorem).}\quad Let
+$\mathcal{D}$ be a complete category, and $R : \mathcal{D} \to \mathcal{C}$
+a functor. Then $R$ has a left adjoint iff:
+
+\begin{enumerate}
+  \item $R$ preserves all small limits, and
+  \item $R$ satisfies the \term{solution-set condition}: for every
+        $A \in \mathcal{C}$, there is a set $I$ of objects
+        $\{B_i\}_{i \in I}$ in $\mathcal{D}$ and morphisms
+        $f_i : A \to R(B_i)$ such that every morphism $A \to R B$ in
+        $\mathcal{C}$ factors as $A \xrightarrow{f_i} R B_i
+        \xrightarrow{R(g)} R B$ for some $i$ and some $g : B_i \to B$
+        in $\mathcal{D}$.
+\end{enumerate}
+
+\subsection{Expanding: Reading the Solution-Set Condition}
+
+The solution-set condition says: for each $A$, there is a \emph{set} (not
+a proper class) of ``candidate units'' $f_i : A \to R(B_i)$ such that
+every actual unit factors through one of them. This is a
+\emph{smallness} condition --- it tames a potentially proper-class-sized
+collection of candidates down to a set.
+
+In practice, the solution-set condition holds in any reasonable
+category. The condition is automatic if $\mathcal{D}$ has, for instance,
+a small dense subcategory or a small cogenerating set.
+
+\subsection{Formalizing: The Statement, Again}
+
+For clarity, restate. Given $R : \mathcal{D} \to \mathcal{C}$ with
+$\mathcal{D}$ complete:
+
+\begin{align*}
+  & R \text{ has a left adjoint } L \\
+  \iff\;
+  & R \text{ preserves small limits} \\
+  & \quad \text{and for each } A \in \mathcal{C},
+    \;\; \exists \text{ set } \{(B_i, f_i)\}_{i \in I} \\
+  & \quad \text{such that any } (B, f) \text{ factors through some } (B_i, f_i).
+\end{align*}
+
+\textbf{Proof sketch.}\quad ($\Leftarrow$) Build $L A$ as the limit of
+the diagram of all factorizations in the comma category through the
+solution set. Use limit-preservation of $R$ to verify the universal
+property. The solution-set condition is what guarantees this limit is
+indexed by a small enough diagram.
+
+($\Rightarrow$) If $L$ exists, then $(L A, \eta_A)$ is the initial object
+of $(A \downarrow R)$; take $\{L A\}$ to be the solution set. Limit
+preservation is RAPL. \qed
+
+\subsection{Reorganizing: When Each Hypothesis Bites}
+
+\textbf{Completeness of $\mathcal{D}$} is what lets us construct $L A$
+as a limit.
+
+\textbf{$R$ preserves limits} is what makes the constructed $L A$ have
+the right universal property.
+
+\textbf{Solution-set condition} is what makes the construction
+\emph{size-feasible}: without it, the relevant ``limit'' would be over a
+proper class.
+
+\subsection{Simplifying: GAFT as a Recipe}
+
+To verify GAFT:
+\begin{enumerate}
+  \item Check $\mathcal{D}$ has all small limits.
+  \item Check $R$ preserves them.
+  \item Check the solution-set condition (often the trickiest step).
+\end{enumerate}
+
+\subsection{Formally: The Dual for Right Adjoints}
+
+\formalnote{GAFT for right adjoints}
+By duality: a functor $L : \mathcal{C} \to \mathcal{D}$ with
+$\mathcal{D}$ cocomplete has a right adjoint iff $L$ preserves all small
+colimits and satisfies the dual solution-set condition.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Special Adjoint Functor Theorem}
+\label{sec:saft}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Cleaner Statement Under Extra Conditions}
+
+GAFT is general but requires checking the solution-set condition, which
+is sometimes awkward. SAFT replaces the solution-set condition with two
+cleaner structural assumptions on $\mathcal{D}$: \emph{well-poweredness}
+and \emph{a small cogenerating set}.
+
+\subsection{Expanding: Well-Powered and Cogenerating}
+
+\textbf{Well-powered.}\quad A category $\mathcal{D}$ is
+\term{well-powered} if for every object $B$, the collection of
+subobjects of $B$ (equivalence classes of monomorphisms into $B$) is a
+set, not a proper class. This holds in almost every category one meets
+in practice.
+
+\textbf{Cogenerating set.}\quad A set $\{S_j\}_{j \in J}$ in $\mathcal{D}$
+is \term{cogenerating} (or a ``set of cogenerators'') if the functor
+\begin{equation*}
+  \mathcal{D} \to \prod_j \mathbf{Set},
+  \quad
+  B \mapsto (\mathrm{Hom}(B, S_j))_{j \in J}
+\end{equation*}
+is faithful; equivalently, morphisms $f, g : B \to B'$ are equal iff
+$h \circ f = h \circ g$ for every $h : B' \to S_j$ for every $j$.
+
+\subsection{Formalizing: SAFT}
+
+\textbf{Theorem (Special Adjoint Functor Theorem).}\quad Let
+$\mathcal{D}$ be complete, well-powered, and have a small cogenerating
+set. Let $R : \mathcal{D} \to \mathcal{C}$ be a functor. Then $R$ has a
+left adjoint iff $R$ preserves all small limits.
+
+\subsection{Reorganizing: Why SAFT Is Easier}
+
+The two structural conditions on $\mathcal{D}$ (well-powered and
+cogenerating set) together imply the solution-set condition of GAFT for
+every $R$. So under SAFT's hypotheses, you do not need to verify
+solution-sets separately; you only check limit-preservation.
+
+In categories like $\mathbf{CHaus}$ (compact Hausdorff spaces) or any
+locally presentable category, SAFT's hypotheses are automatic, so the
+existence of an adjoint reduces to checking limit-preservation.
+
+\subsection{Simplifying: SAFT in Practice}
+
+For ``well-behaved'' target categories: limit-preservation is enough.
+
+\subsection{Formally: Locally Presentable Categories}
+
+\formalnote{A modern reformulation}
+The most powerful adjoint-functor theorem in current use is the AFT for
+\term{locally presentable categories}: in a locally presentable category,
+a functor between locally presentable categories has a left adjoint iff
+it preserves limits. This subsumes both GAFT and SAFT for an enormous
+class of practical examples.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Worked Examples}
+\label{sec:aft-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Watching the Theorems Work}
+
+We apply the theorems to three classical adjoints that we have seen
+existing for ``other'' reasons, and observe the AFT machinery at work.
+
+\subsection{Expanding: Three Workouts}
+
+\begin{example}{Stone--\v{C}ech Compactification, via SAFT}
+The inclusion $i : \mathbf{CHaus} \hookrightarrow \mathbf{Top}$ has a
+left adjoint $\beta$ (the Stone--\v{C}ech compactification). To prove
+existence by SAFT, we need:
+\begin{itemize}
+  \item $\mathbf{CHaus}$ is complete (yes; limits of compact Hausdorff
+        spaces are compact Hausdorff).
+  \item $\mathbf{CHaus}$ is well-powered (yes; subobjects of a compact
+        Hausdorff space are closed subsets, which form a set).
+  \item $\mathbf{CHaus}$ has a small cogenerating set: $\{[0, 1]\}$ is
+        one. (Two morphisms into a $\mathrm{CHaus}$ space agree iff
+        they agree after composition with every map to $[0, 1]$, which
+        is Urysohn-like.)
+  \item $i$ preserves limits (yes; it preserves the underlying topology).
+\end{itemize}
+SAFT delivers the adjoint $\beta$ without our needing to construct it
+explicitly.
+\end{example}
+
+\begin{example}{Free $R$-Module Functor, via GAFT}
+Let $R$ be a ring. The forgetful $U : R\text{-}\mathbf{Mod} \to \mathbf{Set}$
+has a left adjoint (the free $R$-module functor). $R\text{-}\mathbf{Mod}$
+is complete, $U$ preserves limits, and the solution-set condition holds
+with a singleton set: $\{R^X\}$, the free module on the set $X$. GAFT
+delivers existence.
+\end{example}
+
+\begin{example}{Sheafification, via SAFT in $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$}
+The inclusion of sheaves into presheaves is a fully faithful functor with
+a left adjoint, called \term{sheafification}. SAFT applies: the presheaf
+category is complete, well-powered, and the family of representables
+$\{Y(C)\}_{C \in \mathcal{C}}$ is jointly cogenerating. The inclusion of
+sheaves preserves limits because limits of sheaves are computed
+pointwise. SAFT gives sheafification as a left adjoint.
+\end{example}
+
+\subsection{Formalizing: A General Recipe}
+
+When confronted with ``does $R$ have a left adjoint?'', try SAFT first
+(it requires less work to verify). If $\mathcal{D}$ is not known to be
+well-powered or cogenerated, fall back to GAFT and check the
+solution-set condition by hand.
+
+If even GAFT fails, there is a fundamental obstruction: either $R$ does
+not preserve limits (and so no left adjoint exists at all), or the
+candidate left adjoint involves a proper-class-sized colimit and is not
+representable.
+
+\subsection{Reorganizing: When Adjoints Fail to Exist}
+
+\begin{itemize}
+  \item The inclusion $\mathbf{Set} \hookrightarrow \mathbf{Class}$ has
+        no left adjoint, because $\mathbf{Class}$ is not a category in
+        the usual sense (size issues).
+  \item The forgetful $\mathbf{TopGrp} \to \mathbf{Grp}$ (forgetting the
+        topology of a topological group) has no left adjoint, because
+        the candidate would be a free topological group on a discrete
+        group, which exists but is hard to verify without further
+        smallness.
+\end{itemize}
+
+\subsection{Simplifying: The Final Slogan}
+
+\begin{equation*}
+  \boxed{\;\;
+    \text{Preserves all limits} + \text{Smallness}
+    \;\Rightarrow\;
+    \text{Has a left adjoint}.
+  \;\;}
+\end{equation*}
+
+\subsection{Formally: Connection to Yoneda}
+
+\formalnote{AFT and representability}
+The Adjoint Functor Theorems are really representability theorems in
+disguise. Asking whether $R$ has a left adjoint is asking whether each
+of the presheaves $\mathrm{Hom}_\mathcal{C}(A, R(-))$ is representable.
+The theorems give conditions under which a presheaf is representable, and
+left-adjoint-existence is a special case.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What question does an Adjoint Functor Theorem answer?}{Given a functor $R$, does it have a left adjoint?}
+\qaitem{When does $R$ certainly \emph{not} have a left adjoint?}{When $R$ fails to preserve some small limit.}
+\qaitem{Why?}{By RAPL: right adjoints must preserve all small limits.}
+\qaitem{What is the comma category $(A \downarrow R)$?}{Pairs $(B, f : A \to R B)$, with the obvious morphisms.}
+\qaitem{Why does $(A \downarrow R)$ matter for adjunctions?}{$L A$ exists iff $(A \downarrow R)$ has an initial object.}
+\qaitem{What initial object does it have?}{$(L A, \eta_A)$, the universal arrow from $A$ to $R$.}
+\qaitem{State GAFT in slogan form.}{Complete target, $R$ preserves limits, plus solution-set $\Rightarrow$ $R$ has a left adjoint.}
+\qaitem{What is the solution-set condition?}{For each $A$, a set of $f_i : A \to R B_i$ such that every $f : A \to R B$ factors through one.}
+\qaitem{Why does the condition need a \emph{set}?}{To avoid proper-class-sized constructions.}
+\qaitem{In the SAFT, which two extra assumptions replace the solution-set condition?}{Well-poweredness and a small cogenerating set.}
+\qaitem{What is a well-powered category?}{One in which each object has only a set's worth of subobjects.}
+\qaitem{What is a cogenerating set?}{A set $\{S_j\}$ such that hom-into-cogenerators is jointly faithful.}
+\qaitem{Give an example of a cogenerator in $\mathbf{CHaus}$.}{$[0, 1]$.}
+\qaitem{Where does SAFT apply that GAFT doesn't need to be invoked?}{When the target category is locally presentable; SAFT often suffices.}
+\qaitem{What is the connection to Yoneda?}{Both GAFT and SAFT are representability theorems for the presheaves $\mathrm{Hom}(A, R(-))$.}
+\qaitem{What strategy underlies both theorems?}{Construct $L A$ as a limit over the comma category, controlled by a smallness hypothesis.}
+\qaitem{Why does completeness of $\mathcal{D}$ enter?}{Because we construct $L A$ as a limit of objects in $\mathcal{D}$.}
+\qaitem{Why does limit-preservation of $R$ enter?}{Because $L A$'s universal property must hold after applying $R$.}
+\qaitem{Where does the solution-set condition enter the proof?}{To ensure the limit we take is over a set-sized diagram.}
+\qaitem{Can a functor have neither a left nor a right adjoint?}{Yes; many do.}
+\qaitem{Can a functor have both?}{Yes; e.g., the identity functor has itself on both sides.}
+\qaitem{What does ``$f^*$ has both adjoints'' say in logic?}{There are both existential and universal quantifiers, given by left and right adjoints.}
+\qaitem{Is the forgetful functor $\mathbf{Mon} \to \mathbf{Set}$ adjoint-bearing?}{Yes; it has a left adjoint (free monoid), no right adjoint.}
+\qaitem{Why no right adjoint to forgetful $\mathbf{Mon} \to \mathbf{Set}$?}{The forgetful doesn't preserve coproducts on the nose.}
+\qaitem{In a locally presentable category, what's the criterion for an adjoint?}{Limit preservation suffices.}
+\qaitem{What's the dual of GAFT for right adjoints?}{Cocomplete target, $L$ preserves colimits, plus dual solution-set condition.}
+\qaitem{Sheafification is an example of which theorem applied?}{SAFT.}
+\qaitem{Why is the AFT considered a deep theorem?}{It turns existence-of-adjoint into a checkable list of conditions, often the only practical route.}
+\qaitem{What's the central tool common to all the theorems?}{Comma categories with initial objects.}
+\qaitem{Final slogan?}{``Preserves all limits + smallness $\Rightarrow$ has a left adjoint.''}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+The \textbf{Adjoint Functor Theorems} give criteria for a functor $R$ to
+have a left adjoint.
+
+\textbf{GAFT}: If $\mathcal{D}$ is complete, $R$ preserves small limits,
+and $R$ satisfies the \textbf{solution-set condition}, then $R$ has a
+left adjoint.
+
+\textbf{SAFT}: If additionally $\mathcal{D}$ is well-powered and has a
+small cogenerating set, the solution-set condition is automatic; limit
+preservation suffices.
+
+The underlying mechanism: $L A$ exists iff the comma category
+$(A \downarrow R)$ has an initial object, which it does under the
+hypotheses, constructed as a limit over a solution-set-indexed diagram.
+
+These theorems supply existence of Stone--\v{C}ech compactification,
+sheafification, free module functors, and many other classical
+left adjoints --- without requiring an explicit construction in each case.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Comma category.}\quad
+$(A \downarrow R)$ has objects $(B, f)$ with $f : A \to R B$, and
+morphisms $g : B \to B'$ with $R(g) \circ f = f'$.
+
+\medskip
+\textbf{Adjoint criterion.}\quad
+$R$ has a left adjoint $L$ iff $(A \downarrow R)$ has an initial object
+for every $A$. That initial object is $(L A, \eta_A)$.
+
+\medskip
+\textbf{GAFT.}\quad
+If $\mathcal{D}$ is complete, then $R : \mathcal{D} \to \mathcal{C}$ has
+a left adjoint iff:
+\begin{itemize}
+  \item $R$ preserves all small limits, and
+  \item for every $A$, there is a set $\{(B_i, f_i)\}$ such that every
+        $f : A \to R B$ factors as $R(g) \circ f_i$ for some $i$,
+        $g : B_i \to B$.
+\end{itemize}
+
+\medskip
+\textbf{SAFT.}\quad
+If $\mathcal{D}$ is complete, well-powered, and has a small cogenerating
+set, then $R : \mathcal{D} \to \mathcal{C}$ has a left adjoint iff $R$
+preserves all small limits.
+
+\medskip
+\textbf{Dual.}\quad
+Apply to $\mathcal{D}^{\mathrm{op}}$ for right-adjoint existence.
+
+\medskip
+\noindent\textit{This concludes the foundational arc of the book.
+Chapter~11 onward will turn to connections with other areas of
+mathematics, where the toolkit of categories, functors, natural
+transformations, limits, adjunctions, monads, Yoneda, and AFT becomes
+the working vocabulary.}
+\end{formalrestatement}

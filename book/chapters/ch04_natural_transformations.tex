@@ -546,6 +546,47 @@ category, and the functor category is no exception.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Functors are maps between categories. What is a map between functors?}{A natural transformation.}
+\qaitem{If $F, G : \mathcal{C} \to \mathcal{D}$, what does $\alpha : F \Rightarrow G$ consist of?}{A morphism $\alpha_A : F(A) \to G(A)$ in $\mathcal{D}$ for every object $A$ of $\mathcal{C}$.}
+\qaitem{What is $\alpha_A$ called?}{The component of $\alpha$ at $A$.}
+\qaitem{What constraint do the components satisfy?}{The naturality square: for every $f : A \to B$, $G(f) \circ \alpha_A = \alpha_B \circ F(f)$.}
+\qaitem{What does the naturality square look like as a commuting diagram?}{A square with $F(A), G(A), F(B), G(B)$ at the corners, and $F(f), G(f), \alpha_A, \alpha_B$ on the sides.}
+\qaitem{Why is it called \emph{natural}?}{Because the components are chosen in a way that respects all morphisms, not just one.}
+\qaitem{What is the identity natural transformation on $F$?}{$\mathrm{id}_F$, with $(\mathrm{id}_F)_A = \mathrm{id}_{F(A)}$.}
+\qaitem{Does $\mathrm{id}_F$ satisfy naturality?}{Yes, trivially: both paths around the square reduce to $F(f)$.}
+\qaitem{What is vertical composition?}{Composing $\alpha : F \Rightarrow G$ with $\beta : G \Rightarrow H$ to get $\beta \cdot \alpha : F \Rightarrow H$.}
+\qaitem{What is the component formula for $\beta \cdot \alpha$?}{$(\beta \cdot \alpha)_A = \beta_A \circ \alpha_A$.}
+\qaitem{Is vertical composition associative?}{Yes.}
+\qaitem{What is the functor category $[\mathcal{C}, \mathcal{D}]$?}{The category whose objects are functors $\mathcal{C} \to \mathcal{D}$ and whose morphisms are natural transformations between them.}
+\qaitem{What is the identity morphism in $[\mathcal{C}, \mathcal{D}]$?}{The identity natural transformation $\mathrm{id}_F$.}
+\qaitem{What are two other notations for $[\mathcal{C}, \mathcal{D}]$?}{$\mathcal{D}^{\mathcal{C}}$ and $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$.}
+\qaitem{When is $\alpha : F \Rightarrow G$ called a natural isomorphism?}{When every component $\alpha_A$ is an isomorphism in $\mathcal{D}$.}
+\qaitem{If every component is an iso, is the inverse natural too?}{Yes. The pointwise inverses assemble into a natural transformation.}
+\qaitem{What does $F \cong G$ mean in $[\mathcal{C}, \mathcal{D}]$?}{There exists a natural isomorphism $F \Rightarrow G$.}
+\qaitem{Can $F$ and $G$ act differently on objects yet be naturally isomorphic?}{Yes; their object-values need only be isomorphic, not equal.}
+\qaitem{Why is naturality the right notion of ``map of functors''?}{Without it, components could behave incoherently across morphisms; naturality enforces coherence.}
+\qaitem{What is horizontal composition?}{Composing $\alpha : F \Rightarrow G$ in $[\mathcal{C}, \mathcal{D}]$ with $\beta : H \Rightarrow K$ in $[\mathcal{D}, \mathcal{E}]$ to get $\beta \ast \alpha : H \circ F \Rightarrow K \circ G$.}
+\qaitem{What is the whiskering $\beta F$?}{Horizontal composition $\beta \ast \mathrm{id}_F$: precomposing each component of $\beta$ with $F$.}
+\qaitem{What is the component of $\beta F$ at $A$?}{$\beta_{F(A)}$.}
+\qaitem{What is $\alpha_A : F(A) \to G(A)$ best read as?}{``$\alpha$ component at $A$,'' a single morphism in $\mathcal{D}$.}
+\qaitem{Is naturality a property or extra data?}{A property: the components are the data, and naturality is a condition they must satisfy.}
+\qaitem{Do natural transformations between functors $\mathcal{C} \to \mathcal{D}$ form a set?}{They form a hom-set in $[\mathcal{C}, \mathcal{D}]$.}
+\qaitem{Why do we need naturality if pointwise isomorphism would do?}{Pointwise iso ignores coherence; many ``isomorphic'' functors fail to be naturally isomorphic.}
+\qaitem{Where does the symbol $\Rightarrow$ come from?}{It distinguishes a 2-cell (between 1-cells) from a 1-cell (between 0-cells).}
+\qaitem{Is $F \Rightarrow G$ a different thing from $F \to G$?}{Conventionally yes: $\to$ is a morphism, $\Rightarrow$ is a natural transformation between functors.}
+\qaitem{What is the simplest non-trivial natural transformation example?}{The identity-to-identity isomorphism, or the inclusion of a constant functor into a non-constant one.}
+\qaitem{Why did we want functor categories at all?}{So that we can apply categorical reasoning \emph{to functors themselves} --- the same machinery, one level up.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
 \section*{Chapter Summary}
 \addcontentsline{toc}{section}{Chapter Summary}
 % ═══════════════════════════════════════════════════════════════════════════
