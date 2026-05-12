@@ -1,0 +1,395 @@
+% ch32_formal_theory_of_monads.tex — Volume III Chapter 8
+
+\chapter{The Formal Theory of Monads}
+
+\begin{overviewbox}
+Chapter~8 introduced monads as triples $(T, \eta, \mu)$ of endofunctor +
+unit + multiplication. Chapter~21 developed their Eilenberg--Moore and
+Kleisli categories and proved Beck's monadicity theorem. Chapter~31
+described the codensity monad and the algebraic-theory monad as Kan
+extensions. This chapter is the synthesis: the \emph{formal theory of
+monads} (Street 1972) sees monads as 0-dimensional algebraic gadgets in
+\emph{any} 2-category $\mathcal{K}$. The Eilenberg--Moore construction
+becomes a 2-categorical right adjoint, the Kleisli construction a left
+adjoint, and Beck's theorem the assertion that a 2-functor admits a
+``monad presentation''.
+
+By treating monads formally, we make several constructions of Chapter~21
+into special cases of single 2-categorical formalisms, prepare the way for
+\emph{distributive laws} (Chapter~35) as monad maps in a 2-category of
+2-categories, and exhibit the deep parallel between monads in different
+2-categories: monads in $\mathbf{Cat}$ (ordinary), monads in $\mathbf{Prof}$
+(profunctors), monads in $\mathbf{Span}$ (categories enriched in sets/spans).
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monads in a 2-Category}
+\label{sec:monads-in-2cat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Monad in a 2-category]
+\label{def:monad-in-2cat}
+Let $\mathcal{K}$ be a 2-category. A \term{monad} in $\mathcal{K}$ on an
+object $a \in \mathcal{K}$ consists of:
+\begin{itemize}
+  \item A 1-cell $t : a \to a$.
+  \item A 2-cell $\eta : 1_a \Rightarrow t$ (the \term{unit}).
+  \item A 2-cell $\mu : t t \Rightarrow t$ (the \term{multiplication}).
+\end{itemize}
+satisfying associativity ($\mu \cdot \mu t = \mu \cdot t \mu$) and unit laws
+($\mu \cdot \eta t = \mu \cdot t \eta = 1_t$), where all compositions are in
+$\mathcal{K}$.
+\end{definition}
+
+\begin{example_thm}[Ordinary monads]
+A monad in $\mathbf{Cat}$ is precisely an ordinary monad on a category
+(Chapter~8). The object is the category; the 1-cell is the endofunctor; the
+2-cells are the natural transformations $\eta, \mu$.
+\end{example_thm}
+
+\begin{example_thm}[Monads in $\mathbf{Span}$]
+A monad in $\mathbf{Span}(\mathbf{Set})$ on an object $A$ is a relation
+$R \subseteq A \times A$ with: a unit (reflexivity — the identity span $A
+\hookrightarrow R$); a multiplication ($R \circ R \subseteq R$, i.e.,
+transitivity). Hence monads in $\mathbf{Span}$ are \emph{preorders}.
+\end{example_thm}
+
+\begin{example_thm}[Monads in $\mathbf{Prof}$]
+A monad in $\mathbf{Prof}$ on a category $\mathcal{A}$ is a profunctor
+$P : \mathcal{A} \to \mathcal{A}$ with unit $\eta : \mathcal{A}(-, -)
+\Rightarrow P$ and multiplication $\mu : P \circ P \Rightarrow P$
+satisfying the monad axioms. Such structures are equivalent to
+\term{category extensions} of $\mathcal{A}$: small categories $\mathcal{B}$
+with an identity-on-objects functor $\mathcal{A} \to \mathcal{B}$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Eilenberg--Moore and Kleisli, Formally}
+\label{sec:formal-em-kleisli}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The construction of Eilenberg--Moore and Kleisli categories from a monad
+generalizes to any 2-category — when those 2-categorical objects exist.
+
+\begin{definition}[Eilenberg--Moore object]
+\label{def:em-object}
+For a monad $t = (t, \eta, \mu)$ on $a$ in $\mathcal{K}$, the \term{Eilenberg--Moore
+object} $a^t$ — when it exists — is an object of $\mathcal{K}$ equipped with
+a 1-cell $u^t : a^t \to a$ and a 2-cell $\alpha^t : t u^t \Rightarrow u^t$
+satisfying:
+\begin{itemize}
+  \item $\alpha^t \cdot \eta u^t = 1_{u^t}$.
+  \item $\alpha^t \cdot \mu u^t = \alpha^t \cdot t \alpha^t$.
+\end{itemize}
+The universal property: for any $(b, k : b \to a, \beta : t k \Rightarrow k)$
+satisfying the same axioms, there is a unique 1-cell $\hat k : b \to a^t$
+with $u^t \hat k = k$ and $\alpha^t \hat k = \beta$, 2-cells equivariant.
+\end{definition}
+
+\begin{theorem}[Eilenberg--Moore as 2-categorical right adjoint]
+\label{thm:em-as-right-adjoint}
+In any 2-category $\mathcal{K}$ with Eilenberg--Moore objects, the
+construction $t \mapsto a^t$ is the right adjoint of an inclusion
+\begin{equation*}
+  \mathcal{K} \;\xhookrightarrow{(-)^{\mathrm{free}}}\; \mathrm{Mnd}(\mathcal{K})
+\end{equation*}
+where $\mathrm{Mnd}(\mathcal{K})$ is the 2-category of monads in $\mathcal{K}$
+and ``free monads'' on each object.
+\end{theorem}
+
+\begin{definition}[Kleisli object]
+\label{def:kleisli-object}
+The \term{Kleisli object} $a_t$ — when it exists — is dual to Eilenberg--Moore:
+an object with a 1-cell $f_t : a \to a_t$ and a 2-cell $\rho_t : f_t t
+\Rightarrow f_t$, universally so. In any 2-category, $a_t$ is the
+\emph{left} adjoint to $(-)^{\mathrm{free}}$ — that is, the free Kleisli
+construction.
+\end{definition}
+
+\begin{remark}[The two extremes]
+For any monad $t$ on $a$ in $\mathcal{K}$, the Kleisli and Eilenberg--Moore
+objects are the \emph{initial} and \emph{terminal} ``resolutions'' of $t$
+(adjunctions $L \dashv R$ with $RL = t$ as monad). This recovers in
+2-categorical terms the well-known fact (Chapter~21) that every monad's
+adjunctions form a poset with Kleisli at the bottom and Eilenberg--Moore at
+the top.
+\end{remark}
+
+\subsection{Reorganizing: When Do EM/Kleisli Objects Exist?}
+
+\begin{theorem}[Existence of EM objects in $\mathbf{Cat}$]
+\label{thm:em-exists-cat}
+$\mathbf{Cat}$ has all Eilenberg--Moore and Kleisli objects. They coincide
+with the classical constructions of Chapter~21.
+\end{theorem}
+
+\begin{theorem}[Existence in $\mathbf{Prof}$]
+\label{thm:em-exists-prof}
+$\mathbf{Prof}$ has all Eilenberg--Moore objects. The Eilenberg--Moore
+object of a monad-profunctor is the corresponding ``Eilenberg--Moore
+profunctor''; explicitly, it is the category of $P$-algebras for the
+monad-profunctor $P$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monad Maps and the 2-Category of Monads}
+\label{sec:monad-maps}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Monad map]
+\label{def:monad-map}
+For monads $(a, t, \eta^t, \mu^t)$ and $(b, s, \eta^s, \mu^s)$ in $\mathcal{K}$,
+a \term{monad map} is a pair $(f, \phi)$:
+\begin{itemize}
+  \item A 1-cell $f : a \to b$.
+  \item A 2-cell $\phi : s f \Rightarrow f t$.
+\end{itemize}
+satisfying:
+\begin{itemize}
+  \item $\phi \cdot \eta^s f = f \eta^t$ (compatibility with units).
+  \item $\phi \cdot \mu^s f = f \mu^t \cdot \phi t \cdot s \phi$
+        (compatibility with multiplications).
+\end{itemize}
+\end{definition}
+
+\begin{definition}[$\mathrm{Mnd}(\mathcal{K})$]
+\label{def:mnd-K}
+The \term{2-category of monads in $\mathcal{K}$}, $\mathrm{Mnd}(\mathcal{K})$,
+has:
+\begin{itemize}
+  \item 0-cells: monads in $\mathcal{K}$.
+  \item 1-cells: monad maps.
+  \item 2-cells: 2-cells $\beta : f \Rightarrow f'$ in $\mathcal{K}$
+        compatible with the monad map structure.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Free monad and Eilenberg--Moore as adjoints]
+\label{thm:mnd-adjoints}
+In a 2-category $\mathcal{K}$ with EM objects,
+\begin{equation*}
+  (-)^{\mathrm{free}} \;:\; \mathcal{K} \rightleftarrows \mathrm{Mnd}(\mathcal{K})
+  \;:\; \mathrm{EM}
+\end{equation*}
+is a 2-adjunction (in the appropriate sense).
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{$(-)^{\mathrm{free}}$ sends $a \in \mathcal{K}$ to the identity
+monad $(1_a, 1, 1)$ on $a$.}{The trivial monad.}
+\proofstep{$\mathrm{EM}$ sends $(a, t)$ to $a^t$ (the EM object).}{Functorial
+in monad maps by the universal property of EM.}
+\proofstep{Adjunction unit at $a$: the trivial monad on $a$ becomes
+$a^{1_a} = a$ (the EM object of the identity monad is the original
+object).}{Trivial monad has trivial EM object.}
+\proofstep{Adjunction counit at $(a, t)$: the natural arrow $a^t \to a$
+forgetting algebra structure.}{$u^t$ from the EM universal property.}
+\proofstep{Triangle identities: by the universal properties of EM and
+$(-)^{\mathrm{free}}$.}{Direct calculation.}
+\end{prooflog}
+
+\subsection{Reorganizing}
+
+\begin{remark}[Beck's monadicity in formal terms]
+Beck's theorem (Chapter~21) characterizes when an adjunction $L \dashv R$ is
+\emph{monadic}, i.e., when the comparison functor to the EM category is an
+equivalence. In formal 2-categorical terms: when does an adjunction in
+$\mathcal{K}$ factor through an EM object? The answer is what
+Theorem~\ref{thm:beck-formal} below provides.
+\end{remark}
+
+\begin{theorem}[Formal Beck's monadicity]
+\label{thm:beck-formal}
+In a 2-category $\mathcal{K}$ with EM objects, an adjunction $f \dashv g$
+between $a$ and $b$ is monadic — i.e., $b \cong a^{gf}$ over $a$ — iff $g$
+\emph{creates EM algebras}: every algebra structure on $g$ uniquely lifts to
+an EM-object structure on $b$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Distributive Laws — Preview}
+\label{sec:distributive-laws-preview}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The 2-categorical theory of monads sets up the natural language for
+\emph{distributive laws}: ways of composing two monads on the same object.
+
+\subsection{Formalizing}
+
+\begin{definition}[Distributive law]
+\label{def:dist-law}
+For monads $s = (s, \eta^s, \mu^s)$ and $t = (t, \eta^t, \mu^t)$ on an object
+$a$ in $\mathcal{K}$, a \term{distributive law of $s$ over $t$} is a 2-cell
+$\lambda : ts \Rightarrow st$ satisfying four coherence axioms involving
+$\eta^s, \eta^t, \mu^s, \mu^t$ and $\lambda$.
+\end{definition}
+
+\begin{theorem}[Distributive law $\Leftrightarrow$ composite monad]
+\label{thm:dist-law-composite}
+A distributive law $\lambda : ts \Rightarrow st$ is equivalent to the data
+of a monad structure on the composite $st$ extending those of $s$ and $t$.
+\end{theorem}
+
+\begin{remark}
+Chapter~35 develops this fully. The 2-categorical formulation of monads makes
+distributive laws into ``2-cells with structure,'' immediately suggesting
+their interaction with the rest of formal monad theory.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bicategorical Monads and Higher Structure}
+\label{sec:bicat-monads}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The formal theory extends to bicategories. In a bicategory $\mathcal{B}$, a
+monad on an object $a$ is a 1-cell $t : a \to a$ with 2-cell unit and
+multiplication satisfying the monad axioms \emph{up to coherent isomorphism}
+in $\mathcal{B}$.
+
+\begin{example_thm}[Monoidal monads as bicategorical monads]
+A monoidal monad on a monoidal category $(\mathcal{V}, \otimes)$ — i.e., a
+monad $T$ that is also a lax monoidal functor with the unit/multiplication
+being monoidal natural transformations — is precisely a monad in the
+bicategory $B\mathcal{V}^{\mathrm{lax}}$ of $\mathcal{V}$-enriched lax
+monoidal functors and lax monoidal natural transformations.
+\end{example_thm}
+
+\begin{remark}[Higher monads]
+Higher categories give higher monads. A monad in a 3-category is a 1-cell
+together with 2-cell unit/multiplication and 3-cell coherence (associator
+and unitor) for the multiplication. The cycle continues; this is the
+beginning of \emph{higher monad theory} and its connection to higher
+algebra.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:formal-monad-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a monad in a 2-category.}{An object $a$, a 1-cell $t : a \to a$, 2-cells $\eta : 1_a \Rightarrow t$ and $\mu : tt \Rightarrow t$, satisfying associativity and unit axioms.}
+\qaitem{What is a monad in $\mathbf{Cat}$?}{An ordinary monad on a category.}
+\qaitem{What is a monad in $\mathbf{Span}(\mathbf{Set})$?}{A preorder (reflexive transitive relation).}
+\qaitem{What is a monad in $\mathbf{Prof}$ on $\mathcal{A}$?}{A profunctor $P : \mathcal{A} \to \mathcal{A}$ with unit and multiplication; equivalent to an identity-on-objects extension of $\mathcal{A}$.}
+\qaitem{Define an Eilenberg--Moore object in a 2-category.}{Object $a^t$ with universal 1-cell $u^t : a^t \to a$ and 2-cell $\alpha^t : t u^t \Rightarrow u^t$ satisfying the EM axioms.}
+\qaitem{Define a Kleisli object in a 2-category.}{Dual to EM: object $a_t$ with universal 1-cell $f_t : a \to a_t$ and 2-cell $\rho_t : f_t t \Rightarrow f_t$.}
+\qaitem{In what sense are EM and Kleisli the ``extremes''?}{Among all adjunctions $L \dashv R$ in $\mathcal{K}$ with $RL = t$ (as monad), Kleisli is initial and EM terminal.}
+\qaitem{Does $\mathbf{Cat}$ have all EM objects?}{Yes, the classical Eilenberg--Moore construction.}
+\qaitem{Does $\mathbf{Prof}$ have EM objects?}{Yes; the EM object of a monad-profunctor is the category of its algebras (a profunctor itself).}
+\qaitem{Define a monad map between monads in $\mathcal{K}$.}{A pair $(f, \phi)$ where $f : a \to b$ is a 1-cell and $\phi : s f \Rightarrow f t$ is a 2-cell satisfying compatibility with units and multiplications.}
+\qaitem{What is $\mathrm{Mnd}(\mathcal{K})$?}{The 2-category whose 0-cells are monads in $\mathcal{K}$, 1-cells are monad maps, 2-cells are compatible 2-cells.}
+\qaitem{State the EM-adjoint theorem.}{$(-)^{\mathrm{free}} \dashv \mathrm{EM}$ is a 2-adjunction between $\mathcal{K}$ and $\mathrm{Mnd}(\mathcal{K})$ (in any 2-category with EM objects).}
+\qaitem{State formal Beck's monadicity.}{An adjunction $f \dashv g : a \to b$ is monadic iff $g$ creates EM algebras: every algebra structure on $g$ uniquely lifts to an EM-object structure on $b$.}
+\qaitem{Define a distributive law of $s$ over $t$.}{A 2-cell $\lambda : ts \Rightarrow st$ satisfying four coherence axioms involving $\eta^s, \eta^t, \mu^s, \mu^t$.}
+\qaitem{State the distributive-law-composite-monad theorem.}{A distributive law $\lambda : ts \Rightarrow st$ is equivalent to a monad structure on the composite $st$ extending the monad structures of $s$ and $t$.}
+\qaitem{Why is the formal theory of monads ``the right one''?}{Because it makes the constructions of Chapter~21 (EM, Kleisli, comparison) into 2-categorical universal constructions valid in any 2-category, recovering them as adjoints of natural functors.}
+\qaitem{What does ``creates EM algebras'' mean?}{$g$ creates the EM object: any algebra-structure 2-cell on $g$ uniquely lifts to make $b$ into an EM object of $gf$ over $a$.}
+\qaitem{How does codensity (Chapter~31) fit into this picture?}{The codensity monad $\operatorname{Ran}_G G$ is a monad in $\mathbf{Cat}$ canonically associated to any functor; it provides the formal counterpart of the algebraic theory presented by $G$.}
+\qaitem{What's the simplest nontrivial example of a monad in $\mathbf{Span}$?}{Equality on a set: a preorder, hence a monad. More elaborate examples come from arbitrary preorders.}
+\qaitem{What 2-categorical structure does a monoidal monad live in?}{The bicategory $B\mathcal{V}^{\mathrm{lax}}$ of $\mathcal{V}$-enriched lax monoidal functors.}
+\qaitem{Why is the formal monad theory the foundation for distributive laws?}{Because composition of monads — which is what distributive laws regulate — is naturally a 2-categorical operation; the formal framework makes the composition meaningful.}
+\qaitem{What is the relationship between $\mathrm{Mnd}(\mathcal{K})$ and the codensity construction?}{The codensity monad provides an embedding $G^* \mathcal{K} \to \mathrm{Mnd}(\mathcal{K})$ sending each functor $G$ to its codensity monad.}
+\qaitem{Why are bicategorical monads more general than 2-categorical ones?}{Because the bicategorical version allows the associativity and unit axioms to hold only up to coherent isomorphism, accommodating more examples.}
+\qaitem{Sketch why a profunctor monad $P : \mathcal{A} \to \mathcal{A}$ corresponds to an extension $\mathcal{A} \to \mathcal{B}$.}{The EM object of $P$ in $\mathbf{Prof}$ is the category $\mathcal{B}$; the unit $\mathcal{A}(-,-) \to P$ becomes the identity-on-objects functor $\mathcal{A} \to \mathcal{B}$.}
+\qaitem{What's the relationship between formal monads and bicategorical strictification (Chapter~25)?}{Both involve replacing weak structure with strict structure up to equivalence; for monads, strictification yields strict 2-monads from bicategorical monads.}
+\qaitem{Why is the 2-category $\mathrm{Mnd}(\mathcal{K})$ ``2-categorical''?}{Because it carries the structure of a 2-category: not just monads (objects) and monad maps (1-cells), but also coherent 2-cells between monad maps.}
+\qaitem{What is the comparison functor from Chapter~21 in this formal language?}{For an adjunction $F \dashv G$ in $\mathcal{K}$, the comparison $K : b \to a^{GF}$ is the unique 1-cell from the codomain of $F$ to the EM object of $GF$ over $a$.}
+\qaitem{Why is Beck's monadicity stated for ``creates EM algebras''?}{Because the EM creation condition is the 2-categorical universal property; Beck's classical conditions (reflecting isos, F-split coequalizers) are equivalent reformulations in $\mathbf{Cat}$.}
+\qaitem{What is the relationship between the formal monad theory and homotopical algebra?}{In homotopical algebra, one works with $\infty$-monads in $\infty$-categories; the formal monad theory provides the strict-categorical foundation that the $\infty$-categorical version generalizes.}
+\qaitem{Why does ``formal'' here mean ``2-categorical''?}{Because the constructions are defined uniformly in any 2-category, with the same proofs/diagrams working everywhere; the ``formal'' theory is the one that's independent of the specific 2-category $\mathcal{K}$.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Monads in a 2-category.}\quad A 1-cell $t : a \to a$ with 2-cell
+unit $\eta$ and multiplication $\mu$ satisfying associativity and unit
+axioms. Examples: monads in $\mathbf{Cat}$ (ordinary), in $\mathbf{Span}$
+(preorders), in $\mathbf{Prof}$ (category extensions).
+
+\textbf{Eilenberg--Moore and Kleisli objects.}\quad 2-categorical universal
+constructions extending the classical Chapter~21 constructions. EM is the
+right adjoint of $(-)^{\mathrm{free}} : \mathcal{K} \to \mathrm{Mnd}(\mathcal{K})$;
+Kleisli is the left adjoint. They are the terminal/initial extremes among
+adjunctions inducing $t$.
+
+\textbf{$\mathrm{Mnd}(\mathcal{K})$.}\quad The 2-category whose 0-cells are
+monads in $\mathcal{K}$, 1-cells are monad maps $(f, \phi)$ with coherence
+axioms, 2-cells are compatible 2-cells from $\mathcal{K}$.
+
+\textbf{Formal Beck.}\quad An adjunction $f \dashv g$ is monadic iff $g$
+creates EM algebras: algebra-structure 2-cells on $g$ uniquely lift to
+EM-object structures.
+
+\textbf{Distributive laws.}\quad 2-cells $\lambda : ts \Rightarrow st$
+satisfying four coherence axioms; equivalent to a monad structure on the
+composite $st$. Chapter~35 develops fully.
+
+\textbf{Bicategorical and higher monads.}\quad Bicategorical generalizations
+where the monad axioms hold up to coherent isomorphism. Foundation for
+higher monad theory.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Monad in $\mathcal{K}$.}\quad $(t, \eta, \mu)$ on an object $a$ with
+$\eta : 1_a \Rightarrow t$, $\mu : tt \Rightarrow t$, satisfying
+$\mu \cdot t \mu = \mu \cdot \mu t$ and $\mu \cdot \eta t = \mu \cdot t \eta
+= 1_t$.
+
+\medskip
+\textbf{Eilenberg--Moore object.}\quad $a^t$ with universal $u^t : a^t \to a$,
+$\alpha^t : t u^t \Rightarrow u^t$, satisfying the EM axioms. Universally
+factors all adjunctions with monad $t$.
+
+\medskip
+\textbf{Kleisli object.}\quad Dual: $a_t$ with $f_t : a \to a_t$, $\rho_t :
+f_t t \Rightarrow f_t$. The initial resolution of $t$.
+
+\medskip
+\textbf{Monad map.}\quad $(f, \phi) : (a, t) \to (b, s)$ with $\phi : s f
+\Rightarrow f t$ compatible with $\eta, \mu$.
+
+\medskip
+\textbf{2-adjunction.}\quad $(-)^{\mathrm{free}} \dashv \mathrm{EM}$ between
+$\mathcal{K}$ and $\mathrm{Mnd}(\mathcal{K})$, when EM objects exist.
+
+\medskip
+\textbf{Formal Beck.}\quad $f \dashv g$ monadic $\iff$ $g$ creates EM algebras.
+
+\medskip
+\textbf{Distributive law.}\quad $\lambda : ts \Rightarrow st$ with four
+coherence axioms; bijective with monad structures on $st$ extending those
+of $s, t$.
+
+\medskip
+\noindent\textit{Chapter~33 develops adjunctions formally in 2-categories
+and bicategories, providing the dual framework to this chapter's monad
+theory.}
+\end{formalrestatement}

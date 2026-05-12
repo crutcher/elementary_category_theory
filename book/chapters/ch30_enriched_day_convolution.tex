@@ -1,0 +1,506 @@
+% ch30_enriched_day_convolution.tex — Volume III Chapter 6
+
+\chapter{Enriched Categories: Day Convolution}
+
+\begin{overviewbox}
+Chapter~20 developed enriched category theory: $\mathcal{V}$-categories,
+enriched Yoneda, weighted limits, base change, self-enrichment. Chapter~26
+delivered the coend calculus that those constructions depend on.
+Chapter~29 identified free monoidal categories with presheaf categories
+``with the right tensor.'' This chapter delivers that tensor: \term{Day
+convolution}, the canonical monoidal structure on $[\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ when $\mathcal{C}$ is itself a $\mathcal{V}$-monoidal
+category.
+
+Day convolution is a single coend formula that turns the Yoneda embedding
+into a strong monoidal functor and exhibits the presheaf category as the
+free $\mathcal{V}$-cocompletion-with-monoidal-structure of $\mathcal{C}$.
+We develop its construction, prove its universal property, derive the
+closed structure, and apply it to enriched Kan extensions and to the
+formal theory of monads (preview, Chapter~32). The chapter closes with
+Cauchy completion in the Day-convolution-aware sense and a sketch of
+where ``monoidal Yoneda'' takes us next.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Day Convolution Construction}
+\label{sec:day-convolution}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Fix a complete and cocomplete symmetric monoidal closed category $\mathcal{V}$
+and a small $\mathcal{V}$-monoidal category $\mathcal{C}$. That is,
+$\mathcal{C}$ is a $\mathcal{V}$-category equipped with a $\mathcal{V}$-functor
+$\otimes_\mathcal{C} : \mathcal{C} \otimes \mathcal{C} \to \mathcal{C}$ and a
+unit object $I_\mathcal{C} \in \mathcal{C}$, satisfying the $\mathcal{V}$-enriched
+monoidal axioms.
+
+\begin{definition}[Day convolution]
+\label{def:day-convolution}
+For $\mathcal{V}$-functors $F, G : \mathcal{C}^{\mathrm{op}} \to \mathcal{V}$,
+the \term{Day convolution} $F \star_{\mathrm{Day}} G : \mathcal{C}^{\mathrm{op}}
+\to \mathcal{V}$ is defined by the coend
+\begin{equation*}
+  (F \star_{\mathrm{Day}} G)(c) \;=\; \int^{a, b \in \mathcal{C}}
+  \mathcal{C}(c, a \otimes_\mathcal{C} b) \otimes F(a) \otimes G(b).
+\end{equation*}
+The Day-convolution unit is the representable $\mathcal{C}(-, I_\mathcal{C})
+= Y(I_\mathcal{C})$.
+\end{definition}
+
+\begin{howtosay}
+$F \star_{\mathrm{Day}} G$ \sayit{``F Day-convolution G''} or simply
+\sayit{``F star G''} when the context is clear. The integral signs are over
+the pair $(a, b)$ — i.e., a double coend over $\mathcal{C}$ in both arguments.
+\end{howtosay}
+
+\subsection{Reorganizing: Why This Formula?}
+
+\begin{remark}[Conceptual reading]
+The Day convolution is the ``left Kan extension along the monoidal product''
+of the pair $(F, G)$. Explicitly: $\mathcal{C} \otimes \mathcal{C}
+\xrightarrow{F \otimes G} \mathcal{V} \otimes \mathcal{V} \xrightarrow{\otimes_\mathcal{V}}
+\mathcal{V}$, then take the left Kan extension along $\otimes_\mathcal{C} :
+\mathcal{C} \otimes \mathcal{C} \to \mathcal{C}$. The coend formula
+(Chapter~26, Example~\ref{ex:lan-coend}) gives the displayed integral.
+\end{remark}
+
+\begin{theorem}[Day convolution is a $\mathcal{V}$-functor monoidal structure]
+\label{thm:day-monoidal}
+$\star_{\mathrm{Day}}$ makes $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$
+into a $\mathcal{V}$-enriched monoidal category. Its associator and unitors
+are induced from those of $\mathcal{C}$ and $\mathcal{V}$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Show $F \star_{\mathrm{Day}} (G \star_{\mathrm{Day}} H) \cong
+(F \star_{\mathrm{Day}} G) \star_{\mathrm{Day}} H$ via the associator of
+$\mathcal{C}$.}{Compute both sides by Fubini and the coend manipulations.}
+\proofstep{$(F \star_{\mathrm{Day}} (G \star_{\mathrm{Day}} H))(c) =
+\int^{a, b} \mathcal{C}(c, a \otimes b) \otimes F(a) \otimes \int^{x, y}
+\mathcal{C}(b, x \otimes y) \otimes G(x) \otimes H(y)$.}{Substitute the
+definition.}
+\proofstep{Apply Fubini (Theorem~\ref{thm:fubini-coend}) and the ninja
+Yoneda lemma to integrate over $b$ against $\mathcal{C}(b, x \otimes y)$.}{
+Yoneda reduction reduces $\int^b \mathcal{C}(c, a \otimes b) \otimes \mathcal{C}(b, x \otimes y)$
+to $\mathcal{C}(c, a \otimes (x \otimes y))$.}
+\proofstep{Result: $\int^{a, x, y} \mathcal{C}(c, a \otimes (x \otimes y))
+\otimes F(a) \otimes G(x) \otimes H(y)$.}{After Yoneda reduction.}
+\proofstep{Symmetrically, $((F \star_{\mathrm{Day}} G) \star_{\mathrm{Day}} H)(c)
+\cong \int^{a, x, y} \mathcal{C}(c, (a \otimes x) \otimes y) \otimes F(a)
+\otimes G(x) \otimes H(y)$.}{By the same calculation with the inner coend
+in the first argument.}
+\proofstep{The associator of $\mathcal{C}$ gives an isomorphism
+$\mathcal{C}(c, a \otimes (x \otimes y)) \cong \mathcal{C}(c, (a \otimes x)
+\otimes y)$, natural in $a, x, y, c$.}{Functoriality of $\mathcal{C}$ along
+$\alpha_\mathcal{C}$.}
+\proofstep{This induces $F \star_{\mathrm{Day}} (G \star_{\mathrm{Day}} H)
+\cong (F \star_{\mathrm{Day}} G) \star_{\mathrm{Day}} H$.}{Coend
+functoriality.}
+\proofstep{Unit: $Y(I_\mathcal{C}) \star_{\mathrm{Day}} F \cong F$
+via the unit-law isomorphism of $\mathcal{C}$. Symmetrically for the right unit.}{
+Same Yoneda-reduction argument.}
+\proofstep{Pentagon and triangle axioms for $\star_{\mathrm{Day}}$ follow
+from those for $\otimes_\mathcal{C}$.}{Functoriality transfers commutativity.}
+\end{prooflog}
+
+\subsection{Formally}
+
+\begin{theorem}[Day convolution is closed]
+\label{thm:day-closed}
+The Day-monoidal category $([\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V},
+\star_{\mathrm{Day}}, Y(I_\mathcal{C}))$ is symmetric monoidal closed when
+$\mathcal{C}$ is symmetric monoidal. The internal hom is
+\begin{equation*}
+  [G, H]_{\mathrm{Day}}(c) \;=\; \int_b \mathcal{V}(G(b), H(c \otimes b)).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Sketch]
+Verify the adjunction $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}
+(F \star_{\mathrm{Day}} G, H) \cong [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}
+(F, [G, H]_{\mathrm{Day}})$ by direct calculation: substitute the coend formula
+for the convolution, use Yoneda reduction on the $\mathcal{C}(c, a \otimes b)$
+factor, and identify the resulting double end with $[G, H]_{\mathrm{Day}}$.
+Symmetry comes from that of $\mathcal{C}$.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Universal Property}
+\label{sec:day-universal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Day convolution exhibits the presheaf category as the \emph{free
+$\mathcal{V}$-cocompletion that is also a $\mathcal{V}$-monoidal extension}
+of $\mathcal{C}$.
+
+\begin{theorem}[Universal property of Day convolution]
+\label{thm:day-universal}
+Let $\mathcal{C}$ be a small $\mathcal{V}$-monoidal category and let
+$(\mathcal{E}, \otimes_\mathcal{E}, I_\mathcal{E})$ be a cocomplete
+$\mathcal{V}$-monoidal category whose tensor product preserves colimits in
+each variable. Then every $\mathcal{V}$-monoidal functor $F : \mathcal{C} \to
+\mathcal{E}$ extends, up to essentially unique $\mathcal{V}$-monoidal natural
+isomorphism, to a $\mathcal{V}$-cocontinuous strong monoidal functor
+\begin{equation*}
+  \widetilde F \;:\; ([\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V},
+  \star_{\mathrm{Day}}) \to \mathcal{E}
+\end{equation*}
+with $\widetilde F \circ Y \cong F$ as $\mathcal{V}$-monoidal functors.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Define $\widetilde F (P) = \int^c P(c) \otimes_\mathcal{E} F(c)$
+(weighted colimit; Chapter~28, Theorem~\ref{thm:free-cocompletion}).}{
+This is the $\mathcal{V}$-cocontinuous extension.}
+\proofstep{Show $\widetilde F$ is strong monoidal: $\widetilde F(F_1 \star_{\mathrm{Day}}
+F_2) \cong \widetilde F(F_1) \otimes_\mathcal{E} \widetilde F(F_2)$.}{
+The key computation.}
+\proofstep{$\widetilde F(F_1 \star_{\mathrm{Day}} F_2) = \int^c (F_1 \star
+F_2)(c) \otimes_\mathcal{E} F(c) = \int^{c, a, b} \mathcal{C}(c, a \otimes b)
+\otimes_\mathcal{V} F_1(a) \otimes_\mathcal{V} F_2(b) \otimes_\mathcal{E}
+F(c)$.}{Substituting definitions.}
+\proofstep{Apply Yoneda reduction to the integral over $c$ against
+$\mathcal{C}(c, a \otimes b)$: $\int^c \mathcal{C}(c, a \otimes b)
+\otimes_\mathcal{E} F(c) \cong F(a \otimes b) \cong F(a) \otimes_\mathcal{E} F(b)$.}{
+$F$ is monoidal.}
+\proofstep{So $\widetilde F(F_1 \star_{\mathrm{Day}} F_2) \cong \int^{a, b}
+F_1(a) \otimes_\mathcal{V} F_2(b) \otimes_\mathcal{E} F(a) \otimes_\mathcal{E} F(b)$.}{
+Substituting and rearranging.}
+\proofstep{Right-hand side: $\widetilde F(F_1) \otimes_\mathcal{E}
+\widetilde F(F_2) = \left(\int^a F_1(a) \otimes_\mathcal{E} F(a)\right)
+\otimes_\mathcal{E} \left(\int^b F_2(b) \otimes_\mathcal{E} F(b)\right)$.}{
+Substituting the definition of $\widetilde F$.}
+\proofstep{Since $\otimes_\mathcal{E}$ preserves colimits, we can move the
+$\otimes_\mathcal{E}$ inside the coends; the two expressions agree.}{
+Cocontinuity of $\otimes_\mathcal{E}$ plus Fubini.}
+\proofstep{Unit: $\widetilde F(Y(I_\mathcal{C})) = \int^c \mathcal{C}(c, I_\mathcal{C})
+\otimes_\mathcal{E} F(c) \cong F(I_\mathcal{C}) \cong I_\mathcal{E}$.}{Yoneda
+reduction then $F$ preserves the unit.}
+\proofstep{Uniqueness: any cocontinuous strong monoidal $G$ extending $F$
+must agree with $\widetilde F$ on representables (by $G \circ Y \cong F$),
+hence on all presheaves (by cocontinuity and density).}{Standard uniqueness
+argument.}
+\end{prooflog}
+
+\subsection{Reorganizing: The Slogan}
+
+\begin{corollary}[Day convolution = free monoidal cocompletion]
+\label{cor:day-free}
+For a small $\mathcal{V}$-monoidal category $\mathcal{C}$, the Yoneda
+embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$
+exhibits the Day-monoidal presheaf category as the free $\mathcal{V}$-cocomplete
+monoidal extension of $\mathcal{C}$.
+\end{corollary}
+
+\begin{remark}[The full picture]
+Combining Chapter~28 (Yoneda as free cocompletion) and the present theorem:
+\begin{itemize}
+  \item Cocompletion alone: $\mathcal{C} \xrightarrow{Y} [\mathcal{C}^{\mathrm{op}},
+        \mathcal{V}]_\mathcal{V}$. Universal among cocomplete extensions.
+  \item Monoidal cocompletion: same target with Day convolution. Universal
+        among cocomplete monoidal extensions.
+\end{itemize}
+Day convolution is the canonical lift of the universal property from
+``cocompletion'' to ``monoidal cocompletion.''
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Enriched Kan Extensions}
+\label{sec:enriched-kan-via-day}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The coend calculus and Day convolution combine to give the cleanest
+formulation of enriched Kan extensions.
+
+\subsection{Formalizing}
+
+\begin{theorem}[Enriched Kan extension formulas]
+\label{thm:enriched-kan}
+For $\mathcal{V}$-functors $K : \mathcal{C} \to \mathcal{D}$ and $F :
+\mathcal{C} \to \mathcal{E}$ (with $\mathcal{E}$ tensored and cocomplete),
+the \term{enriched left Kan extension} $\operatorname{Lan}_K F : \mathcal{D}
+\to \mathcal{E}$ exists and is given by
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;=\; \int^c \mathcal{D}(K c, d) \otimes_\mathcal{E} F(c).
+\end{equation*}
+Dually, the \term{enriched right Kan extension} $\operatorname{Ran}_K F$
+(with $\mathcal{E}$ cotensored and complete) is
+\begin{equation*}
+  (\operatorname{Ran}_K F)(d) \;=\; \int_c [\mathcal{D}(d, K c), F(c)]_\mathcal{E}.
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+The formulas are the weighted colimit and weighted limit, respectively
+(Chapter~27, \S~\ref{sec:wkan-preview}). Existence follows from cocompleteness
+(resp.\ completeness) of $\mathcal{E}$ via the reduction of weighted
+(co)limits to conical (co)limits + (co)tensors (Chapter~27, Theorem~\ref{thm:wcomplete-from-pieces}).
+\end{proof}
+
+\begin{theorem}[Kan extensions form an adjoint triple along Yoneda]
+\label{thm:kan-triple-along-yoneda}
+For the Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$, there is an adjoint triple
+\begin{equation*}
+  \operatorname{Lan}_Y \;\dashv\; Y^* \;\dashv\; \operatorname{Ran}_Y
+\end{equation*}
+between $[\mathcal{C}, \mathcal{E}]_\mathcal{V}$ (functor $\mathcal{V}$-category)
+and $[[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}, \mathcal{E}]_\mathcal{V}$
+(presheaf functor category). Here $Y^*$ is precomposition with $Y$.
+\end{theorem}
+
+\begin{proof}[Sketch]
+This is the enriched analogue of Chapter~18's adjoint triple
+$\operatorname{Lan}_p \dashv p^* \dashv \operatorname{Ran}_p$ specialized to
+$p = Y$. The proof uses the coend formulas of Theorem~\ref{thm:enriched-kan}
+and the universal property of the presheaf category.
+\end{proof}
+
+\subsection{Reorganizing: Day Convolution as Kan Extension}
+
+\begin{proposition}[Day convolution as $\operatorname{Lan}$]
+\label{prop:day-as-lan}
+The Day convolution $F \star_{\mathrm{Day}} G$ is the left Kan extension of
+the composite
+\begin{equation*}
+  \mathcal{C} \otimes \mathcal{C} \xrightarrow{Y \otimes Y}
+  [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V} \otimes [\mathcal{C}^{\mathrm{op}},
+  \mathcal{V}]_\mathcal{V} \xrightarrow{\star_{\mathrm{Day}}}
+  [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}
+\end{equation*}
+along $\otimes_\mathcal{C} : \mathcal{C} \otimes \mathcal{C} \to \mathcal{C}$,
+evaluated at the pair $(F, G)$.
+\end{proposition}
+
+\begin{proof}
+Direct from Definition~\ref{def:day-convolution} and the left Kan coend
+formula of Theorem~\ref{thm:enriched-kan}.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monoids in the Day-Monoidal Category}
+\label{sec:day-monoids}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The most striking applications of Day convolution come from looking at
+\emph{monoids} in the resulting monoidal category $[\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$.
+
+\subsection{Formalizing}
+
+\begin{theorem}[Monoids in Day convolution]
+\label{thm:day-monoids}
+For a small $\mathcal{V}$-monoidal category $\mathcal{C}$:
+\begin{equation*}
+  \mathrm{Mon}([\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V},
+  \star_{\mathrm{Day}})
+  \;\simeq\;
+  [\mathcal{C}, \mathcal{V}]_\mathcal{V}^{\mathrm{lax\,monoidal}},
+\end{equation*}
+the category of \term{lax monoidal $\mathcal{V}$-functors} $\mathcal{C} \to
+\mathcal{V}$.
+\end{theorem}
+
+\begin{remark}[Interpretation]
+A monoid in $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$ with Day
+tensor is precisely a lax monoidal functor $\mathcal{C} \to \mathcal{V}$.
+This is the \emph{universal monoid construction}: Day convolution turns
+``lax monoidal functor'' into ``monoid in a single category.''
+\end{remark}
+
+\subsection{Reorganizing: Examples and Special Cases}
+
+\begin{example_thm}[Algebras over a $\mathcal{V}$-operad]
+For an operad $\mathcal{O}$ in $\mathcal{V}$, monoids in the Day-monoidal
+$[\mathbb{F}^{\mathrm{op}}, \mathcal{V}]$ (with $\mathbb{F}$ the category of
+finite sets and bijections, monoidal under disjoint union) recover
+$\mathcal{O}$-algebras. Operads-as-monoids becomes a special case of
+Day-convolution monoid theory.
+\end{example_thm}
+
+\begin{example_thm}[The Hochschild cohomology setup]
+For an associative algebra $A$, the Hochschild cohomology of $A$ arises as
+the cohomology of the Day-monoidal presheaf category $[\Delta^{\mathrm{op}},
+\mathcal{V}]$ at the specific monoid $A$. Day convolution captures the
+``cosimplicial homotopical structure'' uniformly.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cauchy Completion Revisited}
+\label{sec:cauchy-revisited}
+% ═══════════════════════════════════════════════════════════════════════════
+
+Chapter~28 introduced Cauchy completeness in the (unenriched) profunctor
+setting. In the enriched setting, Cauchy completeness interacts richly with
+Day convolution.
+
+\subsection{Formalizing}
+
+\begin{definition}[Enriched Cauchy completion]
+\label{def:enriched-cauchy}
+A $\mathcal{V}$-category $\mathcal{C}$ is \term{Cauchy complete} if for
+every $\mathcal{V}$-profunctor $P : \mathbf{1} \to \mathcal{C}$ admitting a
+right adjoint as a 1-cell in $\mathcal{V}$-$\mathbf{Prof}$, $P$ is
+representable by an object of $\mathcal{C}$.
+
+The \term{Cauchy completion} $\bar{\mathcal{C}}$ is the universal Cauchy-complete
+enlargement; it is precisely the full sub-$\mathcal{V}$-category of
+$[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$ consisting of the
+\term{absolute presheaves}.
+\end{definition}
+
+\begin{remark}[Concrete cases]
+\begin{itemize}
+  \item In the $\mathbf{Set}$-enriched case, Cauchy completion is the
+        idempotent (Karoubian) completion.
+  \item In the $\mathbf{Ab}$-enriched case, Cauchy completion adds direct
+        summands of free objects.
+  \item In the $\mathbf{Cat}$-enriched case (i.e., 2-categories), Cauchy
+        completion adds objects represented by 1-cells with a right adjoint.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:day-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define Day convolution.}{For $F, G : \mathcal{C}^{\mathrm{op}} \to \mathcal{V}$, $(F \star_{\mathrm{Day}} G)(c) = \int^{a, b} \mathcal{C}(c, a \otimes_\mathcal{C} b) \otimes F(a) \otimes G(b)$.}
+\qaitem{What is the Day-convolution unit?}{The Yoneda embedding of the monoidal unit: $Y(I_\mathcal{C}) = \mathcal{C}(-, I_\mathcal{C})$.}
+\qaitem{Why is Day convolution monoidal?}{Because the associator and unitors of $\mathcal{C}$ transfer (via Yoneda reduction and functoriality of coends) to associator and unitors of $\star_{\mathrm{Day}}$.}
+\qaitem{Show that $Y(I_\mathcal{C}) \star_{\mathrm{Day}} F \cong F$.}{$(Y(I_\mathcal{C}) \star F)(c) = \int^{a, b} \mathcal{C}(c, a \otimes b) \otimes \mathcal{C}(a, I) \otimes F(b)$; Yoneda-reduce $a$ to get $\int^b \mathcal{C}(c, I \otimes b) \otimes F(b) \cong \int^b \mathcal{C}(c, b) \otimes F(b) \cong F(c)$.}
+\qaitem{What is the internal hom of Day convolution?}{$[G, H]_{\mathrm{Day}}(c) = \int_b \mathcal{V}(G(b), H(c \otimes b))$.}
+\qaitem{When is Day convolution closed?}{When $\mathcal{C}$ is symmetric monoidal and $\mathcal{V}$ is symmetric monoidal closed and complete.}
+\qaitem{State the universal property of Day convolution.}{For every cocomplete $\mathcal{V}$-monoidal $\mathcal{E}$ and $\mathcal{V}$-monoidal $F : \mathcal{C} \to \mathcal{E}$, there is an essentially unique cocontinuous strong monoidal $\widetilde F : [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V} \to \mathcal{E}$ extending $F$ via Yoneda.}
+\qaitem{Why is Day convolution the ``free monoidal cocompletion''?}{Because $[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$ with Day tensor is initial among cocomplete monoidal extensions of $\mathcal{C}$; equivalently, the universal property uniquely characterizes the construction.}
+\qaitem{Write the enriched left Kan extension formula.}{$(\operatorname{Lan}_K F)(d) = \int^c \mathcal{D}(K c, d) \otimes_\mathcal{E} F(c)$.}
+\qaitem{Right Kan extension formula?}{$(\operatorname{Ran}_K F)(d) = \int_c [\mathcal{D}(d, K c), F(c)]_\mathcal{E}$.}
+\qaitem{Why is $\operatorname{Lan}_Y \dashv Y^* \dashv \operatorname{Ran}_Y$ an adjoint triple?}{Because Yoneda is the universal embedding into the free cocompletion; the restriction $Y^*$ has left and right adjoints by the colimit/limit formulas (special case of Chapter~18's adjoint triple).}
+\qaitem{Why is Day convolution the left Kan extension of $\star_\mathcal{V} \circ (Y \otimes Y)$ along $\otimes_\mathcal{C}$?}{Because Yoneda extends pointwise to the presheaf category, and the Day formula is exactly the left Kan extension of the composite ``embed-then-tensor'' along $\otimes_\mathcal{C}$.}
+\qaitem{State the monoids-in-Day-convolution theorem.}{Monoids in $([\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}, \star_{\mathrm{Day}})$ are equivalent to lax monoidal $\mathcal{V}$-functors $\mathcal{C} \to \mathcal{V}$.}
+\qaitem{Interpret this for operads.}{For $\mathcal{C} = \mathbb{F}$ (finite sets and bijections, disjoint union), monoids in Day convolution = lax monoidal $\mathbb{F} \to \mathcal{V}$ = operads.}
+\qaitem{Why is Day convolution natural in the base category?}{Because the formula's coend integrates over all morphisms; functoriality in $\mathcal{C}$ is preserved by the coend construction.}
+\qaitem{What is an enriched profunctor $\mathcal{C} \to \mathcal{D}$?}{A $\mathcal{V}$-functor $P : \mathcal{D}^{\mathrm{op}} \otimes \mathcal{C} \to \mathcal{V}$.}
+\qaitem{What is enriched Cauchy completion?}{The universal Cauchy-complete enlargement: full sub-$\mathcal{V}$-category of presheaves consisting of absolute (representable-up-to-equivalence) ones.}
+\qaitem{What is $\mathbf{Ab}$-Cauchy completion?}{Adding direct summands of free objects (i.e., the idempotent splitting for direct sum decompositions).}
+\qaitem{What does ``absolute'' mean for a presheaf in this context?}{A presheaf $P$ is absolute if its Yoneda extension $\widetilde Y^{-1}(P)$ exists in $\mathcal{C}$ — i.e., $P$ is represented by an object of the Cauchy completion.}
+\qaitem{Why is the Day-convolution monoidal structure ``the right one''?}{Because it is uniquely determined by the universal property: it is the unique monoidal structure on the free cocompletion that makes Yoneda strongly monoidal.}
+\qaitem{What is the relationship between Day convolution and the convolution of $L^1$-functions on a group?}{Same formula: $(f * g)(x) = \int f(a) g(x - a) \, da$ is the special case for $\mathcal{C}$ = a group and $\mathcal{V} = \mathbf{Set}$; the coend becomes an ordinary integral over the group.}
+\qaitem{State the Day convolution formula for a discrete (groupoid) $\mathcal{C}$.}{$(F \star_{\mathrm{Day}} G)(c) = \coprod_{a \otimes b \cong c} F(a) \times G(b) / \sim$, where the coend reduces to a coproduct over a single representative; in a group, this is the convolution sum.}
+\qaitem{Why does $\otimes_\mathcal{E}$ need to preserve colimits for the universal property to hold?}{Because $\widetilde F$ is a colimit-preserving functor; for it to be \emph{monoidal}, the target tensor must distribute over colimits. Otherwise the convolution formula doesn't carry the monoidal structure cleanly.}
+\qaitem{What's the simplest example of Day convolution?}{$\mathcal{C} = $ a discrete monoidal category (a monoid). Then $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is the category of $\mathcal{C}$-graded sets, and Day convolution is exactly the convolution on graded sets.}
+\qaitem{What is the dual of the Day convolution theorem (using right Kan extension)?}{The cofree comonoidal cocompletion: $[\mathcal{C}, \mathcal{V}]_\mathcal{V}$ with the dual ``Day cotensor'' has the universal property for comonoids and oplax monoidal functors.}
+\qaitem{How does Day convolution relate to Chapter~29's free monoidal category?}{$F^\otimes(\mathcal{C}) \cong ([\mathcal{C}^{\mathrm{op}}, \mathbf{Set}], \star_{\mathrm{Day}})$ when $\mathcal{C}$ is itself monoidal; Day convolution provides the missing tensor on the presheaf category.}
+\qaitem{What is the explicit formula for an $\mathcal{O}$-algebra in $\mathcal{V}$ via Day convolution?}{An $\mathcal{O}$-algebra $A$ corresponds to a lax monoidal functor $\mathbb{F} \to \mathcal{V}$ sending $n$ to $A^{\otimes n}$, with the operad's composition giving the structure 2-cells.}
+\qaitem{State Day convolution closure as an adjunction.}{$[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(F \star_{\mathrm{Day}} G, H) \cong [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}(F, [G, H]_{\mathrm{Day}})$.}
+\qaitem{Why is the proof of associativity for Day convolution a coend calculation?}{Because the formula is itself a coend; associativity reduces to Fubini-plus-Yoneda-reduction, the two pillars of the coend calculus.}
+\qaitem{What chapter develops the formal theory of monads that uses Day convolution?}{Chapter~32 (The Formal Theory of Monads); monoids in Day-monoidal categories provide the foundation for monad transformers and distributive laws (Chapter~35).}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Day convolution.}\quad For a $\mathcal{V}$-monoidal $\mathcal{C}$,
+the convolution $(F \star_{\mathrm{Day}} G)(c) = \int^{a, b} \mathcal{C}(c,
+a \otimes b) \otimes F(a) \otimes G(b)$ makes $[\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ into a $\mathcal{V}$-monoidal category. The unit is
+$Y(I_\mathcal{C})$.
+
+\textbf{Universal property.}\quad The Yoneda embedding $Y : \mathcal{C} \to
+[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$ exhibits the
+Day-monoidal presheaf category as the free $\mathcal{V}$-cocomplete monoidal
+extension of $\mathcal{C}$: any $\mathcal{V}$-monoidal $F : \mathcal{C} \to
+\mathcal{E}$ extends uniquely to a cocontinuous strong monoidal $\widetilde F$.
+
+\textbf{Closed structure.}\quad For symmetric monoidal $\mathcal{C}$, Day
+convolution is symmetric monoidal closed, with internal hom $[G, H]_{\mathrm{Day}}(c)
+= \int_b \mathcal{V}(G(b), H(c \otimes b))$.
+
+\textbf{Enriched Kan extensions.}\quad $\operatorname{Lan}_K F (d) = \int^c
+\mathcal{D}(K c, d) \otimes F(c)$ and $\operatorname{Ran}_K F (d) = \int_c
+[\mathcal{D}(d, K c), F(c)]$. These give the adjoint triple
+$\operatorname{Lan}_Y \dashv Y^* \dashv \operatorname{Ran}_Y$ along the
+Yoneda embedding.
+
+\textbf{Day-monoid theorem.}\quad Monoids in $([\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}, \star_{\mathrm{Day}})$ are equivalent to lax
+monoidal $\mathcal{V}$-functors $\mathcal{C} \to \mathcal{V}$. Operads and
+algebraic structures are special cases.
+
+\textbf{Cauchy completion.}\quad The full sub-presheaf category of
+\emph{absolute} presheaves. In $\mathbf{Set}$-enriched: idempotent splitting;
+in $\mathbf{Ab}$-enriched: direct summand completion; in $\mathbf{Cat}$-enriched:
+left-adjoint completion.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Day convolution.}\quad
+\begin{equation*}
+  (F \star_{\mathrm{Day}} G)(c) \;=\; \int^{a, b \in \mathcal{C}}
+  \mathcal{C}(c, a \otimes_\mathcal{C} b) \otimes F(a) \otimes G(b),
+  \qquad \mathbf{1}_{\mathrm{Day}} \;=\; Y(I_\mathcal{C}).
+\end{equation*}
+
+\medskip
+\textbf{Internal hom (Day-closed).}\quad
+\begin{equation*}
+  [G, H]_{\mathrm{Day}}(c) \;=\; \int_b \mathcal{V}(G(b), H(c \otimes b)).
+\end{equation*}
+
+\medskip
+\textbf{Universal property.}\quad The Day-monoidal $[\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ is the free $\mathcal{V}$-cocomplete monoidal
+extension of $\mathcal{C}$. $\widetilde F(P) = \int^c P(c) \otimes_\mathcal{E} F(c)$.
+
+\medskip
+\textbf{Enriched Kan extensions.}\quad
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;=\; \int^c \mathcal{D}(K c, d) \otimes_\mathcal{E} F(c),
+  \qquad
+  (\operatorname{Ran}_K F)(d) \;=\; \int_c [\mathcal{D}(d, K c), F(c)]_\mathcal{E}.
+\end{equation*}
+Adjoint triple along $Y$: $\operatorname{Lan}_Y \dashv Y^* \dashv \operatorname{Ran}_Y$.
+
+\medskip
+\textbf{Day-monoid theorem.}\quad
+\begin{equation*}
+  \mathrm{Mon}([\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V},
+  \star_{\mathrm{Day}}) \;\simeq\; [\mathcal{C}, \mathcal{V}]_\mathcal{V}^{\mathrm{lax\,mon}}.
+\end{equation*}
+
+\medskip
+\textbf{Cauchy completion.}\quad $\bar{\mathcal{C}} \subset [\mathcal{C}^{\mathrm{op}},
+\mathcal{V}]_\mathcal{V}$ is the full sub-$\mathcal{V}$-category of absolute
+presheaves. Examples: idempotent splitting ($\mathbf{Set}$), direct-summand
+closure ($\mathbf{Ab}$), left-adjoint splitting ($\mathbf{Cat}$).
+
+\medskip
+\noindent\textit{Chapter~31 develops the general theory of Kan extensions
+in the enriched setting, building on the formulas of this chapter and the
+adjoint triple along Yoneda. Pointwise extensions, absolute extensions, and
+applications to coherence and to the formal theory of monads (Chapter~32)
+follow.}
+\end{formalrestatement}

@@ -1,0 +1,363 @@
+% ch35_distributive_laws.tex — Volume III Chapter 11
+
+\chapter{Distributive Laws and Composed Monads}
+
+\begin{overviewbox}
+This chapter develops a topic untouched by Volumes I and II: when can two
+monads $s, t$ on the same object be \emph{composed} to give a new monad
+$st$? Beck (1969) answered: precisely when there is a \term{distributive
+law} $\lambda : ts \Rightarrow st$ satisfying four coherence axioms. The
+composed monad $st$ then has unit $\eta^{st} = \eta^s \eta^t$ and
+multiplication built from $\mu^s, \mu^t, \lambda$.
+
+Distributive laws are the algebraic vocabulary for ``two monad structures
+that play well together.'' Their applications: \emph{monad transformers}
+in programming languages (Reader-of-State, State-of-List, etc.); the
+construction of \emph{rings as compositions of abelian groups and monoids};
+\emph{double dualization} as a monoidal composite; \emph{traced monads};
+the \emph{distributive law approach to operads}. The chapter closes with
+mixed distributive laws (monad over comonad) and the connection to bimonads
+and Hopf monads.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Distributive Law Axioms}
+\label{sec:dist-axioms}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Distributive law of $s$ over $t$]
+\label{def:dist-formal}
+For monads $s, t$ on $a$ in a 2-category $\mathcal{K}$, a \term{distributive
+law of $s$ over $t$} is a 2-cell $\lambda : ts \Rightarrow st$ such that the
+four diagrams below commute:
+\begin{align*}
+  \text{(D1) Unit-on-left:} &\quad \lambda \cdot t \eta^s = \eta^s t \\
+  \text{(D2) Unit-on-right:} &\quad \lambda \cdot \eta^t s = s \eta^t \\
+  \text{(D3) Mult-on-left:} &\quad \lambda \cdot t \mu^s = \mu^s t \cdot s \lambda \cdot \lambda s \\
+  \text{(D4) Mult-on-right:} &\quad \lambda \cdot \mu^t s = s \mu^t \cdot \lambda t \cdot t \lambda
+\end{align*}
+\end{definition}
+
+\begin{howtosay}
+$\lambda : ts \Rightarrow st$ \sayit{``lambda from t-s to s-t''}: the
+distributive law moves $t$ past $s$, swapping their order. (D1), (D2) are
+the \term{unit} laws (compatibility of $\lambda$ with the monad units),
+and (D3), (D4) are the \term{multiplication} laws.
+\end{howtosay}
+
+\subsection{Reorganizing}
+
+\begin{remark}[Symmetry]
+Distributive laws are inherently directional: $\lambda : ts \Rightarrow st$
+is not the same as $\lambda' : st \Rightarrow ts$. The composed monad on
+the result depends on which direction is chosen. For symmetric monoidal
+contexts, one can sometimes find a self-dual law.
+\end{remark}
+
+\begin{example_thm}[Trivial distributive law]
+For any monad $s$ on $a$, the identity $s s \Rightarrow s s$ is the trivial
+distributive law of $s$ over itself. The composed monad $ss$ may or may not
+agree with $s$; it does iff $\mu^s$ acts ``as expected.''
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Beck's Theorem on Distributive Laws}
+\label{sec:beck-dist}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Beck, 1969]
+\label{thm:beck-dist}
+For monads $(s, \eta^s, \mu^s)$ and $(t, \eta^t, \mu^t)$ on $a$ in a 2-category
+$\mathcal{K}$, the following data are equivalent:
+\begin{enumerate}
+  \item A distributive law $\lambda : ts \Rightarrow st$.
+  \item A monad structure $(st, \eta^{st}, \mu^{st})$ on the composite $st$
+        \emph{extending} those of $s$ and $t$ (i.e., the inclusions $s \to st$
+        and $t \to st$ via $\eta$ are monad maps).
+  \item A lift of $t$ to a monad on the EM object $a^s$ of $s$.
+\end{enumerate}
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{(1) $\Rightarrow$ (2): given $\lambda$, define $\eta^{st} =
+\eta^s \cdot \eta^t$ and $\mu^{st} = (\mu^s \cdot s\lambda) \cdot (t\mu^t)$
+(reading right-to-left).}{Composing the basic data through $\lambda$.}
+\proofstep{Verify $\mu^{st}$ is associative: chain the four distributive-law
+axioms (D1--D4) to reduce both $\mu^{st} \cdot st\mu^{st}$ and $\mu^{st} \cdot
+\mu^{st} st$ to the same expression.}{Mechanical but lengthy: this is the
+``coherence pyramid'' for $\lambda$.}
+\proofstep{Verify $\mu^{st}$ satisfies unit laws: use (D1) and (D2) to check
+$\mu^{st} \cdot \eta^{st} st = 1_{st} = \mu^{st} \cdot st \eta^{st}$.}{
+Unit-law verification.}
+\proofstep{(2) $\Rightarrow$ (1): given a monad structure on $st$, define
+$\lambda$ as the composite $ts \xrightarrow{\eta^s t s \eta^t} st s t
+\xrightarrow{\mu^{st}} st$.}{Inverse construction.}
+\proofstep{(1) $\Leftrightarrow$ (3): a distributive law lifts $t$ to a
+$\mathcal{K}$-monad on $a^s$, because (D3) and (D4) provide the necessary
+naturality and compatibility with the algebra structure on $a^s$.}{Algebra
+lifting.}
+\proofstep{All three forms thus carry equivalent data.}{Standard.}
+\end{prooflog}
+
+\subsection{Reorganizing: Why the Three Forms Are Useful}
+
+\begin{remark}
+The three forms of Beck's theorem support different applications:
+\begin{itemize}
+  \item Form (1) — distributive law — is the most explicit, easiest to
+        check, used in computations.
+  \item Form (2) — composite monad — emphasizes the algebraic conclusion:
+        an algebra for the composite is an algebra for both monads,
+        compatibly.
+  \item Form (3) — lift of $t$ to $a^s$ — is the conceptual heart: $\lambda$
+        encodes how $t$ becomes a monad on $s$-algebras.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Classical Examples}
+\label{sec:dist-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{example_thm}[Rings = (Abelian groups) $\otimes$ (Monoids)]
+\label{ex:ring-dist}
+Let $\mathrm{Ab}$ be the free abelian group monad on $\mathbf{Set}$, and
+let $\mathrm{Mon}$ be the free monoid monad. A distributive law
+$\lambda : \mathrm{Ab}\,\mathrm{Mon} \Rightarrow \mathrm{Mon}\,\mathrm{Ab}$
+sends a formal $\mathbb{Z}$-linear combination of words to a sum of products,
+expanding the linear combination through the monoid structure.
+
+The composite monad $\mathrm{Mon}\,\mathrm{Ab}$ on $\mathbf{Set}$ produces
+the \term{free ring} on a set: an algebra is a ring.
+\end{example_thm}
+
+\begin{example_thm}[Modules = (Abelian groups) $\otimes$ (Action of a monoid)]
+For a fixed ring $R$, the free $R$-module monad on $\mathbf{Set}$ factors as
+a composite of: (i) the free abelian group monad on $\mathbf{Set}$, (ii) the
+``action of $R$'' monad on $\mathbf{Ab}$. The distributive law expresses
+that scalar multiplication distributes over addition.
+\end{example_thm}
+
+\begin{example_thm}[Monad transformers in programming]
+In functional programming, \term{monad transformers} like
+\texttt{ReaderT s m}, \texttt{StateT s m}, \texttt{ListT m} construct
+composite monads from basic ones plus a distributive law. The
+$\lambda$ axioms verify that the operations of one monad commute
+correctly with the operations of the other.
+\end{example_thm}
+
+\subsection{Reorganizing}
+
+\begin{example_thm}[Self-distributive monoidal monads]
+On $\mathbf{Set}$, the powerset monad $P$ is a monad. Asking when $P$
+distributes over $P$ — i.e., when sets-of-sets can be flattened consistently
+— amounts to choosing a coherent ``element-wise'' versus ``set-wise''
+ordering. Such laws give rise to ``$\mathbb{Z}_2$-graded monads.''
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Mixed Distributive Laws}
+\label{sec:mixed-dist}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+A monad and a comonad can interact via a \emph{mixed} distributive law.
+
+\begin{definition}[Mixed distributive law]
+\label{def:mixed-dist}
+For a monad $t = (t, \eta^t, \mu^t)$ and a comonad $g = (g, \varepsilon^g,
+\delta^g)$ on the same object $a$ in $\mathcal{K}$, a \term{mixed distributive
+law} is a 2-cell $\lambda : gt \Rightarrow tg$ satisfying four coherence
+diagrams involving $\eta^t, \mu^t, \varepsilon^g, \delta^g$ and $\lambda$.
+\end{definition}
+
+\begin{theorem}[Mixed Beck]
+\label{thm:mixed-beck}
+Mixed distributive laws are in bijection with:
+\begin{itemize}
+  \item Monad structures on the composite $tg$ compatible with both $t$ and $g$.
+  \item Lifts of $t$ to a monad on the (co-)EM object $a^g$.
+\end{itemize}
+\end{theorem}
+
+\subsection{Reorganizing: Bimonads and Hopf Monads}
+
+\begin{definition}[Bimonad]
+\label{def:bimonad}
+A \term{bimonad} (sometimes ``Hopf monad'' in some authors' terminology) is
+a monad $H$ on a monoidal category $\mathcal{V}$ together with a comonoidal
+structure (mediating its own multiplication and the tensor product of
+$\mathcal{V}$) such that the two structures are compatible in a coherent
+way. Equivalently, $H$ is a comonad in the bicategory of monoidal categories
+and lax monoidal functors.
+\end{definition}
+
+\begin{example_thm}[Group rings as bimonads]
+For a group $G$, the group ring monad $-{[G]}$ on $\mathbf{Vect}_k$ has a
+natural bimonad structure: it is at once a free-module monad and a
+``representation'' bimonad. Its algebras are \term{$G$-modules}, and its
+bimonad structure is what gives them the monoidal structure of $G$-modules
+under tensor product.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Distributive Laws in $\infty$-Categorical Settings}
+\label{sec:dist-infty}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+In an $\infty$-category, monads and distributive laws carry higher
+coherence data: not just 2-cells but also higher morphisms making the
+``distributive law axioms'' coherent.
+
+\begin{remark}[Higher distributive laws]
+For 2-monads (monads in a 3-category), a distributive law is a 2-cell with
+3-cell coherence. The pattern continues; $\infty$-monad theory exhibits a
+\emph{tower of distributive laws}, where each level's coherence becomes the
+next level's basic structure.
+\end{remark}
+
+\subsection{Reorganizing}
+
+\begin{remark}[Why distributive laws matter for Vol III's synthesis]
+Distributive laws are the formal mechanism by which compound monadic
+structures (rings, modules, groups acting on rings, etc.) decompose into
+``layers.'' They are the categorification of distributivity in arithmetic.
+Just as distributivity $(a + b)c = ac + bc$ in ring theory expresses
+how multiplication interacts with addition, distributive laws express how
+\emph{any} two monadic structures interact. Vol III sees this as a
+foundational pattern: the entire ``algebra of structures'' refines through
+distributive laws.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:dist-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a distributive law of $s$ over $t$.}{A 2-cell $\lambda : ts \Rightarrow st$ satisfying four coherence axioms: two unit laws (D1, D2) and two multiplication laws (D3, D4).}
+\qaitem{State the four axioms.}{(D1) $\lambda \cdot t\eta^s = \eta^s t$. (D2) $\lambda \cdot \eta^t s = s \eta^t$. (D3) $\lambda \cdot t\mu^s = \mu^s t \cdot s\lambda \cdot \lambda s$. (D4) $\lambda \cdot \mu^t s = s\mu^t \cdot \lambda t \cdot t\lambda$.}
+\qaitem{Is a distributive law symmetric in $s$ and $t$?}{No. $\lambda : ts \Rightarrow st$ moves $t$ past $s$ in one direction. The reverse direction $\lambda' : st \Rightarrow ts$ is a different (and not generally existing) structure.}
+\qaitem{State Beck's distributive-law theorem.}{Distributive laws $\lambda : ts \Rightarrow st$ are in bijection with monad structures on $st$ extending those of $s, t$, and with lifts of $t$ to a monad on $a^s$.}
+\qaitem{What is the formula for the composite monad's multiplication?}{$\mu^{st} = (\mu^s \cdot s\lambda) \cdot (t\mu^t)$: apply $t$'s multiplication, swap via $\lambda$, then apply $s$'s multiplication.}
+\qaitem{What is the formula for the composite monad's unit?}{$\eta^{st} = \eta^s \cdot \eta^t$: the composition of both monad units.}
+\qaitem{Give the ring-as-composite-monad example.}{The free ring monad $\mathrm{Ring}$ on $\mathbf{Set}$ factors as $\mathrm{Mon} \circ \mathrm{Ab}$ via a distributive law sending formal linear combinations of words to expanded sums of products.}
+\qaitem{Why does this give rings?}{Because an algebra over $\mathrm{Mon} \circ \mathrm{Ab}$ is a set with both an abelian group structure and a monoid structure such that multiplication distributes over addition --- i.e., a ring.}
+\qaitem{State the module-monad decomposition for a ring $R$.}{Free $R$-module = (free abelian group) composed with (action of $R$), with the distributive law expressing that scalar multiplication distributes over addition.}
+\qaitem{What are monad transformers in functional programming?}{Type constructors that combine multiple monad effects: e.g., $\mathtt{StateT}\,s\,m$ combines $\mathrm{State}$ and $m$, requiring a distributive law of $s$ and $m$.}
+\qaitem{Define a mixed distributive law.}{For a monad $t$ and comonad $g$: $\lambda : gt \Rightarrow tg$ satisfying four coherence axioms involving both $\eta, \mu$ of $t$ and $\varepsilon, \delta$ of $g$.}
+\qaitem{State mixed Beck's theorem.}{Mixed distributive laws are in bijection with monad structures on $tg$ compatible with both, or equivalently with lifts of $t$ to a monad on the co-EM object $a^g$.}
+\qaitem{Define a bimonad.}{A monad on a monoidal category equipped with a comonoidal structure such that the two are coherent. Algebras for a bimonad have additional monoidal structure.}
+\qaitem{Give an example of a bimonad.}{The group ring monad $-{[G]}$ on $\mathbf{Vect}_k$ for a group $G$.}
+\qaitem{What is a Hopf monad?}{A bimonad whose comonoidal structure has an antipode-like operation; algebras for a Hopf monad have natural left/right module/comodule structures.}
+\qaitem{Why are distributive laws inherently 2-categorical?}{Because they are 2-cells (natural transformations between functors). They live in the 2-categorical structure of $\mathcal{K}$ and depend on it.}
+\qaitem{What is the dual statement: ``law of $s$ over $t$'' vs.\ ``law of $t$ over $s$''?}{$\lambda : ts \Rightarrow st$ is a distributive law of $s$ over $t$; the dual $\lambda' : st \Rightarrow ts$ would be a law of $t$ over $s$. The two are different structures (generally).}
+\qaitem{What is the relationship between distributive laws and monad maps?}{A distributive law $\lambda$ provides a way to ``transport'' algebras of one monad through the other, i.e., the natural lifting of one monad to algebras for another.}
+\qaitem{Can two monads have no distributive law between them?}{Yes: e.g., the powerset monad and the set-of-bags monad have no compatible distributive law. The composite cannot be made into a monad.}
+\qaitem{Why is the composite monad's existence equivalent to the distributive law?}{Because (a) given $\lambda$, you construct $\mu^{st}$ from $\mu^s, \mu^t, \lambda$; and (b) given a compatible $\mu^{st}$, you recover $\lambda$ as a specific composite. The two structures carry the same information.}
+\qaitem{State the categorical interpretation of (D1).}{$\lambda$ extends $\eta^s$ from the unit of $s$ to a unit for the composite $st$: applying $\lambda$ after $t\eta^s$ should give the same as $\eta^s t$ (transporting through).}
+\qaitem{Give an example of a distributive law in $\mathbf{Cat}$.}{The free abelian group functor distributes over the free monoid functor; the law assigns to each ``element of (free monoid of (free abelian group on $X$))'' a corresponding element of the swapped composite.}
+\qaitem{Why does a distributive law lift one monad to algebras for the other?}{Because the four axioms encode exactly the compatibility needed for $t$ to define operations on $s$-algebras: the unit and multiplication of $t$ become natural with respect to the $s$-algebra structure.}
+\qaitem{What does the (D3) axiom say informally?}{It says ``the law $\lambda$ respects the multiplication of $s$'': transporting through $\lambda$ commutes with the way $s$'s multiplication acts.}
+\qaitem{Why are distributive laws sometimes called ``compatibility 2-cells''?}{Because they encode the precise way two monad structures must agree to be combined; they are the algebraic certificate of compatibility.}
+\qaitem{Where do distributive laws appear in topology?}{In topological algebra: distributive laws relate operations such as group multiplication and topological structure, producing topological groups, rings, etc.}
+\qaitem{Why is the Hopf monad framework valuable?}{Because it encodes Hopf-algebraic structure (group rings, quantum groups, Hopf algebras) in monadic terms, making representations into the natural ``algebras of a bimonad.''}
+\qaitem{What's the $\infty$-categorical version of a distributive law?}{An $\infty$-cell with higher coherence data, providing distributive structure in higher categories; appears in derived algebraic geometry and homotopy theory.}
+\qaitem{Summarize Beck's theorem's three faces.}{(1) Distributive law $\lambda : ts \Rightarrow st$. (2) Composite monad structure on $st$. (3) Lift of $t$ to a monad on $a^s$. All three carry the same data.}
+\qaitem{What's the strategic role of distributive laws in Vol III?}{They are the mechanism by which compound monadic structures decompose into ``layers,'' generalizing arithmetic distributivity to a structural primitive of category theory.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Distributive law $\lambda : ts \Rightarrow st$.}\quad A 2-cell
+satisfying four coherence axioms (D1, D2 unit; D3, D4 multiplication).
+Encodes the compatibility allowing two monads on the same object to be
+composed.
+
+\textbf{Beck's theorem.}\quad Distributive laws are in bijection with: (a)
+monad structures on the composite $st$; (b) lifts of $t$ to a monad on the
+Eilenberg--Moore object $a^s$.
+
+\textbf{Classical examples.}\quad Rings = (Abelian groups) $\otimes$
+(Monoids). Modules over $R$ = (Abelian groups) $\otimes$ (action of $R$).
+Monad transformers in functional programming.
+
+\textbf{Mixed distributive laws.}\quad Between a monad and a comonad on the
+same object: lift the monad to a structure on the co-Eilenberg--Moore
+object of the comonad.
+
+\textbf{Bimonads and Hopf monads.}\quad Monads on monoidal categories with
+compatible comonoidal structures. Algebras of a bimonad on
+$\mathbf{Vect}_k$ have monoidal structure; algebras of a Hopf monad have
+additional module/comodule duality.
+
+\textbf{$\infty$-categorical aspects.}\quad Distributive laws extend to
+$\infty$-monads in $\infty$-categories with higher coherence data; basic
+for derived algebraic geometry and homotopy theory.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Distributive law axioms (D1--D4).}\quad
+\begin{align*}
+  \lambda \cdot t \eta^s &= \eta^s t \\
+  \lambda \cdot \eta^t s &= s \eta^t \\
+  \lambda \cdot t \mu^s &= \mu^s t \cdot s \lambda \cdot \lambda s \\
+  \lambda \cdot \mu^t s &= s \mu^t \cdot \lambda t \cdot t \lambda
+\end{align*}
+
+\medskip
+\textbf{Composite monad.}\quad $\eta^{st} = \eta^s \cdot \eta^t$;
+$\mu^{st} = (\mu^s \cdot s\lambda) \cdot (t\mu^t)$.
+
+\medskip
+\textbf{Beck's bijection.}\quad
+$\{\lambda : ts \Rightarrow st \text{ satisfying D1--D4}\}
+\leftrightarrow \{\text{monad structures on } st\}
+\leftrightarrow \{\text{lifts of } t \text{ to monad on } a^s\}$.
+
+\medskip
+\textbf{Examples.}\quad Ring = Monoid $\circ$ AbGroup; $R$-Module = (action of $R$)
+$\circ$ AbGroup; monad transformers in programming.
+
+\medskip
+\textbf{Mixed distributive law.}\quad $\lambda : gt \Rightarrow tg$ between a
+monad $t$ and a comonad $g$, with four axioms involving $\eta^t, \mu^t,
+\varepsilon^g, \delta^g$.
+
+\medskip
+\textbf{Bimonad.}\quad Monad on monoidal $\mathcal{V}$ + compatible
+comonoidal structure. Hopf monad: bimonad + antipode-like operation.
+
+\medskip
+\noindent\textit{Chapter~36 synthesizes Volume III as a whole and points
+forward to topics beyond Volume III's scope: $\infty$-categories, higher
+algebra, derived algebraic geometry, homotopy type theory.}
+\end{formalrestatement}

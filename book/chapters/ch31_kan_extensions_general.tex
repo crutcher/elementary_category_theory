@@ -1,0 +1,451 @@
+% ch31_kan_extensions_general.tex — Volume III Chapter 7
+
+\chapter{Kan Extensions: The General Theory}
+
+\begin{overviewbox}
+Chapter~18 developed Kan extensions in the $\mathbf{Set}$-enriched setting:
+the adjoint triple $\operatorname{Lan}_p \dashv p^* \dashv \operatorname{Ran}_p$,
+the colimit formula, pointwise and absolute extensions, the
+nerve/realization paradigm. Chapters~27 and~30 lifted the formulas to the
+enriched setting. This chapter completes the theory: pointwise and absolute
+Kan extensions in $\mathcal{V}$-$\mathbf{Cat}$, the \emph{codensity monad}
+(every functor $G : \mathcal{B} \to \mathcal{C}$ defines a monad $\operatorname{Ran}_G G$
+on $\mathcal{C}$), algebraic theories as Kan extensions of representables,
+and the unifying slogan: \emph{every adjoint is a Kan extension; every monad
+is a Kan extension; every limit is a Kan extension.}
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Pointwise Kan Extensions in $\mathcal{V}$-$\mathbf{Cat}$}
+\label{sec:pointwise-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Pointwise Kan extension]
+\label{def:pointwise-kan}
+Let $\mathcal{V}$ be a complete, cocomplete symmetric monoidal closed
+category. For $\mathcal{V}$-functors $K : \mathcal{C} \to \mathcal{D}$ and
+$F : \mathcal{C} \to \mathcal{E}$, the \term{pointwise left Kan extension}
+$\operatorname{Lan}_K F : \mathcal{D} \to \mathcal{E}$ is the $\mathcal{V}$-functor
+defined object-wise by the weighted colimit
+\begin{equation*}
+  (\operatorname{Lan}_K F)(d) \;=\; \mathcal{D}(K-, d) \star F \;=\;
+  \int^c \mathcal{D}(K c, d) \otimes_\mathcal{E} F(c).
+\end{equation*}
+Dually, the \term{pointwise right Kan extension} is
+\begin{equation*}
+  (\operatorname{Ran}_K F)(d) \;=\; \{\mathcal{D}(d, K-), F\} \;=\;
+  \int_c [\mathcal{D}(d, K c), F(c)]_\mathcal{E}.
+\end{equation*}
+\end{definition}
+
+\begin{theorem}[Pointwise Kan extensions are Kan extensions]
+\label{thm:pointwise-is-kan}
+The pointwise extensions are Kan extensions in the classical sense: they
+satisfy the universal property of left/right Kan extension as initial/terminal
+objects in the appropriate comma category of functors.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{$(\operatorname{Lan}_K F)$ comes with a $\mathcal{V}$-natural unit
+$\eta : F \Rightarrow (\operatorname{Lan}_K F) \circ K$.}{Defined at $c$ by
+the universal cowedge into the coend $\int^{c'} \mathcal{D}(K c', K c)
+\otimes F(c')$ at the identity $\mathcal{D}(K c, K c)$.}
+\proofstep{For any $G : \mathcal{D} \to \mathcal{E}$ and $\sigma : F \Rightarrow
+G \circ K$, define $\widetilde\sigma : \operatorname{Lan}_K F \Rightarrow G$
+by $\widetilde\sigma_d : \int^c \mathcal{D}(K c, d) \otimes F(c) \to G(d)$
+sending $(f : K c \to d, x \in F(c))$ to $G(f) \circ \sigma_c(x)$.}{
+Universal property of the coend.}
+\proofstep{$\widetilde\sigma$ is well-defined (compatible with the coend
+quotient) by naturality of $\sigma$ in $c$.}{Cowedge condition.}
+\proofstep{$\widetilde\sigma$ satisfies $\widetilde\sigma_K \circ \eta = \sigma$
+and is unique with that property.}{Direct calculation; standard.}
+\proofstep{Conclude: $\operatorname{Lan}_K F$ is the universal $\mathcal{V}$-functor
+with a $\mathcal{V}$-natural transformation $F \Rightarrow (\operatorname{Lan}_K F)
+\circ K$.}{Initial in the appropriate comma category.}
+\proofstep{Dually for $\operatorname{Ran}_K F$.}{Reverse all arrows.}
+\end{prooflog}
+
+\subsection{Reorganizing: Pointwise vs.\ ``Global''}
+
+A Kan extension as defined in Chapter~17 (Kan extension along a functor,
+defined by the universal property in the comma category of functors) need
+not be pointwise — i.e., it may not satisfy the weighted-colimit formula at
+each object. Pointwise Kan extensions are the well-behaved kind; in the
+enriched setting they are essentially the only kind worth considering.
+
+\begin{theorem}[Pointwise extensions exist under cocompleteness]
+\label{thm:pointwise-existence}
+If $\mathcal{E}$ is $\mathcal{V}$-cocomplete and $\mathcal{C}$ is small, then
+$\operatorname{Lan}_K F$ exists and is pointwise for every $K, F$. Dually,
+if $\mathcal{E}$ is $\mathcal{V}$-complete, $\operatorname{Ran}_K F$ exists
+and is pointwise.
+\end{theorem}
+
+\begin{proof}
+Existence of the weighted colimits/limits in the formulas of
+Definition~\ref{def:pointwise-kan} follows from cocompleteness/completeness
+(Chapter~27, Theorem~\ref{thm:wcomplete-from-pieces}). That they satisfy the
+universal property of Kan extension is Theorem~\ref{thm:pointwise-is-kan}.
+\end{proof}
+
+\subsection{Formally}
+
+\begin{example_thm}[Left Kan extension along an inclusion]
+For $K : \mathcal{C} \hookrightarrow \mathcal{D}$ a fully faithful inclusion
+and $F : \mathcal{C} \to \mathcal{E}$,
+\begin{equation*}
+  (\operatorname{Lan}_K F)(K c) \;\cong\; F(c)
+\end{equation*}
+(by Yoneda reduction applied to $\mathcal{D}(K c', K c) \cong \mathcal{C}(c', c)$).
+The extension fixes the embedded subcategory; only the new objects in
+$\mathcal{D}$ get genuinely new values.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Absolute Kan Extensions}
+\label{sec:absolute-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Absolute Kan extension]
+\label{def:absolute-kan}
+A Kan extension $\operatorname{Lan}_K F$ is \term{absolute} if it is
+preserved by every $\mathcal{V}$-functor $G : \mathcal{E} \to \mathcal{F}$:
+\begin{equation*}
+  G \circ \operatorname{Lan}_K F \;\cong\; \operatorname{Lan}_K (G \circ F).
+\end{equation*}
+\end{definition}
+
+\begin{theorem}[Characterization of absolute Kan extensions]
+\label{thm:absolute-kan-char}
+$\operatorname{Lan}_K F$ is absolute iff every constituent weighted colimit
+$\mathcal{D}(K-, d) \star F$ is an absolute colimit (preserved by every
+functor).
+\end{theorem}
+
+\begin{remark}
+Absolute colimits exist in only special cases. In $\mathbf{Set}$-enriched:
+filtered colimits of split idempotents, and not much more. In other
+enrichments: e.g., $\mathbf{Ab}$-absolute colimits include direct summand
+splittings. The absoluteness condition is restrictive.
+\end{remark}
+
+\subsection{Reorganizing}
+
+\begin{proposition}[Cauchy completeness via absoluteness]
+\label{prop:cauchy-via-absolute}
+A $\mathcal{V}$-category $\mathcal{C}$ is Cauchy complete iff every absolute
+$\mathcal{V}$-colimit-diagram has a colimit in $\mathcal{C}$. The Cauchy
+completion $\bar{\mathcal{C}}$ is the smallest enlargement with this
+property.
+\end{proposition}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Codensity Monad}
+\label{sec:codensity}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Codensity monad]
+\label{def:codensity}
+For a $\mathcal{V}$-functor $G : \mathcal{B} \to \mathcal{C}$, the
+\term{codensity monad} $\mathbb{T}_G$ is the monad on $\mathcal{C}$
+defined by
+\begin{equation*}
+  T_G(c) \;=\; (\operatorname{Ran}_G G)(c) \;=\; \int_b [\mathcal{C}(c, G b), G b]_\mathcal{C}.
+\end{equation*}
+Its unit is the unit of the Kan extension; its multiplication comes from
+the natural composition action of $\operatorname{Ran}_G G$ on itself.
+\end{definition}
+
+\begin{theorem}[Codensity is a monad]
+\label{thm:codensity-monad}
+$\mathbb{T}_G = (T_G, \eta, \mu)$ is a $\mathcal{V}$-monad on $\mathcal{C}$,
+called the \term{codensity monad of $G$}.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{$T_G = \operatorname{Ran}_G G$ comes with a $\mathcal{V}$-natural
+unit $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow T_G$.}{The unit of the right
+Kan extension.}
+\proofstep{The composite $T_G \circ T_G : \mathcal{C} \to \mathcal{C}$
+factors through the colim that defines $T_G$.}{$T_G$ preserves the relevant
+limits because it is defined as a limit.}
+\proofstep{Construct $\mu : T_G \circ T_G \Rightarrow T_G$: using the
+universal property of $\operatorname{Ran}_G G$, $T_G \circ T_G$ also
+admits a natural transformation from $G$, and the universality factors it
+through $T_G$.}{Detailed argument; uses the fact that Kan extensions form
+an adjunction.}
+\proofstep{Associativity: $\mu \circ T_G \mu = \mu \circ \mu T_G$.}{Both
+factor through the same universal arrow from $G$.}
+\proofstep{Unit axiom: $\mu \circ \eta T_G = \mu \circ T_G \eta = \mathrm{id}_{T_G}$.}{
+Unit of the Kan extension.}
+\proofstep{Conclude: $(T_G, \eta, \mu)$ is a monad on $\mathcal{C}$.}{Standard.}
+\end{prooflog}
+
+\subsection{Reorganizing: Adjunctions Give Codensity}
+
+\begin{theorem}[Adjoint gives its left's codensity]
+\label{thm:adjoint-codensity}
+If $F \dashv G$ with $F : \mathcal{C} \to \mathcal{D}$, $G : \mathcal{D} \to
+\mathcal{C}$, then $\mathbb{T}_G = G F$ is the standard adjunction monad.
+\end{theorem}
+
+\begin{proof}
+$\operatorname{Ran}_G G = G F$ when $F \dashv G$: the right Kan extension of
+a right adjoint along itself is the adjunction composite. Hence
+$\mathbb{T}_G = G F$, the standard monad from the adjunction (Chapter~8).
+\end{proof}
+
+\begin{remark}[The codensity is a generalization]
+For functors $G$ that are \emph{not} right adjoints, the codensity monad
+exists but does not arise from an adjunction. This is the situation Beck
+sought to characterize with monadicity (Chapter~21): the codensity monad
+provides ``the closest monad to $G$,'' adjunction or not.
+\end{remark}
+
+\subsection{Formally: Examples}
+
+\begin{example_thm}[Ultrafilter monad as codensity]
+The \term{ultrafilter monad} on $\mathbf{Set}$ is the codensity monad of
+the inclusion $\mathbf{FinSet} \hookrightarrow \mathbf{Set}$. Explicitly,
+$T_G(X) = \int_F [\mathbf{Set}(X, F), F]$ where $F$ ranges over finite sets;
+this end equals the set of ultrafilters on $X$. \emph{(Kennison--Gildenhuys
+1971.)}
+\end{example_thm}
+
+\begin{example_thm}[Double dualization monad]
+For a field $k$, the codensity monad of $\mathbf{FinDim}_k \hookrightarrow
+\mathbf{Vect}_k$ is the \term{double dualization monad} $V \mapsto V^{**}$.
+Its algebras are precisely the linearly compact vector spaces.
+\end{example_thm}
+
+\begin{example_thm}[Topological codensity]
+The codensity monad of $\mathbf{CompactHaus} \hookrightarrow \mathbf{Top}$
+is the \term{Stone--\v Cech monad} $\beta : \mathbf{Top} \to \mathbf{Top}$:
+its algebras are the compact Hausdorff spaces. Stone--\v Cech compactification
+is monadic over $\mathbf{Top}$ via the codensity construction.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Algebraic Theories as Kan Extensions}
+\label{sec:algebraic-as-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The codensity monad reveals an organizing principle: many ``algebraic
+theories'' over a base category arise as Kan extensions of representable
+functors.
+
+\subsection{Formalizing}
+
+\begin{theorem}[Algebraic theories via Kan]
+\label{thm:algebraic-as-kan}
+For a small category $\mathcal{T}$ of ``operations'' and a functor $J :
+\mathcal{T} \to \mathbf{Set}$ presenting the theory as Lawvere did (each
+$J(t)$ is the underlying set of the free algebra on $|t|$ generators), the
+free-algebra monad on $\mathbf{Set}$ is
+\begin{equation*}
+  T \;=\; \operatorname{Lan}_J J.
+\end{equation*}
+Algebras for this monad are precisely $\mathcal{T}$-models.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Lawvere's classical correspondence between Lawvere theories and finitary
+monads on $\mathbf{Set}$ (Chapter~21, application section) is recast as
+``the monad is the left Kan extension of $J$ along itself.'' The
+construction's universal property — every algebra for the monad satisfies
+the operations encoded by $\mathcal{T}$ — follows from the universal
+property of the Kan extension.
+\end{proof}
+
+\subsection{Reorganizing}
+
+\begin{remark}[The two faces of monads]
+Theorem~\ref{thm:algebraic-as-kan} and Theorem~\ref{thm:adjoint-codensity}
+together show: every monad on $\mathcal{C}$ is \emph{either} the codensity
+of an inclusion (the ``categorical face'') \emph{or} the left Kan extension
+of a representing functor (the ``algebraic face''). Many monads are both
+simultaneously. Vol III Chapter~32 makes the formal theory explicit.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The General Slogan}
+\label{sec:kan-slogan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The work of Chapters~26--31 unifies under a single slogan:
+
+\begin{quote}
+\textbf{The slogan.}\quad \emph{Every universal construction in category
+theory is a Kan extension.}
+\end{quote}
+
+\begin{theorem}[Kan extensions subsume universal constructions]
+\label{thm:kan-subsumes}
+The following are all Kan extensions:
+\begin{itemize}
+  \item Limits and colimits (Chapter~27, \S\ref{sec:wkan-preview}): every
+        weighted (co)limit is a Kan extension.
+  \item Adjoint functors (Chapter~28, Corollary~\ref{cor:adjoint-as-ran}):
+        every right adjoint is $\operatorname{Ran}_Y$ for some Yoneda
+        embedding; every left adjoint is $\operatorname{Lan}_Y$.
+  \item Monads (this chapter, \S\ref{sec:codensity},
+        \S\ref{sec:algebraic-as-kan}): every monad is either a codensity
+        $\operatorname{Ran}_G G$ or an algebra-theoretic
+        $\operatorname{Lan}_J J$.
+  \item Free constructions (Chapter~28, \S\ref{sec:adjoints-via-yoneda},
+        Example~\ref{ex:profunctor-composition}): every free algebraic
+        construction is the left Kan extension along the Yoneda embedding
+        of a generating sub-category.
+\end{itemize}
+\end{theorem}
+
+\begin{remark}[The unifying principle]
+This is not a coincidence. Kan extensions are exactly the universal
+constructions that solve the universal mapping problem
+``find an object equipped with a universal natural transformation to/from
+a given functor.'' Every universal construction reduces to this same
+template; the only variable is which functor and along which arrow.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:kan-general-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define the pointwise left Kan extension.}{$(\operatorname{Lan}_K F)(d) = \mathcal{D}(K-, d) \star F = \int^c \mathcal{D}(K c, d) \otimes F(c)$, a weighted colimit.}
+\qaitem{Define the pointwise right Kan extension.}{$(\operatorname{Ran}_K F)(d) = \{\mathcal{D}(d, K-), F\} = \int_c [\mathcal{D}(d, K c), F(c)]$, a weighted limit.}
+\qaitem{When do pointwise Kan extensions exist?}{When the target is $\mathcal{V}$-cocomplete (for Lan) or $\mathcal{V}$-complete (for Ran) and the source is small.}
+\qaitem{State the universal property of $\operatorname{Lan}_K F$.}{Initial: there is a unit $\eta : F \Rightarrow (\operatorname{Lan}_K F) \circ K$, and for any $\sigma : F \Rightarrow G K$ there is a unique $\widetilde\sigma : \operatorname{Lan}_K F \Rightarrow G$ with $\widetilde\sigma K \circ \eta = \sigma$.}
+\qaitem{Why is the pointwise extension also a (classical) Kan extension?}{Because it satisfies the universal property of Theorem~\ref{thm:pointwise-is-kan}; the coend formula explicitly constructs the universal arrow.}
+\qaitem{What is a non-pointwise Kan extension?}{One satisfying the universal property in the functor category but not given by the weighted-colimit formula at each object. In enriched settings these are pathological; pointwise is the standard.}
+\qaitem{Define an absolute Kan extension.}{One preserved by every functor: $G \circ \operatorname{Lan}_K F \cong \operatorname{Lan}_K (G \circ F)$ for all $G$.}
+\qaitem{When is a weighted colimit absolute?}{When every functor preserves it. In $\mathbf{Set}$: split idempotents and filtered colimits (with finite limits). Rarer in non-$\mathbf{Set}$ enrichments.}
+\qaitem{Define the codensity monad of $G$.}{$\mathbb{T}_G = \operatorname{Ran}_G G$: a monad on the target of $G$, with $T_G(c) = \int_b [\mathcal{C}(c, G b), G b]$.}
+\qaitem{Why is the codensity monad a monad?}{Because the right Kan extension's universal property gives natural unit and multiplication structures satisfying the monad axioms.}
+\qaitem{State the adjoint-codensity theorem.}{If $F \dashv G$ then $\mathbb{T}_G = G F$, the standard adjunction monad.}
+\qaitem{What is the codensity monad of $\mathbf{FinSet} \hookrightarrow \mathbf{Set}$?}{The ultrafilter monad: $T(X) = $ set of ultrafilters on $X$.}
+\qaitem{What is the codensity monad of $\mathbf{FinDim}_k \hookrightarrow \mathbf{Vect}_k$?}{The double dualization monad: $V \mapsto V^{**}$.}
+\qaitem{Codensity of $\mathbf{CompactHaus} \hookrightarrow \mathbf{Top}$?}{The Stone--\v Cech monad: algebras are compact Hausdorff spaces.}
+\qaitem{Why is the codensity construction a generalization of adjunctions?}{Because it exists for any functor $G$, not just right adjoints. When $G$ has a left adjoint, the codensity recovers the standard monad; otherwise it provides the ``best monad'' arising from $G$.}
+\qaitem{State the algebraic-theory-as-Kan theorem.}{For a Lawvere theory $\mathcal{T}$ with $J : \mathcal{T} \to \mathbf{Set}$ presenting it, the free-algebra monad is $T = \operatorname{Lan}_J J$, and algebras for this monad are $\mathcal{T}$-models.}
+\qaitem{What are the ``two faces'' of monads via Kan extensions?}{Codensity ($\operatorname{Ran}_G G$, for $G$ from a subcategory) and algebraic ($\operatorname{Lan}_J J$, for $J$ presenting a theory). Many monads are both.}
+\qaitem{State the unifying Kan extension slogan.}{Every universal construction in category theory is a Kan extension: limits, colimits, adjoints, monads, free constructions all fit.}
+\qaitem{Why is this slogan not a coincidence?}{Because Kan extensions are exactly the universal solutions to ``find an object with a universal natural transformation along a given functor.'' Every universal construction reduces to this template.}
+\qaitem{Express the limit of $F : \mathcal{J} \to \mathcal{C}$ as a Kan extension.}{$\lim F = (\operatorname{Ran}_{!_\mathcal{J}} F)(\star)$ where $!_\mathcal{J} : \mathcal{J} \to \mathbf{1}$ is the unique functor to the terminal category and $\star$ is the unique object of $\mathbf{1}$.}
+\qaitem{Express the free algebra functor over a monad $T$ as a Kan extension.}{The free $T$-algebra functor $\mathcal{C} \to \mathcal{C}^T$ is $\operatorname{Lan}_{!_\mathcal{C}^T} \mathrm{Id}_{\mathcal{C}^T}$ (in suitable form).}
+\qaitem{Why is Cauchy completion characterized via absolute Kan extensions?}{Because Cauchy complete categories are exactly those where every absolute weighted colimit diagram has a colimit; absolute Kan extensions are the ``forced'' ones.}
+\qaitem{What is the relationship between codensity monads and the formal theory of monads (Chapter~32)?}{Codensity provides examples of monads that are not adjunction-induced; the formal theory of monads provides the 2-categorical setting in which codensity monads naturally live.}
+\qaitem{Why do pointwise Kan extensions exist in enriched settings?}{Because they are weighted (co)limits, and weighted (co)completeness reduces to conical (co)completeness plus (co)tensors (Chapter~27).}
+\qaitem{Why is the unit $\eta : F \Rightarrow (\operatorname{Lan}_K F) \circ K$ the universal arrow?}{Because every natural transformation $F \Rightarrow G K$ factors uniquely through $\operatorname{Lan}_K F$, by definition of the Kan extension.}
+\qaitem{What is the relationship between $\operatorname{Lan}_Y$ for the Yoneda embedding $Y$ and free cocompletion?}{$\operatorname{Lan}_Y F$ is the free $\mathcal{V}$-cocompletion of $F$ along $Y$ (Chapter~28, Theorem~\ref{thm:free-cocompletion}).}
+\qaitem{Why is the Yoneda embedding dense?}{Because $\operatorname{Lan}_Y Y = \mathrm{Id}_{[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]}$ (Chapter~28, Corollary~\ref{cor:yoneda-dense}); the identity is the Kan extension of $Y$ along itself.}
+\qaitem{What is the Kan extension along the Yoneda embedding in $\mathbf{Prof}$?}{The hom-profunctor is the identity 1-cell; Kan extensions along the embedding into $\mathbf{Prof}$ realize various universal constructions in profunctor language.}
+\qaitem{In what sense is the codensity monad ``the right one'' even for non-adjoint $G$?}{Because it provides the universal monad whose algebras are ``things satisfying all the relations $G$ does''; the codensity captures the equational content of $G$ as a structure-preserving functor.}
+\qaitem{How does Theorem~\ref{thm:kan-subsumes} summarize Volume III's contribution?}{It establishes that the entire universal-constructions toolkit of category theory reduces to a single primitive (Kan extension) plus the coend calculus that computes it; this is the formal-spine perspective Volume III sought.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Pointwise Kan extensions.}\quad In the enriched setting, the
+pointwise extensions are the weighted-colimit and weighted-limit formulas:
+$(\operatorname{Lan}_K F)(d) = \int^c \mathcal{D}(K c, d) \otimes F(c)$ and
+$(\operatorname{Ran}_K F)(d) = \int_c [\mathcal{D}(d, K c), F(c)]$. They
+exist whenever the target is cocomplete (resp.\ complete).
+
+\textbf{Pointwise satisfies the universal property.}\quad These extensions
+are universal: they are initial/terminal in the relevant functor comma
+categories. Non-pointwise Kan extensions are pathological in enriched
+settings.
+
+\textbf{Absolute Kan extensions.}\quad Preserved by every functor. Rare:
+in $\mathbf{Set}$-enriched, mainly split idempotents and filtered colimits.
+Cauchy completion: the universal closure under absolute colimits.
+
+\textbf{The codensity monad.}\quad $\mathbb{T}_G = \operatorname{Ran}_G G$
+on the codomain of $G$. A monad even when $G$ is not a right adjoint.
+Examples: ultrafilter monad (codensity of $\mathbf{FinSet} \hookrightarrow
+\mathbf{Set}$); double dualization (codensity of $\mathbf{FinDim}_k
+\hookrightarrow \mathbf{Vect}_k$); Stone--\v Cech monad (codensity of
+$\mathbf{CompactHaus} \hookrightarrow \mathbf{Top}$).
+
+\textbf{Algebraic theories as Kan extensions.}\quad The free-algebra monad
+for a Lawvere theory $J : \mathcal{T} \to \mathbf{Set}$ is $\operatorname{Lan}_J J$.
+This gives the second face of monads (the first being codensity).
+
+\textbf{The slogan.}\quad Every universal construction in category theory is
+a Kan extension: limits, adjoints, monads, free algebras, geometric
+realization. The coend calculus (Chapter~26) and weighted (co)limits
+(Chapter~27) provide the computational tools.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Pointwise Kan extensions.}\quad
+\begin{align*}
+  (\operatorname{Lan}_K F)(d) &= \int^c \mathcal{D}(K c, d) \otimes_\mathcal{E} F(c), \\
+  (\operatorname{Ran}_K F)(d) &= \int_c [\mathcal{D}(d, K c), F(c)]_\mathcal{E}.
+\end{align*}
+
+\medskip
+\textbf{Existence.}\quad Pointwise Kan extensions exist when $\mathcal{C}$
+is small and $\mathcal{E}$ is $\mathcal{V}$-cocomplete (Lan) or complete (Ran).
+
+\medskip
+\textbf{Universal property.}\quad $\operatorname{Lan}_K F$ is initial in the
+comma category of natural transformations $F \Rightarrow G K$; dually for
+$\operatorname{Ran}$.
+
+\medskip
+\textbf{Codensity monad.}\quad $\mathbb{T}_G = \operatorname{Ran}_G G$ is a
+monad on $\mathcal{C}$ for every functor $G : \mathcal{B} \to \mathcal{C}$.
+For $F \dashv G$: $\mathbb{T}_G = G F$.
+
+\medskip
+\textbf{Algebraic-theory monads.}\quad For $J : \mathcal{T} \to \mathbf{Set}$
+presenting a Lawvere theory, the free-algebra monad is $T = \operatorname{Lan}_J J$;
+algebras = $\mathcal{T}$-models.
+
+\medskip
+\textbf{Absolute Kan extension.}\quad $\operatorname{Lan}_K F$ is absolute
+iff every constituent weighted colimit is preserved by every functor.
+
+\medskip
+\textbf{The slogan.}\quad Every universal construction in category theory is
+a Kan extension. Limits and colimits, adjoints, monads, free algebras,
+nerve/realization, geometric realization, sheafification --- all are
+specific instances of $\operatorname{Lan}_K F$ or $\operatorname{Ran}_K F$
+for appropriate $K, F$.
+
+\medskip
+\noindent\textit{Chapter~32 develops the \emph{formal theory of monads}:
+monads in a 2-category, Eilenberg--Moore objects, the algebra of monads,
+and the structures that codify the ``two faces'' (codensity and algebraic)
+of monad theory.}
+\end{formalrestatement}

@@ -1,0 +1,384 @@
+% ch33_adjunctions_formal.tex — Volume III Chapter 9
+
+\chapter{Adjunctions: The Full Formal Account}
+
+\begin{overviewbox}
+Chapter~7 introduced adjunctions via hom-set bijections. Chapter~17 gave the
+deeper account: triangle identities, uniqueness via Yoneda, the comma-category
+characterization. Chapter~32 placed monads in any 2-category. This chapter
+does the same for adjunctions and harvests the consequences.
+
+An \term{adjunction in a 2-category} $\mathcal{K}$ is a pair of 1-cells
+$f \dashv g$ with unit and counit 2-cells satisfying the triangle identities,
+all formulated in $\mathcal{K}$. Such adjunctions automatically give monads
+(by composition) and play the role of universal-property witnesses. The
+chapter develops adjunctions in $\mathcal{K}$, in bicategories (where the
+triangle identities hold only up to coherent iso), and in the enriched
+setting $\mathcal{V}$-$\mathbf{Cat}$. The unifying observation: adjunctions
+form the \emph{free Eilenberg--Moore resolution} of monads, while monads
+form the \emph{free decomposition} of adjunctions — they are formally dual
+constructions in the 2-category of 2-categories.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions in a 2-Category}
+\label{sec:adj-2cat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Adjunction in a 2-category]
+\label{def:adj-2cat}
+An \term{adjunction} $f \dashv g$ in a 2-category $\mathcal{K}$ between
+objects $a, b$ consists of:
+\begin{itemize}
+  \item 1-cells $f : a \to b$ and $g : b \to a$;
+  \item 2-cells $\eta : 1_a \Rightarrow gf$ (\term{unit}) and
+        $\varepsilon : fg \Rightarrow 1_b$ (\term{counit});
+\end{itemize}
+satisfying the \term{triangle identities}:
+$\varepsilon f \cdot f\eta = 1_f$ and $g\varepsilon \cdot \eta g = 1_g$.
+\end{definition}
+
+\begin{theorem}[Each adjunction gives a monad]
+\label{thm:adj-gives-monad}
+For an adjunction $f \dashv g$ in $\mathcal{K}$, the composite $gf : a \to a$
+with unit $\eta$ and multiplication $g \varepsilon f : gfgf \Rightarrow gf$
+is a monad on $a$ in $\mathcal{K}$.
+\end{theorem}
+
+\begin{proof}
+Direct verification: associativity from the interchange law plus naturality
+of $\varepsilon$; unit laws from the triangle identities applied at the
+appropriate variables.
+\end{proof}
+
+\subsection{Reorganizing: Examples}
+
+\begin{example_thm}[Adjunctions in $\mathbf{Cat}$]
+Adjunctions in $\mathbf{Cat}$ are precisely ordinary adjunctions
+$F : \mathcal{A} \rightleftarrows \mathcal{B} : G$ with $F \dashv G$.
+\end{example_thm}
+
+\begin{example_thm}[Adjunctions in $\mathbf{Span}$]
+An adjunction in $\mathbf{Span}(\mathbf{Set})$ between $A, B$ consists of a
+span $f : A \leftarrow X \to B$ left-adjoint to a span $g : B \leftarrow Y
+\to A$. Such adjunctions correspond to \emph{functions} $f : A \to B$ — the
+left adjoint span is the graph of $f$; the right adjoint is its converse.
+\end{example_thm}
+
+\begin{example_thm}[Adjunctions in $\mathbf{Prof}$]
+An adjunction $f \dashv g$ in $\mathbf{Prof}$ between $\mathcal{A}, \mathcal{B}$
+consists of profunctors $f : \mathcal{A} \to \mathcal{B}$ and
+$g : \mathcal{B} \to \mathcal{A}$ with $f g \cong \mathcal{B}(-, -)$ (counit
+is an iso) and unit a natural transformation $\mathcal{A}(-, -) \to gf$. By
+the Yoneda lemma in $\mathbf{Prof}$ (Chapter~28), adjunctions in
+$\mathbf{Prof}$ correspond to ordinary functors $\mathcal{A} \to \mathcal{B}$:
+$f$ is the representable profunctor of the functor, $g$ is the corepresentable.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions and Monads, Formally}
+\label{sec:adj-mnd-formal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Free adjunctions from monads]
+\label{thm:free-adj-from-mnd}
+In a 2-category $\mathcal{K}$ with Eilenberg--Moore objects, every monad
+$t = (t, \eta, \mu)$ on $a$ gives rise to an adjunction
+\begin{equation*}
+  f_t \;:\; a \rightleftarrows a^t \;:\; u^t
+\end{equation*}
+with $u^t f_t = t$ as monads. This is the \emph{free} adjunction realizing $t$.
+\end{theorem}
+
+\begin{theorem}[Formal monadicity]
+\label{thm:formal-monadicity}
+An adjunction $f \dashv g$ in $\mathcal{K}$ is \emph{monadic} iff the canonical
+comparison 1-cell $b \to a^{gf}$ is an equivalence in $\mathcal{K}$.
+\end{theorem}
+
+\begin{remark}[The duality]
+Chapter~32 said EM objects are the \emph{right adjoint} of $(-)^{\mathrm{free}}$.
+Here Theorem~\ref{thm:free-adj-from-mnd} says EM objects yield adjunctions
+with prescribed monad. These two facts together exhibit the precise duality:
+monads $\leftrightarrow$ adjunctions through the EM construction. Adjunctions
+are the ``free things from which monads arise''; monads are the ``shadows of
+adjunctions''.
+\end{remark}
+
+\subsection{Reorganizing: The Adjoint-Triple Yoga}
+
+\begin{theorem}[Adjoint triple from adjunction]
+\label{thm:adj-triple}
+For an adjunction $f \dashv g$ in $\mathcal{K}$, suppose $\mathcal{K}$ has
+Kan extensions along $f$. Then there is an adjoint triple
+\begin{equation*}
+  \operatorname{Lan}_f g \;\dashv\; (- \circ f) \;\dashv\; \operatorname{Ran}_f g
+\end{equation*}
+between $[a, ?]$ and $[b, ?]$ (functor 2-categories). In particular, when
+$\mathcal{K} = \mathbf{Cat}$, this recovers the classical result that
+$\operatorname{Lan}_F \dashv F^* \dashv \operatorname{Ran}_F$ along any
+functor $F$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions in Bicategories}
+\label{sec:adj-bicat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+In a bicategory $\mathcal{B}$, the strict triangle identities of
+Definition~\ref{def:adj-2cat} must be replaced by coherent isomorphisms.
+
+\begin{definition}[Adjunction in a bicategory]
+\label{def:adj-bicat}
+An \term{adjunction in a bicategory} $\mathcal{B}$ consists of:
+\begin{itemize}
+  \item 1-cells $f : a \to b$, $g : b \to a$;
+  \item 2-cells $\eta : 1_a \Rightarrow gf$ and $\varepsilon : fg
+        \Rightarrow 1_b$;
+\end{itemize}
+satisfying the \emph{coherent} triangle identities, i.e., the standard
+triangle equations modified by the coherence isomorphisms of $\mathcal{B}$.
+\end{definition}
+
+\begin{theorem}[Adjunctions strictify with the bicategory]
+\label{thm:adj-strictify}
+The strictification $\mathcal{B}^{\mathrm{st}}$ of a bicategory $\mathcal{B}$
+(Chapter~25, Theorem~\ref{thm:strictification}) transports adjunctions:
+every adjunction in $\mathcal{B}$ corresponds to a strict adjunction in
+$\mathcal{B}^{\mathrm{st}}$, and conversely.
+\end{theorem}
+
+This is the analogue for adjunctions of the bicategorical coherence theorem.
+
+\subsection{Reorganizing}
+
+\begin{example_thm}[Adjoint pairs of bimodules]
+In $\mathbf{Bimod}$, an adjunction between commutative rings $R, S$ consists
+of:
+\begin{itemize}
+  \item An $(S, R)$-bimodule $M$;
+  \item An $(R, S)$-bimodule $N$;
+\end{itemize}
+with $M \otimes_S N \cong R$ as $(R, R)$-bimodules and $N \otimes_R M \cong S$
+as $(S, S)$-bimodules. Such bimodules are precisely \emph{Morita equivalences}
+between $R$ and $S$. Adjunctions in $\mathbf{Bimod}$ thus recover the classical
+Morita theory of rings.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Enriched Adjunctions}
+\label{sec:enriched-adj}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\mathcal{V}$-adjunction]
+\label{def:v-adjunction}
+A \term{$\mathcal{V}$-adjunction} $F \dashv_\mathcal{V} G$ between
+$\mathcal{V}$-categories $\mathcal{C}, \mathcal{D}$ consists of $\mathcal{V}$-functors
+$F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to \mathcal{C}$ with
+a $\mathcal{V}$-natural isomorphism $\mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$
+in $\mathcal{V}$.
+\end{definition}
+
+\begin{remark}
+This is exactly Chapter~20's $\mathcal{V}$-adjunction. Here we revisit it
+formally: $\mathcal{V}$-adjunctions are adjunctions in the 2-category
+$\mathcal{V}$-$\mathbf{Cat}$ (whose 1-cells are $\mathcal{V}$-functors and
+2-cells are $\mathcal{V}$-natural transformations).
+\end{remark}
+
+\begin{theorem}[$\mathcal{V}$-adjunctions and $\mathcal{V}$-monads]
+\label{thm:v-adj-monad}
+Every $\mathcal{V}$-adjunction $F \dashv_\mathcal{V} G$ gives a $\mathcal{V}$-monad
+$GF$ on $\mathcal{C}$. Conversely, every $\mathcal{V}$-monad arises this way
+(via the EM and Kleisli constructions in $\mathcal{V}$-$\mathbf{Cat}$).
+\end{theorem}
+
+\subsection{Reorganizing: When Ordinary $\Leftrightarrow$ Enriched}
+
+\begin{theorem}[Lifting ordinary to enriched]
+\label{thm:lift-adj}
+For tensored and cotensored $\mathcal{V}$-categories $\mathcal{C}, \mathcal{D}$,
+an ordinary adjunction $F \dashv G$ between $\mathcal{V}$-functors (that need
+not be $\mathcal{V}$-natural) lifts to a $\mathcal{V}$-adjunction iff $G$
+preserves cotensors.
+\end{theorem}
+
+\begin{proof}[Sketch]
+The bijection $\mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$ between
+$\mathbf{Set}$s lifts to an isomorphism in $\mathcal{V}$ iff the bijection
+respects the $\mathcal{V}$-action, which is exactly the cotensor-preservation
+condition for $G$.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions and the Yoneda Embedding}
+\label{sec:adj-via-yoneda}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The formal Yoneda lemma (Chapter~28) characterizes adjoints via representability.
+We restate it here in 2-categorical language.
+
+\begin{theorem}[Adjunctions as Yoneda-representable]
+\label{thm:adj-yoneda}
+For a $\mathcal{V}$-functor $G : \mathcal{D} \to \mathcal{C}$, the following
+are equivalent:
+\begin{enumerate}
+  \item $G$ has a left adjoint $L$.
+  \item For each $c \in \mathcal{C}$, the functor $\mathcal{C}(c, G-) :
+        \mathcal{D} \to \mathcal{V}$ is representable.
+  \item For each $c$, the precomposition $G \circ Y : \mathcal{D} \to
+        [\mathcal{C}^{\mathrm{op}}, \mathcal{V}]_\mathcal{V}$ has $\mathcal{C}(c, -)$
+        as a value somewhere.
+\end{enumerate}
+The witnessing left adjoint $L$ is the functor whose component at $c$ is
+the representing object of $\mathcal{C}(c, G-)$.
+\end{theorem}
+
+\subsection{Reorganizing}
+
+\begin{remark}[Kan extension perspective]
+The right adjoint $G$ is the right Kan extension of itself along the Yoneda
+embedding (Chapter~28, Corollary~\ref{cor:adjoint-as-ran}). Adjunctions
+become Kan extensions in this language; the unifying slogan of Chapter~31
+holds at the adjunction level.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:adj-formal-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define an adjunction in a 2-category.}{1-cells $f \dashv g$, 2-cells $\eta : 1 \Rightarrow gf$ and $\varepsilon : fg \Rightarrow 1$, satisfying the triangle identities $\varepsilon f \cdot f\eta = 1_f$ and $g\varepsilon \cdot \eta g = 1_g$.}
+\qaitem{State the adjunction-monad theorem.}{Every adjunction $f \dashv g$ gives a monad $gf$ with unit $\eta$ and multiplication $g\varepsilon f$.}
+\qaitem{What are adjunctions in $\mathbf{Cat}$?}{Ordinary adjunctions $F \dashv G$ between categories.}
+\qaitem{What are adjunctions in $\mathbf{Span}$?}{Functions $f : A \to B$: the graph of $f$ is left adjoint to its converse.}
+\qaitem{What are adjunctions in $\mathbf{Prof}$?}{Ordinary functors $\mathcal{A} \to \mathcal{B}$, presented via the representable and corepresentable profunctors.}
+\qaitem{State free adjunction from monads.}{Each monad $t$ on $a$ in a 2-category with EM objects yields an adjunction $f_t : a \rightleftarrows a^t : u^t$ with $u^t f_t = t$.}
+\qaitem{State formal monadicity.}{An adjunction $f \dashv g$ is monadic iff the canonical $b \to a^{gf}$ is an equivalence in $\mathcal{K}$.}
+\qaitem{Define an adjunction in a bicategory.}{Same as 2-categorical, but the triangle identities are required to hold up to coherent isomorphisms (the structure 2-cells of the bicategory).}
+\qaitem{State the strictification theorem for adjunctions.}{Every adjunction in a bicategory corresponds to a strict adjunction in the strictified 2-category; the correspondence is one-to-one.}
+\qaitem{What are adjunctions in $\mathbf{Bimod}$?}{Morita equivalences between commutative rings: $(S, R)$-bimodule $M$ and $(R, S)$-bimodule $N$ with $M \otimes_S N \cong R$ and $N \otimes_R M \cong S$.}
+\qaitem{Define a $\mathcal{V}$-adjunction.}{$\mathcal{V}$-functors $F \dashv_\mathcal{V} G$ with $\mathcal{V}$-natural iso $\mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$ in $\mathcal{V}$.}
+\qaitem{When does an ordinary adjunction between $\mathcal{V}$-functors lift to a $\mathcal{V}$-adjunction?}{When $G$ preserves cotensors (and $\mathcal{C}, \mathcal{D}$ are tensored/cotensored).}
+\qaitem{State Theorem~\ref{thm:adj-yoneda}.}{$G$ has left adjoint iff $\mathcal{C}(c, G-)$ is representable for every $c$, with $L c$ being the representing object.}
+\qaitem{Why is every right adjoint a right Kan extension along Yoneda?}{Because $\mathcal{C}(c, G-) \cong \mathcal{D}(L c, -) = Y(L c)$, so $G \cong \operatorname{Ran}_Y (G \circ Y^{-1})$ informally; precisely, $G$ is determined by its action through the Yoneda embedding.}
+\qaitem{What's the adjoint triple from an adjunction?}{For $f \dashv g$: $\operatorname{Lan}_f g \dashv (-\circ f) \dashv \operatorname{Ran}_f g$ between functor 2-categories, the dual of Chapter~18's adjoint triple of restrictions.}
+\qaitem{Why is the duality monads $\leftrightarrow$ adjunctions encoded in the EM construction?}{Because EM is the right adjoint of $(-)^{\mathrm{free}}$ from $\mathcal{K}$ to $\mathrm{Mnd}(\mathcal{K})$. Going monad $\to$ adjunction is the EM functor; going adjunction $\to$ monad is its inverse on the relevant subcategory.}
+\qaitem{How does Theorem~\ref{thm:formal-monadicity} subsume Beck's classical theorem?}{In $\mathbf{Cat}$, $a^{gf}$ is the classical EM category; the comparison being an equivalence is exactly Beck's conclusion.}
+\qaitem{State why all adjunctions in $\mathbf{Prof}$ come from ordinary functors.}{Because the Yoneda lemma in $\mathbf{Prof}$ (Theorem~\ref{thm:yoneda-prof}) says hom-profunctors are the identity 1-cells; a left adjoint profunctor must therefore be representable, hence corresponds to a functor.}
+\qaitem{What is a Morita equivalence?}{An adjunction in $\mathbf{Bimod}$ (or in the corresponding category of derived/triangulated categories of modules). It is an isomorphism of categories at the bimodule-derived level.}
+\qaitem{Why does the triangle identity hold up to coherent iso in bicategorical adjunctions?}{Because in a bicategory the composition of 1-cells (and the action on 2-cells) is associative and unital only up to the bicategory's structure 2-cells; the strict triangle identity is the special case where these are identities.}
+\qaitem{Sketch how cotensor preservation gives a $\mathcal{V}$-adjunction.}{$\mathcal{V}(V, \mathcal{D}(FA, B)) \cong \mathcal{V}(V, \mathcal{C}(A, GB))$ by ordinary adjunction; if $G$ preserves cotensors, this isomorphism is $\mathcal{V}$-natural, lifting to an iso in $\mathcal{V}$.}
+\qaitem{What 2-categorical adjunctions do not arise from ordinary adjunctions?}{Adjunctions in $\mathbf{Prof}$ where the profunctor is not representable — but by Theorem~\ref{thm:yoneda-prof} this case is empty. Adjunctions in 2-categories with no $\mathbf{Cat}$-structure (e.g., $\mathbf{Span}$) can be ``functional'' without coming from $\mathbf{Cat}$.}
+\qaitem{Why is the free-monad/EM duality stated in $\mathrm{Mnd}(\mathcal{K})$?}{Because the duality is internal to that 2-category: $\mathcal{K}$ sits inside $\mathrm{Mnd}(\mathcal{K})$ as the trivial monads, and EM provides the inverse direction.}
+\qaitem{What's the relationship between adjoint Kan extensions and adjoint pairs?}{Each adjoint pair $\operatorname{Lan}_f \dashv f^*$ gives an adjunction in the 2-category $[\mathcal{C}, ?]$; the Kan extension language is the 2-categorical version of adjunctions between functor categories.}
+\qaitem{Why is Beck's monadicity ``creating EM algebras'' equivalent to ``comparison is an equivalence''?}{Because creating EM algebras gives the inverse functor of the comparison; together they make $b \to a^{gf}$ an equivalence (by direct construction of the inverse).}
+\qaitem{What's the formal-monadicity version of ``F-split coequalizers exist''?}{Equivalent to ``$g$ preserves the absolute coequalizers of EM resolutions'' — a 2-categorical statement that reduces to Beck's condition in $\mathbf{Cat}$.}
+\qaitem{In what sense are adjunctions ``primitive'' relative to monads?}{Because every monad arises from an adjunction (its EM resolution), but not every adjunction is reconstructable from its monad (the comparison may not be an equivalence). Adjunctions carry strictly more information.}
+\qaitem{What's the dual of Theorem~\ref{thm:free-adj-from-mnd}?}{For each comonad $c$ on $a$ in a 2-category with co-Eilenberg--Moore objects, there's an adjunction $f^c : a^c \rightleftarrows a : u_c$ with $f^c u_c = c$ as comonad.}
+\qaitem{How does the formal theory of adjunctions inform $\infty$-categorical theory?}{In an $\infty$-category $\mathcal{K}$, an adjunction is data $f \dashv g$ with unit/counit and coherence going all the way up. The formal monadicity theorem extends, but the proofs become more elaborate.}
+\qaitem{Summarize the unifying perspective.}{Adjunctions and monads are formally dual 2-categorical constructions. EM provides the equivalence between adjunctions inducing $t$ and the universal $a^t$. The Kan extension formula makes the duality computational.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Adjunctions in a 2-category.}\quad $f \dashv g$ with $\eta, \varepsilon$
+satisfying the triangle identities (strict in a 2-category; up to coherent iso
+in a bicategory). Adjunctions in $\mathbf{Cat}$ are ordinary; in $\mathbf{Span}$
+are functions; in $\mathbf{Prof}$ are functors; in $\mathbf{Bimod}$ are Morita
+equivalences.
+
+\textbf{Adjunction $\to$ monad.}\quad Each adjunction $f \dashv g$ gives a
+monad $gf$ on the source. Conversely, each monad in $\mathcal{K}$ (with EM
+objects) yields an adjunction (free realization). The two constructions are
+formally dual via the EM functor.
+
+\textbf{Enriched adjunctions.}\quad $\mathcal{V}$-adjunctions are adjunctions
+in $\mathcal{V}$-$\mathbf{Cat}$. They lift from ordinary adjunctions of
+$\mathcal{V}$-functors when the right adjoint preserves cotensors.
+
+\textbf{Yoneda-representability.}\quad $G$ has a left adjoint iff
+$\mathcal{C}(c, G-)$ is representable for every $c$; the representing object
+is the left adjoint's value at $c$. Adjoints are right Kan extensions along
+Yoneda (Chapter~28).
+
+\textbf{Strictification.}\quad Adjunctions in a bicategory strictify with the
+bicategory: every adjunction in $\mathcal{B}$ corresponds to a strict
+adjunction in $\mathcal{B}^{\mathrm{st}}$.
+
+\textbf{Formal Beck monadicity.}\quad An adjunction is monadic iff the
+comparison $b \to a^{gf}$ is an equivalence. In $\mathbf{Cat}$ this is
+classical Beck; in general 2-categories it gives the right formulation of
+``algebras for a monad''.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Adjunction in $\mathcal{K}$.}\quad $f \dashv g$ with $\eta, \varepsilon$,
+triangle identities $\varepsilon f \cdot f\eta = 1_f$ and $g\varepsilon \cdot
+\eta g = 1_g$.
+
+\medskip
+\textbf{Adjunction $\to$ monad.}\quad $(gf, \eta, g\varepsilon f)$ is a monad
+on $a$.
+
+\medskip
+\textbf{Formal monadicity.}\quad $f \dashv g$ monadic $\iff$ $b \to a^{gf}$
+is an equivalence in $\mathcal{K}$.
+
+\medskip
+\textbf{$\mathcal{V}$-adjunction.}\quad $F \dashv_\mathcal{V} G$ with
+$\mathcal{V}$-natural iso $\mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$.
+Ordinary $\to$ $\mathcal{V}$-: condition is cotensor preservation.
+
+\medskip
+\textbf{Adjunction $\to$ Kan extension.}\quad For $f \dashv g$ and Kan
+extensions: $\operatorname{Lan}_f g \dashv (- \circ f) \dashv \operatorname{Ran}_f g$.
+
+\medskip
+\textbf{Yoneda-representable adjoints.}\quad $G$ has $L \dashv G$ $\iff$
+$\mathcal{C}(c, G-)$ representable $\forall c$; $L c$ is the representing object.
+
+\medskip
+\textbf{Strictification.}\quad Adjunctions in a bicategory $\leftrightarrow$
+strict adjunctions in $\mathcal{B}^{\mathrm{st}}$.
+
+\medskip
+\textbf{Examples by 2-category.}\quad $\mathbf{Cat}$: ordinary. $\mathbf{Span}$:
+functions. $\mathbf{Prof}$: functors. $\mathbf{Bimod}$: Morita equivalences.
+
+\medskip
+\noindent\textit{Chapter~34 unifies the adjoint functor theorems of
+Chapter~10/23 in light of the formal adjunction theory and the enriched
+weighted-limits perspective. Special focus: AFTs in enriched and locally
+presentable settings.}
+\end{formalrestatement}

@@ -1,0 +1,515 @@
+% ch29_monoidal_coherence.tex — Volume III Chapter 5
+
+\chapter{Monoidal Categories: Coherence}
+
+\begin{overviewbox}
+Chapter~19 proved Mac Lane's coherence theorem for monoidal categories via
+the normal-form strategy: every formal diagram of associators and unitors
+in a free monoidal category collapses to a canonical bracketing, hence
+commutes. Chapter~25 proved its bicategorical generalization, that every
+bicategory is biequivalent to a strict 2-category.
+
+This chapter is the synthesis. We re-derive monoidal coherence as a
+\emph{special case} of bicategorical strictification — a monoidal category
+is a one-object bicategory, so the strictification of Chapter~25 specializes
+to the strictification of monoidal categories. We then push further into
+material untouched by Chapter~19: \emph{coherence for monoidal functors}
+(when does a monoidal functor's structure 2-cells satisfy ``all'' the
+coherence diagrams automatically?), \emph{free monoidal categories} and
+their universal property, and the symmetric/braided variants. The chapter
+closes with a glimpse of operads — the algebraic objects that make
+``monoidal coherence'' a workable computational tool.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monoidal Strictification via Bicategorical Strictification}
+\label{sec:mon-strict}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Recall (Chapter~25, Proposition on monoidal $\Leftrightarrow$ one-object
+bicategory): a monoidal category $(\mathcal{V}, \otimes, I, \alpha, \lambda,
+\rho)$ is the same data as a one-object bicategory $B\mathcal{V}$.
+
+\begin{theorem}[Strictification for monoidal categories]
+\label{thm:mon-strict}
+Every monoidal category $\mathcal{V}$ is monoidally equivalent to a
+\emph{strict} monoidal category $\mathcal{V}^{\mathrm{st}}$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Form the one-object bicategory $B\mathcal{V}$ (Chapter~25,
+\S~\ref{sec:bicategories-formal}).}{Monoidal $\leftrightarrow$ one-object
+bicategory.}
+\proofstep{By Theorem~\ref{thm:strictification} (Chapter~25, bicategorical
+strictification), $B\mathcal{V}$ is biequivalent to a strict 2-category
+$(B\mathcal{V})^{\mathrm{st}}$.}{Apply the strictification construction.}
+\proofstep{The string-replacement construction of Chapter~25 preserves the
+one-object property: $(B\mathcal{V})^{\mathrm{st}}$ is again one-object.}{
+Strings are constructed pointwise; the single 0-cell of $B\mathcal{V}$
+remains the single 0-cell of $(B\mathcal{V})^{\mathrm{st}}$.}
+\proofstep{Therefore $(B\mathcal{V})^{\mathrm{st}}$ corresponds to a strict
+one-object 2-category, i.e., a strict monoidal category $\mathcal{V}^{\mathrm{st}}$.}{
+Monoidal $\leftrightarrow$ one-object reverse direction.}
+\proofstep{The biequivalence of bicategories $\widehat{(-)} :
+(B\mathcal{V})^{\mathrm{st}} \to B\mathcal{V}$ corresponds to a monoidal
+equivalence $\widehat{(-)} : \mathcal{V}^{\mathrm{st}} \to \mathcal{V}$.}{
+A pseudofunctor between one-object bicategories is the same data as a
+strong monoidal functor between the corresponding monoidal categories.}
+\proofstep{Conclude: every monoidal category is monoidally equivalent to a
+strict one.}{Strictification.}
+\end{prooflog}
+
+\begin{corollary}[Mac Lane's coherence, repackaged]
+\label{cor:maclane-from-strict}
+In any monoidal category, every diagram of associators and unitors commutes.
+\end{corollary}
+
+\begin{proof}
+By Theorem~\ref{thm:mon-strict}, $\mathcal{V}$ is monoidally equivalent to
+$\mathcal{V}^{\mathrm{st}}$, in which all $\alpha, \lambda, \rho$ are
+identities and hence every formal diagram trivially commutes. The
+equivalence reflects commutativity (it is fully faithful).
+\end{proof}
+
+\begin{remark}
+Chapter~19's normal-form proof of coherence is constructive in $\mathcal{V}$
+itself, while the strictification-based proof above factors through the
+larger category $\mathcal{V}^{\mathrm{st}}$. Both yield the same theorem;
+the strictification proof has the conceptual virtue of making coherence a
+special case of the general bicategorical phenomenon.
+\end{remark}
+
+\subsection{Reorganizing: The Strictification Construction Explicitly}
+
+The string-replacement construction of Chapter~25, specialized:
+
+\begin{definition}[Explicit strictification $\mathcal{V}^{\mathrm{st}}$]
+\label{def:explicit-strict}
+For a monoidal category $\mathcal{V}$:
+\begin{itemize}
+  \item Objects of $\mathcal{V}^{\mathrm{st}}$: finite strings (lists) of
+        objects of $\mathcal{V}$, including the empty string (which serves as
+        the strict unit).
+  \item Morphisms from $(A_1, \ldots, A_m)$ to $(B_1, \ldots, B_n)$: morphisms
+        $A_1 \otimes \cdots \otimes A_m \to B_1 \otimes \cdots \otimes B_n$
+        in $\mathcal{V}$ (left-associated), where the empty string composes
+        to $I$.
+  \item Tensor: concatenation of strings.
+  \item Unit: empty string.
+  \item Associator, unitors: identities.
+\end{itemize}
+\end{definition}
+
+\begin{proposition}
+$\mathcal{V}^{\mathrm{st}}$ is a strict monoidal category. The functor
+$\widehat{(-)} : \mathcal{V}^{\mathrm{st}} \to \mathcal{V}$, $(A_1, \ldots,
+A_n) \mapsto A_1 \otimes \cdots \otimes A_n$ (left-bracketed), is a monoidal
+equivalence.
+\end{proposition}
+
+\begin{proof}
+Concatenation is strictly associative; the empty string is a strict identity.
+$\widehat{(-)}$ is essentially surjective (every $A \in \mathcal{V}$ is
+$\widehat{(A)}$) and fully faithful (by definition of morphisms in
+$\mathcal{V}^{\mathrm{st}}$).
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Coherence for Monoidal Functors}
+\label{sec:monfun-coherence}
+% ═══════════════════════════════════════════════════════════════════════════
+
+A monoidal functor $F : \mathcal{V} \to \mathcal{W}$ between monoidal
+categories carries comparison 2-cells $\phi_{A,B} : F A \otimes F B \to
+F(A \otimes B)$ and $\phi_I : I_\mathcal{W} \to F I_\mathcal{V}$. The
+coherence axioms in Chapter~19 ensure $\phi$ is compatible with the
+associators and unitors of $\mathcal{V}, \mathcal{W}$.
+
+\subsection{Formalizing}
+
+\begin{theorem}[Coherence for monoidal functors]
+\label{thm:monfun-coherence}
+In a strong (resp.\ lax, oplax) monoidal functor $F : \mathcal{V} \to
+\mathcal{W}$, every diagram built from $\phi_{A,B}$, $\phi_I$, $F$ applied to
+the structure morphisms of $\mathcal{V}$, and the structure morphisms of
+$\mathcal{W}$ — where the diagram has a single fixed source and target —
+commutes.
+\end{theorem}
+
+\begin{remark}
+The proof again reduces to strictification: replace $\mathcal{V}$ and
+$\mathcal{W}$ by their strictifications, transport $F$ to a functor between
+strict monoidal categories. In the strict case the coherence diagrams trivially
+commute, and equivalence reflects.
+\end{remark}
+
+\subsection{Reorganizing: The Two Hexagons}
+
+\begin{definition}[Hexagonal coherence axioms]
+\label{def:monfun-hexagons}
+A lax monoidal functor $F : (\mathcal{V}, \otimes, I) \to (\mathcal{W},
+\otimes, I)$ satisfies the \term{associativity hexagon}: for $A, B, C \in
+\mathcal{V}$,
+\begin{equation*}
+\begin{tikzcd}[column sep=tiny]
+  (FA \otimes FB) \otimes FC \arrow[r, "{\alpha}"] \arrow[d, "{\phi_{A,B} \otimes 1}" '] &
+  FA \otimes (FB \otimes FC) \arrow[d, "{1 \otimes \phi_{B,C}}"] \\
+  F(A \otimes B) \otimes FC \arrow[d, "{\phi_{A \otimes B, C}}" '] &
+  FA \otimes F(B \otimes C) \arrow[d, "{\phi_{A, B \otimes C}}"] \\
+  F((A \otimes B) \otimes C) \arrow[r, "{F(\alpha)}"] & F(A \otimes (B \otimes C))
+\end{tikzcd}
+\end{equation*}
+and the \term{unitality squares}:
+\begin{equation*}
+\begin{tikzcd}
+  I_\mathcal{W} \otimes FA \arrow[r, "{\lambda_\mathcal{W}}"] \arrow[d, "{\phi_I \otimes 1}" '] &
+  FA \\
+  FI_\mathcal{V} \otimes FA \arrow[r, "{\phi_{I, A}}"] & F(I \otimes A) \arrow[u, "{F(\lambda)}" ']
+\end{tikzcd}
+\quad
+\begin{tikzcd}
+  FA \otimes I_\mathcal{W} \arrow[r, "{\rho_\mathcal{W}}"] \arrow[d, "{1 \otimes \phi_I}" '] &
+  FA \\
+  FA \otimes FI_\mathcal{V} \arrow[r, "{\phi_{A, I}}"] & F(A \otimes I) \arrow[u, "{F(\rho)}" ']
+\end{tikzcd}
+\end{equation*}
+\end{definition}
+
+\begin{proposition}[Coherence axioms imply all coherence diagrams]
+\label{prop:hexagons-suffice}
+The associativity hexagon and the unitality squares of
+Definition~\ref{def:monfun-hexagons} imply Theorem~\ref{thm:monfun-coherence}:
+all diagrams of formal coherence built from $\phi$, $F$, and the structure
+2-cells of $\mathcal{V}, \mathcal{W}$ commute.
+\end{proposition}
+
+\begin{proof}[Sketch]
+The strategy is the same as the monoidal-category case. Construct the
+strictifications $\mathcal{V}^{\mathrm{st}}, \mathcal{W}^{\mathrm{st}}$;
+transport $F$ to $F^{\mathrm{st}} : \mathcal{V}^{\mathrm{st}} \to
+\mathcal{W}^{\mathrm{st}}$. In $\mathcal{W}^{\mathrm{st}}$, all coherence
+diagrams have identity sides; the strictified $\phi^{\mathrm{st}}$ is
+forced (by the two hexagons and squares) to be an identity. Pulling back,
+all original diagrams commute.
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Free Monoidal Categories}
+\label{sec:free-monoidal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+The universal monoidal category on a given category $\mathcal{C}$ is the
+``one with no relations beyond what monoidal structure requires.'' Formally:
+
+\begin{definition}[Free monoidal category]
+\label{def:free-monoidal}
+For an ordinary category $\mathcal{C}$, the \term{free monoidal category} on
+$\mathcal{C}$, written $F^\otimes(\mathcal{C})$, is the monoidal category
+characterized by the universal property: for every monoidal category
+$\mathcal{V}$ and every ordinary functor $F : \mathcal{C} \to \mathcal{V}$,
+there is an essentially unique strong monoidal functor $\widetilde F :
+F^\otimes(\mathcal{C}) \to \mathcal{V}$ extending $F$.
+\end{definition}
+
+\begin{theorem}[Construction]
+\label{thm:free-monoidal-construction}
+$F^\otimes(\mathcal{C})$ has:
+\begin{itemize}
+  \item Objects: finite lists (with bracketings, possibly nested) of objects of $\mathcal{C}$.
+  \item Morphisms: generated by morphisms of $\mathcal{C}$ on singletons,
+        identity for tensor combinations, with associators and unitors
+        formally adjoined as isomorphisms.
+\end{itemize}
+The universal property follows from a normal-form argument akin to
+strictification.
+\end{theorem}
+
+\begin{proof}[Sketch]
+Existence: the explicit construction. Universality: given $F : \mathcal{C}
+\to \mathcal{V}$, define $\widetilde F$ on singletons by $F$; extend to
+tensor combinations by $F(A_1) \otimes \cdots \otimes F(A_n)$ (with
+appropriate bracketing) and on morphisms by transport along the
+$\mathcal{V}$-associators and unitors. Coherence (Theorem~\ref{thm:monfun-coherence})
+guarantees the extension is well-defined and a strong monoidal functor.
+Uniqueness up to monoidal natural isomorphism is standard.
+\end{proof}
+
+\begin{remark}[Strict variant]
+The \emph{strict} free monoidal category $F^{\otimes,\mathrm{st}}(\mathcal{C})$
+has objects flat lists (no nested brackets) and morphisms generated by $\mathcal{C}$
+without formal associators. It is the strict 2-category one-object specialization
+of the strictification construction.
+\end{remark}
+
+\subsection{Reorganizing: The Yoneda Description}
+
+\begin{proposition}[Free monoidal as Day convolution]
+\label{prop:free-mon-day}
+For a category $\mathcal{C}$ (with no monoidal structure), $F^\otimes(\mathcal{C})$
+is the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ equipped
+with \emph{Day convolution} — see Chapter~30. The Yoneda embedding $Y :
+\mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ becomes the
+unit of $F^\otimes$.
+\end{proposition}
+
+This identification — free cocompletion = free monoidal category, in the
+appropriate sense — is the link between Yoneda theory (Chapter~28) and
+monoidal theory developed in Chapter~30.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Symmetric and Braided Coherence}
+\label{sec:sym-coherence}
+% ═══════════════════════════════════════════════════════════════════════════
+
+Symmetric and braided monoidal categories add an extra structure 2-cell
+$\sigma_{A,B} : A \otimes B \cong B \otimes A$ (the \term{braiding} or
+\term{symmetry}), satisfying additional hexagons.
+
+\subsection{Formalizing}
+
+\begin{definition}[Braided monoidal category]
+\label{def:braided}
+A \term{braided monoidal category} adds to a monoidal category a natural
+isomorphism $\sigma_{A, B} : A \otimes B \to B \otimes A$ — the \term{braiding}
+— satisfying the two \term{braiding hexagons} (compatibility with the
+associator).
+\end{definition}
+
+\begin{definition}[Symmetric monoidal category]
+A \term{symmetric monoidal category} is a braided monoidal category whose
+braiding is \term{self-inverse}: $\sigma_{B, A} \circ \sigma_{A, B} =
+\mathrm{id}_{A \otimes B}$.
+\end{definition}
+
+\subsection{Formally}
+
+\begin{theorem}[Coherence for symmetric monoidal categories]
+\label{thm:sym-coherence}
+In a symmetric monoidal category, every diagram built from $\alpha, \lambda,
+\rho, \sigma$ between two parenthesizations of the same word — \emph{where
+both words use the same permutation of the input letters} — commutes.
+\end{theorem}
+
+\begin{remark}[Note the constraint]
+Theorem~\ref{thm:sym-coherence} is \emph{not} ``every formal diagram
+commutes.'' Two different ways of permuting $A \otimes B \otimes C$ via
+braidings can give two different morphisms $A \otimes B \otimes C \to
+B \otimes A \otimes C$. The theorem says: if both ends of the diagram
+correspond to the \emph{same} permutation, then any path connecting them
+commutes. Braids are real morphisms, not coherence noise.
+\end{remark}
+
+\begin{theorem}[Coherence for braided monoidal categories]
+\label{thm:braid-coherence}
+In a braided monoidal category, the coherence ``free model'' is the braid
+category $\mathbf{Br}$: objects are natural numbers, morphisms from $m$ to
+$m$ are braids on $m$ strands. Two formal diagrams commute iff the
+corresponding braids are equal as braids.
+\end{theorem}
+
+\begin{remark}
+The contrast: symmetric coherence quotients out the over-and-under information
+in braids, treating each as a permutation; braided coherence keeps the full
+braid. This is why braided monoidal categories model topological information
+(knots, links, ribbon categories) that symmetric ones miss.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Operads: A Glimpse}
+\label{sec:operads}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The combinatorial structure underlying monoidal coherence is captured by
+\term{operads} (and their relatives — props, properads, multicategories).
+
+\subsection{Formalizing}
+
+\begin{definition}[Operad]
+\label{def:operad}
+A \term{(symmetric, $\mathcal{V}$-enriched) operad} $\mathcal{O}$ consists of:
+\begin{itemize}
+  \item For each $n \geq 0$, an object $\mathcal{O}(n) \in \mathcal{V}$
+        equipped with a right action of the symmetric group $\mathfrak{S}_n$.
+  \item Composition maps $\gamma : \mathcal{O}(n) \otimes \mathcal{O}(k_1)
+        \otimes \cdots \otimes \mathcal{O}(k_n) \to \mathcal{O}(k_1 + \cdots
+        + k_n)$ for all $n, k_1, \ldots, k_n$.
+  \item Unit $\eta : I \to \mathcal{O}(1)$.
+\end{itemize}
+Satisfying associativity, unit, and equivariance axioms.
+\end{definition}
+
+\begin{remark}[Algebras over an operad]
+For an operad $\mathcal{O}$ in $\mathcal{V}$, an \term{$\mathcal{O}$-algebra}
+is an object $A \in \mathcal{V}$ equipped with structure morphisms
+$\mathcal{O}(n) \otimes A^{\otimes n} \to A$ satisfying compatibility with
+$\gamma$ and $\eta$.
+
+\emph{Examples:}
+\begin{itemize}
+  \item The \emph{associative operad} $\mathrm{Assoc}$ in $\mathbf{Set}$:
+        $\mathrm{Assoc}(n) = \mathfrak{S}_n$. Algebras are non-commutative monoids.
+  \item The \emph{commutative operad} $\mathrm{Comm}$: $\mathrm{Comm}(n) =
+        \{*\}$. Algebras are commutative monoids.
+  \item The \emph{little disks operad} (in $\mathbf{Top}$): $E_2$-algebras
+        are braided monoidal structures up to homotopy.
+\end{itemize}
+\end{remark}
+
+\subsection{Reorganizing: Operads as Monads}
+
+\begin{proposition}[Operad-monad correspondence]
+\label{prop:operad-monad}
+A symmetric $\mathcal{V}$-operad $\mathcal{O}$ in a cocomplete monoidal
+$\mathcal{V}$ gives a monad $T_\mathcal{O}$ on $\mathcal{V}$:
+\begin{equation*}
+  T_\mathcal{O}(X) \;=\; \coprod_{n \geq 0} \mathcal{O}(n) \otimes_{\mathfrak{S}_n}
+  X^{\otimes n}.
+\end{equation*}
+$\mathcal{O}$-algebras and $T_\mathcal{O}$-algebras coincide.
+\end{proposition}
+
+\begin{remark}
+This is the link between operad theory and the formal theory of monads
+(Chapter~32). An operad presents an algebraic theory with $n$-ary operations
+for every $n$; the monad presents the same theory as a coalgebraic gadget.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:mon-coherence-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{State the monoidal strictification theorem.}{Every monoidal category is monoidally equivalent to a strict monoidal category.}
+\qaitem{How does monoidal strictification follow from bicategorical strictification?}{A monoidal category is a one-object bicategory. The bicategorical strictification of Chapter~25 preserves the one-object property; the resulting strict 2-category corresponds to a strict monoidal category.}
+\qaitem{Describe $\mathcal{V}^{\mathrm{st}}$ explicitly.}{Objects: finite lists of objects of $\mathcal{V}$. Morphisms: morphisms of $\mathcal{V}$ between the left-associated tensor of the lists. Tensor: concatenation. Unit: empty list. All structure 2-cells are identities.}
+\qaitem{What is the equivalence $\widehat{(-)} : \mathcal{V}^{\mathrm{st}} \to \mathcal{V}$?}{$(A_1, \ldots, A_n) \mapsto A_1 \otimes \cdots \otimes A_n$ (left-bracketed). It is essentially surjective and fully faithful.}
+\qaitem{State Mac Lane's coherence theorem (in this language).}{In any monoidal category, every diagram of associators and unitors with the same source and target commutes.}
+\qaitem{Why does Mac Lane's coherence follow from strictification?}{In the strict category, all diagrams of identity 2-cells trivially commute. The equivalence with $\mathcal{V}$ reflects this.}
+\qaitem{State coherence for monoidal functors.}{In a (lax, oplax, or strong) monoidal functor $F : \mathcal{V} \to \mathcal{W}$, every diagram of formal $F$-coherence morphisms (involving $\phi_{A,B}$, $\phi_I$, $F$ applied to $\mathcal{V}$'s structure morphisms, and $\mathcal{W}$'s structure morphisms) commutes.}
+\qaitem{What axioms guarantee monoidal-functor coherence?}{The associativity hexagon and the unitality squares of Definition~\ref{def:monfun-hexagons}.}
+\qaitem{Define the free monoidal category $F^\otimes(\mathcal{C})$.}{The monoidal category with the universal property: every functor $\mathcal{C} \to \mathcal{V}$ extends uniquely (up to monoidal natural iso) to a strong monoidal functor $F^\otimes(\mathcal{C}) \to \mathcal{V}$.}
+\qaitem{Describe $F^\otimes(\mathcal{C})$ explicitly.}{Objects: finite bracketed lists of objects of $\mathcal{C}$. Morphisms: generated by morphisms of $\mathcal{C}$ on singletons and the associators/unitors as formal isomorphisms.}
+\qaitem{What is the relationship between $F^\otimes(\mathcal{C})$ and the presheaf category?}{$F^\otimes(\mathcal{C})$ is the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ with Day convolution as the tensor (Chapter~30).}
+\qaitem{Define a braided monoidal category.}{A monoidal category with a natural isomorphism $\sigma_{A,B} : A \otimes B \to B \otimes A$ — the braiding — satisfying two compatibility hexagons with the associator.}
+\qaitem{Define a symmetric monoidal category.}{A braided monoidal category whose braiding is self-inverse: $\sigma_{B,A} \circ \sigma_{A,B} = \mathrm{id}$.}
+\qaitem{State coherence for symmetric monoidal categories.}{Every diagram of $\alpha, \lambda, \rho, \sigma$ between two parenthesizations of the same word — using the same permutation — commutes.}
+\qaitem{Why is symmetric coherence not ``every diagram commutes''?}{Because different choices of braiding can give genuinely different permutations; coherence quotients by permutation equivalence, not all rearrangements.}
+\qaitem{State coherence for braided monoidal categories.}{The coherence-free model is the braid category $\mathbf{Br}$. Two formal diagrams commute iff their corresponding braids are equal as braids.}
+\qaitem{What is the difference between symmetric and braided coherence?}{Symmetric coherence forgets the ``over-vs.\ under'' information in a braid (keeps only the permutation). Braided coherence retains the full braid. Hence braided monoidal categories model knots/links/ribbon structures while symmetric ones don't.}
+\qaitem{Define an operad.}{A family $\{\mathcal{O}(n)\}_{n \geq 0}$ of $\mathfrak{S}_n$-equipped objects with composition maps $\gamma : \mathcal{O}(n) \otimes \prod_i \mathcal{O}(k_i) \to \mathcal{O}(\sum k_i)$ and unit, satisfying associativity, unit, and equivariance.}
+\qaitem{What is an algebra over an operad $\mathcal{O}$?}{An object $A$ with structure maps $\mathcal{O}(n) \otimes A^{\otimes n} \to A$ compatible with $\gamma$ and $\eta$.}
+\qaitem{Give three example operads.}{$\mathrm{Assoc}$ (associative operad, algebras = monoids); $\mathrm{Comm}$ (commutative operad, algebras = commutative monoids); $E_2$ (little disks operad in $\mathbf{Top}$, algebras = braided monoidal structures up to homotopy).}
+\qaitem{State the operad-monad correspondence.}{Each operad $\mathcal{O}$ gives a monad $T_\mathcal{O}(X) = \coprod_n \mathcal{O}(n) \otimes_{\mathfrak{S}_n} X^{\otimes n}$; algebras coincide.}
+\qaitem{Why do operads matter for coherence?}{They make the combinatorial structure of monoidal coherence (and braided/symmetric variants) into a workable algebraic gadget. Operad theory governs which coherence diagrams must commute.}
+\qaitem{What is the strict free monoidal category $F^{\otimes,\mathrm{st}}(\mathcal{C})$?}{Objects: flat lists. Morphisms: generated by $\mathcal{C}$ alone, no formal associators. It is the strict 2-category specialization of strictification.}
+\qaitem{How does the strictification of monoidal functors work?}{Given $F : \mathcal{V} \to \mathcal{W}$, transport to $F^{\mathrm{st}} : \mathcal{V}^{\mathrm{st}} \to \mathcal{W}^{\mathrm{st}}$. Since $\mathcal{W}^{\mathrm{st}}$ is strict, $F^{\mathrm{st}}$'s coherence comparators must reduce; the axioms force them to be identities.}
+\qaitem{In what sense is coherence ``conceptual'' rather than ``combinatorial''?}{Once strictification is in hand, coherence reduces to the trivial fact that diagrams in strict categories have identity sides. The strictification theorem absorbs all combinatorial intricacy.}
+\qaitem{Why is the bicategorical strictification proof of Chapter~25 ``deeper'' than the monoidal case of Chapter~19?}{Because Chapter~19 used a normal-form combinatorial argument specialized to monoidal coherence. Chapter~25's strictification works for arbitrary bicategories — and monoidal is just one example. The bicategorical proof unifies many coherence theorems.}
+\qaitem{What is the ``free strict monoidal category on a strictly monoidal generating data''?}{The free strict monoidal category $F^{\otimes,\mathrm{st}}(\mathcal{C})$ is its own strictification.}
+\qaitem{What is the monoidal natural transformation between two strong monoidal functors?}{A natural transformation $\eta : F \Rightarrow G$ such that the diagrams $\eta_{A \otimes B} \circ \phi^F_{A,B} = \phi^G_{A,B} \circ (\eta_A \otimes \eta_B)$ and $\eta_I \circ \phi^F_I = \phi^G_I$ commute.}
+\qaitem{What does monoidal equivalence buy beyond monoidal isomorphism?}{Monoidal equivalence is weaker: it requires only essentially surjective fully faithful strong monoidal functors with monoidal natural isomorphisms as units/counits. Strictification gives \emph{equivalence}, not isomorphism, between $\mathcal{V}$ and $\mathcal{V}^{\mathrm{st}}$.}
+\qaitem{Summarize the chapter's contribution beyond Chapter~19.}{Coherence is now a bicategorical phenomenon (one-object special case of strictification); monoidal-functor coherence is established formally; free monoidal categories and operads give the algebraic backbone.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Strictification, derived twice.}\quad Every monoidal category is
+monoidally equivalent to a strict one — once proved combinatorially in
+Chapter~19, here re-proved as the one-object special case of bicategorical
+strictification (Chapter~25). Mac Lane's coherence becomes the trivial
+observation that in the strict category, all diagrams have identity sides.
+
+\textbf{Coherence for monoidal functors.}\quad The associativity hexagon and
+unitality squares of $\phi_{A,B}, \phi_I$ imply that every formal coherence
+diagram involving $F$, its comparators, and the structure of source/target
+commutes. Same strictification proof.
+
+\textbf{Free monoidal categories.}\quad $F^\otimes(\mathcal{C})$ — objects =
+bracketed lists, morphisms generated by $\mathcal{C}$ and formal coherence
+isos — is universal among monoidal categories receiving a functor from
+$\mathcal{C}$. It equals the presheaf category with Day convolution
+(Chapter~30).
+
+\textbf{Symmetric/braided coherence.}\quad Symmetric coherence: every diagram
+between two parenthesizations of the same word using the same permutation
+commutes (different permutations are genuinely different morphisms). Braided
+coherence: governed by the braid category $\mathbf{Br}$. The distinction
+explains why braided monoidal categories model knots and ribbons.
+
+\textbf{Operads.}\quad The algebraic gadget capturing $n$-ary structure
+under monoidal coherence. Every operad yields a monad; algebras coincide.
+Examples: $\mathrm{Assoc}$, $\mathrm{Comm}$, $E_2$. Operads are the
+combinatorial spine of higher coherence theory.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Strictification.}\quad For every monoidal category $\mathcal{V}$,
+there exist a strict monoidal category $\mathcal{V}^{\mathrm{st}}$ and a
+strong monoidal equivalence $\widehat{(-)} : \mathcal{V}^{\mathrm{st}} \to
+\mathcal{V}$. Construction: objects are finite lists of objects of
+$\mathcal{V}$; morphisms are $\mathcal{V}$-morphisms between left-bracketed
+tensors; tensor is concatenation.
+
+\medskip
+\textbf{Mac Lane coherence.}\quad Every diagram of associators and unitors
+in a monoidal category commutes (special case of strictification).
+
+\medskip
+\textbf{Monoidal-functor coherence.}\quad If $F : \mathcal{V} \to \mathcal{W}$
+is monoidal (lax/oplax/strong) satisfying the associativity hexagon and
+unitality squares, every diagram of formal coherence commutes.
+
+\medskip
+\textbf{Free monoidal category.}\quad For any category $\mathcal{C}$,
+$F^\otimes(\mathcal{C})$ exists and satisfies the universal property: every
+functor $\mathcal{C} \to \mathcal{V}$ extends essentially uniquely to a
+strong monoidal functor $F^\otimes(\mathcal{C}) \to \mathcal{V}$.
+
+\medskip
+\textbf{Symmetric coherence.}\quad In a symmetric monoidal category, every
+diagram of $\alpha, \lambda, \rho, \sigma$ between parenthesizations
+representing the \emph{same permutation} of the input letters commutes.
+
+\medskip
+\textbf{Braided coherence.}\quad The coherence-free model is the braid
+category $\mathbf{Br}$; formal diagrams commute iff their braids are equal.
+
+\medskip
+\textbf{Operad to monad.}\quad For a symmetric $\mathcal{V}$-operad
+$\mathcal{O}$ in cocomplete $\mathcal{V}$:
+\begin{equation*}
+  T_\mathcal{O}(X) \;=\; \coprod_{n \geq 0} \mathcal{O}(n) \otimes_{\mathfrak{S}_n}
+  X^{\otimes n},
+\end{equation*}
+with $\mathcal{O}$-algebras = $T_\mathcal{O}$-algebras.
+
+\medskip
+\noindent\textit{Chapter~30 introduces \emph{Day convolution} — the
+monoidal structure on enriched functor categories that completes the
+identification of $F^\otimes(\mathcal{C})$ with $[\mathcal{C}^{\mathrm{op}},
+\mathbf{Set}]$.}
+\end{formalrestatement}
