@@ -173,6 +173,26 @@
   #1
 }
 
+% ── "How to Say This" callout ────────────────────────────────────────────────
+% Used when introducing notation that has multiple conventional readings
+% or pronunciations across the literature.
+\newtcolorbox{howtosay}[1][]{
+  enhanced,
+  breakable,
+  colback=NoteBg!60,
+  colframe=NoteBorder!70,
+  fonttitle=\bfseries\footnotesize,
+  title={How to Say This},
+  left=6pt, right=6pt, top=3pt, bottom=3pt,
+  attach boxed title to top left={yshift=-2mm, xshift=4mm},
+  boxed title style={colback=NoteBorder!70, colframe=NoteBorder!70,
+    fontupper=\color{white}\bfseries\footnotesize},
+  #1
+}
+
+% Inline pronunciation hint, for notation with a single common reading.
+\newcommand{\sayit}[1]{\textit{\,(read: #1)}}
+
 % ── Chapter summary box ──────────────────────────────────────────────────────
 \newtcolorbox{summarybox}[1][]{
   enhanced,

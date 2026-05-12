@@ -1,0 +1,737 @@
+\chapter{Universal Properties}
+
+\begin{overviewbox}
+Category theory characterizes objects by their relationships to other
+objects, not by what they are made of inside. The cleanest expression of this
+principle is the \emph{universal property}: a description of an object that
+says, in effect, ``this object is the unique one (up to unique isomorphism)
+that participates in such-and-such a way in such-and-such a situation.''
+
+This chapter introduces the universal-property pattern through its two
+simplest cases: \emph{initial objects} (those with a unique map out to every
+other object) and \emph{terminal objects} (those with a unique map in from
+every other object). We then state the general pattern, prove that universal
+objects are unique up to unique isomorphism, and use the pattern to preview
+\emph{products} and \emph{coproducts} --- the first universal constructions
+involving more than one object at a time.
+
+Universal properties are everywhere from this chapter onward. The investment
+made here in understanding the pattern pays off repeatedly.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Initial Objects}
+\label{sec:initial}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: One Way Out}
+
+An \term{initial object} in a category is an object from which there is
+exactly one morphism to every other object --- including itself. ``Exactly
+one'' is the key phrase: not zero, not two, not many. The initial object
+has a unique outbound connection to every destination.
+
+If you imagine the category as a transit map, an initial object is a station
+from which there is one and only one route to every station in the city.
+There may be many such routes from other stations, but starting at the
+initial object, your route is forced.
+
+\subsection{Expanding: Looking for Initial Objects}
+
+\begin{example}{$\mathbf{0}$ Is Initial in Itself}
+The empty category $\mathbf{0}$ has no objects. The statement ``for every
+object $A$, there is exactly one morphism from $X$ to $A$'' is vacuously
+true for any $X$, but $\mathbf{0}$ has no objects to play the role of $X$
+either. Vacuously, the empty category is its own (trivial) example.
+\end{example}
+
+\begin{example}{$\mathbf{1}$ Is Initial in $\mathbf{2}$ Read Backwards?}
+Recall $\mathbf{2}$: two objects $0, 1$ with one non-identity morphism
+$\iota : 0 \to 1$. The object $0$ has:
+\begin{align*}
+  \mathrm{Hom}(0, 0) &= \{\mathrm{id}_0\}, \\
+  \mathrm{Hom}(0, 1) &= \{\iota\}.
+\end{align*}
+Exactly one morphism to each object. So $0$ is the initial object of
+$\mathbf{2}$. The object $1$, by contrast, has $\mathrm{Hom}(1, 0) =
+\varnothing$ --- no morphism to $0$ at all. So $1$ is not initial.
+\end{example}
+
+\begin{example}{The Recipe Category}
+The recipe category has Chop, Sauté, Add with morphisms
+$\mathrm{Chop} \to \mathrm{Saut\acute{e}} \to \mathrm{Add}$ (and their
+composite). From Chop:
+\begin{align*}
+  \mathrm{Hom}(\mathrm{Chop}, \mathrm{Chop}) &= \{\mathrm{id}_{\mathrm{Chop}}\}, \\
+  \mathrm{Hom}(\mathrm{Chop}, \mathrm{Saut\acute{e}}) &= \{f\}, \\
+  \mathrm{Hom}(\mathrm{Chop}, \mathrm{Add}) &= \{g \circ f\}.
+\end{align*}
+Exactly one morphism to each. So Chop is initial. It is the unique step
+from which a unique route reaches every other step.
+\end{example}
+
+\begin{example}{No Initial Object}
+Take the indiscrete category on two objects $\{A, B\}$: hom-sets are
+all singletons including $\mathrm{Hom}(A, B)$, $\mathrm{Hom}(B, A)$,
+$\mathrm{Hom}(A, A) = \{\mathrm{id}_A\}$, $\mathrm{Hom}(B, B) =
+\{\mathrm{id}_B\}$. Both $A$ and $B$ have exactly one morphism to each
+object, so both are initial. We will see in the next section that this
+forces $A \cong B$, but here we note: \emph{there can be more than one
+initial object} in a category, but they must be isomorphic.
+\end{example}
+
+\begin{dialog}
+To check whether an object $X$ is initial, I ask, for each object $A$ in the
+category: how many morphisms $X \to A$ are there?
+\begin{itemize}
+  \item If exactly one for every $A$: $X$ is initial.
+  \item If zero for some $A$: $X$ is not initial.
+  \item If two or more for some $A$: $X$ is not initial.
+\end{itemize}
+The check is local at $X$ but quantifies over every $A$ in the category. In
+small categories, this is a finite check. In large categories, it is usually
+a structural argument.
+\end{dialog}
+
+\subsection{Formalizing: The Definition}
+
+An object $X \in \mathrm{Ob}(\mathcal{C})$ is \term{initial} if for every
+object $A \in \mathrm{Ob}(\mathcal{C})$, the hom-set $\mathrm{Hom}(X, A)$
+is a singleton:
+\begin{equation*}
+  | \mathrm{Hom}_{\mathcal{C}}(X, A) | = 1
+  \quad \text{for every } A \in \mathrm{Ob}(\mathcal{C}).
+\end{equation*}
+We write $\mathbf{0}$ for an initial object (when one exists), and $!_A$
+or simply $!$ for the unique morphism $\mathbf{0} \to A$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``initial object'' is sometimes called the \emph{universal repelling
+        object}, or the \emph{strict initial} in some refined contexts.
+  \item The notation $\mathbf{0}$ (boldface zero) is conventional. Some
+        authors use $\bot$ (read ``bottom''), particularly when the category
+        comes from logic.
+  \item The unique morphism is often written $!_A$ (``shriek to $A$'') or
+        $!_{\mathbf{0}, A}$. The exclamation point itself is read
+        ``shriek'' or ``bang.''
+  \item Drawn as a dashed arrow when emphasizing uniqueness:
+        $\mathbf{0} \dashrightarrow A$.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: The Examples Restated}
+
+\begin{align*}
+  &\text{$\mathbf{0}$ in $\mathbf{2}$:}
+    && |\mathrm{Hom}(0, 0)| = 1,\; |\mathrm{Hom}(0, 1)| = 1. \;\text{Initial.} \\
+  &\text{Chop in Recipe:}
+    && |\mathrm{Hom}(\mathrm{Chop}, X)| = 1 \;\text{for } X \in \{\mathrm{Chop}, \mathrm{Saut\acute{e}}, \mathrm{Add}\}. \\
+  &\text{Indiscrete on $\{A, B\}$:}
+    && \text{both $A$ and $B$ initial; both isomorphic.} \\
+  &\text{$\mathbf{0}$ (empty category):}
+    && \text{vacuously its own (trivial) initial object.}
+\end{align*}
+
+\subsection{Simplifying: Initial in One Line}
+
+\begin{equation*}
+  X \text{ is initial in } \mathcal{C}
+  \;\iff\;
+  \forall\, A \in \mathcal{C},\; \exists !\, f \in \mathrm{Hom}(X, A).
+\end{equation*}
+
+The symbol $\exists !$ is read ``there exists a unique.''
+
+\subsection{Formally: Uniqueness Sketch}
+
+\formalnote{Initial objects are unique up to unique isomorphism}
+Suppose $X$ and $Y$ are both initial in $\mathcal{C}$. There is a unique
+$f : X \to Y$ (because $X$ is initial), and a unique $g : Y \to X$ (because
+$Y$ is initial). Consider $g \circ f : X \to X$. There is exactly one
+morphism $X \to X$ (because $X$ is initial), and $\mathrm{id}_X$ is such a
+morphism. So $g \circ f = \mathrm{id}_X$. By the same argument,
+$f \circ g = \mathrm{id}_Y$. Hence $f$ is an isomorphism, and uniqueness of
+$f$ as a morphism gives uniqueness of the isomorphism.
+
+We will state and reuse this argument in its general form in
+\S5.3. Notice that no inspection of what $X$ or $Y$ are ``made of'' is
+involved --- the entire proof uses only the universal property.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Terminal Objects}
+\label{sec:terminal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: One Way In}
+
+A \term{terminal object} is the mirror image of an initial object: an object
+to which there is exactly one morphism from every other object. Instead of
+``one way out,'' it is ``one way in.''
+
+\subsection{Expanding: A Categorical Mirror}
+
+\begin{example}{$1$ Is Terminal in $\mathbf{2}$}
+In $\mathbf{2}$, the object $1$ has:
+\begin{align*}
+  \mathrm{Hom}(0, 1) &= \{\iota\}, \\
+  \mathrm{Hom}(1, 1) &= \{\mathrm{id}_1\}.
+\end{align*}
+Exactly one morphism into $1$ from every object. So $1$ is terminal. (The
+object $0$ is not terminal, since $\mathrm{Hom}(1, 0) = \varnothing$.)
+\end{example}
+
+\begin{example}{Add in the Recipe Category}
+In the recipe category, Add receives the morphisms $\mathrm{id}_{\mathrm{Add}}$,
+$g$, and $g \circ f$. One from each step. So Add is terminal.
+\end{example}
+
+\begin{example}{An Object That Is Both}
+In $\mathbf{1}$ (one object, one morphism), the unique object $*$ has
+exactly one morphism out (to itself) and exactly one morphism in (from
+itself). It is simultaneously initial and terminal. Such an object is called
+a \term{zero object}.
+\end{example}
+
+\subsection{Formalizing: Duality}
+
+An object $X \in \mathrm{Ob}(\mathcal{C})$ is \term{terminal} if for every
+object $A \in \mathrm{Ob}(\mathcal{C})$, the hom-set $\mathrm{Hom}(A, X)$
+is a singleton:
+\begin{equation*}
+  | \mathrm{Hom}_{\mathcal{C}}(A, X) | = 1
+  \quad \text{for every } A \in \mathrm{Ob}(\mathcal{C}).
+\end{equation*}
+
+\textbf{Duality.} An object is terminal in $\mathcal{C}$ iff it is initial
+in $\mathcal{C}^{\mathrm{op}}$. The two notions are dual to each other in
+the formal sense of \S2.4: any statement about initial objects becomes a
+statement about terminal objects when you replace $\mathcal{C}$ by
+$\mathcal{C}^{\mathrm{op}}$, and vice versa.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``terminal object'' is also called the \emph{universal attracting
+        object}, or in some texts the \emph{final object}. ``Terminal'' is
+        most common in modern usage.
+  \item Notation: $\mathbf{1}$ (boldface one) is standard. Some authors
+        use $\top$ (read ``top''), especially in logic contexts.
+  \item The unique morphism into a terminal object is also written $!$ or
+        $!_A : A \to \mathbf{1}$.
+  \item A \emph{zero object}, which is both initial and terminal, is
+        sometimes denoted $0$, $\mathbf{0}$, or $*$.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: The Same Theorem, Twice}
+
+The uniqueness-up-to-unique-isomorphism result we proved for initial objects
+holds, by duality, for terminal objects: any two terminal objects are
+isomorphic via a unique isomorphism. This is not a second proof to write;
+it is the same proof, transported across the opposite-category construction.
+
+This is the first concrete payoff of \S2.4. We proved one result and got
+two theorems. From here on, every result about a universal property comes
+in two flavors (covariant and contravariant), and we will prove only one
+of them.
+
+\subsection{Simplifying: Initial and Terminal}
+
+\begin{align*}
+  X \text{ initial}
+    &\iff \forall A,\; \exists ! \, f : X \to A. \\
+  X \text{ terminal}
+    &\iff \forall A,\; \exists ! \, f : A \to X.
+\end{align*}
+
+\subsection{Formally: Zero Morphisms}
+
+\formalnote{Zero objects and zero morphisms}
+If $\mathcal{C}$ has a zero object $\mathbf{0}$ (an object that is both
+initial and terminal), then for any pair $A, B$ there is a distinguished
+morphism
+\begin{equation*}
+  0_{A,B} : A \to B,
+\end{equation*}
+obtained by composing the unique $A \to \mathbf{0}$ with the unique
+$\mathbf{0} \to B$. This is the \term{zero morphism} from $A$ to $B$.
+Zero morphisms have the property that any composite involving a zero
+morphism is again a zero morphism. They behave like the algebraic zero in
+contexts where one applies.
+
+\formalnote{Existence is not guaranteed}
+Many categories have no initial or terminal object at all. The empty
+category $\mathbf{0}$ has no terminal object (no object exists to receive
+the unique morphism from elsewhere). The category of nonempty preorders
+under monotone maps has neither. Existence of universal objects is
+context-dependent.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Universal Property Pattern}
+\label{sec:universal-pattern}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: ``Unique So That\ldots''}
+
+The defining feature of every universal property is a phrase of the form:
+\begin{quote}
+  \emph{for every} object $X$ with property $P$, \emph{there exists a unique}
+  morphism $u : X \to U$ (or $U \to X$) \emph{such that} some diagram
+  commutes.
+\end{quote}
+The object $U$ is the universal one. The phrase ``unique so that'' is the
+signature.
+
+Initial and terminal objects fit this template in the simplest possible way:
+$P$ is trivial (``$X$ is any object''), and the diagram has only one path.
+More involved universal properties add data and conditions, but the shape
+``for every \ldots, there exists a unique \ldots such that \ldots'' is
+preserved.
+
+\subsection{Expanding: A Worked-Out Template}
+
+\begin{example}{Initial Object as a Universal Property}
+\begin{quote}
+  An object $\mathbf{0}$ is \emph{initial} if:\\
+  \emph{for every} object $A$,\\
+  \emph{there exists a unique} morphism $!_A : \mathbf{0} \to A$.
+\end{quote}
+
+No diagram is needed beyond the morphism itself, because there is no other
+data to compare against.
+\end{example}
+
+\begin{example}{Terminal Object as a Universal Property}
+\begin{quote}
+  An object $\mathbf{1}$ is \emph{terminal} if:\\
+  \emph{for every} object $A$,\\
+  \emph{there exists a unique} morphism $!_A : A \to \mathbf{1}$.
+\end{quote}
+\end{example}
+
+\begin{example}{The Universal Property of a Product (Preview)}
+For objects $A$ and $B$ in $\mathcal{C}$, a \emph{product} is an object $P$
+equipped with two morphisms $\pi_1 : P \to A$ and $\pi_2 : P \to B$ such that:
+\begin{quote}
+  \emph{for every} object $X$ and every pair of morphisms $f : X \to A$,
+  $g : X \to B$,\\
+  \emph{there exists a unique} morphism $\langle f, g \rangle : X \to P$
+  \emph{such that} the diagram
+  \medskip
+  \begin{center}
+  \begin{tikzcd}[column sep=3em, row sep=2em]
+    & X
+      \arrow[dl, "f"', bend right=15]
+      \arrow[dr, "g", bend left=15]
+      \arrow[d, dashed, "\langle f, g \rangle"] & \\
+    A & P \arrow[l, "\pi_1"] \arrow[r, "\pi_2"'] & B
+  \end{tikzcd}
+  \end{center}
+  commutes.
+\end{quote}
+
+Here the universal property has additional data ($\pi_1, \pi_2$) and a
+diagram with multiple paths. But the signature phrase is the same.
+\end{example}
+
+\subsection{Formalizing: The Pattern}
+
+A \term{universal property} for a class of objects is a specification of:
+\begin{enumerate}
+  \item A category $\mathcal{C}$ in which we look for the universal object.
+  \item Some \term{data} $D$ that the universal object must carry.
+  \item A class of \term{competitors}: pairs $(X, d_X)$ where $X$ is an
+        object and $d_X$ is the same kind of data attached to $X$.
+  \item A \term{uniqueness requirement}: for every competitor $(X, d_X)$,
+        there is exactly one morphism from $X$ to the universal object (or
+        from the universal object to $X$) compatible with the data.
+\end{enumerate}
+
+The universal object is the ``optimal'' member of the class of competitors
+in a precise sense made by the uniqueness requirement.
+
+\subsection{Reorganizing: Recognizing the Pattern}
+
+Whenever you see a definition of the form
+\begin{quote}
+  \textit{For every $X$ with $\ldots$, there exists a unique $u : X \to U$
+  such that $\ldots$ commutes,}
+\end{quote}
+you are looking at a universal property. The next few chapters introduce
+many such definitions:
+\begin{itemize}
+  \item products and coproducts;
+  \item equalizers and coequalizers;
+  \item pullbacks and pushouts;
+  \item limits and colimits;
+  \item the Yoneda embedding;
+  \item adjunctions.
+\end{itemize}
+Each is built from the same template. Recognizing the template is half the
+work of understanding the definition.
+
+\subsection{Simplifying: The Uniqueness Schema}
+
+\begin{equation*}
+  \forall\, X \in \mathcal{P},\; \exists !\, u : X \to U \;\text{such that}\; \Phi(u).
+\end{equation*}
+
+Here $\mathcal{P}$ is the class of competitors, $U$ is the universal object,
+and $\Phi(u)$ is the commutativity condition. Reading this as a sentence
+in English gives the prose form of any universal property.
+
+\subsection{Formally: Universal Elements via Representable Functors}
+
+\formalnote{Universal properties as natural isomorphisms}
+Every universal property can be restated as the assertion that a certain
+functor $\mathcal{C} \to \mathbf{Set}$ is \term{representable}: that is,
+naturally isomorphic to a hom-functor $\mathrm{Hom}_\mathcal{C}(U, -)$ or
+$\mathrm{Hom}_\mathcal{C}(-, U)$. We will not develop $\mathbf{Set}$ or
+representability here --- both come in a later chapter --- but it is worth
+mentioning that the pattern of this section has a clean abstract
+formulation: a universal property is a representation of a certain
+functor.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Uniqueness Up to Unique Isomorphism}
+\label{sec:uniqueness-iso}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: ``The'' Universal Object}
+
+Universal objects are not, in general, literally unique. There can be many
+initial objects in a category. What \emph{is} unique is the
+\emph{isomorphism} between any two of them: not just that they are
+isomorphic, but that there is exactly one isomorphism connecting them, given
+by the universal property itself.
+
+This is the precise sense in which a universal object is ``the'' universal
+object. ``The'' here is shorthand for ``unique up to unique isomorphism.''
+
+\subsection{Expanding: Counting Initial Objects}
+
+\begin{example}{Two Initial Objects Must Be Uniquely Isomorphic}
+Recall the indiscrete category on $\{A, B\}$. Both $A$ and $B$ are initial.
+The unique morphism $A \to B$ (call it $\alpha$) and the unique morphism
+$B \to A$ (call it $\beta$) must satisfy:
+\begin{align*}
+  \beta \circ \alpha &= \mathrm{id}_A
+    && \text{(only one morphism $A \to A$, must be the identity)} \\
+  \alpha \circ \beta &= \mathrm{id}_B
+    && \text{(only one morphism $B \to B$, must be the identity)}.
+\end{align*}
+So $\alpha$ is an isomorphism with inverse $\beta$. The isomorphism is
+unique because $\alpha$ itself was unique (only one morphism $A \to B$
+exists).
+\end{example}
+
+\subsection{Formalizing: The Theorem}
+
+\textbf{Theorem (Uniqueness of Initial Objects).}\quad If $X$ and $Y$ are
+both initial in $\mathcal{C}$, then there is a unique isomorphism
+$X \xrightarrow{\sim} Y$.
+
+\textbf{Proof.} Let $f : X \to Y$ and $g : Y \to X$ be the unique morphisms
+guaranteed by the initiality of $X$ and $Y$ respectively. Compute:
+\begin{align*}
+  g \circ f &: X \to X. \\
+  \intertext{There is only one morphism $X \to X$ (by initiality of $X$), and
+  $\mathrm{id}_X$ is one. So:}
+  g \circ f &= \mathrm{id}_X.
+  \intertext{Similarly:}
+  f \circ g &: Y \to Y, \\
+  f \circ g &= \mathrm{id}_Y.
+\end{align*}
+So $f$ is an isomorphism, with inverse $g$. The isomorphism $f$ is unique
+among morphisms $X \to Y$ because $\mathrm{Hom}(X, Y)$ has exactly one
+element. \qed
+
+By duality (apply this theorem in $\mathcal{C}^{\mathrm{op}}$):
+
+\textbf{Theorem (Uniqueness of Terminal Objects).}\quad If $X$ and $Y$ are
+both terminal in $\mathcal{C}$, then there is a unique isomorphism
+$X \xrightarrow{\sim} Y$.
+
+\subsection{Reorganizing: The General Principle}
+
+The argument generalizes. For any universal property, suppose $U$ and $U'$
+both satisfy it with the same data. Then:
+\begin{itemize}
+  \item The universal property of $U'$ applied to $U$ gives a unique
+        morphism $u : U \to U'$ compatible with the data.
+  \item The universal property of $U$ applied to $U'$ gives a unique
+        morphism $u' : U' \to U$.
+  \item The composite $u' \circ u : U \to U$ is forced by the universal
+        property to be $\mathrm{id}_U$ (uniqueness applied to $U$
+        compared against itself).
+  \item Similarly $u \circ u' = \mathrm{id}_{U'}$.
+\end{itemize}
+So $u$ is the unique isomorphism between $U$ and $U'$. This works for every
+universal property in this book; the argument is the same in each case.
+
+\subsection{Simplifying: The Slogan}
+
+A universal object is \term{unique up to unique isomorphism}. Or, in
+notation:
+\begin{equation*}
+  U, U' \text{ both satisfy the same universal property}
+  \;\;\Longrightarrow\;\;
+  \exists !\, u : U \xrightarrow{\sim} U'.
+\end{equation*}
+
+\subsection{Formally: Treating Universal Objects as Concrete}
+
+\formalnote{The convention}
+We routinely speak of ``the'' initial object, ``the'' terminal object,
+``the'' product of $A$ and $B$, and so on, even though strictly speaking
+there is a whole equivalence class of such objects. The justification is
+exactly the theorem of this section: the choice of representative within
+the equivalence class is harmless because any two representatives are
+related by a unique canonical isomorphism.
+
+\formalnote{When uniqueness fails}
+In some weaker contexts (e.g., bicategories, weak limits), the uniqueness
+of the isomorphism relaxes to ``unique up to higher coherent
+isomorphism.'' We will encounter such weakened versions in later chapters.
+For ordinary (1-)category theory, the strict uniqueness above holds without
+modification.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Toward Products and Coproducts}
+\label{sec:toward-products}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Two Objects Combined}
+
+Suppose we have two objects $A$ and $B$ in a category, and we want to talk
+about a single object that ``contains'' both of them, in some categorical
+sense. There are two natural ways to do this:
+\begin{itemize}
+  \item Combine them so that you can \emph{extract} either one: this leads
+        to \emph{products}.
+  \item Combine them so that you can \emph{embed} either one: this leads
+        to \emph{coproducts}.
+\end{itemize}
+Each combination has a universal property. This section sketches both as
+previews; the full development comes in Chapter~6.
+
+\subsection{Expanding: Pairing and Choice}
+
+\begin{example}{Products as ``Both at Once''}
+Imagine you have a Chop step and a Sauté step. A combined task ``Chop and
+Sauté'' should let you extract either the chop part or the sauté part.
+That is, there should be two ``projections'' $\pi_1 : \mathrm{Chop} \wedge
+\mathrm{Saut\acute{e}} \to \mathrm{Chop}$ and $\pi_2 : \mathrm{Chop} \wedge
+\mathrm{Saut\acute{e}} \to \mathrm{Saut\acute{e}}$. Given any other step $X$
+that can independently be sent to both Chop and Sauté, there should be a
+unique way to send $X$ to the combined task.
+\end{example}
+
+\begin{example}{Coproducts as ``Either-Or''}
+Conversely, a step ``Chop or Sauté'' should accept a chop or a sauté
+input and route it through. So there are two ``inclusions'' $\iota_1 :
+\mathrm{Chop} \to \mathrm{Chop} \vee \mathrm{Saut\acute{e}}$ and $\iota_2 :
+\mathrm{Saut\acute{e}} \to \mathrm{Chop} \vee \mathrm{Saut\acute{e}}$.
+Given any other step $Y$ that can receive a chop and can receive a sauté,
+there should be a unique way to receive from the disjoint union.
+\end{example}
+
+\subsection{Formalizing: The Two Universal Properties}
+
+A \term{product} of $A$ and $B$ in $\mathcal{C}$ is an object $A \times B$
+together with morphisms $\pi_1 : A \times B \to A$ and $\pi_2 : A \times
+B \to B$, such that:
+\begin{quote}
+  \emph{for every} object $X$ with morphisms $f : X \to A$ and $g : X \to B$,\\
+  \emph{there exists a unique} morphism $\langle f, g \rangle : X \to A
+  \times B$ \emph{such that}\\
+  $\pi_1 \circ \langle f, g \rangle = f$ \emph{and} $\pi_2 \circ \langle f,
+  g \rangle = g$.
+\end{quote}
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3em, row sep=2.5em]
+  & X
+    \arrow[dl, "f"', bend right=15]
+    \arrow[dr, "g", bend left=15]
+    \arrow[d, dashed, "\langle f, g \rangle"] & \\
+  A & A \times B \arrow[l, "\pi_1"] \arrow[r, "\pi_2"'] & B
+\end{tikzcd}
+\end{center}
+\medskip
+
+A \term{coproduct} of $A$ and $B$ is an object $A + B$ (also written
+$A \sqcup B$) with morphisms $\iota_1 : A \to A + B$ and $\iota_2 : B \to
+A + B$, such that:
+\begin{quote}
+  \emph{for every} object $Y$ with morphisms $f : A \to Y$ and $g : B
+  \to Y$,\\
+  \emph{there exists a unique} morphism $[f, g] : A + B \to Y$
+  \emph{such that}\\
+  $[f, g] \circ \iota_1 = f$ \emph{and} $[f, g] \circ \iota_2 = g$.
+\end{quote}
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=3em, row sep=2.5em]
+  A \arrow[r, "\iota_1"] \arrow[dr, "f"', bend right=15]
+  & A + B \arrow[d, dashed, "{[f, g]}"]
+  & B \arrow[l, "\iota_2"'] \arrow[dl, "g", bend left=15] \\
+  & Y &
+\end{tikzcd}
+\end{center}
+
+\begin{howtosay}
+\begin{itemize}
+  \item $A \times B$ — ``$A$ cross $B$,'' ``the product of $A$ and $B$,''
+        or sometimes ``$A$ product $B$.'' Some authors write $A \wedge B$
+        (read ``$A$ meet $B$'' or ``$A$ and $B$''), especially in
+        lattice-theoretic contexts.
+  \item $A + B$ — ``$A$ plus $B$,'' ``the coproduct of $A$ and $B$,'' or
+        ``$A$ sum $B$.'' The notation $A \sqcup B$ (read ``$A$ disjoint
+        union $B$'') is also common; $A \vee B$ (``$A$ join $B$,'' ``$A$ or
+        $B$'') appears in lattice-theoretic contexts.
+  \item $\pi_1, \pi_2$ — ``pi sub one'' and ``pi sub two,'' or
+        ``first/second projection,'' or ``left/right projection.''
+  \item $\iota_1, \iota_2$ — ``iota sub one,'' ``iota sub two,'' or
+        ``first/second injection'' or ``left/right inclusion.''
+  \item $\langle f, g \rangle$ — ``angle $f$ comma $g$,'' ``the pairing of
+        $f$ and $g$,'' or ``$f$ paired with $g$.''
+  \item $[f, g]$ — ``bracket $f$ comma $g$,'' ``the cotuple of $f$ and
+        $g$,'' or ``case analysis on $f$ and $g$.''
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Duality Again}
+
+A coproduct in $\mathcal{C}$ is a product in $\mathcal{C}^{\mathrm{op}}$.
+Every theorem about products has a corresponding theorem about coproducts
+obtained by reversing arrows. The pairing $\langle f, g \rangle$ in a
+product corresponds to the cotuple $[f, g]$ in a coproduct. The projections
+$\pi_i$ correspond to the inclusions $\iota_i$.
+
+We will use this duality without comment for the rest of the book.
+
+\subsection{Simplifying: The Product and Coproduct Schema}
+
+\begin{align*}
+  \text{Product:}\quad
+    &\forall (X, f, g),\; \exists !\, \langle f, g \rangle : X \to A \times B,\;
+    \pi_i \circ \langle f, g \rangle = (f, g)_i. \\
+  \text{Coproduct:}\quad
+    &\forall (Y, f, g),\; \exists !\, [f, g] : A + B \to Y,\;
+    [f, g] \circ \iota_i = (f, g)_i.
+\end{align*}
+
+\subsection{Formally: Existence and Notation}
+
+\formalnote{When products exist}
+Not every category has products. The categories from Chapter~1 (recipe,
+approval chain) generally do not, because there are not enough morphisms to
+support pairings. We will exhibit categories that \emph{do} have products
+in Chapter~6.
+
+\formalnote{Binary, finite, and infinite}
+The product of two objects is the \emph{binary} product. One can also speak
+of products of finitely many objects, indexed products
+$\prod_{i \in I} A_i$, and infinite products. The universal-property
+template extends uniformly to all of these. The same goes for coproducts.
+
+\formalnote{Uniqueness up to unique isomorphism, restated}
+By the theorem of \S5.4, any two products $(P, \pi_1, \pi_2)$ and
+$(P', \pi'_1, \pi'_2)$ of the same pair $A, B$ are related by a unique
+isomorphism $P \xrightarrow{\sim} P'$ commuting with the projections.
+Likewise for coproducts. We may therefore speak of ``the'' product and
+``the'' coproduct.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+An \textbf{initial object} $\mathbf{0}$ has a unique morphism to every
+object. A \textbf{terminal object} $\mathbf{1}$ has a unique morphism from
+every object. They are dual to each other.
+
+\textbf{Uniqueness up to unique isomorphism}: any two objects satisfying the
+same universal property are connected by a unique isomorphism.
+
+The \textbf{universal property pattern}:
+\begin{equation*}
+  \forall\, X \text{ with data},\; \exists !\, u : X \to U \;\text{or}\; U \to X
+  \text{ compatible with the data}.
+\end{equation*}
+
+\textbf{Products} ($A \times B$) and \textbf{coproducts} ($A + B$) are the
+first universal constructions involving two objects: a product comes with
+projections $\pi_1, \pi_2$ and a pairing operation $\langle f, g \rangle$;
+a coproduct comes with inclusions $\iota_1, \iota_2$ and a cotuple $[f, g]$.
+
+\medskip
+\textbf{Recognizing a universal property:} look for ``for every \ldots,
+there exists a unique \ldots such that some diagram commutes.''
+\end{summarybox}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Initial object.}\quad
+$\mathbf{0} \in \mathcal{C}$ is initial iff
+$|\mathrm{Hom}(\mathbf{0}, A)| = 1$ for every $A \in \mathcal{C}$.
+
+\medskip
+\textbf{Terminal object.}\quad
+$\mathbf{1} \in \mathcal{C}$ is terminal iff
+$|\mathrm{Hom}(A, \mathbf{1})| = 1$ for every $A \in \mathcal{C}$.
+
+\medskip
+\textbf{Duality.}\quad
+$X$ is terminal in $\mathcal{C}$ iff $X$ is initial in
+$\mathcal{C}^{\mathrm{op}}$.
+
+\medskip
+\textbf{Uniqueness theorem.}\quad
+Any two objects satisfying the same universal property are related by a
+unique isomorphism:
+\begin{equation*}
+  U, U' \text{ both satisfy the property}
+  \;\;\Longrightarrow\;\;
+  \exists !\, u : U \xrightarrow{\sim} U'.
+\end{equation*}
+
+\medskip
+\textbf{Product.}\quad
+$(A \times B, \pi_1, \pi_2)$ is a product of $A, B$ iff for every
+$(X, f, g)$ with $f : X \to A$, $g : X \to B$:
+\begin{equation*}
+  \exists !\, \langle f, g \rangle : X \to A \times B
+  \;\text{with}\;
+  \pi_1 \circ \langle f, g \rangle = f,\;
+  \pi_2 \circ \langle f, g \rangle = g.
+\end{equation*}
+
+\medskip
+\textbf{Coproduct.}\quad
+$(A + B, \iota_1, \iota_2)$ is a coproduct of $A, B$ iff for every
+$(Y, f, g)$ with $f : A \to Y$, $g : B \to Y$:
+\begin{equation*}
+  \exists !\, [f, g] : A + B \to Y
+  \;\text{with}\;
+  [f, g] \circ \iota_1 = f,\;
+  [f, g] \circ \iota_2 = g.
+\end{equation*}
+
+\medskip
+\noindent\textit{Chapter~6 develops the full theory of limits and colimits,
+of which initial and terminal objects, products and coproducts, are the
+first examples.}
+\end{formalrestatement}
