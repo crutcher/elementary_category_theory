@@ -1,0 +1,529 @@
+\chapter{Adjunctions}
+
+\begin{overviewbox}
+We have now built a substantial toolkit: categories, functors, natural
+transformations, universal properties, limits, and colimits. The next
+step is to study how categories themselves \emph{relate}.
+
+An \term{adjunction} is the fundamental relationship between two
+categories. It is the categorical formalization of a recurring informal
+pattern: \emph{constructing} something on one side ``corresponds to''
+\emph{checking} something on the other. The construction goes
+\emph{left} (a functor $L$) and the checking goes \emph{right} (a functor
+$R$), and the two are linked by a bijection between hom-sets:
+\begin{equation*}
+  \mathrm{Hom}_\mathcal{D}(L(A), B) \;\cong\; \mathrm{Hom}_\mathcal{C}(A, R(B)).
+\end{equation*}
+This bijection, when it holds naturally in both variables, is called an
+\term{adjunction} and is written $L \dashv R$.
+
+The reason adjunctions matter is that almost every important construction
+in mathematics is part of an adjunction: free monoid/forgetful, free
+group/forgetful, tensor/hom, $\exists$/pullback, abelianization/inclusion,
+\ldots The list is essentially endless.
+
+The deep fact of this chapter: left adjoints preserve colimits, right
+adjoints preserve limits. This is what makes adjunctions the principal
+tool for proving preservation theorems.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Hom-Set Bijection}
+\label{sec:hom-set-bijection}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Free and Forgetful}
+
+Here is the prototypical pattern. Consider an object $A$ in some category
+$\mathcal{C}$ of ``raw stuff'' (say a set). We want to ``freely build a
+richer structure'' on $A$ --- a monoid, a group, a module --- landing in
+some richer category $\mathcal{D}$. The free construction is $L(A)$, an
+object of $\mathcal{D}$.
+
+Conversely, given an object $B$ in $\mathcal{D}$, we can \emph{forget} its
+extra structure, landing back in $\mathcal{C}$. The forgetful is $R(B)$,
+an object of $\mathcal{C}$.
+
+The magic: a structured map $L(A) \to B$ (i.e., a homomorphism in
+$\mathcal{D}$) corresponds to an unstructured map $A \to R(B)$ (just a
+function on raw stuff). Once you fix where each generator of $L(A)$ goes
+in $B$, the rest of the homomorphism is forced. This correspondence is a
+bijection $\mathrm{Hom}_\mathcal{D}(L(A), B) \cong \mathrm{Hom}_\mathcal{C}(A, R(B))$.
+
+\subsection{Expanding: The Pattern in Concrete Settings}
+
+\begin{example}{Free Monoid and Forgetful}
+Take $L = \text{free monoid functor}, R = \text{forgetful from monoids to
+sets}$. For a set $A$ and a monoid $B$:
+\begin{itemize}
+  \item A monoid homomorphism $L(A) \to B$ is determined by where it
+        sends each $a \in A$ (the generators).
+  \item A function $A \to R(B)$ is exactly a choice of an element of $B$
+        for each $a \in A$.
+\end{itemize}
+These data are the same. The bijection is the formal statement of this
+informal fact.
+\end{example}
+
+\begin{example}{Discrete and Forgetful for Topology}
+Let $L$ send a set $X$ to ``$X$ with the discrete topology,'' and $R$
+send a topological space to its underlying set. A continuous map
+$L(X) \to Y$ is just any function $X \to R(Y)$, because every function
+from a discrete space is continuous. So we get a bijection
+\begin{equation*}
+  \mathrm{Hom}_{\mathbf{Top}}(L(X), Y) \cong \mathrm{Hom}_{\mathbf{Set}}(X, R(Y)).
+\end{equation*}
+$L$ is left adjoint to $R$.
+\end{example}
+
+\begin{example}{Tensor and Hom}
+For modules over a commutative ring $R$, the tensor product with a
+fixed module $M$ is left adjoint to the hom-functor out of $M$:
+\begin{equation*}
+  \mathrm{Hom}(N \otimes M, P) \cong \mathrm{Hom}(N, \mathrm{Hom}(M, P)).
+\end{equation*}
+This bijection is so important it has a special name: \emph{tensor-hom
+adjunction}. It generalizes the ``currying'' of functions in $\mathbf{Set}$:
+$Z^{X \times Y} = (Z^Y)^X$.
+\end{example}
+
+\begin{dialog}
+The pattern in each case: one functor \emph{builds something} and the
+other \emph{forgets or evaluates}. The bijection says that the building
+in one direction matches the using in the other.
+\end{dialog}
+
+\subsection{Formalizing: Adjoint Functors}
+
+Let $L : \mathcal{C} \to \mathcal{D}$ and $R : \mathcal{D} \to \mathcal{C}$
+be functors. We say $L$ is \term{left adjoint to} $R$ (equivalently $R$
+is \term{right adjoint to} $L$), and we write $L \dashv R$, if there is a
+\emph{natural} bijection
+\begin{equation*}
+  \varphi_{A,B} : \mathrm{Hom}_\mathcal{D}(L(A), B)
+  \;\xrightarrow{\;\cong\;}\;
+  \mathrm{Hom}_\mathcal{C}(A, R(B))
+\end{equation*}
+for every $A \in \mathcal{C}$ and $B \in \mathcal{D}$. The naturality
+requires that $\varphi$ commute with precomposition by $L(f)$ in
+$\mathcal{D}$ and with $f$ in $\mathcal{C}$, and similarly with $R(g)$.
+
+If $\varphi$ exists, we say $L$ and $R$ form an \term{adjoint pair}, or
+that $(L, R, \varphi)$ is an \term{adjunction}.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $L \dashv R$ --- ``$L$ is left adjoint to $R$,'' or
+        ``the adjunction $L$-$R$.''
+  \item The symbol $\dashv$ is read ``turnstile,'' written
+        \texttt{\textbackslash dashv}. The reflected $\vdash$ goes the
+        other direction.
+  \item $\varphi$ is sometimes called the \emph{adjunction iso} or just
+        \emph{the natural bijection}.
+  \item Naturality is in \emph{both} variables: $A$ contravariantly
+        (from $\mathcal{C}^{\mathrm{op}}$) and $B$ covariantly.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Unit and Counit}
+
+Plug $B = L(A)$ into the bijection: the right-hand side becomes
+$\mathrm{Hom}_\mathcal{C}(A, R(L(A)))$. The identity $\mathrm{id}_{L(A)}$
+on the left corresponds to a morphism on the right:
+\begin{equation*}
+  \eta_A : A \to R(L(A)).
+\end{equation*}
+This morphism is called the \term{unit of the adjunction at $A$}.
+
+Dually, plug $A = R(B)$: the left-hand side becomes
+$\mathrm{Hom}_\mathcal{D}(L(R(B)), B)$. The identity $\mathrm{id}_{R(B)}$
+on the right corresponds to:
+\begin{equation*}
+  \varepsilon_B : L(R(B)) \to B,
+\end{equation*}
+the \term{counit at $B$}.
+
+The collections $(\eta_A)$ and $(\varepsilon_B)$ assemble into natural
+transformations
+\begin{equation*}
+  \eta : \mathrm{Id}_\mathcal{C} \Rightarrow R \circ L,
+  \qquad
+  \varepsilon : L \circ R \Rightarrow \mathrm{Id}_\mathcal{D}.
+\end{equation*}
+
+\subsection{Simplifying: The Triangle Identities}
+
+\begin{align*}
+  (R \varepsilon) \circ (\eta R) &= \mathrm{id}_R, \\
+  (\varepsilon L) \circ (L \eta) &= \mathrm{id}_L.
+\end{align*}
+These are the \term{triangle identities} (or \emph{counit-unit laws}).
+They encode the requirement that the bijection $\varphi$ is the natural
+bijection of an adjunction, expressed entirely in terms of $L$, $R$,
+$\eta$, and $\varepsilon$.
+
+\subsection{Formally: Three Equivalent Definitions}
+
+\formalnote{Adjunctions, three ways}
+The following data are interchangeable:
+\begin{enumerate}
+  \item A natural bijection $\varphi$ as above.
+  \item Natural transformations $\eta, \varepsilon$ satisfying the
+        triangle identities.
+  \item For every $A$, a universal arrow $\eta_A : A \to R(L(A))$ from
+        $A$ to $R$ (or, dually, for every $B$, a universal arrow from
+        $L$ to $B$).
+\end{enumerate}
+Each formulation is convenient in different proofs. The hom-set bijection
+is best for computing examples; the unit/counit form is best for proofs
+in 2-category theory; the universal-arrow form is best for the Adjoint
+Functor Theorems (Chapter~10).
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjoint Pairs in the Wild}
+\label{sec:adjoints-in-wild}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Tour}
+
+The same hom-set bijection $\mathrm{Hom}(L A, B) \cong \mathrm{Hom}(A, R B)$
+appears all over mathematics. Recognizing it is half the battle.
+
+\subsection{Expanding: A Catalogue}
+
+\begin{example}{Free Group --- Forgetful}
+$L$ sends a set to the free group on it; $R$ sends a group to its
+underlying set. The unit $\eta_A : A \to R L(A)$ is the inclusion of
+generators.
+\end{example}
+
+\begin{example}{Abelianization --- Inclusion}
+$L : \mathbf{Grp} \to \mathbf{Ab}$ sends a group $G$ to its abelianization
+$G / [G, G]$. $R$ is the inclusion of abelian groups into all groups. The
+unit is the quotient map $G \to G^{\mathrm{ab}}$.
+\end{example}
+
+\begin{example}{Discrete --- Forgetful for Posets}
+$L$ sends a set $X$ to the discrete poset (no nontrivial order). $R$ sends
+a poset to its underlying set. $L \dashv R$.
+\end{example}
+
+\begin{example}{Quantifiers as Adjoints}
+For a function $f : X \to Y$, the pullback functor $f^* : \mathbf{Set}/Y
+\to \mathbf{Set}/X$ has both a left adjoint $\exists_f$ and a right
+adjoint $\forall_f$. The left adjoint is ``image'' and the right adjoint
+is ``Frobenius's all-fiber condition.'' This makes existential and
+universal quantification adjoints to substitution.
+\end{example}
+
+\begin{example}{Curry: Product --- Function-Space}
+In $\mathbf{Set}$ (and any cartesian closed category):
+\begin{equation*}
+  \mathrm{Hom}(A \times B, C) \;\cong\; \mathrm{Hom}(A, C^B).
+\end{equation*}
+$(- \times B)$ is left adjoint to $(-)^B$.
+\end{example}
+
+\subsection{Formalizing: A Recipe for Identifying Adjunctions}
+
+To spot an adjunction $L \dashv R$:
+\begin{enumerate}
+  \item Identify the two categories $\mathcal{C}$ and $\mathcal{D}$.
+  \item Identify the candidate functors $L$ and $R$.
+  \item Write out a typical hom-set $\mathrm{Hom}_\mathcal{D}(L A, B)$
+        in concrete terms.
+  \item Write out $\mathrm{Hom}_\mathcal{C}(A, R B)$ in concrete terms.
+  \item Look for a natural bijection between the two descriptions.
+\end{enumerate}
+If you can carry out steps 3--5, you have your adjunction.
+
+\subsection{Reorganizing: Adjoints Are Unique}
+
+\textbf{Theorem (Uniqueness of adjoints).}\quad If $R$ has a left adjoint,
+that left adjoint is unique up to natural isomorphism. Dually for right
+adjoints.
+
+The proof is the standard universal-property uniqueness argument from
+\S5.4, applied to the unit (or counit).
+
+\subsection{Simplifying: ``Adjoints'' Are Functorial Pairs}
+
+We will routinely write things like ``the left adjoint to $R$ is $L$''
+or ``$\exists_f$ is left adjoint to $f^*$.'' This is a statement about
+a \emph{pair} of functors and a natural bijection, but the bijection is
+canonically determined by either functor and need not be named.
+
+\subsection{Formally: Composability of Adjunctions}
+
+\formalnote{Adjunctions compose}
+If $L \dashv R$ between $\mathcal{C}$ and $\mathcal{D}$, and $L' \dashv R'$
+between $\mathcal{D}$ and $\mathcal{E}$, then $L' \circ L \dashv R \circ R'$
+between $\mathcal{C}$ and $\mathcal{E}$. The bijection composes:
+\begin{align*}
+  \mathrm{Hom}_\mathcal{E}(L'L(A), B)
+    &\cong \mathrm{Hom}_\mathcal{D}(L(A), R'(B)) \\
+    &\cong \mathrm{Hom}_\mathcal{C}(A, R R'(B)).
+\end{align*}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjunctions and Limits}
+\label{sec:adjunctions-and-limits}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Right Adjoints Preserve Limits}
+
+The most useful theorem about adjunctions is this:
+\begin{quote}
+\textit{If $R$ has a left adjoint, then $R$ preserves all limits that
+exist in its source.}
+\end{quote}
+Dually, left adjoints preserve all colimits.
+
+Why does this matter? Because limits are everywhere (Chapter~6) and
+checking that a functor preserves them is, in general, painful. But once
+we know our functor is a right adjoint, preservation is automatic.
+
+\subsection{Expanding: Sketch of the Proof}
+
+The proof is short. Suppose $L \dashv R$, $D : \mathcal{J} \to \mathcal{D}$
+is a diagram, and $\lim D$ exists. We want to show $R(\lim D) = \lim (R
+\circ D)$.
+
+For any object $A$:
+\begin{align*}
+  \mathrm{Hom}(A, R(\lim D))
+    &\cong \mathrm{Hom}(L(A), \lim D) && \text{(adjunction)} \\
+    &\cong \lim_j \mathrm{Hom}(L(A), D(j)) && \text{(limit/hom)} \\
+    &\cong \lim_j \mathrm{Hom}(A, R(D(j))) && \text{(adjunction, pointwise)} \\
+    &\cong \mathrm{Hom}(A, \lim_j R(D(j))). && \text{(limit/hom)}
+\end{align*}
+This natural isomorphism for every $A$ identifies $R(\lim D)$ with $\lim
+(R \circ D)$ up to unique iso. Hence $R$ preserves the limit.
+
+\subsection{Formalizing: The Statement, Precisely}
+
+\textbf{Theorem (RAPL: Right Adjoints Preserve Limits).}\quad Let
+$L \dashv R$ with $L : \mathcal{C} \to \mathcal{D}$ and $R : \mathcal{D}
+\to \mathcal{C}$. For any diagram $D : \mathcal{J} \to \mathcal{D}$ whose
+limit exists, the canonical morphism
+\begin{equation*}
+  R(\lim D) \;\xrightarrow{\;\cong\;}\; \lim (R \circ D)
+\end{equation*}
+is an isomorphism.
+
+Dually: \textbf{LAPC (Left Adjoints Preserve Colimits).}
+
+\subsection{Reorganizing: A Test for ``No Left Adjoint''}
+
+The contrapositive is useful: if $R$ \emph{fails} to preserve some limit,
+then $R$ has no left adjoint. For example:
+\begin{itemize}
+  \item The functor $\pi_0 : \mathbf{Top} \to \mathbf{Set}$ (path
+        components) fails to preserve products (cf. the line $\times$
+        line example), so it has no left adjoint (in the unenriched
+        sense).
+  \item The free-group functor $L : \mathbf{Set} \to \mathbf{Grp}$ does
+        not preserve products, so it has no right adjoint either. (It is
+        itself a left adjoint, of course --- of the forgetful functor.)
+\end{itemize}
+
+\subsection{Simplifying: The Adjunction Slogan}
+
+\begin{equation*}
+  \boxed{\;\;
+    L \dashv R
+    \;\Rightarrow\;
+    R \text{ preserves limits},\;\;
+    L \text{ preserves colimits}.
+  \;\;}
+\end{equation*}
+
+\subsection{Formally: Hom-Functor Preservation}
+
+\formalnote{Hom-functors and limits}
+For any object $A$ of $\mathcal{C}$, the hom-functor
+$\mathrm{Hom}(A, -)$ preserves limits. This is sometimes called
+``co-Yoneda preservation'' and it is the limit/hom step used in the
+proof of RAPL. Dually, $\mathrm{Hom}(-, A)$ (contravariant) sends
+colimits to limits.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Equivalences as Adjunctions}
+\label{sec:equivalences}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: When the Two Sides Are Almost the Same}
+
+A special and important case: when both the unit $\eta$ and the counit
+$\varepsilon$ are natural isomorphisms. Then $L$ and $R$ are inverses up
+to natural isomorphism, and the two categories $\mathcal{C}$ and
+$\mathcal{D}$ are essentially the same. We call this an
+\term{equivalence} of categories.
+
+\subsection{Expanding: Equivalence vs. Isomorphism}
+
+An \emph{isomorphism} of categories would require $R \circ L = \mathrm{Id}_\mathcal{C}$
+and $L \circ R = \mathrm{Id}_\mathcal{D}$ \emph{on the nose}. This is too
+strict --- and usually irrelevant. What we really want is that the two
+sides are the same \emph{up to natural isomorphism}, which is exactly
+what equivalence demands.
+
+\begin{example}{Finite Sets and Their Cardinality Skeletons}
+Let $\mathcal{C}$ be $\mathbf{FinSet}$ (all finite sets and functions),
+and $\mathcal{D}$ be the skeleton $\mathbf{FinSet}_\mathrm{sk}$ with
+objects $\underline{n} = \{1, 2, \ldots, n\}$ for $n \geq 0$. The
+inclusion $\mathcal{D} \hookrightarrow \mathcal{C}$ is one half of an
+equivalence; the other functor sends a finite set $X$ to
+$\underline{|X|}$. Every finite set is isomorphic to some $\underline{n}$,
+so the unit and counit are natural isomorphisms.
+\end{example}
+
+\subsection{Formalizing: Equivalence of Categories}
+
+An \term{equivalence of categories} between $\mathcal{C}$ and $\mathcal{D}$
+is a pair of functors $L : \mathcal{C} \to \mathcal{D}$ and
+$R : \mathcal{D} \to \mathcal{C}$ together with natural isomorphisms
+\begin{equation*}
+  R \circ L \;\cong\; \mathrm{Id}_\mathcal{C},
+  \qquad
+  L \circ R \;\cong\; \mathrm{Id}_\mathcal{D}.
+\end{equation*}
+We write $\mathcal{C} \simeq \mathcal{D}$.
+
+Equivalently: $L \dashv R$, both unit and counit are natural isomorphisms.
+
+\textbf{Theorem (Recognition of Equivalences).}\quad A functor
+$F : \mathcal{C} \to \mathcal{D}$ is one half of an equivalence iff $F$
+is fully faithful and \term{essentially surjective} (every object of
+$\mathcal{D}$ is isomorphic to some $F(C)$).
+
+\subsection{Reorganizing: The Strict-Equivalence Slogan}
+
+Isomorphism of categories is the strict version; equivalence is the
+\emph{right} version. Whenever we say ``two categories are the same'' we
+almost always mean equivalence.
+
+\subsection{Simplifying: The Equivalence Schema}
+
+\begin{equation*}
+  F \text{ is an equivalence}
+  \;\iff\;
+  F \text{ is fully faithful and essentially surjective}.
+\end{equation*}
+
+\subsection{Formally: Working with Skeletons}
+
+\formalnote{Skeletons and equivalence}
+Every category $\mathcal{C}$ is equivalent to its \term{skeleton}: a
+subcategory containing one object per isomorphism class. Working with a
+skeleton is often convenient, because it eliminates redundant objects
+without changing the categorical content.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qa{What is an adjunction, in one sentence?}{A natural bijection between $\mathrm{Hom}_\mathcal{D}(L A, B)$ and $\mathrm{Hom}_\mathcal{C}(A, R B)$.}
+\qa{Which is the left adjoint: $L$ or $R$?}{$L$. It appears on the left of the hom inside $\mathcal{D}$.}
+\qa{What does $L \dashv R$ mean?}{$L$ is left adjoint to $R$.}
+\qa{In ``free monoid --- forgetful,'' which is left?}{Free monoid is left; forgetful is right.}
+\qa{What is the unit of an adjunction?}{A natural transformation $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow R L$.}
+\qa{What is the counit?}{A natural transformation $\varepsilon : L R \Rightarrow \mathrm{Id}_\mathcal{D}$.}
+\qa{How does $\eta_A$ relate to $\mathrm{id}_{L(A)}$?}{Under the bijection, $\eta_A$ corresponds to $\mathrm{id}_{L(A)}$.}
+\qa{How does $\varepsilon_B$ relate to $\mathrm{id}_{R(B)}$?}{Under the inverse bijection, $\varepsilon_B$ corresponds to $\mathrm{id}_{R(B)}$.}
+\qa{What are the triangle identities?}{$(R \varepsilon)(\eta R) = \mathrm{id}_R$ and $(\varepsilon L)(L \eta) = \mathrm{id}_L$.}
+\qa{Why do we care about the triangle identities?}{They are the data-only form of the adjunction (no bijection needed).}
+\qa{Are adjoints unique?}{Yes, up to natural isomorphism.}
+\qa{What is the slogan for limits and adjoints?}{Right adjoints preserve limits; left adjoints preserve colimits. (RAPL/LAPC.)}
+\qa{If $R$ fails to preserve some limit, what can you conclude?}{$R$ has no left adjoint.}
+\qa{Why does the hom-set bijection imply RAPL?}{Apply $\mathrm{Hom}(A, -)$, which preserves limits; chase the bijection.}
+\qa{What is the prototype adjunction in $\mathbf{Set}$?}{Currying: $(- \times B) \dashv (-)^B$.}
+\qa{What is the tensor-hom adjunction in modules?}{$(- \otimes M) \dashv \mathrm{Hom}(M, -)$.}
+\qa{Quantifiers as adjoints to what?}{Adjoints to the pullback functor $f^*$: $\exists_f \dashv f^* \dashv \forall_f$.}
+\qa{What is an equivalence of categories?}{A pair $L \dashv R$ where both unit and counit are natural isomorphisms.}
+\qa{Why prefer equivalence to isomorphism of categories?}{Isomorphism is too strict; almost all ``sameness'' in CT is up to natural iso.}
+\qa{What is essential surjectivity?}{Every object in $\mathcal{D}$ is isomorphic to some $F(C)$.}
+\qa{When is $F$ an equivalence?}{When $F$ is fully faithful and essentially surjective.}
+\qa{What is a skeleton of a category?}{A subcategory with one object per isomorphism class.}
+\qa{Is every category equivalent to its skeleton?}{Yes.}
+\qa{Do adjunctions compose?}{Yes: $L \dashv R$ and $L' \dashv R'$ give $L' L \dashv R R'$.}
+\qa{Does the identity functor have an adjoint?}{Yes; it is adjoint to itself.}
+\qa{Can a functor have more than one left adjoint?}{Only up to natural isomorphism; there is essentially one.}
+\qa{Why is the unit ``the obvious'' inclusion in many examples?}{Because the unit corresponds to $\mathrm{id}_{L(A)}$, the most basic morphism on the freely built object.}
+\qa{What kind of functor is $\pi_0 : \mathbf{Top} \to \mathbf{Set}$?}{Not a right adjoint in the unenriched sense (it fails to preserve some products).}
+\qa{What is the practical use of recognizing an adjunction?}{You instantly get a wealth of preservation theorems and natural bijections.}
+\qa{What's the deeper meaning of $L \dashv R$?}{The construction $L$ \emph{represents} the same data as the checking $R$, viewed dually.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+An \textbf{adjunction} $L \dashv R$ is a natural bijection
+$\mathrm{Hom}(L A, B) \cong \mathrm{Hom}(A, R B)$. Equivalently, it is a
+pair of natural transformations $\eta : \mathrm{Id} \Rightarrow R L$
+(\textbf{unit}) and $\varepsilon : L R \Rightarrow \mathrm{Id}$
+(\textbf{counit}) satisfying the \textbf{triangle identities}.
+
+Adjoints are unique up to natural isomorphism. They compose. They are
+ubiquitous: free/forgetful pairs, tensor-hom, quantifiers, abelianization,
+discrete topology, etc.
+
+The major theorem: \textbf{Right Adjoints Preserve Limits} (RAPL) and
+\textbf{Left Adjoints Preserve Colimits} (LAPC).
+
+An \textbf{equivalence of categories} is an adjunction with invertible
+unit and counit. It is recognized by being \textbf{fully faithful and
+essentially surjective}.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Adjunction.}\quad $L : \mathcal{C} \to \mathcal{D}$ is left
+adjoint to $R : \mathcal{D} \to \mathcal{C}$ ($L \dashv R$) iff there is a
+natural bijection
+\begin{equation*}
+  \varphi_{A,B} : \mathrm{Hom}_\mathcal{D}(L A, B) \cong \mathrm{Hom}_\mathcal{C}(A, R B).
+\end{equation*}
+
+\medskip
+\textbf{Unit and counit.}\quad
+$\eta : \mathrm{Id}_\mathcal{C} \Rightarrow R L$,
+$\varepsilon : L R \Rightarrow \mathrm{Id}_\mathcal{D}$, satisfying:
+\begin{equation*}
+  (R \varepsilon)(\eta R) = \mathrm{id}_R,
+  \qquad
+  (\varepsilon L)(L \eta) = \mathrm{id}_L.
+\end{equation*}
+
+\medskip
+\textbf{Limit preservation.}\quad
+$L \dashv R \;\Rightarrow\; R \text{ preserves limits},\; L \text{ preserves colimits}$.
+
+\medskip
+\textbf{Equivalence.}\quad
+$\mathcal{C} \simeq \mathcal{D}$ iff there exist $L \dashv R$ with
+$\eta, \varepsilon$ both natural isomorphisms; equivalently, there exists
+a fully faithful, essentially surjective functor.
+
+\medskip
+\noindent\textit{Chapter~8 develops monads, which arise from adjunctions
+and capture algebraic structure relative to a base category.}
+\end{formalrestatement}
