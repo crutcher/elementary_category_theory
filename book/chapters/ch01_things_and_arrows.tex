@@ -850,6 +850,47 @@ which we will develop in Chapter~3.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qa{What are the two ingredients of any category, before laws?}{Objects and morphisms.}
+\qa{Is a morphism a function?}{Not necessarily. It is an arrow with a source and a target. Functions are one example.}
+\qa{Can two different morphisms have the same source and target?}{Yes. The hom-set may contain many morphisms.}
+\qa{Can a morphism have two different sources?}{No. The source is part of the morphism's data.}
+\qa{What does $f : A \to B$ tell you?}{The name of the morphism, its source $A$, and its target $B$.}
+\qa{If $f : A \to B$ and $g : B \to C$, is $g \circ f$ defined?}{Yes. The target of $f$ matches the source of $g$.}
+\qa{If $f : A \to B$ and $g : C \to D$ with $B \neq C$, is $g \circ f$ defined?}{No. Composition requires the matching condition.}
+\qa{What is the source and target of $g \circ f$ when $f : A \to B$ and $g : B \to C$?}{Source $A$, target $C$.}
+\qa{How is $g \circ f$ pronounced?}{``$g$ after $f$,'' or ``$g$ composed with $f$.''}
+\qa{Why is composition written right-to-left?}{So that the morphism applied first sits closest to the input. Like $g(f(x))$.}
+\qa{What does the identity morphism $\mathrm{id}_A$ do under composition?}{It leaves morphisms unchanged: $f \circ \mathrm{id}_A = f$ and $\mathrm{id}_B \circ f = f$.}
+\qa{How many identity morphisms does an object have?}{Exactly one.}
+\qa{State the associativity law in symbols.}{$(h \circ g) \circ f = h \circ (g \circ f)$.}
+\qa{Why does associativity let us write $h \circ g \circ f$ without parentheses?}{Because the grouping doesn't change the result.}
+\qa{When we say a diagram \emph{commutes}, what do we mean?}{Every path between two given objects gives the same composite morphism.}
+\qa{In a triangle with $f : A \to B$, $g : B \to C$, and $h : A \to C$, what equation makes it commute?}{$h = g \circ f$.}
+\qa{Is a single morphism $f : A \to B$ a (trivial) commutative diagram?}{Yes. There is only one path, so it commutes vacuously.}
+\qa{Can a diagram fail to commute?}{Yes. Two paths might compose to different morphisms.}
+\qa{What does an empty hom-set $\mathrm{Hom}(A, B) = \varnothing$ mean?}{There are no morphisms from $A$ to $B$ at all.}
+\qa{Must every pair of objects have a morphism between them?}{No.}
+\qa{What is the smallest category with a non-identity morphism?}{$\mathbf{2}$: two objects with one arrow between them, plus the two identities.}
+\qa{In the recipe category, what is the composite of ``chop'' and ``saut\'e''?}{A single morphism Chop $\to$ Add.}
+\qa{Why is the discrete category on a set $S$ called ``discrete''?}{It has no morphisms besides identities.}
+\qa{In a discrete category on $\{A, B\}$, is $\mathrm{Hom}(A, B)$ empty?}{Yes. There are no non-identity morphisms.}
+\qa{Why does the unit law require both $f \circ \mathrm{id}_A = f$ and $\mathrm{id}_B \circ f = f$?}{Because $f$ has both a source and a target, and identity must be neutral on both sides.}
+\qa{What goes wrong if you drop associativity?}{Composites of three or more morphisms become ambiguous.}
+\qa{What goes wrong if you drop identities?}{Composition has no neutral element; many constructions break.}
+\qa{What is the most reliable test that a triangle commutes?}{Compute both paths and check they are equal as morphisms.}
+\qa{Can a morphism be its own inverse without being the identity?}{Yes; for example, a swap in a permutation.}
+\qa{If $f$ and $g$ are both identities on $A$, what can you conclude?}{$f = g$. There is only one identity per object.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
 \section*{Chapter Summary}
 \addcontentsline{toc}{section}{Chapter Summary}
 \label{sec:ch1-summary}

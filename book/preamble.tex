@@ -229,6 +229,32 @@
 % Inline pronunciation hint, for notation with a single common reading.
 \newcommand{\sayit}[1]{\textit{\,(read: #1)}}
 
+% ── Exercises (Little-Schemer Q/A style) ────────────────────────────────────
+% A two-column Q/A list. Use \qa{question}{answer} inside a qa environment.
+% The pair is rendered as a single row in a tabularx, with the question
+% on the left and the answer on the right, separated by a vertical rule.
+\usepackage{tabularx}
+\usepackage{array}
+
+\newtcolorbox{exercisesbox}{
+  enhanced,
+  breakable,
+  colback=DialogBg!50,
+  colframe=DialogBorder,
+  fonttitle=\bfseries,
+  title={Exercises},
+  left=8pt, right=8pt, top=6pt, bottom=6pt,
+}
+
+\newenvironment{qa}{%
+  \setlength{\extrarowheight}{2pt}%
+  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{\raggedright\arraybackslash}X@{}}%
+}{%
+  \end{tabularx}%
+}
+\newcommand{\qa}[2]{#1 & #2 \\[0.3em]}
+\newcommand{\qarow}{\multicolumn{3}{c}{\color{DialogBorder!40}\hrulefill}\\[0.2em]}
+
 % ── Chapter summary box ──────────────────────────────────────────────────────
 \newtcolorbox{summarybox}[1][]{
   enhanced,
