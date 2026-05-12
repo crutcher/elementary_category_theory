@@ -1,0 +1,412 @@
+% ch23_aft_complete.tex — Volume II Chapter 11
+
+\chapter{Adjoint Functor Theorems: Complete Treatment}
+
+\begin{overviewbox}
+Chapter 10 presented the Adjoint Functor Theorems as culmination of
+Volume I. This chapter revisits them from the perspective of Volume II,
+with complete proofs and deeper applications. The question --- when does
+a functor $F : \mathcal{C} \to \mathcal{D}$ have a left adjoint? --- is
+one of the most important existence questions in category theory.
+
+The two main answers are:
+\begin{itemize}
+  \item \term{General Adjoint Functor Theorem (GAFT)}: $F$ has a left
+        adjoint iff it preserves all small limits (is \term{continuous})
+        and every comma category $(d \downarrow F)$ has a
+        \term{weakly initial set} (the solution set condition).
+  \item \term{Special Adjoint Functor Theorem (SAFT)}: if additionally
+        $\mathcal{C}$ is complete and has a small \term{cogenerating set},
+        then continuity of $F$ alone suffices.
+\end{itemize}
+Both theorems reduce the existence question to two ingredients: a
+\emph{limit} argument (build a candidate from the solution set by taking
+a limit) and a \emph{smallness} argument (ensure the limit is over a small
+diagram). The SAFT uses the cogenerating set to automatically produce a
+small solution set for any continuous functor.
+
+Applications include free algebras, sheafification, and the
+Stone--\v{C}ech compactification: each is a left adjoint whose existence
+is guaranteed by the SAFT.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Adjoint Functor Question}
+\label{sec:aft-question-II}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Recap: Adjunctions via Universal Arrows}
+
+Recall from Chapter 7: a functor $F : \mathcal{C} \to \mathcal{D}$ has
+a left adjoint $L : \mathcal{D} \to \mathcal{C}$ if and only if, for
+every $d \in \mathcal{D}$, there exists a \term{universal arrow} from $d$
+to $F$ --- a pair $(Ld, \eta_d : d \to F(Ld))$ such that every $f : d
+\to F(c)$ factors uniquely as $f = F(\bar f) \circ \eta_d$ for a unique
+$\bar f : Ld \to c$.
+
+This universal arrow is exactly the initial object of the
+\term{comma category} $(d \downarrow F)$:
+\begin{itemize}
+  \item Objects: pairs $(c \in \mathcal{C}, \; f : d \to Fc)$.
+  \item Morphisms $(c, f) \to (c', f')$: maps $g : c \to c'$ with
+        $Fg \circ f = f'$.
+\end{itemize}
+
+So the existence of a left adjoint reduces to: does every comma category
+$(d \downarrow F)$ have an initial object?
+
+\subsection{Two Ingredients for an Initial Object}
+
+An initial object in a category can be constructed as a limit over a
+\emph{weakly initial set}:
+
+\begin{definition}[Weakly initial set]
+A set $\mathcal{S} \subseteq \mathrm{Ob}(\mathcal{K})$ is called
+\term{weakly initial} if every object $k \in \mathcal{K}$ admits a
+morphism from some $s \in \mathcal{S}$.
+\end{definition}
+
+\begin{lemma}[Weakly initial set $\Rightarrow$ initial object]
+\label{lem:weakly-initial}
+If $\mathcal{K}$ is a locally small category that has small limits and
+$\mathcal{S}$ is a weakly initial set, then $\mathcal{K}$ has an initial
+object.
+\end{lemma}
+
+\begin{proof}
+\begin{prooflog}
+\proofstep{Let $i = \prod_{s \in \mathcal{S}} s$ be the product of all objects in $\mathcal{S}$ (a small product)}{Exists because $\mathcal{S}$ is a set and $\mathcal{K}$ has small limits}
+\proofstep{For each $k$, there is some $s \in \mathcal{S}$ and a map $s \to k$; composing with the projection $i \to s$ gives a map $i \to k$}{So $i$ is a weakly initial object: every $k$ has at least one map from $i$}
+\proofstep{Not all maps $i \to k$ need be equal; take the equalizer of all maps $i \to k$ for all $k$}{For each $k$, let $e_k: \mathrm{eq}(i \rightrightarrows k) \to i$ be the equalizer of the (possibly large) family of all maps $i \to k$}
+\proofstep{Since $\mathcal{K}$ is locally small, the hom-set $\mathcal{K}(i,k)$ is a set, so its equalizer is a small limit}{$e_k$ equalizes all $f: i \to k$ at once}
+\proofstep{The limit of the family $\{e_k\}_{k \in \mathcal{K}}$: let $\ell = \lim_k \mathrm{eq}(i \rightrightarrows k)$}{Another small (in fact set-indexed) limit}
+\proofstep{$\ell$ is initial: it maps to $i$, hence to every $k$; and the unique map $\ell \to k$ is forced by the equalizer at $k$}{One verifies that any two maps $\ell \to k$ must be equal by unpacking the equalizer and limit construction}
+\end{prooflog}
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The General Adjoint Functor Theorem}
+\label{sec:gaft-vol2}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Solution Set Condition}
+
+\begin{definition}[Solution set condition]
+A functor $F: \mathcal{C} \to \mathcal{D}$ satisfies the
+\term{solution set condition} if for every $d \in \mathcal{D}$, there
+exists a \emph{set} $\{(c_i, f_i: d \to Fc_i)\}_{i \in I}$ of objects
+of $(d \downarrow F)$ such that every $(c, f: d \to Fc)$ in $(d \downarrow F)$
+admits a morphism from some $(c_i, f_i)$. That is,
+$\{(c_i, f_i)\}_{i \in I}$ is a weakly initial set in $(d \downarrow F)$.
+\end{definition}
+
+Informally: there is a \emph{set} of ``generators'' for all maps from
+$d$ into $F$'s image. The construction $Ld$ will be a limit over this set.
+
+\subsection{The Theorem}
+
+\begin{theorem}[General Adjoint Functor Theorem]
+\label{thm:gaft}
+Let $\mathcal{C}$ be locally small and complete (has all small limits),
+and let $F: \mathcal{C} \to \mathcal{D}$ be a functor. Then $F$ has a
+left adjoint if and only if:
+\begin{enumerate}
+  \item[(G1)] $F$ is \term{continuous}: it preserves all small limits.
+  \item[(G2)] $F$ satisfies the solution set condition.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We prove the direction $\text{(G1)+(G2)} \Rightarrow \exists L$.
+The converse --- that any left adjoint is continuous and satisfies the
+solution set condition --- is standard.
+
+\begin{prooflog}
+\proofstep{Fix $d \in \mathcal{D}$; we need an initial object of $(d \downarrow F)$}{$(d \downarrow F)$ is locally small (since $\mathcal{C}$ is) and has small limits by (G1): $F$ continuous implies $(d \downarrow F)$ has small limits}
+\proofstep{Why $(d \downarrow F)$ has small limits when $F$ is continuous}{A limit $\lim_j (c_j, f_j)$ in $(d \downarrow F)$ has underlying object $\lim_j c_j$ in $\mathcal{C}$. The map $d \to F(\lim_j c_j)$ is given by $d \xrightarrow{f_j} Fc_j$ factoring through $F(\lim_j c_j) \cong \lim_j Fc_j$ (using $F$ continuous)}
+\proofstep{By (G2), $(d \downarrow F)$ has a weakly initial set $\{(c_i, f_i)\}_{i \in I}$}{This is exactly what the solution set condition provides}
+\proofstep{Apply Lemma~\ref{lem:weakly-initial} to $(d \downarrow F)$: it has small limits and a weakly initial set}{Therefore $(d \downarrow F)$ has an initial object $(Ld, \eta_d: d \to FLd)$}
+\proofstep{Do this for every $d$; the assignment $d \mapsto Ld$ extends to a functor $L: \mathcal{D} \to \mathcal{C}$}{The universal property of the initial object gives the action of $L$ on morphisms}
+\proofstep{$\eta: \mathrm{Id}_\mathcal{D} \Rightarrow FL$ is the unit; the adjunction $L \dashv F$ holds by construction}{Each $\eta_d : d \to FLd$ is the initial object; universality gives the adjunction bijection $\mathcal{C}(Ld, c) \cong \mathcal{D}(d, Fc)$}
+\end{prooflog}
+\end{proof}
+
+\begin{dialog}
+The proof has a clean two-step structure. Step one: use $F$-continuity to
+give $(d \downarrow F)$ limits. Step two: use the solution set to give it
+a weakly initial set. Then the lemma combines these to produce an initial
+object, which is the adjoint value $Ld$. The solution set condition is the
+\emph{smallness} valve --- without it, the product $\prod_{s \in \mathcal{S}}
+s$ might be over a proper class, which is not permissible.
+\end{dialog}
+
+\subsection{The Converse}
+
+If $F$ has a left adjoint $L$, then:
+\begin{itemize}
+  \item $F$ is continuous: right adjoints preserve all limits.
+  \item Solution set condition: for each $d$, take the singleton set
+        $\{(Ld, \eta_d)\}$. Every $(c, f: d \to Fc)$ factors through
+        $(Ld, \eta_d)$ by the universal property: this is the definition
+        of the adjunction bijection.
+\end{itemize}
+So (G1) and (G2) are not just sufficient but necessary.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Special Adjoint Functor Theorem}
+\label{sec:saft-vol2}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Cogenerating Sets}
+
+\begin{definition}[Cogenerating set]
+A set $\mathcal{G} \subseteq \mathrm{Ob}(\mathcal{C})$ is a
+\term{cogenerating set} (or \term{coseparating set}) for $\mathcal{C}$ if:
+for any two distinct morphisms $f \neq g : a \rightrightarrows b$,
+there exists $s \in \mathcal{G}$ and $h : b \to s$ such that $hf \neq hg$.
+
+Equivalently: the collection of functors $\{\mathrm{Hom}(-,s) : s \in
+\mathcal{G}\}$ is jointly faithful.
+\end{definition}
+
+\begin{example}{Cogenerating sets in $\mathbf{Set}$}
+The single set $\{0,1\}$ cogenerates $\mathbf{Set}$: two functions $f,g:
+A \to B$ are equal iff for every $b \in B$, the preimages $f^{-1}(b)$
+and $g^{-1}(b)$ agree, which is detected by maps $B \to \{0,1\}$.
+\end{example}
+
+\begin{example}{Cogenerating sets in $\mathbf{Ab}$}
+The group $\mathbb{Q}/\mathbb{Z}$ cogenerates $\mathbf{Ab}$: this is
+the content of Baer's criterion for injectivity and the fact that
+$\mathbb{Q}/\mathbb{Z}$ is an injective cogenerator.
+\end{example}
+
+\subsection{The Theorem}
+
+\begin{theorem}[Special Adjoint Functor Theorem]
+\label{thm:saft}
+Let $\mathcal{C}$ be locally small, complete, and have a small
+cogenerating set $\mathcal{G}$. Then every continuous functor
+$F : \mathcal{C} \to \mathcal{D}$ has a left adjoint.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+By GAFT, it suffices to produce a solution set for each $d$.
+
+\begin{prooflog}
+\proofstep{Fix $d \in \mathcal{D}$; we must find a set of objects $(c_i, f_i: d \to Fc_i)$ weakly generating $(d \downarrow F)$}{Strategy: bound the ``size'' of $c$ using the cogenerating set $\mathcal{G}$}
+\proofstep{For any $(c, f: d \to Fc)$ in $(d \downarrow F)$, consider the maps from $c$ into elements of $\mathcal{G}$}{Since $\mathcal{G}$ cogenerates, $c$ embeds into the product $\prod_{s \in \mathcal{G}, \, h: c \to s} s$}
+\proofstep{The cardinality of the indexing set for this product is bounded by $|\mathcal{G}| \times |\mathcal{D}(d, Fs)|$ for $s \in \mathcal{G}$}{All these hom-sets are sets (locally small) and $\mathcal{G}$ is a set}
+\proofstep{Let $S$ be the set of all isomorphism classes of objects $c$ that embed into products of elements of $\mathcal{G}$ with index set of this bounded cardinality}{$S$ is a set, as it is bounded in cardinality}
+\proofstep{Claim: the set $\{(c, f: d \to Fc) : c \in S\}$ is a weakly initial set in $(d \downarrow F)$}{For any $(c', f': d \to Fc')$, the object $c'$ embeds into some product from $\mathcal{G}$; the image of $f'$ under this embedding gives an object in $S$ that maps to $c'$}
+\proofstep{We have a set-indexed weakly initial set; apply GAFT}{GAFT gives the initial object $Ld$ and the left adjoint $L$}
+\end{prooflog}
+\end{proof}
+
+\begin{dialog}
+The cogenerating set acts as a ``measuring stick'' for objects of
+$\mathcal{C}$. It turns a potentially proper-class-sized collection of
+objects into a set-sized one: every object, up to its maps into $\mathcal{G}$,
+is represented by a bounded-size product. This is the key move that
+eliminates the solution set condition from the hypotheses.
+\end{dialog}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Applications}
+\label{sec:aft-applications}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Free Algebras}
+
+\begin{example}{The Free Group Functor}
+The forgetful functor $G : \mathbf{Grp} \to \mathbf{Set}$ has a left
+adjoint, the \term{free group functor} $F : \mathbf{Set} \to \mathbf{Grp}$.
+
+\textbf{Via GAFT:} $G$ is continuous (it creates limits: the underlying
+set of a limit of groups is the limit of the underlying sets). The
+solution set for a set $X$ is: all groups with cardinality at most
+$\aleph_0 \cdot |X|$ (a set, bounded by the number of words in the
+generators). So GAFT applies and $F$ exists.
+
+\textbf{Via SAFT:} $\mathbf{Grp}$ is complete, locally small, and the
+single group $\mathbb{Z}/2\mathbb{Z}$ together with $\mathbb{Z}$ forms a
+cogenerating set (or one can use the family of all finite groups plus
+$\mathbb{Z}$). So SAFT gives the free group functor directly.
+\end{example}
+
+\begin{example}{Free Algebras for Any Algebraic Theory}
+Any algebraic theory $\mathbf{T}$ (in the sense of a Lawvere theory or
+a signature with equations) gives a forgetful functor $G: \mathrm{Alg}(\mathbf{T})
+\to \mathbf{Set}$ that is continuous and whose domain is complete, locally
+small, and has a cogenerating set. By SAFT, the free algebra functor
+$F: \mathbf{Set} \to \mathrm{Alg}(\mathbf{T})$ always exists.
+\end{example}
+
+\subsection{Sheafification}
+
+Let $X$ be a topological space and $\mathbf{PSh}(X)$ the category of
+presheaves on $X$. The full subcategory $\mathbf{Sh}(X) \hookrightarrow
+\mathbf{PSh}(X)$ of sheaves has an inclusion functor $\iota$.
+
+\begin{theorem}
+The inclusion $\iota : \mathbf{Sh}(X) \hookrightarrow \mathbf{PSh}(X)$
+has a left adjoint, the \term{sheafification functor}
+$\mathrm{sh}: \mathbf{PSh}(X) \to \mathbf{Sh}(X)$.
+\end{theorem}
+
+\begin{proof}[Sketch via GAFT]
+\begin{prooflog}
+\proofstep{$\iota$ preserves limits: limits of sheaves are sheaves, and $\iota$ reflects limits by definition}{Verified by checking the sheaf condition passes to limits}
+\proofstep{Solution set for a presheaf $P$: let $S$ be the set of all sheaves $\mathcal{F}$ together with a map $P \to \iota\mathcal{F}$, up to isomorphism, with $|\mathcal{F}(U)|$ bounded by $|P(U)|$ for all $U$}{This bounds are achievable since sheafification doesn't increase sections beyond the presheaf}
+\proofstep{By GAFT, the initial object $\mathrm{sh}(P)$ exists; it is the sheafification}{The sheaf $\mathrm{sh}(P)$ with the unit map $P \to \iota\,\mathrm{sh}(P)$ is universal among all sheaf maps from $P$}
+\end{prooflog}
+\end{proof}
+
+The sheafification functor is one of the most important examples of a
+left adjoint in algebraic topology and algebraic geometry. It is the
+reason why the category of sheaves is reflective in the category of
+presheaves.
+
+\subsection{Stone--\v{C}ech Compactification}
+
+Let $\mathbf{CompHaus}$ be the category of compact Hausdorff spaces and
+continuous maps, and $i: \mathbf{CompHaus} \hookrightarrow \mathbf{Top}$
+the inclusion into all topological spaces.
+
+\begin{theorem}
+The functor $i$ has a left adjoint $\beta: \mathbf{Top} \to
+\mathbf{CompHaus}$, the \term{Stone--\v{C}ech compactification}.
+\end{theorem}
+
+\begin{proof}[Sketch via SAFT]
+\begin{prooflog}
+\proofstep{$\mathbf{CompHaus}$ is complete, locally small}{Limits of compact Hausdorff spaces are compact Hausdorff}
+\proofstep{$\mathbf{CompHaus}$ has a cogenerating set: $\{[0,1]\}$ alone cogenerates}{By Urysohn's theorem, continuous functions $X \to [0,1]$ separate points of $X$; Gelfand duality confirms $[0,1]$ cogenerates}
+\proofstep{The inclusion $i$ is continuous: limits of compact Hausdorff spaces computed in $\mathbf{Top}$ remain compact Hausdorff}{Standard compactness arguments}
+\proofstep{SAFT applies: continuous functor out of a complete, locally small category with a cogenerating set has a left adjoint}{Therefore $\beta = Li$ exists}
+\end{prooflog}
+\end{proof}
+
+The left adjoint $\beta X$ is the Stone--\v{C}ech compactification: the
+``largest'' compact Hausdorff space through which all maps $X \to K$
+(for compact Hausdorff $K$) factor. It is a genuinely analytic construction,
+but category theory reveals its existence as a formal consequence of SAFT.
+
+\subsection{Geometric Morphisms and Toposes}
+
+In topos theory, the right adjoint (``inverse image'') of a geometric
+morphism $f: \mathcal{E} \to \mathcal{F}$ always has a left adjoint
+(``direct image''). This follows from SAFT applied to the topos $\mathcal{E}$,
+which is complete, locally small, and has a cogenerating set (given by
+the subobject classifier $\Omega$ and the terminal object). The AFTs are
+thus fundamental to the theory of toposes and sheaves.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:aft-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{State the General Adjoint Functor Theorem.}{A functor $F: \mathcal{C} \to \mathcal{D}$ has a left adjoint iff $\mathcal{C}$ is locally small and complete, $F$ is continuous (preserves all small limits), and $F$ satisfies the solution set condition (each $(d \downarrow F)$ has a weakly initial set).}
+\qaitem{What is the comma category $(d \downarrow F)$?}{Objects: pairs $(c, f: d \to Fc)$ with $c \in \mathcal{C}$. Morphisms $(c,f) \to (c', f')$: maps $g: c \to c'$ with $Fg \circ f = f'$. The initial object of $(d \downarrow F)$, if it exists, is the value $Ld$ of the left adjoint.}
+\qaitem{What is a weakly initial set?}{A set $\mathcal{S}$ of objects in a category $\mathcal{K}$ such that every $k \in \mathcal{K}$ admits at least one morphism from some $s \in \mathcal{S}$. Not every such morphism needs to be unique.}
+\qaitem{How does a weakly initial set yield an initial object?}{If $\mathcal{K}$ is locally small with small limits, take the product $i = \prod_{s \in \mathcal{S}} s$, then the limit over all maps from $i$ (equalizing all parallel pairs $i \rightrightarrows k$) produces an initial object.}
+\qaitem{What is the solution set condition for $F: \mathcal{C} \to \mathcal{D}$?}{For every $d \in \mathcal{D}$, there is a set $\{(c_i, f_i: d \to Fc_i)\}$ such that every $(c, f: d \to Fc)$ in $(d \downarrow F)$ admits a map from some $(c_i, f_i)$.}
+\qaitem{If $F$ has a left adjoint $L$, what is the solution set for $d$?}{The singleton $\{(Ld, \eta_d: d \to FLd)\}$. Every map $f: d \to Fc$ factors uniquely through $\eta_d$, so this single pair is already weakly initial (in fact initial).}
+\qaitem{State the Special Adjoint Functor Theorem.}{If $\mathcal{C}$ is locally small, complete, and has a small cogenerating set, then every continuous functor $F: \mathcal{C} \to \mathcal{D}$ has a left adjoint.}
+\qaitem{What is a cogenerating set for $\mathcal{C}$?}{A set $\mathcal{G} \subseteq \mathrm{Ob}(\mathcal{C})$ such that for any $f \neq g: a \rightrightarrows b$, some $h: b \to s$ with $s \in \mathcal{G}$ satisfies $hf \neq hg$. Equivalently, the functors $\mathrm{Hom}(-, s)$ for $s \in \mathcal{G}$ are jointly faithful.}
+\qaitem{How does the SAFT avoid the explicit solution set condition?}{The cogenerating set provides a size bound: every object $c$ ``fits into'' a product of elements of $\mathcal{G}$, and the cardinality of this product is bounded by the size of $\mathcal{G}$ and the hom-sets. This automatically constructs a solution set from the cogenerating set.}
+\qaitem{What cogenerates $\mathbf{Set}$?}{The two-element set $\{0,1\}$ alone cogenerates $\mathbf{Set}$: for any $f \neq g: A \to B$, some characteristic function $B \to \{0,1\}$ distinguishes $f$ and $g$.}
+\qaitem{What cogenerates $\mathbf{Ab}$?}{$\mathbb{Q}/\mathbb{Z}$ cogenerates $\mathbf{Ab}$: it is an injective cogenerator. The Pontryagin duality $A \mapsto \mathrm{Hom}(A, \mathbb{Q}/\mathbb{Z})$ is faithful.}
+\qaitem{Why does every continuous functor out of $\mathbf{Set}$ automatically satisfy the solution set condition?}{Because $\mathbf{Set}$ has a cogenerating set ($\{0,1\}$), so SAFT applies. But also: for a continuous functor $F: \mathbf{Set} \to \mathcal{D}$, one can take the solution set for $d$ to be all $(X, f)$ with $|X|$ bounded by $|\mathcal{D}(d, F\{*\})|$ and similar cardinality bounds.}
+\qaitem{What makes sheafification a left adjoint?}{The inclusion $\iota: \mathbf{Sh}(X) \hookrightarrow \mathbf{PSh}(X)$ is continuous (limits of sheaves are sheaves). The GAFT/SAFT then guarantees a left adjoint, which is sheafification.}
+\qaitem{What is the Stone--\v{C}ech compactification categorically?}{The left adjoint to the inclusion $i: \mathbf{CompHaus} \hookrightarrow \mathbf{Top}$. Its existence follows from SAFT: $\mathbf{CompHaus}$ is complete, locally small, and cogerated by $[0,1]$.}
+\qaitem{Why does $[0,1]$ cogenerate $\mathbf{CompHaus}$?}{By Urysohn's lemma, for any compact Hausdorff space $X$ and distinct points $x \neq y$, there is a continuous $f: X \to [0,1]$ with $f(x) \neq f(y)$. So maps into $[0,1]$ separate points, hence separate morphisms.}
+\qaitem{What is a reflective subcategory?}{A full subcategory $\mathcal{D} \hookrightarrow \mathcal{C}$ is reflective if the inclusion has a left adjoint, called the \term{reflector}. Examples: sheaves in presheaves, compact Hausdorff spaces in topological spaces, abelian groups in groups.}
+\qaitem{Give the GAFT condition in the form ``$F$ has a left adjoint iff \ldots''}{$F: \mathcal{C} \to \mathcal{D}$ (with $\mathcal{C}$ locally small and complete) has a left adjoint iff $F$ preserves all small limits and for each $d \in \mathcal{D}$, the category $(d \downarrow F)$ has a weakly initial set.}
+\qaitem{Does the free abelian group functor $\mathbf{Set} \to \mathbf{Ab}$ exist, and why?}{Yes. The forgetful $G: \mathbf{Ab} \to \mathbf{Set}$ is continuous and $\mathbf{Ab}$ has a cogenerating set ($\mathbb{Q}/\mathbb{Z}$). By SAFT, $G$ has a left adjoint --- the free abelian group functor.}
+\qaitem{What is the key step in the proof of GAFT that uses local smallness?}{Local smallness is needed to ensure that the hom-set $\mathcal{K}(i, k)$ is a set (not a proper class) for each $k$, so that the equalizer of all maps $i \to k$ is a small limit.}
+\qaitem{Why does continuity of $F$ imply $(d \downarrow F)$ has small limits?}{A limit $\lim_j (c_j, f_j)$ in $(d \downarrow F)$ has underlying object $\lim_j c_j$ in $\mathcal{C}$. The map $d \to F(\lim_j c_j)$ is given by the limit cone factoring through $F(\lim_j c_j) \cong \lim_j Fc_j$ (by $F$ preserving limits); this makes $(\lim_j c_j, \text{this map})$ the limit in $(d \downarrow F)$.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{summarybox}
+\textbf{Reducing to initial objects.}\quad $F$ has a left adjoint iff
+each comma category $(d \downarrow F)$ has an initial object. This
+reduces the existence question to one about small categories.
+
+\textbf{GAFT.}\quad A complete, locally small $\mathcal{C}$ and a
+continuous $F$ with the solution set condition: then $(d \downarrow F)$
+has small limits (by continuity) and a weakly initial set (by the solution
+set), so an initial object exists by the limit-over-weakly-initial-set
+construction.
+
+\textbf{SAFT.}\quad If additionally $\mathcal{C}$ has a small cogenerating
+set, the solution set condition is automatic: the cogenerating set provides
+a cardinality bound that turns any potential solution set into a genuine
+set.
+
+\textbf{Applications.}\quad Free algebras (GAFT or SAFT applied to the
+forgetful functor), sheafification (GAFT applied to the sheaf inclusion),
+Stone--\v{C}ech compactification (SAFT applied to the compact Hausdorff
+inclusion). Each is a left adjoint whose existence is categorical, even
+if the construction is analytic.
+
+\textbf{The pattern.}\quad Every AFT application has the same shape:
+identify a continuous functor out of a complete, well-powered category;
+check the solution set or cogenerator hypothesis; conclude the left
+adjoint exists; identify what that left adjoint ``is'' concretely.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Formal Restatement}
+\label{sec:aft-formal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+
+\textbf{Continuous functor.}\quad $F: \mathcal{C} \to \mathcal{D}$
+preserves all small limits: for any small diagram $D: \mathcal{J} \to
+\mathcal{C}$, the canonical map $F(\lim D) \to \lim(F \circ D)$ is an
+isomorphism.
+
+\textbf{Solution set condition.}\quad For $F: \mathcal{C} \to \mathcal{D}$
+and each $d \in \mathcal{D}$: there is a set $I$ and a family
+$(c_i, f_i: d \to Fc_i)_{i \in I}$ such that for every $f: d \to Fc$,
+there exist $i \in I$ and $g: c_i \to c$ with $Fg \circ f_i = f$.
+
+\textbf{General Adjoint Functor Theorem (GAFT).}\quad Let $\mathcal{C}$
+be locally small and complete. A functor $F: \mathcal{C} \to \mathcal{D}$
+has a left adjoint iff $F$ is continuous and satisfies the solution set
+condition.
+
+\textbf{Cogenerating set.}\quad A set $\mathcal{G} \subseteq \mathrm{Ob}(\mathcal{C})$
+is cogenerating if the family of functors $(\mathrm{Hom}_\mathcal{C}(-,s))_{s \in \mathcal{G}}$
+is jointly faithful: $f \neq g$ implies $hs \circ f \neq hs \circ g$
+for some $s \in \mathcal{G}$ and $h: \mathrm{cod}(f) \to s$.
+
+\textbf{Special Adjoint Functor Theorem (SAFT).}\quad Let $\mathcal{C}$
+be locally small, complete, and have a small cogenerating set. Then every
+continuous $F: \mathcal{C} \to \mathcal{D}$ has a left adjoint.
+
+\textbf{Key lemma.}\quad If $\mathcal{K}$ is locally small with small
+limits, and has a weakly initial set $\mathcal{S}$, then $\mathcal{K}$
+has an initial object. \emph{Proof}: the limit $\lim(\prod_{s \in \mathcal{S}} s
+\rightrightarrows k)$ over all $k$ is initial.
+
+\textbf{Reflective subcategory.}\quad A full subcategory $i: \mathcal{D}
+\hookrightarrow \mathcal{C}$ is reflective if $i$ has a left adjoint
+(the reflector). By SAFT: if $\mathcal{D}$ is complete, locally small,
+with a cogenerating set, and $i$ is continuous, then $\mathcal{D}$ is
+reflective.
+
+\end{formalrestatement}

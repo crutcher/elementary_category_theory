@@ -1,0 +1,531 @@
+% ch22_natural_transformations_2morphisms.tex — Volume II Chapter 10
+
+\chapter{Natural Transformations as 2-Morphisms}
+
+\begin{overviewbox}
+Chapter 4 introduced natural transformations and showed that they organize
+functors into a more structured whole. But we only used one operation on
+natural transformations: vertical composition. There are actually three
+canonical ways to compose natural transformations --- \term{vertical},
+\term{horizontal}, and \term{whiskering} --- and they interact through a
+single remarkable law: the \term{interchange law}.
+
+The structure formed by categories, functors, and natural transformations,
+with all three compositions, is called the \term{2-category} $\mathbf{Cat}$.
+Understanding $\mathbf{Cat}$ as a 2-category is not just organizational:
+it reveals that the three compositions are not ad hoc, but arise from the
+fact that $\mathbf{Cat}$ has \emph{two levels of morphism}, each with its
+own composition. Natural transformations are the \term{2-morphisms}.
+
+The interchange law is the key coherence axiom: it says that composing in
+the horizontal direction and then vertically gives the same result as
+composing vertically and then horizontally. Without this, the two
+compositions would conflict; with it, they mesh into a unified structure.
+
+This chapter prepares the ground for enriched category theory (Volume III)
+by making explicit the 2-categorical structure that has been implicit
+throughout the book.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The 2-Category \texorpdfstring{$\mathbf{Cat}$}{Cat}}
+\label{sec:2cat-cat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Objects, 1-Morphisms, 2-Morphisms}
+
+The structure $\mathbf{Cat}$ has three levels:
+\begin{itemize}
+  \item \textbf{Objects (0-cells):} small categories $\mathcal{A},
+        \mathcal{B}, \mathcal{C}, \ldots$
+  \item \textbf{1-morphisms (1-cells):} functors $F, G : \mathcal{A} \to
+        \mathcal{B}$.
+  \item \textbf{2-morphisms (2-cells):} natural transformations
+        $\alpha : F \Rightarrow G$ between parallel functors.
+\end{itemize}
+
+A \term{2-category} requires that between any two 0-cells $\mathcal{A}$
+and $\mathcal{B}$, the collection of 1-cells forms a \emph{category}
+--- a category $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$ whose objects
+are functors $\mathcal{A} \to \mathcal{B}$ and whose morphisms are
+natural transformations. The composition in this hom-category is called
+\term{vertical composition}.
+
+Additionally, the 1-cell composition (functor composition) must interact
+with the 2-cells (natural transformations) coherently. This interaction
+is captured by \term{horizontal composition} and \term{whiskering}.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``$\alpha : F \Rightarrow G$'' reads ``$\alpha$ is a 2-cell from
+        $F$ to $G$,'' or ``$\alpha$ goes between $F$ and $G$.''
+  \item We draw 2-cells as double arrows: $\Rightarrow$.
+  \item The hom-category $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$ is also
+        written $[\mathcal{A}, \mathcal{B}]$ or $\mathcal{B}^\mathcal{A}$.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Globular Diagrams}
+
+It helps to draw the three cell levels as nested diagrams:
+\begin{itemize}
+  \item 0-cells (categories) are points: $\bullet$.
+  \item 1-cells (functors) are arrows between points: $\bullet \to \bullet$.
+  \item 2-cells (natural transformations) are regions bounded by two
+        parallel arrows:
+\end{itemize}
+\[
+  \begin{tikzcd}
+    \mathcal{A}
+      \arrow[r, bend left=30, "F", ""{name=U}]
+      \arrow[r, bend right=30, "G"', ""{name=D}]
+    & \mathcal{B}
+    \arrow[Rightarrow, from=U, to=D, "\alpha"]
+  \end{tikzcd}
+\]
+This picture makes it visual that natural transformations ``fill in''
+the region between two parallel functors.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Vertical Composition}
+\label{sec:vertical}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Definition}
+
+Given natural transformations $\alpha : F \Rightarrow G$ and $\beta :
+G \Rightarrow H$ (both $\mathcal{A} \to \mathcal{B}$), their
+\term{vertical composite} $\beta \cdot \alpha : F \Rightarrow H$ is
+defined componentwise:
+\[
+  (\beta \cdot \alpha)_c = \beta_c \circ \alpha_c : Fc \to Gc \to Hc
+  \qquad \text{for each } c \in \mathcal{A}.
+\]
+
+\begin{dialog}
+Vertical composition stacks natural transformations on top of each other:
+two consecutive transformations between the same pair of categories
+collapse into one. The name ``vertical'' comes from the globular picture:
+you are composing within a single column (between $\mathcal{A}$ and
+$\mathcal{B}$), stacking transformation regions vertically.
+\end{dialog}
+
+The naturality of $\beta \cdot \alpha$ is immediate: for any $f: c \to c'$,
+\[
+  H(f) \circ (\beta \cdot \alpha)_c = H(f) \circ \beta_c \circ \alpha_c
+  = \beta_{c'} \circ G(f) \circ \alpha_c = \beta_{c'} \circ \alpha_{c'} \circ F(f)
+  = (\beta \cdot \alpha)_{c'} \circ F(f).
+\]
+
+The identity for vertical composition is the \term{identity natural
+transformation} $\mathrm{id}_F : F \Rightarrow F$, with
+$(\mathrm{id}_F)_c = \mathrm{id}_{Fc}$.
+
+Vertical composition is associative (since composition in $\mathcal{B}$
+is), so $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$ is indeed a category.
+
+\subsection{The Vertical Composition Diagram}
+
+\[
+  \begin{tikzcd}
+    \mathcal{A}
+      \arrow[r, bend left=50, "F", ""{name=F}]
+      \arrow[r, "G"{description}, ""{name=G1, below}, ""{name=G2, above}]
+      \arrow[r, bend right=50, "H"', ""{name=H}]
+    & \mathcal{B}
+    \arrow[Rightarrow, from=F, to=G2, "\alpha"]
+    \arrow[Rightarrow, from=G1, to=H, "\beta"]
+  \end{tikzcd}
+  \quad = \quad
+  \begin{tikzcd}
+    \mathcal{A}
+      \arrow[r, bend left=30, "F", ""{name=U}]
+      \arrow[r, bend right=30, "H"', ""{name=D}]
+    & \mathcal{B}
+    \arrow[Rightarrow, from=U, to=D, "\beta \cdot \alpha"]
+  \end{tikzcd}
+\]
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Horizontal Composition}
+\label{sec:horizontal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Setup}
+
+Vertical composition works within a single hom-category. Horizontal
+composition works \emph{across} hom-categories. Suppose we have:
+\[
+  \begin{tikzcd}
+    \mathcal{A}
+      \arrow[r, bend left=25, "F", ""{name=F1}]
+      \arrow[r, bend right=25, "G"', ""{name=G1}]
+    & \mathcal{B}
+      \arrow[r, bend left=25, "H", ""{name=H1}]
+      \arrow[r, bend right=25, "K"', ""{name=K1}]
+    & \mathcal{C}
+    \arrow[Rightarrow, from=F1, to=G1, "\alpha"]
+    \arrow[Rightarrow, from=H1, to=K1, "\beta"]
+  \end{tikzcd}
+\]
+Here $\alpha: F \Rightarrow G: \mathcal{A} \to \mathcal{B}$ and
+$\beta: H \Rightarrow K: \mathcal{B} \to \mathcal{C}$ are ``side by
+side.'' Their horizontal composite is a natural transformation
+$\beta * \alpha: H \circ F \Rightarrow K \circ G: \mathcal{A} \to
+\mathcal{C}$.
+
+\subsection{The Formula (Two Versions)}
+
+At a component $a \in \mathcal{A}$, the horizontal composite
+$(\beta * \alpha)_a : HFa \to KGa$ is defined by either of two equal
+formulas:
+\begin{align*}
+  (\beta * \alpha)_a
+    &= K(\alpha_a) \circ \beta_{Fa}
+    & &\text{(apply $\beta$ first, then $K$ on $\alpha$)} \\
+    &= \beta_{Ga} \circ H(\alpha_a)
+    & &\text{(apply $H$ on $\alpha$ first, then $\beta$).}
+\end{align*}
+
+\begin{theorem}
+The two formulas agree: $K(\alpha_a) \circ \beta_{Fa} = \beta_{Ga} \circ H(\alpha_a)$.
+\end{theorem}
+
+\begin{proof}
+\begin{prooflog}
+\proofstep{Consider the morphism $\alpha_a : Fa \to Ga$ in $\mathcal{B}$}{This is the $a$-component of $\alpha: F \Rightarrow G$}
+\proofstep{$\beta: H \Rightarrow K$ is a natural transformation, so it is natural at the morphism $\alpha_a$}{Naturality of $\beta$ at $\alpha_a : Fa \to Ga$ gives: $K(\alpha_a) \circ \beta_{Fa} = \beta_{Ga} \circ H(\alpha_a)$}
+\proofstep{This is exactly the required equation}{The two formulas for $(\beta * \alpha)_a$ are equal by the naturality square of $\beta$ at $\alpha_a$}
+\end{prooflog}
+\end{proof}
+
+The naturality of $\beta * \alpha$ (as a transformation $HF \Rightarrow KG$)
+follows from the naturalities of $\alpha$ and $\beta$ and functoriality of
+$H, K$.
+
+\subsection{Horizontal Composition is Functorial}
+
+The assignment $(\alpha, \beta) \mapsto \beta * \alpha$ is the action on
+morphisms of a functor
+\[
+  * : \mathbf{Cat}(\mathcal{A}, \mathcal{B}) \times
+        \mathbf{Cat}(\mathcal{B}, \mathcal{C}) \;\to\;
+        \mathbf{Cat}(\mathcal{A}, \mathcal{C}).
+\]
+This is the \emph{composition functor} for the 2-category $\mathbf{Cat}$.
+Preservation of identity transformations:
+$\mathrm{id}_H * \mathrm{id}_F = \mathrm{id}_{HF}$, since
+$(\mathrm{id}_H * \mathrm{id}_F)_a = \mathrm{id}_{HFa}$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Whiskering}
+\label{sec:whiskering}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Whiskering as a Special Case of Horizontal Composition}
+
+\term{Whiskering} is the horizontal composition of a natural transformation
+with an identity natural transformation, or equivalently, applying a
+functor to a natural transformation.
+
+\textbf{Right-whiskering.}\quad Given $\alpha: F \Rightarrow G$ (functors
+$\mathcal{A} \to \mathcal{B}$) and $H: \mathcal{C} \to \mathcal{A}$, define
+\[
+  \alpha H : F \circ H \Rightarrow G \circ H
+  \qquad (\alpha H)_c = \alpha_{Hc} \;\; \text{for } c \in \mathcal{C}.
+\]
+Right-whiskering by $H$ precomposes with $H$.
+
+\textbf{Left-whiskering.}\quad Given $\alpha: F \Rightarrow G$ (functors
+$\mathcal{A} \to \mathcal{B}$) and $K: \mathcal{B} \to \mathcal{C}$, define
+\[
+  K\alpha : K \circ F \Rightarrow K \circ G
+  \qquad (K\alpha)_a = K(\alpha_a) \;\; \text{for } a \in \mathcal{A}.
+\]
+Left-whiskering by $K$ postcomposes with $K$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``$\alpha H$'' reads ``$\alpha$ right-whiskered by $H$'' or
+        ``$\alpha$ at $H$'' (the subscript $H$ reminds us it acts as a
+        right argument).
+  \item ``$K\alpha$'' reads ``$\alpha$ left-whiskered by $K$'' or
+        ``$K$ applied to $\alpha$.''
+  \item In index notation: $(K\alpha)_a = K(\alpha_a)$, which looks just
+        like applying the functor $K$ to each component.
+\end{itemize}
+\end{howtosay}
+
+\subsection{The Monad Axioms via Whiskering}
+
+Whiskering gives an elegant way to state the monad axioms. For a monad
+$(T, \eta, \mu)$ on $\mathcal{C}$:
+\begin{align*}
+  \mu \circ \mu T &= \mu \circ T\mu
+    & &\text{(associativity: whiskering $\mu$ on both sides of $T$)} \\
+  \mu \circ \eta T &= \mathrm{id}_T = \mu \circ T\eta
+    & &\text{(unit laws: whiskering $\eta$ on both sides)}
+\end{align*}
+Here $\mu T = \mu \cdot T$ means right-whiskering $\mu$ by $T$, and
+$T\mu$ means left-whiskering $\mu$ by $T$.
+
+\subsection{Adjunction Unit and Counit via Whiskering}
+
+The monad multiplication from an adjunction is $\mu = G\varepsilon F$:
+left-whisker the counit $\varepsilon : FG \Rightarrow \mathrm{Id}$ by $G$
+to get $G\varepsilon: GFG \Rightarrow G$, then right-whisker by $F$ to
+get $G\varepsilon F : GFGF \Rightarrow GF$. The two triangle identities
+for an adjunction are:
+\[
+  \varepsilon F \cdot F\eta = \mathrm{id}_F
+  \qquad \text{and} \qquad
+  G\varepsilon \cdot \eta G = \mathrm{id}_G
+\]
+--- both expressed using whiskering.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Interchange Law}
+\label{sec:interchange}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Statement}
+
+The \term{interchange law} is the core compatibility axiom between vertical
+and horizontal composition. Suppose we have four natural transformations
+arranged in a $2 \times 2$ grid:
+\[
+  \begin{tikzcd}
+    \mathcal{A}
+      \arrow[r, bend left=40, "F", ""{name=F1}]
+      \arrow[r, "G"{description}, ""{name=G1, below}, ""{name=G2, above}]
+      \arrow[r, bend right=40, "H"', ""{name=H1}]
+    & \mathcal{B}
+      \arrow[r, bend left=40, "J", ""{name=J1}]
+      \arrow[r, "K"{description}, ""{name=K1, below}, ""{name=K2, above}]
+      \arrow[r, bend right=40, "L"', ""{name=L1}]
+    & \mathcal{C}
+    \arrow[Rightarrow, from=F1, to=G2, "\alpha"]
+    \arrow[Rightarrow, from=G1, to=H1, "\beta"]
+    \arrow[Rightarrow, from=J1, to=K2, "\gamma"]
+    \arrow[Rightarrow, from=K1, to=L1, "\delta"]
+  \end{tikzcd}
+\]
+where $\alpha: F \Rightarrow G$, $\beta: G \Rightarrow H$,
+$\gamma: J \Rightarrow K$, $\delta: K \Rightarrow L$.
+
+\begin{theorem}[Interchange Law]
+\[
+  (\delta \cdot \gamma) * (\beta \cdot \alpha)
+  \;=\; (\delta * \beta) \cdot (\gamma * \alpha).
+\]
+Reading this: ``horizontal composite of vertical composites equals
+vertical composite of horizontal composites.''
+\end{theorem}
+
+\begin{proof}
+\begin{prooflog}
+\proofstep{Evaluate both sides at a component $a \in \mathcal{A}$}{We need: $[(\delta \cdot \gamma) * (\beta \cdot \alpha)]_a = [(\delta * \beta) \cdot (\gamma * \alpha)]_a$}
+\proofstep{Left side using horizontal formula}{$((\delta \cdot \gamma) * (\beta \cdot \alpha))_a = L(\beta \cdot \alpha)_a \circ (\delta \cdot \gamma)_{Fa} = L(\beta_a \circ \alpha_a) \circ \delta_{Fa} \circ \gamma_{Fa}$}
+\proofstep{Right side: $(\gamma * \alpha)_a = K\alpha_a \circ \gamma_{Fa}$ and $(\delta * \beta)_a = L\beta_a \circ \delta_{Ga}$}{So $[(\delta * \beta) \cdot (\gamma * \alpha)]_a = (L\beta_a \circ \delta_{Ga}) \circ (K\alpha_a \circ \gamma_{Fa})$}
+\proofstep{Rewrite right side: $L\beta_a \circ \delta_{Ga} \circ K\alpha_a \circ \gamma_{Fa}$}{Insert $\delta_{Ga} \circ K\alpha_a$; naturality of $\delta$ at $\alpha_a: Fa \to Ga$ gives $\delta_{Ga} \circ K\alpha_a = L\alpha_a \circ \delta_{Fa}$}
+\proofstep{Right side becomes $L\beta_a \circ L\alpha_a \circ \delta_{Fa} \circ \gamma_{Fa}$}{Using $L\beta_a \circ L\alpha_a = L(\beta_a \circ \alpha_a)$ (functoriality of $L$)}
+\proofstep{Right side is $L(\beta_a \circ \alpha_a) \circ \delta_{Fa} \circ \gamma_{Fa}$}{This equals the left side; done}
+\end{prooflog}
+\end{proof}
+
+\subsection{Why the Interchange Law Matters}
+
+The interchange law is not just a technical identity --- it is the
+\emph{reason} that the three compositions are compatible. Without it, one
+could not freely rewrite a 2-categorical expression by changing the order
+of vertical and horizontal operations. The interchange law says:
+\begin{quote}
+\emph{It does not matter whether you compose vertically first and then
+horizontally, or horizontally first and then vertically.}
+\end{quote}
+This is precisely the 2-dimensional analogue of the axiom that in a
+monoid, the binary product is well-defined.
+
+\begin{dialog}
+Think of the $2 \times 2$ grid of natural transformations. You can
+``collapse'' it into a single transformation either by:
+\begin{enumerate}
+  \item First composing each row horizontally (getting two transformations),
+        then composing those vertically.
+  \item First composing each column vertically (getting two transformations),
+        then composing those horizontally.
+\end{enumerate}
+The interchange law says you get the same answer either way.
+\end{dialog}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Strict 2-Categories and Bicategories}
+\label{sec:bicategories}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Strict 2-Categories}
+
+A \term{strict 2-category} is a category enriched over the category
+$\mathbf{Cat}$ of small categories: it has a set of 0-cells, a hom-category
+between each pair of 0-cells, and composition functors satisfying
+associativity and unit laws \emph{strictly} (as equations, not just up to
+isomorphism).
+
+$\mathbf{Cat}$ itself (with small categories as objects) is a strict
+2-category. The hom-category $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$
+is the functor category $[\mathcal{A}, \mathcal{B}]$; functor composition
+is strictly associative; the interchange law holds as a strict equality.
+
+Other examples of strict 2-categories:
+\begin{itemize}
+  \item $\mathbf{2Cat}$: strict 2-categories, strict 2-functors, strict
+        natural transformations.
+  \item $\mathbf{MonCat}$: monoidal categories, strong monoidal functors,
+        monoidal natural transformations.
+  \item $R\text{-}\mathbf{Bimod}$: rings as objects, bimodules as
+        1-morphisms, bimodule maps as 2-morphisms.
+\end{itemize}
+
+\subsection{Bicategories: Weakening the Axioms}
+
+In many naturally occurring examples, 1-cell composition is associative
+only up to coherent isomorphism, not strictly. A \term{bicategory}
+(or \term{weak 2-category}) relaxes this:
+\begin{itemize}
+  \item Composition of 1-cells: $c \circ (b \circ a) \cong (c \circ b)
+        \circ a$ via an \term{associator} 2-cell $\alpha_{a,b,c}$.
+  \item Unit laws: $a \circ \mathrm{id} \cong a$ and $\mathrm{id} \circ a
+        \cong a$ via \term{unitor} 2-cells.
+  \item These 2-cell isomorphisms must satisfy coherence conditions
+        (the pentagon axiom for associators, the triangle axiom for unitors).
+\end{itemize}
+
+\begin{example}{Bimodules as a Bicategory}
+Objects: rings. 1-morphisms: $(R,S)$-bimodules ($R\text{-}S$-bimodules as
+morphisms from $R$ to $S$). 2-morphisms: bimodule maps. Composition:
+tensor product $M \otimes_S N$. This is a bicategory: the tensor product
+is associative only up to a canonical isomorphism, not strictly.
+\end{example}
+
+\begin{example}{Spans as a Bicategory}
+Objects: sets. 1-morphisms $A \to B$: spans, i.e., diagrams $A \leftarrow
+X \rightarrow B$. 2-morphisms: maps of spans. Composition: pullback. This
+is a bicategory because pullback is only associative up to isomorphism.
+\end{example}
+
+A key theorem (Mac Lane's coherence theorem, generalized) says:
+every bicategory is biequivalent to a strict 2-category. So, up to
+biequivalence, the weak and strict notions coincide. But in practice,
+the weak version is more natural for many examples.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:2cat-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What are the three levels of $\mathbf{Cat}$ as a 2-category?}{0-cells (objects): small categories; 1-cells: functors; 2-cells: natural transformations.}
+\qaitem{Define vertical composition of natural transformations $\alpha: F \Rightarrow G$ and $\beta: G \Rightarrow H$.}{$(\beta \cdot \alpha)_c = \beta_c \circ \alpha_c$ for each $c$. It is the composition in the hom-category $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$.}
+\qaitem{Define horizontal composition of $\alpha: F \Rightarrow G : \mathcal{A} \to \mathcal{B}$ and $\beta: H \Rightarrow K : \mathcal{B} \to \mathcal{C}$.}{$(\beta * \alpha)_a = K(\alpha_a) \circ \beta_{Fa} = \beta_{Ga} \circ H(\alpha_a)$. Both formulas are equal by naturality of $\beta$.}
+\qaitem{Why do the two formulas for horizontal composition agree?}{Because $\beta$ is natural at $\alpha_a: Fa \to Ga$: the naturality square for $\beta$ at this morphism gives exactly $K(\alpha_a) \circ \beta_{Fa} = \beta_{Ga} \circ H(\alpha_a)$.}
+\qaitem{State the interchange law.}{$(\delta \cdot \gamma) * (\beta \cdot \alpha) = (\delta * \beta) \cdot (\gamma * \alpha)$: for a $2\times 2$ grid of composable natural transformations.}
+\qaitem{What is right-whiskering $\alpha H$ for $\alpha: F \Rightarrow G$ and $H: \mathcal{C} \to \mathcal{A}$?}{$\alpha H : FH \Rightarrow GH$ with $(\alpha H)_c = \alpha_{Hc}$.}
+\qaitem{What is left-whiskering $K\alpha$ for $\alpha: F \Rightarrow G$ and $K: \mathcal{B} \to \mathcal{C}$?}{$K\alpha : KF \Rightarrow KG$ with $(K\alpha)_a = K(\alpha_a)$.}
+\qaitem{How are whiskering and horizontal composition related?}{Whiskering is horizontal composition with an identity transformation: $K\alpha = \mathrm{id}_K * \alpha$ and $\alpha H = \alpha * \mathrm{id}_H$.}
+\qaitem{Express the monad associativity axiom $\mu \circ \mu T = \mu \circ T\mu$ using whiskering notation.}{$\mu \cdot (\mu \cdot T) = \mu \cdot (T \cdot \mu)$ where $\mu T$ is $\mu$ right-whiskered by $T$ (i.e., $(\mu T)_c = \mu_{Tc}$) and $T\mu$ is $T$ left-whiskered with $\mu$ (i.e., $(T\mu)_c = T(\mu_c)$).}
+\qaitem{What are the triangle identities for $F \dashv G$ written using whiskering?}{$\varepsilon F \cdot F\eta = \mathrm{id}_F$ and $G\varepsilon \cdot \eta G = \mathrm{id}_G$.}
+\qaitem{What is a strict 2-category?}{A category enriched over $\mathbf{Cat}$: 0-cells, hom-categories between pairs of 0-cells, and strictly associative and unital composition functors satisfying interchange.}
+\qaitem{What is a bicategory?}{A weakened 2-category where 1-cell composition is associative only up to coherent associator 2-cells satisfying the pentagon axiom, and unital only up to coherent unitor 2-cells satisfying the triangle axiom.}
+\qaitem{Give an example of a bicategory that is not a strict 2-category.}{Rings and bimodules: composition (tensor product) is only associative up to canonical isomorphism, not strictly.}
+\qaitem{What does the identity natural transformation at $F$ look like?}{$(\mathrm{id}_F)_c = \mathrm{id}_{Fc}$: the identity morphism at $Fc$ for each $c$. It is the identity for vertical composition.}
+\qaitem{What is the horizontal composite of two identity transformations $\mathrm{id}_H * \mathrm{id}_F$?}{$\mathrm{id}_{HF}$: the identity transformation at the composite functor $HF$.}
+\qaitem{In a strict 2-category, how many independent axioms govern the interactions of 0-, 1-, and 2-cells?}{The 1-cells form a category (associativity, units). The 2-cells between each pair of 1-cells form a category (associativity, units for vertical composition). Horizontal composition is functorial. And the interchange law holds. These account for all the axioms.}
+\qaitem{What does ``$\mathbf{Cat}$ enriched over $\mathbf{Cat}$'' mean?}{Each hom-set $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$ is not just a set but a category (the functor category). The composition map is a functor between these categories, not just a function of sets.}
+\qaitem{State Mac Lane's coherence theorem for bicategories.}{Every bicategory is biequivalent to a strict 2-category.}
+\qaitem{What is the vertical identity for the hom-category $\mathbf{Cat}(\mathcal{A}, \mathcal{B})$?}{The identity natural transformation $\mathrm{id}_F$ at each functor $F$.}
+\qaitem{For a 2-category, what axiom ensures that composing 2-cells horizontally and then vertically gives the same result as composing vertically and then horizontally?}{The interchange law: $(\delta \cdot \gamma) * (\beta \cdot \alpha) = (\delta * \beta) \cdot (\gamma * \alpha)$.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{summarybox}
+\textbf{Three compositions.}\quad Natural transformations support three
+compositions: \emph{vertical} ($\beta \cdot \alpha$: stacking within one
+hom-category), \emph{horizontal} ($\beta * \alpha$: placing side by side
+across composable hom-categories), and \emph{whiskering} (a special case
+of horizontal composition involving an identity).
+
+\textbf{Horizontal composition formula.}\quad
+$(\beta * \alpha)_a = K(\alpha_a) \circ \beta_{Fa} = \beta_{Ga} \circ H(\alpha_a)$:
+the two formulas agree by naturality of $\beta$. This is a micro-proof of
+the interchange law in disguise.
+
+\textbf{The interchange law.}\quad
+$(\delta \cdot \gamma) * (\beta \cdot \alpha) = (\delta * \beta) \cdot (\gamma * \alpha)$:
+the law that reconciles horizontal and vertical composition. It is proved
+using naturality at a component and functoriality.
+
+\textbf{2-category \textbf{Cat}.}\quad The triple (categories, functors,
+natural transformations) with these compositions forms a strict 2-category.
+This is the prototype for all 2-categorical thinking.
+
+\textbf{Bicategories.}\quad The weak version of a 2-category, where
+1-cell composition is only associative up to coherent isomorphism. Examples:
+bimodules (tensor product), spans (pullback). Every bicategory is
+biequivalent to a strict 2-category.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Formal Restatement}
+\label{sec:2cat-formal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+
+\textbf{2-Category.}\quad A strict 2-category $\mathcal{K}$ consists of:
+a set of 0-cells; for each pair $(A,B)$ of 0-cells, a hom-category
+$\mathcal{K}(A,B)$ (whose objects are 1-cells, morphisms are 2-cells, and
+composition is vertical); for each triple $(A,B,C)$, a composition functor
+$\circ: \mathcal{K}(B,C) \times \mathcal{K}(A,B) \to \mathcal{K}(A,C)$
+that is strictly associative and unital.
+
+\textbf{Vertical composition.}\quad The composition in the hom-category:
+if $\alpha: f \Rightarrow g$ and $\beta: g \Rightarrow h$ in
+$\mathcal{K}(A,B)$, then $\beta \cdot \alpha : f \Rightarrow h$.
+
+\textbf{Horizontal composition.}\quad The action of the composition
+functor on 2-cells: if $\alpha: f \Rightarrow g$ in $\mathcal{K}(A,B)$
+and $\beta: h \Rightarrow k$ in $\mathcal{K}(B,C)$, then
+$\beta * \alpha: hf \Rightarrow kg$ in $\mathcal{K}(A,C)$.
+
+\textbf{Interchange law.}\quad Since $\circ$ is a functor:
+$(\delta \cdot \gamma) * (\beta \cdot \alpha) = (\delta * \beta) \cdot
+(\gamma * \alpha)$. This is functoriality of $\circ$ applied to the pair
+of composable pairs $((\gamma, \alpha), (\delta, \beta))$.
+
+\textbf{Whiskering.}\quad Special cases of horizontal composition:
+right-whiskering by a 1-cell $f: A \to B$ gives $(\alpha f)_x =
+\alpha_{fx}$; left-whiskering by $g: B \to C$ gives $(g\alpha)_x =
+g(\alpha_x)$.
+
+\textbf{$\mathbf{Cat}$ as a 2-category.}\quad Objects: small categories.
+Hom-categories $\mathbf{Cat}(\mathcal{A}, \mathcal{B}) = [\mathcal{A},
+\mathcal{B}]$: functor categories. Composition: functor composition (on
+objects) and horizontal composition of natural transformations (on
+morphisms in the hom-categories). Strictly associative.
+
+\textbf{Bicategory.}\quad As above but with associator isomorphisms
+$a_{f,g,h}: (fg)h \xRightarrow{\cong} f(gh)$ and unitor isomorphisms,
+satisfying the pentagon and triangle coherence conditions.
+
+\end{formalrestatement}

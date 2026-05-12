@@ -8,12 +8,12 @@ feedback as the project evolves. See `history/` for the immutable record._
 ## Current state
 
 - **Integration branch:** `main`
-- **Feature branch under review:** `feature/exercises-and-ch06-ch09`
-- **Last build round:** v0.12 (Q/A exercises for Ch 1-10; new Ch 6-10)
+- **Feature branch in progress:** `feature/volumes-v0.13`
+- **Last merged round:** v0.12 (Q/A exercises for Ch 1-10; new Ch 6-10)
 - **Chapters written:** Preface, Chapter 1-10
-- **Chapters planned (future):** 11+ connections to other math fields
-- **Merged PRs**: #1 (v0.7 cycle structure), #2 (v0.10 typography into rebuild branch),
-  #3 (undefined ref fix), #4 (v0.10 -> main), #5 (Ch 2 + Ch 3), #7 (v0.11 Ch 4-5)
+- **In progress (v0.13):** Ch 11-12 (complete Vol I); Vol II recapitulation; Vol III formal spine
+- **Merged PRs**: #1 (v0.7), #2 (v0.10 typography), #3 (undefined ref fix),
+  #4 (v0.10 → main), #5 (Ch 2+3), #7 (v0.11 Ch 4-5), #8 (v0.12)
 
 ---
 
@@ -135,7 +135,14 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 
 ---
 
-## Planned chapter roadmap
+## Multi-volume structure (v0.13 directive)
+
+The book is organized into three volumes via LaTeX `\part{}`, with `\partname` set to "Volume".
+Connections to other math fields are deferred beyond Volume III.
+
+### Volume I — The Architecture of Categories (Ch 1–12)
+
+Full cycle pedagogy from scratch. Connections deliberately excluded.
 
 | Ch | Title | Core concept |
 |----|-------|-------------|
@@ -149,7 +156,49 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 | 8  | Monads | Adjunctions give monads, Eilenberg–Moore, Kleisli (v0.12) |
 | 9  | The Yoneda Lemma | Hom-functors, representability, the Yoneda embedding (v0.12) |
 | 10 | Adjoint Functor Theorems | GAFT, SAFT, existence of adjoints (v0.12) |
-| 11+ | Connections | algebra, topology, logic — to come |
+| 11 | Kan Extensions | Left/right Kan extensions, colimit/limit formulas, density (v0.13) |
+| 12 | Monoidal and Enriched Categories | Tensor products, coherence, V-categories (v0.13) |
+
+### Volume II — The Architecture Revisited (Ch 13–24)
+
+Recapitulation assuming ~half familiarity. Same pedagogy, interior math focus.
+Arguments use two-column `prooflog` environment (step | justification).
+Chapter ordering rotated to reframe coverage.
+
+| Ch | Title | Rotation angle |
+|----|-------|---------------|
+| 13 | Categories as Algebraic Structures | Via monoids, groupoids, thin categories |
+| 14 | Functors as Structure Maps | Profunctors; bicategory of relations |
+| 15 | Representability and the Yoneda Philosophy | Yoneda first as organizing principle |
+| 16 | Limits as Representable Constructions | Limits via the Yoneda perspective |
+| 17 | Adjunctions: A Deeper Account | Triangle identities; adjoints of adjoints |
+| 18 | Kan Extensions as Universal Adjoints | Lan/Ran as adjoints to precomposition |
+| 19 | Monoidal Categories as Categorified Monoids | Strict vs. weak; coherence |
+| 20 | Enriched Category Theory | V-Cat in depth; self-enrichment |
+| 21 | Monads: Algebraic Theory and Beck's Theorem | Monadicity; Beck's monadicity theorem |
+| 22 | Natural Transformations as 2-Morphisms | The 2-category Cat; whiskering |
+| 23 | Adjoint Functor Theorems: Complete Treatment | Full proofs with justification logs |
+| 24 | The Representable Universe | Volume II synthesis |
+
+### Volume III — The Formal Spine (Ch 25–36)
+
+High familiarity assumed; rotating toward formal/terse presentation.
+Minimal prose expansion. Maximum proof density. Advanced CT constructions.
+
+| Ch | Title | Theme |
+|----|-------|-------|
+| 25 | 2-Categories and Bicategories | Cat as 2-category; strict vs. weak |
+| 26 | Ends and Coends | Dinatural transformations; the coend calculus |
+| 27 | Weighted Limits and Colimits | V-limits; weighted colimit formula |
+| 28 | The Formal Yoneda Lemma | Yoneda via ends; ninja Yoneda |
+| 29 | Monoidal Categories: Coherence | Mac Lane's coherence theorem; strictification |
+| 30 | Enriched Categories: Day Convolution | Day convolution; enriched Kan extensions |
+| 31 | Kan Extensions: The General Theory | Pointwise; Kan in enriched setting |
+| 32 | The Formal Theory of Monads | Eilenberg–Moore objects; Beck's monadicity |
+| 33 | Adjunctions: The Full Formal Account | Adjunctions in 2-categories |
+| 34 | Adjoint Functor Theorems: Unified | GAFT + SAFT from a single perspective |
+| 35 | Distributive Laws and Composed Monads | Compatibility of monads |
+| 36 | The Formal Landscape | Volume III synthesis and forward pointers |
 
 ---
 
@@ -174,3 +223,7 @@ Defer to its own batch; do not mix retrofits with new-content writing.
 | 2026-05-12 | Defer retrofit of Ch 1–5 to its own batch | Avoid mixing retrofit with new-content writing |
 | 2026-05-12 | Little Schemer Q/A exercises in every chapter | User directive v0.12 |
 | 2026-05-12 | Ordering: Ch 8 = Monads, Ch 9 = Yoneda, Ch 10 = AFT | Natural progression: monads from adjunctions, Yoneda before AFT |
+| 2026-05-12 | Three-volume structure using `\part{}` | Vol I = core CT; Vol II = recapitulation at half familiarity; Vol III = formal spine |
+| 2026-05-12 | Vol II uses prooflog (2-col step/justification) format | Written proof + parallel annotation |
+| 2026-05-12 | Exercise spacing: 3× vertical gap + thin horizontal rule between Q/A pairs | User directive v0.13 |
+| 2026-05-12 | Connections to other math fields deferred beyond Vol III | Build CT foundations first |

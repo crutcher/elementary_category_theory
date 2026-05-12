@@ -1,0 +1,183 @@
+% ch16_limits_as_representable.tex — Volume II Chapter 4
+
+\chapter{Limits as Representable Constructions}
+
+Volume I defined limits via cones and universal properties. This chapter
+reframes limits through the Yoneda lens: a limit of $F$ is the object
+representing the functor of cones over $F$. This framing connects limits
+directly to the Yoneda lemma and makes the universal property automatic.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Cones as a Functor}
+
+A cone over $F : \mathcal{J} \to \mathcal{C}$ with apex $c$ is a natural
+transformation $\Delta c \Rightarrow F$, where $\Delta c : \mathcal{J} \to \mathcal{C}$
+is the constant functor at $c$. Varying the apex, we get a functor:
+\[
+  \operatorname{Cone}(-, F) : \mathcal{C}^{op} \to \mathbf{Set},
+  \qquad
+  c \;\mapsto\; \operatorname{Nat}(\Delta c,\, F).
+\]
+This is a presheaf on $\mathcal{C}$.
+
+\begin{definition}
+A \term{limit} of $F : \mathcal{J} \to \mathcal{C}$ is a representing object
+for the presheaf $\operatorname{Cone}(-,F)$: an object $\lim F \in \mathcal{C}$
+with a natural isomorphism
+\[
+  \mathcal{C}(c,\, \lim F) \;\cong\; \operatorname{Cone}(c,\, F)
+  = \operatorname{Nat}(\Delta c,\, F),
+\]
+natural in $c$.
+\end{definition}
+
+\begin{theorem}
+Limits, when they exist, are unique up to unique isomorphism.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Suppose $(\ell, \lambda)$ and $(\ell', \lambda')$ both represent
+           $\operatorname{Cone}(-,F)$.}
+           {Both are representing objects for the same functor.}
+\proofstep{By the Yoneda lemma, any two representing objects for the same functor
+           are uniquely isomorphic.}
+           {The Yoneda embedding is fully faithful, so it reflects isomorphisms.}
+\proofstep{Under the Yoneda embedding, this isomorphism corresponds to a unique
+           isomorphism $\ell \cong \ell'$ in $\mathcal{C}$.}
+           {Fully faithful functors reflect isomorphisms.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Representable Functors Preserve Limits}
+
+\begin{theorem}
+For any $c \in \mathcal{C}$, the functor $\mathcal{C}(c,-) : \mathcal{C} \to \mathbf{Set}$
+preserves all limits.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{We want: $\mathcal{C}(c, \lim F) \cong \lim_j \mathcal{C}(c, F(j))$.}
+           {That is, $\mathcal{C}(c,-)$ commutes with limits.}
+\proofstep{$\mathcal{C}(c, \lim F) \cong \operatorname{Nat}(\Delta c, F)$
+           by the representability of $\lim F$.}
+           {Definition of limit.}
+\proofstep{$\operatorname{Nat}(\Delta c, F)$ is the set of compatible families
+           $(f_j : c \to F(j))_{j \in \mathcal{J}}$.}
+           {A natural transformation from a constant functor is exactly a compatible family.}
+\proofstep{This equals $\lim_j \mathcal{C}(c, F(j))$ in $\mathbf{Set}$.}
+           {Limits in $\mathbf{Set}$ are sets of compatible tuples.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Completeness from Products and Equalizers}
+
+\begin{theorem}
+$\mathcal{C}$ is complete if and only if it has all small products and all equalizers.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{$(\Rightarrow)$: Products and equalizers are limits.}
+           {Special cases of the general definition.}
+\proofstep{$(\Leftarrow)$: Given $F : \mathcal{J} \to \mathcal{C}$, form
+           $P = \prod_{j} F(j)$ and $Q = \prod_{f : j \to j'} F(j')$.}
+           {Products over all objects and all morphism targets.}
+\proofstep{Define $e, e' : P \to Q$ encoding the naturality condition for cones.}
+           {$e$ uses projections; $e'$ applies $F(f)$ then projects.}
+\proofstep{The equalizer of $e$ and $e'$ is $\lim F$.}
+           {An element of the equalizer is a compatible family -- a cone.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Pointwise Limits in Functor Categories}
+
+\begin{theorem}
+If $\mathcal{D}$ is complete, then limits in $[\mathcal{C}, \mathcal{D}]$ are
+computed pointwise: $(\lim_i F_i)(c) \cong \lim_i (F_i(c))$.
+\end{theorem}
+
+In particular, $[\mathcal{C}^{op}, \mathbf{Set}]$ is complete and cocomplete.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What functor does a limit represent?}
+       {$\operatorname{Cone}(-,F) = \operatorname{Nat}(\Delta(-), F)$, the functor of cones over $F$.}
+
+\qaitem{What is the universal cone?}
+       {The cone corresponding to $\operatorname{id}_{\lim F}$ under the Yoneda bijection.}
+
+\qaitem{Why are limits unique up to unique isomorphism?}
+       {Representing objects for the same functor are uniquely isomorphic by Yoneda.}
+
+\qaitem{What does it mean for a functor to be continuous?}
+       {It preserves all small limits.}
+
+\qaitem{Do representable functors $\mathcal{C}(c,-)$ preserve limits?}
+       {Yes: $\mathcal{C}(c,\lim F) \cong \operatorname{Nat}(\Delta c,F) \cong \lim_j \mathcal{C}(c,F(j))$.}
+
+\qaitem{What two constructions suffice to build all limits?}
+       {Products and equalizers.}
+
+\qaitem{What two constructions suffice to build all colimits?}
+       {Coproducts and coequalizers.}
+
+\qaitem{How are limits computed in $[\mathcal{C},\mathcal{D}]$?}
+       {Pointwise: $(\lim_i F_i)(c) \cong \lim_i(F_i(c))$ when $\mathcal{D}$ is complete.}
+
+\qaitem{Is $[\mathcal{C}^{op},\mathbf{Set}]$ complete and cocomplete?}
+       {Yes; all limits and colimits are computed pointwise in $\mathbf{Set}$.}
+
+\qaitem{What is the terminal object as a limit?}
+       {The limit of the empty diagram.}
+
+\qaitem{What is a pullback as a limit?}
+       {The limit of a cospan $A \to C \leftarrow B$.}
+
+\qaitem{What is an equalizer as a limit?}
+       {The limit of $A \rightrightarrows B$.}
+
+\qaitem{Does $\mathcal{C}(c,-)$ preserve colimits in general?}
+       {Not in general; only for compact/finitely-presented $c$.}
+
+\qaitem{How does the Yoneda embedding interact with limits?}
+       {$Y$ preserves all limits: $Y(\lim F) \cong \lim(Y \circ F)$.}
+
+\qaitem{What is the limit formula as a Kan extension?}
+       {$\lim F = (\operatorname{Ran}_p F)(\star)$ where $p : \mathcal{J} \to \mathbf{1}$.}
+
+\qaitem{Why is $\mathbf{Set}$ both complete and cocomplete?}
+       {All products, equalizers, coproducts, and coequalizers exist as set-theoretic constructions.}
+
+\qaitem{What is the difference between a limit and colimit from the representability perspective?}
+       {Limit represents cones (maps in from variable apex); colimit corepresents cocones (maps out to variable apex).}
+\end{qa}
+\end{exercisesbox}
+
+\begin{summarybox}
+A \textbf{limit} of $F$ is the representing object for $\operatorname{Cone}(-,F)$;
+unique up to unique isomorphism by Yoneda. Representable functors are continuous.
+Every complete category is built from products and equalizers; every cocomplete
+from coproducts and coequalizers. Limits in functor categories are pointwise.
+\end{summarybox}
+
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Limit as representable.}
+$\mathcal{C}(c,\lim F) \cong \operatorname{Nat}(\Delta c, F)$, naturally in $c$.
+
+\textbf{Colimit as corepresentable.}
+$\mathcal{C}(\operatorname{colim} F, c) \cong \operatorname{Nat}(F, \Delta c)$, naturally in $c$.
+
+\textbf{Continuity of representables.}
+$\mathcal{C}(c,-) : \mathcal{C} \to \mathbf{Set}$ is continuous for all $c$.
+
+\textbf{Completeness.}
+$\mathcal{C}$ complete $\Leftrightarrow$ has all products and equalizers.
+$\mathcal{C}$ cocomplete $\Leftrightarrow$ has all coproducts and coequalizers.
+
+\textbf{Pointwise.}
+$(\lim_i F_i)(c) \cong \lim_i(F_i(c))$ in $[\mathcal{C},\mathcal{D}]$ when $\mathcal{D}$ complete.
+\end{formalrestatement}

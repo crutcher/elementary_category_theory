@@ -1,0 +1,284 @@
+% ch14_functors_as_structure_maps.tex — Volume II Chapter 2
+
+\chapter{Functors as Structure Maps}
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ carries objects to objects and
+morphisms to morphisms, preserving composition and identity. But what precisely
+is being preserved? This chapter examines the structural content of functors —
+what they must, may, and cannot preserve — and then extends the picture to
+\term{profunctors}, which generalize functors by replacing the target category
+with a category of relations.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{What Functors Preserve and Reflect}
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ \emph{preserves} a property $P$ of
+morphisms if: whenever $f$ has property $P$ in $\mathcal{C}$, $F(f)$ has property
+$P$ in $\mathcal{D}$. It \emph{reflects} $P$ if: whenever $F(f)$ has $P$ in
+$\mathcal{D}$, $f$ has $P$ in $\mathcal{C}$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lll}
+\hline
+\textbf{Property} & \textbf{All functors preserve?} & \textbf{Notes} \\
+\hline
+Isomorphisms & Yes & $F(f)F(f^{-1}) = \operatorname{id}$ \\
+Monomorphisms & Not in general & Left adjoints need not preserve monos \\
+Epimorphisms & Not in general & Right adjoints need not preserve epis \\
+Limits & Right adjoints preserve limits & RAPL \\
+Colimits & Left adjoints preserve colimits & LAPC \\
+\hline
+\end{tabular}
+\end{center}
+
+The classification matters: knowing whether a functor is a left or right adjoint
+immediately tells you what it preserves, before computing anything specific.
+
+\subsection{Full, Faithful, Essentially Surjective}
+
+\begin{definition}
+A functor $F : \mathcal{C} \to \mathcal{D}$ is:
+\begin{itemize}
+  \item \term{faithful} if each $F_{a,b} : \mathcal{C}(a,b) \to \mathcal{D}(Fa,Fb)$
+    is injective;
+  \item \term{full} if each $F_{a,b}$ is surjective;
+  \item \term{fully faithful} if each $F_{a,b}$ is bijective;
+  \item \term{essentially surjective} if for every $d \in \mathcal{D}$, there
+    exists $c \in \mathcal{C}$ with $F(c) \cong d$.
+\end{itemize}
+An equivalence of categories is a functor that is fully faithful and essentially
+surjective.
+\end{definition}
+
+Fully faithful functors reflect isomorphisms:
+
+\begin{theorem}
+If $F : \mathcal{C} \to \mathcal{D}$ is fully faithful and $F(f)$ is an
+isomorphism, then $f$ is an isomorphism.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Suppose $F(f) : F(a) \to F(b)$ is an isomorphism in $\mathcal{D}$,
+           with inverse $g : F(b) \to F(a)$.}
+           {We need to find $h : b \to a$ in $\mathcal{C}$ with $h \circ f = \operatorname{id}_a$
+            and $f \circ h = \operatorname{id}_b$.}
+\proofstep{Since $F$ is full, there exists $h : b \to a$ in $\mathcal{C}$ with
+           $F(h) = g$.}
+           {Fullness gives a preimage for every morphism in $\mathcal{D}(F(b), F(a))$.}
+\proofstep{$F(h \circ f) = F(h) \circ F(f) = g \circ F(f) = \operatorname{id}_{F(a)} = F(\operatorname{id}_a)$.}
+           {Functoriality of $F$ and the fact that $g$ is inverse to $F(f)$.}
+\proofstep{Since $F$ is faithful, $F(h \circ f) = F(\operatorname{id}_a)$ implies
+           $h \circ f = \operatorname{id}_a$.}
+           {Faithfulness: equal images under $F$ imply equal morphisms.}
+\proofstep{By the same argument, $f \circ h = \operatorname{id}_b$.}
+           {Symmetric argument using $F(f \circ h) = F(f) \circ g = \operatorname{id}_{F(b)}$.}
+\proofstep{Therefore $f$ is an isomorphism with inverse $h$.}
+           {Both composite conditions are verified.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{The Image and Subcategories}
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ has an \term{essential image}: the
+full subcategory of $\mathcal{D}$ on objects isomorphic to $F(c)$ for some
+$c \in \mathcal{C}$. Full faithfulness means $F$ is an equivalence onto its
+essential image.
+
+\begin{definition}
+A \term{subcategory} $\mathcal{S} \subseteq \mathcal{D}$ is full if for all
+$s, s' \in \mathcal{S}$, $\mathcal{S}(s, s') = \mathcal{D}(s, s')$. The inclusion
+functor $\iota : \mathcal{S} \hookrightarrow \mathcal{D}$ is then fully faithful.
+\end{definition}
+
+Reflective subcategories arise when the inclusion functor has a left adjoint
+(the \term{reflector}):
+
+\begin{definition}
+A full subcategory $\iota : \mathcal{S} \hookrightarrow \mathcal{D}$ is
+\term{reflective} if $\iota$ has a left adjoint $R : \mathcal{D} \to \mathcal{S}$.
+\end{definition}
+
+The reflector $R$ sends each object of $\mathcal{D}$ to the ``nearest'' object
+in $\mathcal{S}$. Examples: sheafification (sheaves are a reflective subcategory
+of presheaves); abelianization (abelian groups as a reflective subcategory of groups).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Profunctors}
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ gives a hom-set bijection
+$\mathcal{D}(F(c), d)$ for every $c, d$. This is a function of two variables —
+contravariant in $c$, covariant in $d$. This is the structure of a profunctor.
+
+\begin{definition}
+A \term{profunctor} (also called a \term{distributor} or \term{bimodule})
+from $\mathcal{C}$ to $\mathcal{D}$, written $P : \mathcal{C} \nrightarrow \mathcal{D}$,
+is a functor
+\[
+  P : \mathcal{D}^{op} \times \mathcal{C} \;\to\; \mathbf{Set}.
+\]
+That is, a presheaf on $\mathcal{D}^{op} \times \mathcal{C}$.
+\end{definition}
+
+\begin{howtosay}
+$P : \mathcal{C} \nrightarrow \mathcal{D}$ is read ``$P$ is a profunctor from
+$\mathcal{C}$ to $\mathcal{D}$.'' The slashed arrow $\nrightarrow$ distinguishes
+profunctors from ordinary functors.
+\end{howtosay}
+
+Every functor $F : \mathcal{C} \to \mathcal{D}$ gives rise to two profunctors:
+\begin{align*}
+  \mathcal{D}(-, F(-)) &: \mathcal{C} \nrightarrow \mathcal{D},
+  \qquad (d, c) \mapsto \mathcal{D}(d, F(c)), \\
+  \mathcal{D}(F(-), -) &: \mathcal{D} \nrightarrow \mathcal{C},
+  \qquad (c, d) \mapsto \mathcal{D}(F(c), d).
+\end{align*}
+
+\subsection{Composition of Profunctors}
+
+Two profunctors $P : \mathcal{C} \nrightarrow \mathcal{D}$ and
+$Q : \mathcal{D} \nrightarrow \mathcal{E}$ can be composed. The composite
+$Q \circ P : \mathcal{C} \nrightarrow \mathcal{E}$ is the \term{coend}:
+\[
+  (Q \circ P)(e, c) = \int^{d \in \mathcal{D}} Q(e, d) \times P(d, c).
+\]
+(Coends are introduced formally in Volume III; the intuition is a ``tensor
+product'' over $\mathcal{D}$: matching outputs of $P$ with inputs of $Q$.)
+
+This composition makes profunctors the morphisms in the \term{bicategory of
+profunctors} $\mathbf{Prof}$. The identity profunctor on $\mathcal{C}$ is
+the hom-functor $\mathcal{C}(-, -) : \mathcal{C}^{op} \times \mathcal{C} \to \mathbf{Set}$.
+
+\subsection{Representable Profunctors}
+
+A profunctor $P : \mathcal{C} \nrightarrow \mathcal{D}$ is \term{representable}
+if it is isomorphic to $\mathcal{D}(-, F(-))$ for some functor
+$F : \mathcal{C} \to \mathcal{D}$. Profunctors generalize functors by dropping
+the representability requirement.
+
+The profunctor perspective is powerful: adjunctions between $F \dashv G$ are
+exactly profunctor isomorphisms $\mathcal{D}(F(-), -) \cong \mathcal{C}(-, G(-))$.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What does it mean for a functor to preserve a property $P$?}
+       {Whenever $f$ has property $P$ in the source, $F(f)$ has property $P$ in
+        the target.}
+
+\qaitem{What does it mean for a functor to reflect a property?}
+       {Whenever $F(f)$ has property $P$ in the target, $f$ has property $P$ in
+        the source.}
+
+\qaitem{Do all functors preserve isomorphisms?}
+       {Yes. If $f \circ g = \operatorname{id}$ and $g \circ f = \operatorname{id}$,
+        then $F(f) \circ F(g) = \operatorname{id}$ and $F(g) \circ F(f) = \operatorname{id}$.}
+
+\qaitem{What is a faithful functor?}
+       {One where each function on hom-sets $F_{a,b}$ is injective.}
+
+\qaitem{What is a full functor?}
+       {One where each $F_{a,b}$ is surjective: every morphism between images
+        lifts to a morphism in the source.}
+
+\qaitem{What is an equivalence of categories?}
+       {A functor that is fully faithful and essentially surjective.}
+
+\qaitem{Do fully faithful functors reflect isomorphisms?}
+       {Yes. If $F(f)$ is an isomorphism then $f$ is an isomorphism.}
+
+\qaitem{What is a reflective subcategory?}
+       {A full subcategory whose inclusion has a left adjoint (the reflector).}
+
+\qaitem{What is a profunctor from $\mathcal{C}$ to $\mathcal{D}$?}
+       {A functor $P : \mathcal{D}^{op} \times \mathcal{C} \to \mathbf{Set}$.}
+
+\qaitem{What notation is used for a profunctor from $\mathcal{C}$ to $\mathcal{D}$?}
+       {$P : \mathcal{C} \nrightarrow \mathcal{D}$ with a slashed arrow.}
+
+\qaitem{What is the identity profunctor on $\mathcal{C}$?}
+       {The hom-functor $\mathcal{C}(-,-) : \mathcal{C}^{op} \times \mathcal{C} \to \mathbf{Set}$.}
+
+\qaitem{How does a functor $F : \mathcal{C} \to \mathcal{D}$ give a profunctor?}
+       {Two ways: $\mathcal{D}(-,F(-))$ (a profunctor $\mathcal{C} \nrightarrow \mathcal{D}$)
+        or $\mathcal{D}(F(-),-)$ (a profunctor $\mathcal{D} \nrightarrow \mathcal{C}$).}
+
+\qaitem{When is a profunctor representable?}
+       {When it is isomorphic to $\mathcal{D}(-,F(-))$ for some functor $F$.}
+
+\qaitem{How are adjunctions expressed as profunctors?}
+       {$F \dashv G$ iff there is an isomorphism of profunctors
+        $\mathcal{D}(F(-), -) \cong \mathcal{C}(-, G(-))$.}
+
+\qaitem{What is the composition of profunctors $P : \mathcal{C} \nrightarrow \mathcal{D}$
+        and $Q : \mathcal{D} \nrightarrow \mathcal{E}$?}
+       {$(Q \circ P)(e, c) = \int^d Q(e,d) \times P(d,c)$, a coend over $\mathcal{D}$.}
+
+\qaitem{What is the bicategory $\mathbf{Prof}$?}
+       {Its objects are categories; morphisms are profunctors; 2-cells are natural
+        transformations between profunctors; composition is via coend.}
+
+\qaitem{What is RAPL?}
+       {Right Adjoints Preserve Limits: if $G$ is a right adjoint then $G$ preserves
+        all limits that exist in its source category.}
+
+\qaitem{What is LAPC?}
+       {Left Adjoints Preserve Colimits: if $F$ is a left adjoint then $F$ preserves
+        all colimits.}
+
+\qaitem{Give an example of a functor that does not preserve monomorphisms.}
+       {The abelianization functor $\mathbf{Grp} \to \mathbf{Ab}$: injective group
+        homomorphisms need not remain injective after abelianization.}
+
+\qaitem{What does ``faithful'' mean for a forgetful functor?}
+       {The underlying set function of a morphism determines the morphism; distinct
+        structure-preserving maps have distinct underlying functions.}
+
+\qaitem{Is the forgetful functor $\mathbf{Ab} \to \mathbf{Set}$ faithful?}
+       {Yes: group homomorphisms with the same underlying function are equal.}
+
+\qaitem{Is the forgetful functor $\mathbf{Ab} \to \mathbf{Set}$ full?}
+       {No: not every function between abelian groups is a homomorphism.}
+\end{qa}
+\end{exercisesbox}
+
+\begin{summarybox}
+Functors preserve all isomorphisms but need not preserve monomorphisms, epimorphisms,
+limits, or colimits unless they have adjoint structure (RAPL/LAPC). A functor is
+\textbf{faithful} if injective on hom-sets; \textbf{full} if surjective; an
+\textbf{equivalence} if fully faithful and essentially surjective. Fully faithful
+functors reflect isomorphisms.
+
+A \textbf{profunctor} $P : \mathcal{C} \nrightarrow \mathcal{D}$ is a functor
+$\mathcal{D}^{op} \times \mathcal{C} \to \mathbf{Set}$. Every functor gives two
+profunctors; adjunctions are profunctor isomorphisms. Profunctors form the
+bicategory $\mathbf{Prof}$, with coend-composition.
+\end{summarybox}
+
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Faithful/full/ff.}
+$F : \mathcal{C} \to \mathcal{D}$ is faithful (resp.\ full, fully faithful) iff
+$F_{a,b} : \mathcal{C}(a,b) \to \mathcal{D}(Fa,Fb)$ is injective (resp.\ surjective,
+bijective) for all $a,b$.
+
+\textbf{Reflection of isos.} $F$ fully faithful $\Rightarrow$ $F$ reflects
+isomorphisms.
+
+\textbf{Equivalence.} $F$ is an equivalence iff fully faithful and essentially
+surjective; iff it has a quasi-inverse $G$ with $GF \cong \operatorname{Id}$ and
+$FG \cong \operatorname{Id}$.
+
+\textbf{Reflective subcategory.}
+$\mathcal{S} \subseteq \mathcal{D}$ is reflective iff $\iota : \mathcal{S} \hookrightarrow
+\mathcal{D}$ has a left adjoint $R$.
+
+\textbf{Profunctor.}
+$P : \mathcal{C} \nrightarrow \mathcal{D}$ is $P : \mathcal{D}^{op} \times \mathcal{C} \to \mathbf{Set}$.
+Identity: $\operatorname{Id}_\mathcal{C} = \mathcal{C}(-,-)$.
+Composition: $(Q \circ P)(e,c) = \int^d Q(e,d) \times P(d,c)$.
+$F \dashv G$ iff $\mathcal{D}(F-,-) \cong \mathcal{C}(-,G-)$ as profunctors.
+\end{formalrestatement}

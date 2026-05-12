@@ -1,0 +1,504 @@
+% ch12_monoidal_enriched.tex
+
+\chapter{Monoidal and Enriched Categories}
+
+\begin{overviewbox}
+The categories you have encountered so far have \emph{sets} of morphisms between
+any two objects. The hom-set $\mathcal{C}(a, b)$ is just a set: a collection of
+arrows from $a$ to $b$, with no additional structure.
+
+But in many important categories, those hom-sets carry extra structure. In the
+category of abelian groups, $\operatorname{Hom}(A, B)$ is itself an abelian group.
+In a category of chain complexes, morphism spaces are chain complexes. In a
+2-category, the morphisms between two objects form a whole category.
+
+The unifying concept is \textbf{enriched category theory}: a category enriched
+over a monoidal category $\mathcal{V}$ replaces its hom-sets with objects of
+$\mathcal{V}$. To make this work, $\mathcal{V}$ must itself be a
+\textbf{monoidal category} — a category equipped with a tensor product that
+plays the role of the cartesian product for sets.
+
+This chapter builds monoidal categories from scratch, develops the coherence
+theorem that makes them well-behaved, introduces symmetric and closed monoidal
+categories, and then constructs the general theory of $\mathcal{V}$-enriched
+categories.
+\end{overviewbox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Monoidal Categories}
+
+\subsection{Informally}
+
+A \term{monoidal category} is a category with a way to ``multiply'' objects
+and morphisms together. The archetype is $(\mathbf{Set}, \times, \{*\})$: sets
+with cartesian product, where the one-element set $\{*\}$ acts as the identity
+for $\times$. But many other examples exist:
+
+\begin{itemize}
+  \item $(\mathbf{Ab}, \otimes_{\mathbb{Z}}, \mathbb{Z})$: abelian groups with tensor product.
+  \item $(\mathbf{Vect}_k, \otimes_k, k)$: vector spaces over a field $k$.
+  \item $(\mathbf{Set}, +, \emptyset)$: sets with disjoint union.
+  \item $([\mathcal{C}, \mathcal{C}], \circ, \operatorname{Id})$: endofunctors on a
+    category, with composition.
+\end{itemize}
+
+The defining data is: a category $\mathcal{V}$, a functor
+$\otimes : \mathcal{V} \times \mathcal{V} \to \mathcal{V}$ (the tensor product),
+and a unit object $I \in \mathcal{V}$, together with natural isomorphisms
+expressing associativity and left/right unitality.
+
+\subsection{Expanding}
+
+The tricky part is that associativity and unitality do not need to be equalities —
+they can be natural isomorphisms (``coherent up to isomorphism''):
+\begin{align*}
+  \alpha_{A,B,C} &: (A \otimes B) \otimes C \xrightarrow{\sim} A \otimes (B \otimes C)
+    \qquad \text{(associator)}, \\
+  \lambda_A &: I \otimes A \xrightarrow{\sim} A
+    \qquad \text{(left unitor)}, \\
+  \rho_A &: A \otimes I \xrightarrow{\sim} A
+    \qquad \text{(right unitor)}.
+\end{align*}
+
+Having these isomorphisms opens a question: if there are many ways to parenthesize
+an expression like $A \otimes B \otimes C \otimes D$, do all the paths between
+any two parenthesizations agree? \textbf{Mac Lane's coherence theorem} says yes:
+any two composites of associators and unitors between the same parenthesizations
+are equal. This means we can compute in monoidal categories as if the tensor
+product were strictly associative — writing $A \otimes B \otimes C$ without
+parentheses — as long as we are careful about what ``equal'' means.
+
+\subsection{Formalizing}
+
+\begin{definition}
+A \term{monoidal category} $(\mathcal{V}, \otimes, I, \alpha, \lambda, \rho)$
+consists of:
+\begin{itemize}
+  \item A category $\mathcal{V}$.
+  \item A \term{tensor product} functor $\otimes : \mathcal{V} \times \mathcal{V} \to \mathcal{V}$.
+  \item A \term{unit object} $I \in \mathcal{V}$.
+  \item Natural isomorphisms:
+  \begin{align*}
+    \alpha_{A,B,C} &: (A \otimes B) \otimes C \xrightarrow{\sim} A \otimes (B \otimes C),\\
+    \lambda_A &: I \otimes A \xrightarrow{\sim} A, \\
+    \rho_A   &: A \otimes I \xrightarrow{\sim} A.
+  \end{align*}
+\end{itemize}
+These must satisfy the \term{pentagon axiom}:
+\begin{center}
+\begin{tikzcd}[column sep=small]
+& (A \otimes B) \otimes (C \otimes D)
+    \arrow[dr, "\alpha_{A,B,C\otimes D}"]
+& \\
+((A \otimes B) \otimes C) \otimes D
+    \arrow[ur, "\alpha_{A\otimes B,C,D}"]
+    \arrow[d, "\alpha_{A,B,C} \otimes \operatorname{id}_D"']
+& & A \otimes (B \otimes (C \otimes D)) \\
+(A \otimes (B \otimes C)) \otimes D
+    \arrow[rr, "\alpha_{A,B\otimes C,D}"']
+& & A \otimes ((B \otimes C) \otimes D)
+    \arrow[u, "\operatorname{id}_A \otimes \alpha_{B,C,D}"']
+\end{tikzcd}
+\end{center}
+and the \term{triangle axiom}:
+\begin{center}
+\begin{tikzcd}
+(A \otimes I) \otimes B
+    \arrow[rr, "\alpha_{A,I,B}"]
+    \arrow[dr, "\rho_A \otimes \operatorname{id}_B"']
+& & A \otimes (I \otimes B)
+    \arrow[dl, "\operatorname{id}_A \otimes \lambda_B"]
+\\
+& A \otimes B &
+\end{tikzcd}
+\end{center}
+\end{definition}
+
+\begin{howtosay}
+The tensor product $A \otimes B$ is read ``$A$ tensor $B$.'' The unit $I$ may be
+called the \emph{monoidal unit} or \emph{unit object}. A monoidal category where
+$\alpha$, $\lambda$, $\rho$ are all identity morphisms is called \term{strict}.
+\end{howtosay}
+
+\begin{theorem}[Mac Lane's Coherence Theorem]
+Every monoidal category is monoidally equivalent to a strict monoidal category.
+Moreover, every diagram built from instances of $\alpha$, $\lambda$, $\rho$
+and their inverses that connects the same two parenthesizations commutes.
+\end{theorem}
+
+Coherence allows us to write $A \otimes B \otimes C$ without parentheses and
+to move freely between parenthesizations without tracking the specific isomorphisms.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Symmetric and Closed Monoidal Categories}
+
+\subsection{Formalizing}
+
+Two additional structures enrich monoidal categories significantly.
+
+\begin{definition}
+A monoidal category $(\mathcal{V}, \otimes, I)$ is \term{symmetric} if it has
+a natural isomorphism
+\[
+  \sigma_{A,B} : A \otimes B \xrightarrow{\sim} B \otimes A
+\]
+satisfying: $\sigma_{B,A} \circ \sigma_{A,B} = \operatorname{id}_{A \otimes B}$,
+and compatibility with $\alpha$ expressed by the hexagon axioms.
+\end{definition}
+
+\begin{definition}
+A monoidal category $(\mathcal{V}, \otimes, I)$ is \term{closed} if for each
+object $B$, the functor $(-) \otimes B : \mathcal{V} \to \mathcal{V}$ has a right
+adjoint, written $[B, -]$ or $B \multimap (-)$\sayit{$B$ hom dash}:
+\[
+  \mathcal{V}(A \otimes B,\, C) \;\cong\; \mathcal{V}(A,\, [B, C]).
+\]
+The object $[B, C]$ is called the \term{internal hom} of $B$ and $C$.
+\end{definition}
+
+\begin{howtosay}
+$[B, C]$ is read ``$B$ to $C$'' or ``the internal hom from $B$ to $C$.'' In
+$\mathbf{Set}$, $[B, C] = C^B$ is the set of functions from $B$ to $C$; the
+adjunction becomes the familiar currying bijection
+$\operatorname{Hom}(A \times B, C) \cong \operatorname{Hom}(A, C^B)$.
+\end{howtosay}
+
+The category $\mathbf{Set}$ with cartesian product is symmetric monoidal closed.
+The category $\mathbf{Ab}$ with $\otimes_{\mathbb{Z}}$ is symmetric monoidal closed,
+with internal hom $[A, B] = \operatorname{Hom}_{\mathbb{Z}}(A, B)$.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Enriched Categories}
+
+\subsection{Informally}
+
+Fix a monoidal category $(\mathcal{V}, \otimes, I)$. A \term{$\mathcal{V}$-enriched
+category} $\mathcal{C}$, or \term{$\mathcal{V}$-category}, is like an ordinary
+category except that its hom-sets are replaced by objects of $\mathcal{V}$.
+
+The idea is simple: instead of a \emph{set} $\mathcal{C}(a, b)$ of morphisms
+from $a$ to $b$, we have an \emph{object} $\mathcal{C}(a, b) \in \mathcal{V}$.
+Composition becomes a morphism in $\mathcal{V}$:
+\[
+  \circ_{a,b,c} : \mathcal{C}(b, c) \otimes \mathcal{C}(a, b) \;\to\; \mathcal{C}(a, c).
+\]
+Identity becomes a morphism from the unit:
+\[
+  j_a : I \;\to\; \mathcal{C}(a, a).
+\]
+
+\subsection{Expanding}
+
+Here are the key examples:
+
+\begin{itemize}
+  \item \textbf{$\mathbf{Set}$-enriched categories} are ordinary categories.
+  \item \textbf{$\mathbf{Ab}$-enriched categories} are \term{preadditive categories}:
+    the hom-sets are abelian groups and composition is bilinear.
+  \item \textbf{$\mathbf{Vect}_k$-enriched categories} are \term{$k$-linear categories}.
+  \item \textbf{$\mathbf{Cat}$-enriched categories} are \term{2-categories}:
+    hom-objects are themselves categories (categories of morphisms between two objects).
+  \item \textbf{$([0,\infty], \geq, +, 0)$-enriched categories} are \term{Lawvere metric spaces}:
+    objects are points, and $\mathcal{C}(a,b)$ is the ``distance from $a$ to $b$.''
+\end{itemize}
+
+The last example is striking. A monoidal category need not be cartesian. The
+poset $([0,\infty], \geq)$ — real numbers ordered by $\geq$, with tensor product
+$a + b$ and unit $0$ — is a monoidal category. An enriched category over it is
+a set with a distance function satisfying:
+\[
+  0 \geq d(a, a), \qquad d(b,c) + d(a,b) \geq d(a,c).
+\]
+That is: identity has distance $0$, and the triangle inequality. This is a
+(generalized) metric space.
+
+\subsection{Formalizing}
+
+\begin{definition}
+Let $(\mathcal{V}, \otimes, I)$ be a monoidal category. A
+\term{$\mathcal{V}$-enriched category} (or \term{$\mathcal{V}$-category}) $\mathcal{C}$
+consists of:
+\begin{itemize}
+  \item A collection of \term{objects} $\operatorname{ob}(\mathcal{C})$.
+  \item For each pair $a, b \in \operatorname{ob}(\mathcal{C})$, an object
+    $\mathcal{C}(a,b) \in \mathcal{V}$, called the \term{hom-object}.
+  \item For each triple $a, b, c$, a \term{composition morphism}
+    \[
+      \circ_{a,b,c} : \mathcal{C}(b,c) \otimes \mathcal{C}(a,b) \;\to\; \mathcal{C}(a,c).
+    \]
+  \item For each object $a$, an \term{identity morphism}
+    \[
+      j_a : I \;\to\; \mathcal{C}(a,a).
+    \]
+\end{itemize}
+These must satisfy associativity and unit laws expressed as commutative diagrams
+in $\mathcal{V}$, analogous to the ordinary category axioms.
+\end{definition}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{$\mathcal{V}$-Functors and $\mathcal{V}$-Natural Transformations}
+
+\subsection{Formalizing}
+
+\begin{definition}
+A \term{$\mathcal{V}$-functor} $F : \mathcal{C} \to \mathcal{D}$ between
+$\mathcal{V}$-categories consists of:
+\begin{itemize}
+  \item A function $F : \operatorname{ob}(\mathcal{C}) \to \operatorname{ob}(\mathcal{D})$.
+  \item For each pair $a, b \in \mathcal{C}$, a morphism in $\mathcal{V}$:
+    \[
+      F_{a,b} : \mathcal{C}(a, b) \;\to\; \mathcal{D}(Fa, Fb).
+    \]
+\end{itemize}
+These must be compatible with composition and identities via commutative diagrams
+in $\mathcal{V}$.
+\end{definition}
+
+\begin{definition}
+A \term{$\mathcal{V}$-natural transformation} $\alpha : F \Rightarrow G$ between
+$\mathcal{V}$-functors $F, G : \mathcal{C} \to \mathcal{D}$ assigns to each
+$a \in \mathcal{C}$ a morphism $\alpha_a : I \to \mathcal{D}(Fa, Ga)$ in $\mathcal{V}$,
+satisfying the naturality condition expressed as a commutative square in $\mathcal{V}$.
+\end{definition}
+
+\begin{howtosay}
+A $\mathcal{V}$-natural transformation has its ``components'' as morphisms out of
+the unit $I$ into hom-objects, rather than as elements of a set. In the
+$\mathbf{Set}$-enriched case, $I = \{*\}$ and a morphism $\{*\} \to \mathcal{D}(Fa, Ga)$
+is the same as picking an element of $\mathcal{D}(Fa, Ga)$, recovering the ordinary
+definition.
+\end{howtosay}
+
+\subsection{Self-Enrichment}
+
+A monoidal category $\mathcal{V}$ that is also closed can be enriched over itself.
+The hom-object between two objects $a, b$ is the internal hom $[a, b] \in \mathcal{V}$,
+and composition is given by the morphism:
+\[
+  [b, c] \otimes [a, b] \;\to\; [a, c]
+\]
+obtained via the adjunction for closed structure. This self-enrichment is what
+makes closed monoidal categories the natural foundation for enriched category theory.
+
+\subsection{Reorganizing: Ordinary CT as Enriched CT}
+
+Every concept from Volumes I can be enriched:
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{ll}
+\hline
+\textbf{Ordinary} & \textbf{Enriched over $\mathcal{V}$} \\
+\hline
+Category & $\mathcal{V}$-category \\
+Functor & $\mathcal{V}$-functor \\
+Natural transformation & $\mathcal{V}$-natural transformation \\
+Adjunction & $\mathcal{V}$-adjunction \\
+Limit / Colimit & $\mathcal{V}$-limit / $\mathcal{V}$-colimit (weighted) \\
+Yoneda lemma & $\mathcal{V}$-Yoneda lemma \\
+Kan extension & $\mathcal{V}$-Kan extension \\
+\hline
+\end{tabular}
+\end{center}
+
+The passage from ordinary to enriched is not merely generalization for its own
+sake. Many important categories are naturally enriched (abelian groups,
+chain complexes, spectra in homotopy theory), and their enriched structure
+carries essential information that the underlying ordinary structure loses.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is a monoidal category?}
+       {A category $\mathcal{V}$ with a tensor product functor $\otimes$, a unit
+        object $I$, and natural isomorphisms $\alpha$ (associator), $\lambda$
+        (left unitor), $\rho$ (right unitor), satisfying pentagon and triangle axioms.}
+
+\qaitem{What are the three natural isomorphisms in a monoidal category?}
+       {Associator $\alpha_{A,B,C} : (A\otimes B)\otimes C \cong A\otimes(B\otimes C)$;
+        left unitor $\lambda_A : I\otimes A \cong A$; right unitor $\rho_A : A\otimes I \cong A$.}
+
+\qaitem{What does the pentagon axiom say?}
+       {The five ways of reassociating $((A\otimes B)\otimes C)\otimes D$ into
+        $A\otimes(B\otimes(C\otimes D))$ using $\alpha$ all agree.}
+
+\qaitem{What does the triangle axiom say?}
+       {$(\rho_A \otimes \operatorname{id}_B) = (\operatorname{id}_A \otimes \lambda_B) \circ
+        \alpha_{A,I,B}$ as morphisms $(A\otimes I)\otimes B \to A\otimes B$.}
+
+\qaitem{What is a strict monoidal category?}
+       {One where $\alpha$, $\lambda$, and $\rho$ are all identity morphisms;
+        the tensor product is strictly associative and unital.}
+
+\qaitem{What does Mac Lane's coherence theorem say?}
+       {Every monoidal category is monoidally equivalent to a strict one;
+        any diagram of associators and unitors between the same two
+        parenthesizations commutes.}
+
+\qaitem{What does coherence allow us to do in practice?}
+       {Write $A \otimes B \otimes C$ without parentheses and freely move between
+        parenthesizations without tracking the specific isomorphisms.}
+
+\qaitem{What is a symmetric monoidal category?}
+       {A monoidal category with a natural isomorphism $\sigma_{A,B} : A\otimes B \cong B\otimes A$
+        satisfying $\sigma_{B,A} \circ \sigma_{A,B} = \operatorname{id}$ and hexagon axioms.}
+
+\qaitem{What is a closed monoidal category?}
+       {A monoidal category where $(-)\otimes B$ has a right adjoint $[B,-]$ (internal hom)
+        for every $B$: $\mathcal{V}(A\otimes B, C) \cong \mathcal{V}(A, [B,C])$.}
+
+\qaitem{What is the internal hom in $\mathbf{Set}$?}
+       {$[B, C] = C^B$, the set of functions $B \to C$. The adjunction is the
+        currying bijection $\operatorname{Hom}(A\times B, C) \cong \operatorname{Hom}(A, C^B)$.}
+
+\qaitem{What is a $\mathcal{V}$-enriched category?}
+       {Like a category, but hom-sets $\mathcal{C}(a,b)$ are objects of $\mathcal{V}$;
+        composition is a morphism $\mathcal{C}(b,c)\otimes\mathcal{C}(a,b) \to \mathcal{C}(a,c)$;
+        identity is a morphism $I \to \mathcal{C}(a,a)$.}
+
+\qaitem{What is a $\mathbf{Set}$-enriched category?}
+       {An ordinary category. Hom-sets are sets; composition is a function.}
+
+\qaitem{What is an $\mathbf{Ab}$-enriched category?}
+       {A preadditive category: hom-sets are abelian groups and composition
+        is bilinear (a $\mathbb{Z}$-bilinear map).}
+
+\qaitem{What is a $\mathbf{Cat}$-enriched category?}
+       {A 2-category: hom-objects are categories; objects are 0-cells,
+        morphisms are 1-cells, and morphisms between morphisms are 2-cells.}
+
+\qaitem{What is a $([0,\infty], \geq, +, 0)$-enriched category?}
+       {A (generalized) metric space: objects are points, $\mathcal{C}(a,b)$ is
+        the distance from $a$ to $b$, satisfying $d(a,a) = 0$ and the triangle
+        inequality.}
+
+\qaitem{What is a $\mathcal{V}$-functor?}
+       {A function on objects plus, for each pair $a,b$, a morphism
+        $F_{a,b} : \mathcal{C}(a,b) \to \mathcal{D}(Fa,Fb)$ in $\mathcal{V}$,
+        compatible with composition and identities.}
+
+\qaitem{What is a $\mathcal{V}$-natural transformation?}
+       {Assigns to each $a$ a morphism $\alpha_a : I \to \mathcal{D}(Fa, Ga)$
+        in $\mathcal{V}$, satisfying $\mathcal{V}$-naturality.}
+
+\qaitem{What does a $\mathcal{V}$-natural transformation reduce to when $\mathcal{V} = \mathbf{Set}$?}
+       {An ordinary natural transformation: a morphism $I = \{*\} \to \mathcal{D}(Fa,Ga)$
+        is just an element of the hom-set.}
+
+\qaitem{What is self-enrichment of a closed monoidal category?}
+       {A closed monoidal $\mathcal{V}$ enriches over itself with hom-objects
+        $[a,b] \in \mathcal{V}$; composition given by the closed structure.}
+
+\qaitem{What monoidal category is used to enrich toward 2-categories?}
+       {$\mathbf{Cat}$ with product $\times$ and unit the terminal category $\mathbf{1}$.}
+
+\qaitem{What is a monoidal functor?}
+       {A functor $F : \mathcal{V} \to \mathcal{W}$ between monoidal categories
+        with natural morphisms $F(A)\otimes F(B) \to F(A\otimes B)$ and
+        $I_\mathcal{W} \to F(I_\mathcal{V})$, compatible with associators and unitors.}
+
+\qaitem{What is the tensor product of abelian groups?}
+       {$A \otimes_\mathbb{Z} B$ is the abelian group generated by symbols $a\otimes b$
+        subject to bilinearity. It is the unit for the closed structure with
+        $[A,B] = \operatorname{Hom}_\mathbb{Z}(A,B)$.}
+
+\qaitem{Why does the monoidal category need to be closed to allow self-enrichment?}
+       {The identity element of a $\mathcal{V}$-category requires a map
+        $I \to \mathcal{C}(a,a)$; the composition requires a map
+        $\mathcal{C}(b,c)\otimes\mathcal{C}(a,b) \to \mathcal{C}(a,c)$.
+        In the self-enriched case, both are constructed from the closed structure.}
+
+\qaitem{What is the $\mathcal{V}$-Yoneda lemma?}
+       {For a $\mathcal{V}$-category $\mathcal{C}$ and $\mathcal{V}$-functor
+        $F : \mathcal{C} \to \mathcal{V}$: $\mathcal{V}\text{-}\mathbf{Nat}(\mathcal{C}(a,-), F) \cong F(a)$
+        as objects of $\mathcal{V}$, naturally in $a$ and $F$.}
+
+\qaitem{What is a weighted limit in a $\mathcal{V}$-category?}
+       {A limit weighted by a $\mathcal{V}$-functor $W : \mathcal{J} \to \mathcal{V}$;
+        generalizes ordinary limits (where $W = \Delta I$) and allows enriched
+        universal properties.}
+
+\qaitem{How does enrichment help express that $\operatorname{Hom}(A,B)$ for
+        abelian groups is itself an abelian group?}
+       {$\mathbf{Ab}$-enrichment of $\mathbf{Ab}$ makes each hom-set $\operatorname{Hom}(A,B)$
+        an abelian group, with composition bilinear. This is the self-enriched structure.}
+
+\qaitem{What is a monoid in a monoidal category?}
+       {An object $M \in \mathcal{V}$ with morphisms $\mu : M \otimes M \to M$
+        (multiplication) and $\eta : I \to M$ (unit), satisfying associativity
+        and unit laws. Monoids in $\mathbf{Set}$ are ordinary monoids; in $\mathbf{Ab}$
+        they are rings.}
+
+\qaitem{What is a comonoid in a monoidal category?}
+       {An object $C$ with comultiplication $\delta : C \to C \otimes C$ and
+        counit $\varepsilon : C \to I$, satisfying dual laws. Comonoids in
+        $\mathbf{Set}$ with cartesian product are just sets (every set is a
+        comonoid via the diagonal).}
+
+\qaitem{What is a braided monoidal category?}
+       {A monoidal category with a natural isomorphism $\gamma_{A,B} : A\otimes B \to B\otimes A$
+        satisfying hexagon axioms but \emph{not} required to satisfy $\gamma_{B,A} \circ \gamma_{A,B} = \operatorname{id}$.
+        Symmetric monoidal is the special case where it does.}
+\end{qa}
+\end{exercisesbox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\begin{summarybox}
+A \textbf{monoidal category} $(\mathcal{V}, \otimes, I)$ is a category with a
+tensor product and unit object, with associativity and unitality natural
+isomorphisms satisfying the pentagon and triangle axioms. Mac Lane's
+\textbf{coherence theorem} says any monoidal category is equivalent to a strict
+one, so associativity can be ignored in practice.
+
+A monoidal category is \textbf{symmetric} if $A \otimes B \cong B \otimes A$
+naturally, and \textbf{closed} if $(-) \otimes B$ has a right adjoint
+$[B, -]$ (internal hom).
+
+A \textbf{$\mathcal{V}$-enriched category} replaces hom-sets with objects
+of $\mathcal{V}$, with composition as a morphism in $\mathcal{V}$. $\mathbf{Set}$-categories
+are ordinary categories; $\mathbf{Ab}$-categories are preadditive; $\mathbf{Cat}$-categories
+are 2-categories; $([0,\infty], +, 0)$-categories are metric spaces. Closed
+monoidal categories can enrich over themselves.
+\end{summarybox}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Monoidal category.}
+$(\mathcal{V}, \otimes, I, \alpha, \lambda, \rho)$ where
+$\otimes : \mathcal{V} \times \mathcal{V} \to \mathcal{V}$,
+$I \in \mathcal{V}$, and natural isomorphisms
+$\alpha_{A,B,C} : (A\!\otimes\! B)\!\otimes\! C \cong A\!\otimes\!(B\!\otimes\! C)$,
+$\lambda_A : I\!\otimes\! A \cong A$,
+$\rho_A : A\!\otimes\! I \cong A$
+satisfying the pentagon and triangle coherence conditions.
+
+\textbf{Symmetric.} Additional natural isomorphism
+$\sigma_{A,B} : A\otimes B \xrightarrow{\sim} B\otimes A$ with
+$\sigma_{B,A}\circ\sigma_{A,B} = \operatorname{id}$ and hexagon axioms.
+
+\textbf{Closed.} $(-)\otimes B \dashv [B,-]$ for all $B$; internal hom
+$[B,C] \in \mathcal{V}$ with $\mathcal{V}(A\otimes B, C) \cong \mathcal{V}(A,[B,C])$.
+
+\textbf{$\mathcal{V}$-category.} Objects $\operatorname{ob}(\mathcal{C})$; for
+each $a,b$: hom-object $\mathcal{C}(a,b)\in\mathcal{V}$; composition
+$\circ_{a,b,c} : \mathcal{C}(b,c)\otimes\mathcal{C}(a,b) \to \mathcal{C}(a,c)$;
+identity $j_a : I \to \mathcal{C}(a,a)$; satisfying associativity and unit laws
+as diagrams in $\mathcal{V}$.
+
+\textbf{$\mathcal{V}$-functor $F : \mathcal{C} \to \mathcal{D}$.}
+Function on objects plus $F_{a,b} : \mathcal{C}(a,b) \to \mathcal{D}(Fa,Fb)$
+in $\mathcal{V}$, compatible with $\circ$ and $j$.
+
+\textbf{$\mathcal{V}$-natural transformation $\alpha : F \Rightarrow G$.}
+Components $\alpha_a : I \to \mathcal{D}(Fa,Ga)$ in $\mathcal{V}$
+satisfying: $\circ(G_{a,b}\otimes\alpha_a) = \circ(\alpha_b\otimes F_{a,b})$
+as morphisms $\mathcal{C}(a,b)\otimes I \to \mathcal{D}(Fa,Gb)$.
+
+\textbf{$\mathcal{V}$-Yoneda.}
+$[\mathcal{C},\mathcal{V}]_\mathcal{V}(\mathcal{C}(a,-),\,F) \cong F(a)$ in $\mathcal{V}$,
+naturally in $a \in \mathcal{C}$ and $F \in [\mathcal{C},\mathcal{V}]_\mathcal{V}$.
+\end{formalrestatement}
