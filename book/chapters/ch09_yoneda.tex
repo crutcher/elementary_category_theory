@@ -423,36 +423,36 @@ The notation $\int^A$ here is a coend, a kind of co-limit indexed over a
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What is $\mathrm{Hom}(A, -)$?}{The functor $\mathcal{C} \to \mathbf{Set}$ sending $B$ to the set of morphisms $A \to B$.}
-\qa{Is $\mathrm{Hom}(A, -)$ covariant or contravariant?}{Covariant.}
-\qa{What is $\mathrm{Hom}(-, A)$?}{The functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ sending $B$ to morphisms $B \to A$.}
-\qa{How does $\mathrm{Hom}(A, -)$ act on $g : B \to C$?}{Postcomposition: $f \mapsto g \circ f$.}
-\qa{How does $\mathrm{Hom}(-, A)$ act on $g : B \to C$?}{Precomposition: $f \mapsto f \circ g$.}
-\qa{What does it mean for $F$ to be representable?}{$F \cong \mathrm{Hom}(A, -)$ for some $A$.}
-\qa{Is the representing object unique?}{Yes, up to isomorphism.}
-\qa{State the Yoneda Lemma.}{$\mathrm{Nat}(\mathrm{Hom}(A, -), F) \cong F(A)$.}
-\qa{What is the explicit bijection?}{$\alpha \mapsto \alpha_A(\mathrm{id}_A)$.}
-\qa{What is the inverse map?}{$x \mapsto \alpha^x$ where $\alpha^x_B(f) = F(f)(x)$.}
-\qa{Why is the inverse $\alpha^x$ natural?}{Because $F$ is a functor: $F(g \circ f) = F(g) F(f)$.}
-\qa{What does $\alpha_A(\mathrm{id}_A)$ represent?}{The ``universal element'' that determines $\alpha$.}
-\qa{Yoneda for contravariant functors: state it.}{$\mathrm{Nat}(\mathrm{Hom}(-, A), F) \cong F(A)$ for $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
-\qa{What is the Yoneda embedding?}{The functor $A \mapsto \mathrm{Hom}(-, A)$ from $\mathcal{C}$ into $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$.}
-\qa{Is the Yoneda embedding faithful?}{Yes.}
-\qa{Is it full?}{Yes (this is what the Yoneda Lemma supplies).}
-\qa{So the Yoneda embedding is what?}{Fully faithful.}
-\qa{What is a presheaf on $\mathcal{C}$?}{A functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
-\qa{What is a representable presheaf?}{One of the form $\mathrm{Hom}(-, A)$.}
-\qa{Consequence: when are two objects isomorphic?}{Iff their representables are isomorphic as presheaves.}
-\qa{Hom-functors preserve what?}{All small limits.}
-\qa{Therefore representable functors preserve what?}{All small limits.}
-\qa{What does the density theorem say?}{Every presheaf is canonically a colimit of representables.}
-\qa{What is the slogan for using Yoneda?}{``Check on representables.''}
-\qa{Yoneda restatement of adjunction $L \dashv R$?}{$\mathrm{Hom}(L A, -) \cong \mathrm{Hom}(A, R -)$ as natural transformations.}
-\qa{Yoneda restatement of $A \cong B$?}{$\mathrm{Hom}(A, -) \cong \mathrm{Hom}(B, -)$ naturally.}
-\qa{What is the ``category of elements'' of a presheaf $F$?}{The category with objects $(A, x)$, $x \in F(A)$, and morphisms $f : A \to A'$ with $F(f)(x') = x$.}
-\qa{Why is the Yoneda Lemma considered ``deep''?}{It links naturality, representability, and elements in a single short statement.}
-\qa{What was the most surprising consequence to you?}{Often: that universal properties identify objects up to unique iso \emph{via Yoneda}.}
-\qa{Does Yoneda hold for general $\mathcal{V}$-enriched categories?}{Yes; it generalizes essentially verbatim, with $\mathbf{Set}$ replaced by $\mathcal{V}$.}
+\qaitem{What is $\mathrm{Hom}(A, -)$?}{The functor $\mathcal{C} \to \mathbf{Set}$ sending $B$ to the set of morphisms $A \to B$.}
+\qaitem{Is $\mathrm{Hom}(A, -)$ covariant or contravariant?}{Covariant.}
+\qaitem{What is $\mathrm{Hom}(-, A)$?}{The functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ sending $B$ to morphisms $B \to A$.}
+\qaitem{How does $\mathrm{Hom}(A, -)$ act on $g : B \to C$?}{Postcomposition: $f \mapsto g \circ f$.}
+\qaitem{How does $\mathrm{Hom}(-, A)$ act on $g : B \to C$?}{Precomposition: $f \mapsto f \circ g$.}
+\qaitem{What does it mean for $F$ to be representable?}{$F \cong \mathrm{Hom}(A, -)$ for some $A$.}
+\qaitem{Is the representing object unique?}{Yes, up to isomorphism.}
+\qaitem{State the Yoneda Lemma.}{$\mathrm{Nat}(\mathrm{Hom}(A, -), F) \cong F(A)$.}
+\qaitem{What is the explicit bijection?}{$\alpha \mapsto \alpha_A(\mathrm{id}_A)$.}
+\qaitem{What is the inverse map?}{$x \mapsto \alpha^x$ where $\alpha^x_B(f) = F(f)(x)$.}
+\qaitem{Why is the inverse $\alpha^x$ natural?}{Because $F$ is a functor: $F(g \circ f) = F(g) F(f)$.}
+\qaitem{What does $\alpha_A(\mathrm{id}_A)$ represent?}{The ``universal element'' that determines $\alpha$.}
+\qaitem{Yoneda for contravariant functors: state it.}{$\mathrm{Nat}(\mathrm{Hom}(-, A), F) \cong F(A)$ for $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{What is the Yoneda embedding?}{The functor $A \mapsto \mathrm{Hom}(-, A)$ from $\mathcal{C}$ into $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$.}
+\qaitem{Is the Yoneda embedding faithful?}{Yes.}
+\qaitem{Is it full?}{Yes (this is what the Yoneda Lemma supplies).}
+\qaitem{So the Yoneda embedding is what?}{Fully faithful.}
+\qaitem{What is a presheaf on $\mathcal{C}$?}{A functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{What is a representable presheaf?}{One of the form $\mathrm{Hom}(-, A)$.}
+\qaitem{Consequence: when are two objects isomorphic?}{Iff their representables are isomorphic as presheaves.}
+\qaitem{Hom-functors preserve what?}{All small limits.}
+\qaitem{Therefore representable functors preserve what?}{All small limits.}
+\qaitem{What does the density theorem say?}{Every presheaf is canonically a colimit of representables.}
+\qaitem{What is the slogan for using Yoneda?}{``Check on representables.''}
+\qaitem{Yoneda restatement of adjunction $L \dashv R$?}{$\mathrm{Hom}(L A, -) \cong \mathrm{Hom}(A, R -)$ as natural transformations.}
+\qaitem{Yoneda restatement of $A \cong B$?}{$\mathrm{Hom}(A, -) \cong \mathrm{Hom}(B, -)$ naturally.}
+\qaitem{What is the ``category of elements'' of a presheaf $F$?}{The category with objects $(A, x)$, $x \in F(A)$, and morphisms $f : A \to A'$ with $F(f)(x') = x$.}
+\qaitem{Why is the Yoneda Lemma considered ``deep''?}{It links naturality, representability, and elements in a single short statement.}
+\qaitem{What was the most surprising consequence to you?}{Often: that universal properties identify objects up to unique iso \emph{via Yoneda}.}
+\qaitem{Does Yoneda hold for general $\mathcal{V}$-enriched categories?}{Yes; it generalizes essentially verbatim, with $\mathbf{Set}$ replaced by $\mathcal{V}$.}
 \end{qa}
 \end{exercisesbox}
 

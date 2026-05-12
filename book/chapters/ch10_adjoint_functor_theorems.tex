@@ -368,36 +368,36 @@ left-adjoint-existence is a special case.
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What question does an Adjoint Functor Theorem answer?}{Given a functor $R$, does it have a left adjoint?}
-\qa{When does $R$ certainly \emph{not} have a left adjoint?}{When $R$ fails to preserve some small limit.}
-\qa{Why?}{By RAPL: right adjoints must preserve all small limits.}
-\qa{What is the comma category $(A \downarrow R)$?}{Pairs $(B, f : A \to R B)$, with the obvious morphisms.}
-\qa{Why does $(A \downarrow R)$ matter for adjunctions?}{$L A$ exists iff $(A \downarrow R)$ has an initial object.}
-\qa{What initial object does it have?}{$(L A, \eta_A)$, the universal arrow from $A$ to $R$.}
-\qa{State GAFT in slogan form.}{Complete target, $R$ preserves limits, plus solution-set $\Rightarrow$ $R$ has a left adjoint.}
-\qa{What is the solution-set condition?}{For each $A$, a set of $f_i : A \to R B_i$ such that every $f : A \to R B$ factors through one.}
-\qa{Why does the condition need a \emph{set}?}{To avoid proper-class-sized constructions.}
-\qa{In the SAFT, which two extra assumptions replace the solution-set condition?}{Well-poweredness and a small cogenerating set.}
-\qa{What is a well-powered category?}{One in which each object has only a set's worth of subobjects.}
-\qa{What is a cogenerating set?}{A set $\{S_j\}$ such that hom-into-cogenerators is jointly faithful.}
-\qa{Give an example of a cogenerator in $\mathbf{CHaus}$.}{$[0, 1]$.}
-\qa{Where does SAFT apply that GAFT doesn't need to be invoked?}{When the target category is locally presentable; SAFT often suffices.}
-\qa{What is the connection to Yoneda?}{Both GAFT and SAFT are representability theorems for the presheaves $\mathrm{Hom}(A, R(-))$.}
-\qa{What strategy underlies both theorems?}{Construct $L A$ as a limit over the comma category, controlled by a smallness hypothesis.}
-\qa{Why does completeness of $\mathcal{D}$ enter?}{Because we construct $L A$ as a limit of objects in $\mathcal{D}$.}
-\qa{Why does limit-preservation of $R$ enter?}{Because $L A$'s universal property must hold after applying $R$.}
-\qa{Where does the solution-set condition enter the proof?}{To ensure the limit we take is over a set-sized diagram.}
-\qa{Can a functor have neither a left nor a right adjoint?}{Yes; many do.}
-\qa{Can a functor have both?}{Yes; e.g., the identity functor has itself on both sides.}
-\qa{What does ``$f^*$ has both adjoints'' say in logic?}{There are both existential and universal quantifiers, given by left and right adjoints.}
-\qa{Is the forgetful functor $\mathbf{Mon} \to \mathbf{Set}$ adjoint-bearing?}{Yes; it has a left adjoint (free monoid), no right adjoint.}
-\qa{Why no right adjoint to forgetful $\mathbf{Mon} \to \mathbf{Set}$?}{The forgetful doesn't preserve coproducts on the nose.}
-\qa{In a locally presentable category, what's the criterion for an adjoint?}{Limit preservation suffices.}
-\qa{What's the dual of GAFT for right adjoints?}{Cocomplete target, $L$ preserves colimits, plus dual solution-set condition.}
-\qa{Sheafification is an example of which theorem applied?}{SAFT.}
-\qa{Why is the AFT considered a deep theorem?}{It turns existence-of-adjoint into a checkable list of conditions, often the only practical route.}
-\qa{What's the central tool common to all the theorems?}{Comma categories with initial objects.}
-\qa{Final slogan?}{``Preserves all limits + smallness $\Rightarrow$ has a left adjoint.''}
+\qaitem{What question does an Adjoint Functor Theorem answer?}{Given a functor $R$, does it have a left adjoint?}
+\qaitem{When does $R$ certainly \emph{not} have a left adjoint?}{When $R$ fails to preserve some small limit.}
+\qaitem{Why?}{By RAPL: right adjoints must preserve all small limits.}
+\qaitem{What is the comma category $(A \downarrow R)$?}{Pairs $(B, f : A \to R B)$, with the obvious morphisms.}
+\qaitem{Why does $(A \downarrow R)$ matter for adjunctions?}{$L A$ exists iff $(A \downarrow R)$ has an initial object.}
+\qaitem{What initial object does it have?}{$(L A, \eta_A)$, the universal arrow from $A$ to $R$.}
+\qaitem{State GAFT in slogan form.}{Complete target, $R$ preserves limits, plus solution-set $\Rightarrow$ $R$ has a left adjoint.}
+\qaitem{What is the solution-set condition?}{For each $A$, a set of $f_i : A \to R B_i$ such that every $f : A \to R B$ factors through one.}
+\qaitem{Why does the condition need a \emph{set}?}{To avoid proper-class-sized constructions.}
+\qaitem{In the SAFT, which two extra assumptions replace the solution-set condition?}{Well-poweredness and a small cogenerating set.}
+\qaitem{What is a well-powered category?}{One in which each object has only a set's worth of subobjects.}
+\qaitem{What is a cogenerating set?}{A set $\{S_j\}$ such that hom-into-cogenerators is jointly faithful.}
+\qaitem{Give an example of a cogenerator in $\mathbf{CHaus}$.}{$[0, 1]$.}
+\qaitem{Where does SAFT apply that GAFT doesn't need to be invoked?}{When the target category is locally presentable; SAFT often suffices.}
+\qaitem{What is the connection to Yoneda?}{Both GAFT and SAFT are representability theorems for the presheaves $\mathrm{Hom}(A, R(-))$.}
+\qaitem{What strategy underlies both theorems?}{Construct $L A$ as a limit over the comma category, controlled by a smallness hypothesis.}
+\qaitem{Why does completeness of $\mathcal{D}$ enter?}{Because we construct $L A$ as a limit of objects in $\mathcal{D}$.}
+\qaitem{Why does limit-preservation of $R$ enter?}{Because $L A$'s universal property must hold after applying $R$.}
+\qaitem{Where does the solution-set condition enter the proof?}{To ensure the limit we take is over a set-sized diagram.}
+\qaitem{Can a functor have neither a left nor a right adjoint?}{Yes; many do.}
+\qaitem{Can a functor have both?}{Yes; e.g., the identity functor has itself on both sides.}
+\qaitem{What does ``$f^*$ has both adjoints'' say in logic?}{There are both existential and universal quantifiers, given by left and right adjoints.}
+\qaitem{Is the forgetful functor $\mathbf{Mon} \to \mathbf{Set}$ adjoint-bearing?}{Yes; it has a left adjoint (free monoid), no right adjoint.}
+\qaitem{Why no right adjoint to forgetful $\mathbf{Mon} \to \mathbf{Set}$?}{The forgetful doesn't preserve coproducts on the nose.}
+\qaitem{In a locally presentable category, what's the criterion for an adjoint?}{Limit preservation suffices.}
+\qaitem{What's the dual of GAFT for right adjoints?}{Cocomplete target, $L$ preserves colimits, plus dual solution-set condition.}
+\qaitem{Sheafification is an example of which theorem applied?}{SAFT.}
+\qaitem{Why is the AFT considered a deep theorem?}{It turns existence-of-adjoint into a checkable list of conditions, often the only practical route.}
+\qaitem{What's the central tool common to all the theorems?}{Comma categories with initial objects.}
+\qaitem{Final slogan?}{``Preserves all limits + smallness $\Rightarrow$ has a left adjoint.''}
 \end{qa}
 \end{exercisesbox}
 

@@ -431,36 +431,36 @@ without changing the categorical content.
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What is an adjunction, in one sentence?}{A natural bijection between $\mathrm{Hom}_\mathcal{D}(L A, B)$ and $\mathrm{Hom}_\mathcal{C}(A, R B)$.}
-\qa{Which is the left adjoint: $L$ or $R$?}{$L$. It appears on the left of the hom inside $\mathcal{D}$.}
-\qa{What does $L \dashv R$ mean?}{$L$ is left adjoint to $R$.}
-\qa{In ``free monoid --- forgetful,'' which is left?}{Free monoid is left; forgetful is right.}
-\qa{What is the unit of an adjunction?}{A natural transformation $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow R L$.}
-\qa{What is the counit?}{A natural transformation $\varepsilon : L R \Rightarrow \mathrm{Id}_\mathcal{D}$.}
-\qa{How does $\eta_A$ relate to $\mathrm{id}_{L(A)}$?}{Under the bijection, $\eta_A$ corresponds to $\mathrm{id}_{L(A)}$.}
-\qa{How does $\varepsilon_B$ relate to $\mathrm{id}_{R(B)}$?}{Under the inverse bijection, $\varepsilon_B$ corresponds to $\mathrm{id}_{R(B)}$.}
-\qa{What are the triangle identities?}{$(R \varepsilon)(\eta R) = \mathrm{id}_R$ and $(\varepsilon L)(L \eta) = \mathrm{id}_L$.}
-\qa{Why do we care about the triangle identities?}{They are the data-only form of the adjunction (no bijection needed).}
-\qa{Are adjoints unique?}{Yes, up to natural isomorphism.}
-\qa{What is the slogan for limits and adjoints?}{Right adjoints preserve limits; left adjoints preserve colimits. (RAPL/LAPC.)}
-\qa{If $R$ fails to preserve some limit, what can you conclude?}{$R$ has no left adjoint.}
-\qa{Why does the hom-set bijection imply RAPL?}{Apply $\mathrm{Hom}(A, -)$, which preserves limits; chase the bijection.}
-\qa{What is the prototype adjunction in $\mathbf{Set}$?}{Currying: $(- \times B) \dashv (-)^B$.}
-\qa{What is the tensor-hom adjunction in modules?}{$(- \otimes M) \dashv \mathrm{Hom}(M, -)$.}
-\qa{Quantifiers as adjoints to what?}{Adjoints to the pullback functor $f^*$: $\exists_f \dashv f^* \dashv \forall_f$.}
-\qa{What is an equivalence of categories?}{A pair $L \dashv R$ where both unit and counit are natural isomorphisms.}
-\qa{Why prefer equivalence to isomorphism of categories?}{Isomorphism is too strict; almost all ``sameness'' in CT is up to natural iso.}
-\qa{What is essential surjectivity?}{Every object in $\mathcal{D}$ is isomorphic to some $F(C)$.}
-\qa{When is $F$ an equivalence?}{When $F$ is fully faithful and essentially surjective.}
-\qa{What is a skeleton of a category?}{A subcategory with one object per isomorphism class.}
-\qa{Is every category equivalent to its skeleton?}{Yes.}
-\qa{Do adjunctions compose?}{Yes: $L \dashv R$ and $L' \dashv R'$ give $L' L \dashv R R'$.}
-\qa{Does the identity functor have an adjoint?}{Yes; it is adjoint to itself.}
-\qa{Can a functor have more than one left adjoint?}{Only up to natural isomorphism; there is essentially one.}
-\qa{Why is the unit ``the obvious'' inclusion in many examples?}{Because the unit corresponds to $\mathrm{id}_{L(A)}$, the most basic morphism on the freely built object.}
-\qa{What kind of functor is $\pi_0 : \mathbf{Top} \to \mathbf{Set}$?}{Not a right adjoint in the unenriched sense (it fails to preserve some products).}
-\qa{What is the practical use of recognizing an adjunction?}{You instantly get a wealth of preservation theorems and natural bijections.}
-\qa{What's the deeper meaning of $L \dashv R$?}{The construction $L$ \emph{represents} the same data as the checking $R$, viewed dually.}
+\qaitem{What is an adjunction, in one sentence?}{A natural bijection between $\mathrm{Hom}_\mathcal{D}(L A, B)$ and $\mathrm{Hom}_\mathcal{C}(A, R B)$.}
+\qaitem{Which is the left adjoint: $L$ or $R$?}{$L$. It appears on the left of the hom inside $\mathcal{D}$.}
+\qaitem{What does $L \dashv R$ mean?}{$L$ is left adjoint to $R$.}
+\qaitem{In ``free monoid --- forgetful,'' which is left?}{Free monoid is left; forgetful is right.}
+\qaitem{What is the unit of an adjunction?}{A natural transformation $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow R L$.}
+\qaitem{What is the counit?}{A natural transformation $\varepsilon : L R \Rightarrow \mathrm{Id}_\mathcal{D}$.}
+\qaitem{How does $\eta_A$ relate to $\mathrm{id}_{L(A)}$?}{Under the bijection, $\eta_A$ corresponds to $\mathrm{id}_{L(A)}$.}
+\qaitem{How does $\varepsilon_B$ relate to $\mathrm{id}_{R(B)}$?}{Under the inverse bijection, $\varepsilon_B$ corresponds to $\mathrm{id}_{R(B)}$.}
+\qaitem{What are the triangle identities?}{$(R \varepsilon)(\eta R) = \mathrm{id}_R$ and $(\varepsilon L)(L \eta) = \mathrm{id}_L$.}
+\qaitem{Why do we care about the triangle identities?}{They are the data-only form of the adjunction (no bijection needed).}
+\qaitem{Are adjoints unique?}{Yes, up to natural isomorphism.}
+\qaitem{What is the slogan for limits and adjoints?}{Right adjoints preserve limits; left adjoints preserve colimits. (RAPL/LAPC.)}
+\qaitem{If $R$ fails to preserve some limit, what can you conclude?}{$R$ has no left adjoint.}
+\qaitem{Why does the hom-set bijection imply RAPL?}{Apply $\mathrm{Hom}(A, -)$, which preserves limits; chase the bijection.}
+\qaitem{What is the prototype adjunction in $\mathbf{Set}$?}{Currying: $(- \times B) \dashv (-)^B$.}
+\qaitem{What is the tensor-hom adjunction in modules?}{$(- \otimes M) \dashv \mathrm{Hom}(M, -)$.}
+\qaitem{Quantifiers as adjoints to what?}{Adjoints to the pullback functor $f^*$: $\exists_f \dashv f^* \dashv \forall_f$.}
+\qaitem{What is an equivalence of categories?}{A pair $L \dashv R$ where both unit and counit are natural isomorphisms.}
+\qaitem{Why prefer equivalence to isomorphism of categories?}{Isomorphism is too strict; almost all ``sameness'' in CT is up to natural iso.}
+\qaitem{What is essential surjectivity?}{Every object in $\mathcal{D}$ is isomorphic to some $F(C)$.}
+\qaitem{When is $F$ an equivalence?}{When $F$ is fully faithful and essentially surjective.}
+\qaitem{What is a skeleton of a category?}{A subcategory with one object per isomorphism class.}
+\qaitem{Is every category equivalent to its skeleton?}{Yes.}
+\qaitem{Do adjunctions compose?}{Yes: $L \dashv R$ and $L' \dashv R'$ give $L' L \dashv R R'$.}
+\qaitem{Does the identity functor have an adjoint?}{Yes; it is adjoint to itself.}
+\qaitem{Can a functor have more than one left adjoint?}{Only up to natural isomorphism; there is essentially one.}
+\qaitem{Why is the unit ``the obvious'' inclusion in many examples?}{Because the unit corresponds to $\mathrm{id}_{L(A)}$, the most basic morphism on the freely built object.}
+\qaitem{What kind of functor is $\pi_0 : \mathbf{Top} \to \mathbf{Set}$?}{Not a right adjoint in the unenriched sense (it fails to preserve some products).}
+\qaitem{What is the practical use of recognizing an adjunction?}{You instantly get a wealth of preservation theorems and natural bijections.}
+\qaitem{What's the deeper meaning of $L \dashv R$?}{The construction $L$ \emph{represents} the same data as the checking $R$, viewed dually.}
 \end{qa}
 \end{exercisesbox}
 

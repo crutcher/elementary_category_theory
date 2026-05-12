@@ -656,36 +656,36 @@ Likewise for coproducts. We may therefore speak of ``the'' product and
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What does it mean for an object $X$ to be initial?}{There is exactly one morphism from $X$ to every object.}
-\qa{What does it mean for $X$ to be terminal?}{There is exactly one morphism from every object to $X$.}
-\qa{Is the empty category $\mathbf{0}$ initial or terminal in itself?}{Vacuously its own (trivial) initial object.}
-\qa{Which object is initial in $\mathbf{2}$?}{The object $0$ (source of the unique non-identity arrow).}
-\qa{Which is terminal in $\mathbf{2}$?}{The object $1$.}
-\qa{Can a category have no initial object?}{Yes.}
-\qa{Can a category have more than one initial object?}{Yes, but any two are uniquely isomorphic.}
-\qa{Why ``up to unique isomorphism''?}{The isomorphism between two initial objects is itself uniquely determined.}
-\qa{What is the standard notation for the unique morphism $\mathbf{0} \to A$?}{$!_A$, sometimes called ``the shriek to $A$.''}
-\qa{What is a zero object?}{An object that is both initial and terminal.}
-\qa{Given a zero object, what is the zero morphism $A \to B$?}{The composite $A \to \mathbf{0} \to B$ through the zero object.}
-\qa{What is the signature phrase for a universal property?}{``For every $X$ with such-and-such, there exists a unique $u$ such that some diagram commutes.''}
-\qa{What four pieces specify a universal property?}{The ambient category, the data, the competitors, and the uniqueness requirement.}
-\qa{When two objects satisfy the same universal property, how are they related?}{By a unique isomorphism.}
-\qa{Sketch the uniqueness argument.}{Get morphisms $u : U \to U'$ and $u' : U' \to U$ from each side's universal property; argue $u' \circ u$ and $u \circ u'$ must be identities.}
-\qa{Why does ``unique morphism $X \to X$'' force $u' \circ u = \mathrm{id}_X$?}{Because $\mathrm{id}_X$ also has the property, and there is only one such morphism.}
-\qa{What is a product $A \times B$?}{An object equipped with projections $\pi_1, \pi_2$ such that any $(f, g)$ pair factors uniquely through it.}
-\qa{What is the unique map $X \to A \times B$ induced by $f : X \to A$ and $g : X \to B$?}{$\langle f, g \rangle$, the pairing of $f$ and $g$.}
-\qa{Which equation does $\langle f, g \rangle$ satisfy?}{$\pi_1 \circ \langle f, g \rangle = f$ and $\pi_2 \circ \langle f, g \rangle = g$.}
-\qa{What is the coproduct $A + B$?}{An object equipped with inclusions $\iota_1, \iota_2$ such that any $(f, g)$ pair factors uniquely through it.}
-\qa{What is the unique map $A + B \to Y$ induced by $f : A \to Y$ and $g : B \to Y$?}{$[f, g]$, the cotuple of $f$ and $g$.}
-\qa{Which equation does $[f, g]$ satisfy?}{$[f, g] \circ \iota_1 = f$ and $[f, g] \circ \iota_2 = g$.}
-\qa{What is the relation between products and coproducts under duality?}{A coproduct in $\mathcal{C}$ is a product in $\mathcal{C}^{\mathrm{op}}$.}
-\qa{Why might a category fail to have products?}{Not enough morphisms to support pairings; or no candidate object exists.}
-\qa{In the recipe category, does $\mathrm{Chop} \times \mathrm{Saut\acute{e}}$ exist?}{Generally not; there's no object with the required pairing.}
-\qa{If a product exists, is it literally unique?}{No; unique up to unique isomorphism.}
-\qa{Why is ``unique up to unique iso'' good enough for everyday work?}{We pick a representative and use it; any other representative is interchangeable via the canonical iso.}
-\qa{What word captures all of products, coproducts, initial, and terminal?}{Universal property (or universal construction).}
-\qa{How is a universal property reframed in terms of representable functors?}{As a natural isomorphism between some functor and a hom-functor.}
-\qa{Why bother with universal properties when concrete constructions exist?}{They identify the \emph{essence} of the construction, free of arbitrary internal details.}
+\qaitem{What does it mean for an object $X$ to be initial?}{There is exactly one morphism from $X$ to every object.}
+\qaitem{What does it mean for $X$ to be terminal?}{There is exactly one morphism from every object to $X$.}
+\qaitem{Is the empty category $\mathbf{0}$ initial or terminal in itself?}{Vacuously its own (trivial) initial object.}
+\qaitem{Which object is initial in $\mathbf{2}$?}{The object $0$ (source of the unique non-identity arrow).}
+\qaitem{Which is terminal in $\mathbf{2}$?}{The object $1$.}
+\qaitem{Can a category have no initial object?}{Yes.}
+\qaitem{Can a category have more than one initial object?}{Yes, but any two are uniquely isomorphic.}
+\qaitem{Why ``up to unique isomorphism''?}{The isomorphism between two initial objects is itself uniquely determined.}
+\qaitem{What is the standard notation for the unique morphism $\mathbf{0} \to A$?}{$!_A$, sometimes called ``the shriek to $A$.''}
+\qaitem{What is a zero object?}{An object that is both initial and terminal.}
+\qaitem{Given a zero object, what is the zero morphism $A \to B$?}{The composite $A \to \mathbf{0} \to B$ through the zero object.}
+\qaitem{What is the signature phrase for a universal property?}{``For every $X$ with such-and-such, there exists a unique $u$ such that some diagram commutes.''}
+\qaitem{What four pieces specify a universal property?}{The ambient category, the data, the competitors, and the uniqueness requirement.}
+\qaitem{When two objects satisfy the same universal property, how are they related?}{By a unique isomorphism.}
+\qaitem{Sketch the uniqueness argument.}{Get morphisms $u : U \to U'$ and $u' : U' \to U$ from each side's universal property; argue $u' \circ u$ and $u \circ u'$ must be identities.}
+\qaitem{Why does ``unique morphism $X \to X$'' force $u' \circ u = \mathrm{id}_X$?}{Because $\mathrm{id}_X$ also has the property, and there is only one such morphism.}
+\qaitem{What is a product $A \times B$?}{An object equipped with projections $\pi_1, \pi_2$ such that any $(f, g)$ pair factors uniquely through it.}
+\qaitem{What is the unique map $X \to A \times B$ induced by $f : X \to A$ and $g : X \to B$?}{$\langle f, g \rangle$, the pairing of $f$ and $g$.}
+\qaitem{Which equation does $\langle f, g \rangle$ satisfy?}{$\pi_1 \circ \langle f, g \rangle = f$ and $\pi_2 \circ \langle f, g \rangle = g$.}
+\qaitem{What is the coproduct $A + B$?}{An object equipped with inclusions $\iota_1, \iota_2$ such that any $(f, g)$ pair factors uniquely through it.}
+\qaitem{What is the unique map $A + B \to Y$ induced by $f : A \to Y$ and $g : B \to Y$?}{$[f, g]$, the cotuple of $f$ and $g$.}
+\qaitem{Which equation does $[f, g]$ satisfy?}{$[f, g] \circ \iota_1 = f$ and $[f, g] \circ \iota_2 = g$.}
+\qaitem{What is the relation between products and coproducts under duality?}{A coproduct in $\mathcal{C}$ is a product in $\mathcal{C}^{\mathrm{op}}$.}
+\qaitem{Why might a category fail to have products?}{Not enough morphisms to support pairings; or no candidate object exists.}
+\qaitem{In the recipe category, does $\mathrm{Chop} \times \mathrm{Saut\acute{e}}$ exist?}{Generally not; there's no object with the required pairing.}
+\qaitem{If a product exists, is it literally unique?}{No; unique up to unique isomorphism.}
+\qaitem{Why is ``unique up to unique iso'' good enough for everyday work?}{We pick a representative and use it; any other representative is interchangeable via the canonical iso.}
+\qaitem{What word captures all of products, coproducts, initial, and terminal?}{Universal property (or universal construction).}
+\qaitem{How is a universal property reframed in terms of representable functors?}{As a natural isomorphism between some functor and a hom-functor.}
+\qaitem{Why bother with universal properties when concrete constructions exist?}{They identify the \emph{essence} of the construction, free of arbitrary internal details.}
 \end{qa}
 \end{exercisesbox}
 

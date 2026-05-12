@@ -560,36 +560,36 @@ canonical example.
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What is a functor, in one sentence?}{A structure-preserving map between categories.}
-\qa{What two pieces of data does a functor consist of?}{An action on objects, and an action on morphisms.}
-\qa{What two laws does a functor obey?}{It preserves identities, and it preserves composition.}
-\qa{Write the identity law for a functor $F$.}{$F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$.}
-\qa{Write the composition law.}{$F(g \circ f) = F(g) \circ F(f)$.}
-\qa{What goes wrong if a ``functor'' fails to preserve identities?}{It fails to be a functor. There is no rescue.}
-\qa{Is every function on objects extendable to a functor?}{No. You must also have a well-defined action on morphisms that respects the laws.}
-\qa{What is the identity functor $\mathrm{Id}_\mathcal{C}$?}{The functor that sends every object and every morphism to itself.}
-\qa{What is a constant functor?}{One that sends every object to a fixed $X$ and every morphism to $\mathrm{id}_X$.}
-\qa{Is a constant functor really a functor?}{Yes. Check: it sends $\mathrm{id}_A$ to $\mathrm{id}_X$ and $g \circ f$ to $\mathrm{id}_X \circ \mathrm{id}_X = \mathrm{id}_X$.}
-\qa{What does a functor out of $\mathbf{1}$ pick out?}{A single object in the target category.}
-\qa{What does a functor out of $\mathbf{2}$ pick out?}{A single morphism (with chosen source and target) in the target category.}
-\qa{What does a functor out of a discrete category on $S$ pick out?}{A choice of one object for each element of $S$.}
-\qa{What is a faithful functor?}{One that is injective on each hom-set.}
-\qa{What is a full functor?}{One that is surjective on each hom-set.}
-\qa{What is a fully faithful functor?}{One that is bijective on each hom-set --- both full and faithful.}
-\qa{Can a fully faithful functor be non-injective on objects?}{Yes. Equivalences allow that.}
-\qa{What is a contravariant functor?}{One that reverses the direction of morphisms: $F(g \circ f) = F(f) \circ F(g)$.}
-\qa{How can we recast a contravariant functor as a covariant one?}{As a (covariant) functor out of $\mathcal{C}^{\mathrm{op}}$.}
-\qa{What is the opposite functor $F^{\mathrm{op}}$?}{The same functor regarded as $F^{\mathrm{op}} : \mathcal{C}^{\mathrm{op}} \to \mathcal{D}^{\mathrm{op}}$.}
-\qa{If $F$ is a functor and $f$ is an isomorphism, is $F(f)$ an isomorphism?}{Yes. Apply $F$ to both $g \circ f = \mathrm{id}$ and $f \circ g = \mathrm{id}$.}
-\qa{What is the formula for $F(f^{-1})$?}{$F(f^{-1}) = F(f)^{-1}$. Functors preserve inverses.}
-\qa{Why do functors preserve isomorphisms?}{Because they preserve identities and composition --- and isomorphism is defined using both.}
-\qa{What is the category $\mathbf{Cat}$?}{The category whose objects are (small) categories and whose morphisms are functors.}
-\qa{In $\mathbf{Cat}$, what is composition of functors?}{Sequential application: $(G \circ F)(X) = G(F(X))$, and similarly on morphisms.}
-\qa{What is the identity morphism on $\mathcal{C}$ in $\mathbf{Cat}$?}{The identity functor $\mathrm{Id}_\mathcal{C}$.}
-\qa{Why must $\mathbf{Cat}$ restrict to small categories?}{To avoid set-theoretic foundation problems with collecting all categories.}
-\qa{What is a bifunctor?}{A functor of two arguments, often $F : \mathcal{C} \times \mathcal{D} \to \mathcal{E}$.}
-\qa{If $F$ is faithful, can $F$ send distinct objects to the same image?}{Yes. Faithfulness is about morphisms, not objects.}
-\qa{Why is the functor-axiom $F(g \circ f) = F(g) \circ F(f)$ the heart of the definition?}{It is what makes diagrams in $\mathcal{C}$ become diagrams in $\mathcal{D}$, preserving commutativity.}
+\qaitem{What is a functor, in one sentence?}{A structure-preserving map between categories.}
+\qaitem{What two pieces of data does a functor consist of?}{An action on objects, and an action on morphisms.}
+\qaitem{What two laws does a functor obey?}{It preserves identities, and it preserves composition.}
+\qaitem{Write the identity law for a functor $F$.}{$F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$.}
+\qaitem{Write the composition law.}{$F(g \circ f) = F(g) \circ F(f)$.}
+\qaitem{What goes wrong if a ``functor'' fails to preserve identities?}{It fails to be a functor. There is no rescue.}
+\qaitem{Is every function on objects extendable to a functor?}{No. You must also have a well-defined action on morphisms that respects the laws.}
+\qaitem{What is the identity functor $\mathrm{Id}_\mathcal{C}$?}{The functor that sends every object and every morphism to itself.}
+\qaitem{What is a constant functor?}{One that sends every object to a fixed $X$ and every morphism to $\mathrm{id}_X$.}
+\qaitem{Is a constant functor really a functor?}{Yes. Check: it sends $\mathrm{id}_A$ to $\mathrm{id}_X$ and $g \circ f$ to $\mathrm{id}_X \circ \mathrm{id}_X = \mathrm{id}_X$.}
+\qaitem{What does a functor out of $\mathbf{1}$ pick out?}{A single object in the target category.}
+\qaitem{What does a functor out of $\mathbf{2}$ pick out?}{A single morphism (with chosen source and target) in the target category.}
+\qaitem{What does a functor out of a discrete category on $S$ pick out?}{A choice of one object for each element of $S$.}
+\qaitem{What is a faithful functor?}{One that is injective on each hom-set.}
+\qaitem{What is a full functor?}{One that is surjective on each hom-set.}
+\qaitem{What is a fully faithful functor?}{One that is bijective on each hom-set --- both full and faithful.}
+\qaitem{Can a fully faithful functor be non-injective on objects?}{Yes. Equivalences allow that.}
+\qaitem{What is a contravariant functor?}{One that reverses the direction of morphisms: $F(g \circ f) = F(f) \circ F(g)$.}
+\qaitem{How can we recast a contravariant functor as a covariant one?}{As a (covariant) functor out of $\mathcal{C}^{\mathrm{op}}$.}
+\qaitem{What is the opposite functor $F^{\mathrm{op}}$?}{The same functor regarded as $F^{\mathrm{op}} : \mathcal{C}^{\mathrm{op}} \to \mathcal{D}^{\mathrm{op}}$.}
+\qaitem{If $F$ is a functor and $f$ is an isomorphism, is $F(f)$ an isomorphism?}{Yes. Apply $F$ to both $g \circ f = \mathrm{id}$ and $f \circ g = \mathrm{id}$.}
+\qaitem{What is the formula for $F(f^{-1})$?}{$F(f^{-1}) = F(f)^{-1}$. Functors preserve inverses.}
+\qaitem{Why do functors preserve isomorphisms?}{Because they preserve identities and composition --- and isomorphism is defined using both.}
+\qaitem{What is the category $\mathbf{Cat}$?}{The category whose objects are (small) categories and whose morphisms are functors.}
+\qaitem{In $\mathbf{Cat}$, what is composition of functors?}{Sequential application: $(G \circ F)(X) = G(F(X))$, and similarly on morphisms.}
+\qaitem{What is the identity morphism on $\mathcal{C}$ in $\mathbf{Cat}$?}{The identity functor $\mathrm{Id}_\mathcal{C}$.}
+\qaitem{Why must $\mathbf{Cat}$ restrict to small categories?}{To avoid set-theoretic foundation problems with collecting all categories.}
+\qaitem{What is a bifunctor?}{A functor of two arguments, often $F : \mathcal{C} \times \mathcal{D} \to \mathcal{E}$.}
+\qaitem{If $F$ is faithful, can $F$ send distinct objects to the same image?}{Yes. Faithfulness is about morphisms, not objects.}
+\qaitem{Why is the functor-axiom $F(g \circ f) = F(g) \circ F(f)$ the heart of the definition?}{It is what makes diagrams in $\mathcal{C}$ become diagrams in $\mathcal{D}$, preserving commutativity.}
 \end{qa}
 \end{exercisesbox}
 

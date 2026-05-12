@@ -410,37 +410,37 @@ This is the categorical version of nondeterministic computation.
 
 \begin{exercisesbox}
 \begin{qa}
-\qa{What is a monad on $\mathcal{C}$?}{A triple $(T, \eta, \mu)$ with $T$ an endofunctor, $\eta : \mathrm{Id} \Rightarrow T$, $\mu : T^2 \Rightarrow T$, satisfying associativity and unit laws.}
-\qa{What is $\eta$ called?}{The unit (or ``return'').}
-\qa{What is $\mu$ called?}{The multiplication (or ``join'').}
-\qa{State the associativity law.}{$\mu \circ \mu T = \mu \circ T \mu$.}
-\qa{State the two unit laws.}{$\mu \circ \eta T = \mathrm{id}_T = \mu \circ T \eta$.}
-\qa{Which functor on $\mathbf{Set}$ gives the list monad?}{The free-monoid functor $X \mapsto X^*$.}
-\qa{What is the unit for the list monad?}{$x \mapsto [x]$.}
-\qa{What is the multiplication for the list monad?}{Concatenation of lists of lists.}
-\qa{What is the Maybe monad?}{$T(X) = X + \{*\}$ with $\eta$ the inclusion and $\mu$ the flattening of nested options.}
-\qa{What is the powerset monad?}{$T(X) = \mathcal{P}(X)$ with $\eta = \{-\}$ and $\mu = \bigcup$.}
-\qa{How does every adjunction give a monad?}{Set $T = R L$, $\eta$ = adjunction unit, $\mu = R \varepsilon L$.}
-\qa{Which adjunction gives the list monad?}{Free monoid (left) $\dashv$ Forgetful (right) on $\mathbf{Set} \rightleftarrows \mathbf{Mon}$.}
-\qa{What is a $T$-algebra?}{A pair $(X, \alpha : T X \to X)$ satisfying $\alpha \circ \eta = \mathrm{id}$ and $\alpha \circ \mu = \alpha \circ T \alpha$.}
-\qa{What are the algebras for the list monad?}{Monoids.}
-\qa{What are the algebras for the powerset monad?}{Complete sup-semilattices.}
-\qa{What is a morphism of $T$-algebras?}{A morphism $f$ of underlying objects such that $f \circ \alpha = \beta \circ T f$.}
-\qa{What is the Eilenberg--Moore category?}{The category of $T$-algebras and algebra morphisms, denoted $\mathcal{C}^T$.}
-\qa{What is the free $T$-algebra on $X$?}{$(T(X), \mu_X)$, the algebra given by the monad's own multiplication.}
-\qa{What adjunction does EM provide?}{$F^T \dashv U^T : \mathcal{C}^T \to \mathcal{C}$, where $U^T$ forgets the structure and $F^T$ is the free algebra.}
-\qa{What monad does $F^T \dashv U^T$ produce?}{The original $T$.}
-\qa{What is the Kleisli category $\mathcal{C}_T$?}{Same objects as $\mathcal{C}$; morphisms $X \to Y$ are morphisms $X \to T(Y)$.}
-\qa{What is Kleisli composition?}{$g *_K f = \mu \circ T(g) \circ f$.}
-\qa{What is the identity in the Kleisli category?}{$\eta_X : X \to T(X)$.}
-\qa{What is the role of $\eta$ in the Kleisli category?}{The identity morphism on each object.}
-\qa{How does EM compare to Kleisli?}{EM is the terminal (largest) adjunction giving $T$; Kleisli is the initial (smallest).}
-\qa{Is every monad induced by some adjunction?}{Yes, via either EM or Kleisli.}
-\qa{What is a comonad?}{The dual of a monad: $(W, \varepsilon, \delta)$ with $\varepsilon : W \Rightarrow \mathrm{Id}$, $\delta : W \Rightarrow W^2$.}
-\qa{Slogan: ``A monad is a monoid in \ldots''?}{``\ldots\ the category of endofunctors with composition as tensor.''}
-\qa{What does monadicity mean?}{The original adjunction is equivalent to its EM adjunction.}
-\qa{Why care about Kleisli in computer science?}{Kleisli composition formalizes ``programs with effects''; bind in Haskell is Kleisli composition.}
-\qa{What is the trivial monad?}{The identity functor with $\eta = \mu = \mathrm{id}$.}
+\qaitem{What is a monad on $\mathcal{C}$?}{A triple $(T, \eta, \mu)$ with $T$ an endofunctor, $\eta : \mathrm{Id} \Rightarrow T$, $\mu : T^2 \Rightarrow T$, satisfying associativity and unit laws.}
+\qaitem{What is $\eta$ called?}{The unit (or ``return'').}
+\qaitem{What is $\mu$ called?}{The multiplication (or ``join'').}
+\qaitem{State the associativity law.}{$\mu \circ \mu T = \mu \circ T \mu$.}
+\qaitem{State the two unit laws.}{$\mu \circ \eta T = \mathrm{id}_T = \mu \circ T \eta$.}
+\qaitem{Which functor on $\mathbf{Set}$ gives the list monad?}{The free-monoid functor $X \mapsto X^*$.}
+\qaitem{What is the unit for the list monad?}{$x \mapsto [x]$.}
+\qaitem{What is the multiplication for the list monad?}{Concatenation of lists of lists.}
+\qaitem{What is the Maybe monad?}{$T(X) = X + \{*\}$ with $\eta$ the inclusion and $\mu$ the flattening of nested options.}
+\qaitem{What is the powerset monad?}{$T(X) = \mathcal{P}(X)$ with $\eta = \{-\}$ and $\mu = \bigcup$.}
+\qaitem{How does every adjunction give a monad?}{Set $T = R L$, $\eta$ = adjunction unit, $\mu = R \varepsilon L$.}
+\qaitem{Which adjunction gives the list monad?}{Free monoid (left) $\dashv$ Forgetful (right) on $\mathbf{Set} \rightleftarrows \mathbf{Mon}$.}
+\qaitem{What is a $T$-algebra?}{A pair $(X, \alpha : T X \to X)$ satisfying $\alpha \circ \eta = \mathrm{id}$ and $\alpha \circ \mu = \alpha \circ T \alpha$.}
+\qaitem{What are the algebras for the list monad?}{Monoids.}
+\qaitem{What are the algebras for the powerset monad?}{Complete sup-semilattices.}
+\qaitem{What is a morphism of $T$-algebras?}{A morphism $f$ of underlying objects such that $f \circ \alpha = \beta \circ T f$.}
+\qaitem{What is the Eilenberg--Moore category?}{The category of $T$-algebras and algebra morphisms, denoted $\mathcal{C}^T$.}
+\qaitem{What is the free $T$-algebra on $X$?}{$(T(X), \mu_X)$, the algebra given by the monad's own multiplication.}
+\qaitem{What adjunction does EM provide?}{$F^T \dashv U^T : \mathcal{C}^T \to \mathcal{C}$, where $U^T$ forgets the structure and $F^T$ is the free algebra.}
+\qaitem{What monad does $F^T \dashv U^T$ produce?}{The original $T$.}
+\qaitem{What is the Kleisli category $\mathcal{C}_T$?}{Same objects as $\mathcal{C}$; morphisms $X \to Y$ are morphisms $X \to T(Y)$.}
+\qaitem{What is Kleisli composition?}{$g *_K f = \mu \circ T(g) \circ f$.}
+\qaitem{What is the identity in the Kleisli category?}{$\eta_X : X \to T(X)$.}
+\qaitem{What is the role of $\eta$ in the Kleisli category?}{The identity morphism on each object.}
+\qaitem{How does EM compare to Kleisli?}{EM is the terminal (largest) adjunction giving $T$; Kleisli is the initial (smallest).}
+\qaitem{Is every monad induced by some adjunction?}{Yes, via either EM or Kleisli.}
+\qaitem{What is a comonad?}{The dual of a monad: $(W, \varepsilon, \delta)$ with $\varepsilon : W \Rightarrow \mathrm{Id}$, $\delta : W \Rightarrow W^2$.}
+\qaitem{Slogan: ``A monad is a monoid in \ldots''?}{``\ldots\ the category of endofunctors with composition as tensor.''}
+\qaitem{What does monadicity mean?}{The original adjunction is equivalent to its EM adjunction.}
+\qaitem{Why care about Kleisli in computer science?}{Kleisli composition formalizes ``programs with effects''; bind in Haskell is Kleisli composition.}
+\qaitem{What is the trivial monad?}{The identity functor with $\eta = \mu = \mathrm{id}$.}
 \end{qa}
 \end{exercisesbox}
 
