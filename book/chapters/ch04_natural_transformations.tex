@@ -1,0 +1,628 @@
+\chapter{Natural Transformations}
+
+\begin{overviewbox}
+Chapter~3 built one layer of structure on top of categories: between any two
+categories there are functors, and these functors themselves form a category.
+
+This chapter adds a third layer. Between any two functors there are
+\emph{natural transformations} --- morphisms between morphisms. A natural
+transformation is a coordinated way of moving from one functor to another,
+where ``coordinated'' has a very precise meaning: a single commutative square
+must hold for every morphism in the source category.
+
+By the end of this chapter we will have built a three-level hierarchy:
+objects, morphisms, transformations between morphisms. Together with the
+functor categories that hold them, these three levels are the structural
+backbone of every result in the rest of the book.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{What a Natural Transformation Is}
+\label{sec:nat-trans}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: A Coordinated Family of Morphisms}
+
+Suppose we have two functors $F$ and $G$, both going from category
+$\mathcal{C}$ to category $\mathcal{D}$. They send each object $A \in
+\mathcal{C}$ to a (possibly different) object in $\mathcal{D}$. A natural
+transformation from $F$ to $G$ is a recipe that, at every object $A$ of
+$\mathcal{C}$, gives a morphism in $\mathcal{D}$ from $F(A)$ to $G(A)$.
+
+But these morphisms cannot be chosen independently. They must be
+\emph{coordinated} so that they agree with how $F$ and $G$ act on
+morphisms. That coordination requirement is the entire content of the
+definition.
+
+\subsection{Expanding: Two Functors, a Family of Bridges}
+
+\begin{example}{Two Recipes, One Translation}
+Suppose the recipe category $\mathcal{R}$ (Chop $\to$ Sauté $\to$ Add) maps
+to the approval chain $\mathcal{A}$ (Request $\to$ Approved $\to$ Final) in
+two different ways:
+\begin{itemize}
+  \item Functor $F$: every step maps to Request.
+  \item Functor $G$: Chop $\mapsto$ Request, Sauté $\mapsto$ Approved,
+        Add $\mapsto$ Final.
+\end{itemize}
+
+A natural transformation $\alpha : F \Rightarrow G$ supplies, for each recipe
+step $A$, a morphism in $\mathcal{A}$ from $F(A)$ to $G(A)$:
+\begin{align*}
+  \alpha_{\mathrm{Chop}} &: \mathrm{Request} \to \mathrm{Request} \\
+  \alpha_{\mathrm{Saut\acute{e}}} &: \mathrm{Request} \to \mathrm{Approved} \\
+  \alpha_{\mathrm{Add}}  &: \mathrm{Request} \to \mathrm{Final}
+\end{align*}
+
+In a thin category like $\mathcal{A}$, each of these is the unique morphism
+between its endpoints. The natural transformation $\alpha$ provides
+``advancement arrows'' that move from $F$'s constant Request view to $G$'s
+finer-grained view, one step at a time.
+\end{example}
+
+\begin{dialog}
+When I encounter $\alpha : F \Rightarrow G$, I picture two parallel functor
+arrows from $\mathcal{C}$ to $\mathcal{D}$ and a sheaf of small morphisms
+in $\mathcal{D}$ connecting their object-by-object outputs:
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=4em, row sep=0em]
+  \mathcal{C}
+    \arrow[r, bend left=40, "F"{name=U}]
+    \arrow[r, bend right=40, "G"{name=D, swap}]
+  & \mathcal{D}
+  \arrow[from=U, to=D, Rightarrow, "\alpha"]
+\end{tikzcd}
+\end{center}
+\medskip
+The double arrow $\Rightarrow$ is the visual signature of a natural
+transformation. It lives ``between'' two functors.
+\end{dialog}
+
+\subsection{Formalizing: The Naturality Condition}
+
+Let $F, G : \mathcal{C} \to \mathcal{D}$ be functors. A \term{natural
+transformation} $\alpha : F \Rightarrow G$ consists of:
+
+\begin{itemize}
+  \item For each object $A \in \mathrm{Ob}(\mathcal{C})$, a morphism
+        \(\alpha_A : F(A) \to G(A)\) in $\mathcal{D}$, called the
+        \term{component of $\alpha$ at $A$}.
+\end{itemize}
+
+Subject to the \term{naturality condition}: for every morphism
+$f : A \to B$ in $\mathcal{C}$, the following diagram commutes:
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=4em, row sep=3em]
+  F(A) \arrow[r, "\alpha_A"] \arrow[d, "F(f)"']
+  & G(A) \arrow[d, "G(f)"] \\
+  F(B) \arrow[r, "\alpha_B"']
+  & G(B)
+\end{tikzcd}
+\end{center}
+\medskip
+That is:
+\begin{equation*}
+  G(f) \circ \alpha_A \;=\; \alpha_B \circ F(f).
+\end{equation*}
+
+This square is called the \term{naturality square} at $f$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\alpha : F \Rightarrow G$ is read ``alpha, a natural transformation
+        from $F$ to $G$'' or ``$F$ goes to $G$ via $\alpha$.'' The double
+        arrow is often called \emph{double-arrow}, \emph{nat-arrow}, or
+        \emph{2-arrow}.
+  \item $\alpha_A$ is ``the component of $\alpha$ at $A$,'' or
+        ``alpha sub-$A$,'' or simply ``alpha at $A$.''
+  \item Some authors write $\alpha : F \to G$ when the context is clearly
+        functors. Either notation is standard.
+  \item The naturality square ``commutes'' or, less formally, ``is natural
+        in $A$'' (when we want to emphasize that this commutativity must hold
+        as $A$ varies).
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Verifying Naturality on Our Example}
+
+Return to $\alpha : F \Rightarrow G$ from the recipe example. For naturality
+to hold, every morphism $f : A \to B$ in $\mathcal{R}$ must produce a
+commutative square. Take $f : \mathrm{Chop} \to \mathrm{Saut\acute{e}}$.
+The square is:
+\begin{center}
+\begin{tikzcd}[column sep=5em, row sep=3em]
+  F(\mathrm{Chop}) = \mathrm{Request}
+    \arrow[r, "\alpha_{\mathrm{Chop}}"]
+    \arrow[d, "F(f) = \mathrm{id}_{\mathrm{Request}}"']
+  & G(\mathrm{Chop}) = \mathrm{Request}
+    \arrow[d, "G(f)"] \\
+  F(\mathrm{Saut\acute{e}}) = \mathrm{Request}
+    \arrow[r, "\alpha_{\mathrm{Saut\acute{e}}}"']
+  & G(\mathrm{Saut\acute{e}}) = \mathrm{Approved}
+\end{tikzcd}
+\end{center}
+Both paths from $\mathrm{Request}$ (top-left) to $\mathrm{Approved}$
+(bottom-right) compose to the unique morphism between those two objects in
+$\mathcal{A}$. The square commutes because $\mathcal{A}$ is thin --- there
+is only one possible composite, so there is nothing to fail. The other
+naturality squares (for $g$, $g \circ f$, and the identities) commute for
+the same reason.
+
+The natural transformation $\alpha$ is valid.
+
+\subsection{Simplifying: Naturality as One Equation}
+
+For every $f : A \to B$ in $\mathcal{C}$:
+\begin{equation*}
+  G(f) \circ \alpha_A \;=\; \alpha_B \circ F(f).
+\end{equation*}
+
+That equation, quantified over all $f$, is the entire definition of
+naturality. Everything else --- the components, the diagrams, the names ---
+is bookkeeping around this single equation.
+
+\subsection{Formally: Notation and Conventions}
+
+\formalnote{Notational summary}
+For $F, G : \mathcal{C} \to \mathcal{D}$ and $\alpha : F \Rightarrow G$:
+\begin{align*}
+  \alpha_A &: F(A) \to G(A)
+    && \text{(component at $A$)} \\
+  G(f) \circ \alpha_A &= \alpha_B \circ F(f)
+    && \text{(naturality at $f : A \to B$)}
+\end{align*}
+
+\formalnote{Identity natural transformation}
+For any functor $F : \mathcal{C} \to \mathcal{D}$, there is an identity
+natural transformation $\mathrm{id}_F : F \Rightarrow F$ whose components are
+the identities of $\mathcal{D}$:
+\begin{equation*}
+  (\mathrm{id}_F)_A \;=\; \mathrm{id}_{F(A)}.
+\end{equation*}
+Naturality is automatic: $F(f) \circ \mathrm{id}_{F(A)} = F(f) =
+\mathrm{id}_{F(B)} \circ F(f)$ by the unit laws.
+
+\formalnote{Components determine the transformation}
+A natural transformation is fully specified by its components together with
+the verification of naturality. Two natural transformations $\alpha, \beta :
+F \Rightarrow G$ are equal iff $\alpha_A = \beta_A$ for every $A$. There is
+no extra data beyond the components.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Vertical Composition}
+\label{sec:vertical-comp}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Stacking Transformations}
+
+If $\alpha : F \Rightarrow G$ takes us from $F$ to $G$, and $\beta : G
+\Rightarrow H$ takes us from $G$ to $H$, then doing $\alpha$ followed by
+$\beta$ should take us from $F$ to $H$. This composed transformation is
+denoted $\beta \cdot \alpha$ (or sometimes just $\beta \alpha$) and is called
+the \term{vertical composition}.
+
+It is called \emph{vertical} because in the standard diagram, we picture the
+two transformations stacked top-to-bottom, with the composed transformation
+running the full height.
+
+\subsection{Expanding: Stacking Components}
+
+\begin{center}
+\begin{tikzcd}[column sep=5em, row sep=0em]
+  \mathcal{C}
+    \arrow[r, bend left=60, "F"{name=F1}]
+    \arrow[r, "G"{name=G1, description}]
+    \arrow[r, bend right=60, "H"{name=H1, swap}]
+  & \mathcal{D}
+  \arrow[from=F1, to=G1, Rightarrow, "\alpha"]
+  \arrow[from=G1, to=H1, Rightarrow, "\beta"]
+\end{tikzcd}
+\end{center}
+
+At each object $A$ of $\mathcal{C}$, we have
+\begin{align*}
+  \alpha_A &: F(A) \to G(A), \\
+  \beta_A  &: G(A) \to H(A).
+\end{align*}
+These two morphisms compose in $\mathcal{D}$:
+\begin{equation*}
+  (\beta \cdot \alpha)_A \;\coloneqq\; \beta_A \circ \alpha_A
+  \;:\; F(A) \to H(A).
+\end{equation*}
+
+The component of the composed transformation at $A$ is the composite of
+the two original components at $A$.
+
+\subsection{Formalizing: Naturality of the Composite}
+
+We must check that $\beta \cdot \alpha$ is itself a natural transformation
+--- i.e., that its components $(\beta \cdot \alpha)_A$ satisfy the
+naturality condition. For any $f : A \to B$ in $\mathcal{C}$:
+\begin{align*}
+  H(f) \circ (\beta \cdot \alpha)_A
+    &= H(f) \circ \beta_A \circ \alpha_A
+       && \text{(definition of composite)} \\
+    &= \beta_B \circ G(f) \circ \alpha_A
+       && \text{(naturality of $\beta$ at $f$)} \\
+    &= \beta_B \circ \alpha_B \circ F(f)
+       && \text{(naturality of $\alpha$ at $f$)} \\
+    &= (\beta \cdot \alpha)_B \circ F(f)
+       && \text{(definition of composite)}.
+\end{align*}
+The two outer expressions equal, so the naturality square for
+$\beta \cdot \alpha$ at $f$ commutes. $\beta \cdot \alpha$ is a natural
+transformation.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\beta \cdot \alpha$ is ``beta vertical alpha'' or ``beta after
+        alpha'' or simply ``beta composed with alpha.''
+  \item The dot $\cdot$ is the conventional symbol for vertical composition.
+        Some authors drop it entirely and write $\beta \alpha$.
+  \item Order: $\beta \cdot \alpha$ does $\alpha$ first, then $\beta$ ---
+        right to left, matching morphism composition.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Associativity and Units}
+
+Vertical composition is associative: for $\alpha : F \Rightarrow G$,
+$\beta : G \Rightarrow H$, $\gamma : H \Rightarrow K$:
+\begin{equation*}
+  (\gamma \cdot \beta) \cdot \alpha \;=\; \gamma \cdot (\beta \cdot \alpha).
+\end{equation*}
+This follows componentwise from the associativity of composition in
+$\mathcal{D}$:
+\begin{align*}
+  ((\gamma \cdot \beta) \cdot \alpha)_A
+    &= (\gamma \cdot \beta)_A \circ \alpha_A \\
+    &= (\gamma_A \circ \beta_A) \circ \alpha_A \\
+    &= \gamma_A \circ (\beta_A \circ \alpha_A)
+       && \text{(associativity in $\mathcal{D}$)} \\
+    &= \gamma_A \circ (\beta \cdot \alpha)_A \\
+    &= (\gamma \cdot (\beta \cdot \alpha))_A.
+\end{align*}
+
+Identity transformations are units for vertical composition:
+\begin{equation*}
+  \alpha \cdot \mathrm{id}_F \;=\; \alpha
+  \;=\; \mathrm{id}_G \cdot \alpha
+  \qquad \text{for } \alpha : F \Rightarrow G.
+\end{equation*}
+
+\subsection{Simplifying: A Familiar Pattern}
+
+We have:
+\begin{itemize}
+  \item Objects: functors $F, G, H, \ldots$ all $\mathcal{C} \to \mathcal{D}$.
+  \item Morphisms: natural transformations $\alpha : F \Rightarrow G$.
+  \item Composition: vertical composition $\beta \cdot \alpha$, associative.
+  \item Identity: $\mathrm{id}_F : F \Rightarrow F$, neutral.
+\end{itemize}
+
+The pattern is exactly that of a category. We name the resulting category in
+the next section.
+
+\subsection{Formally: Componentwise Verification Pattern}
+
+\formalnote{The componentwise pattern}
+Most facts about natural transformations are proved by ``checking
+componentwise'': reduce an equation between natural transformations to an
+equation between their components at each object, then verify the latter
+using the rules of the target category $\mathcal{D}$. Naturality of the
+candidate composite or identity is then verified separately.
+
+The proof above of associativity is a paradigmatic example. The reader
+should expect to recognize this pattern often.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Functor Categories}
+\label{sec:functor-cats}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Functors as Objects}
+
+Take any two categories $\mathcal{C}$ and $\mathcal{D}$. The functors from
+$\mathcal{C}$ to $\mathcal{D}$ are objects in a new category, whose
+morphisms are the natural transformations between them. This new category
+is called the \term{functor category} from $\mathcal{C}$ to $\mathcal{D}$.
+
+\subsection{Expanding: Putting the Pieces Together}
+
+We have already collected the ingredients in the previous section. We name
+them once more, now framed as a category:
+
+\begin{itemize}
+  \item \textbf{Objects}: functors $F : \mathcal{C} \to \mathcal{D}$.
+  \item \textbf{Morphisms}: natural transformations $\alpha : F \Rightarrow G$
+        between such functors.
+  \item \textbf{Composition}: vertical composition $\beta \cdot \alpha$.
+  \item \textbf{Identity}: identity natural transformation $\mathrm{id}_F$.
+\end{itemize}
+
+The axioms have been verified:
+\begin{align*}
+  (\gamma \cdot \beta) \cdot \alpha
+    &= \gamma \cdot (\beta \cdot \alpha)
+    && \text{(associativity)} \\
+  \alpha \cdot \mathrm{id}_F
+    &= \alpha
+    = \mathrm{id}_G \cdot \alpha
+    && \text{(unit laws)}.
+\end{align*}
+
+This is a category.
+
+\subsection{Formalizing: Notation}
+
+The functor category from $\mathcal{C}$ to $\mathcal{D}$ is denoted in
+several equivalent ways:
+\begin{equation*}
+  [\mathcal{C}, \mathcal{D}]
+  \;=\; \mathcal{D}^{\mathcal{C}}
+  \;=\; \mathrm{Fun}(\mathcal{C}, \mathcal{D}).
+\end{equation*}
+
+\begin{howtosay}
+\begin{itemize}
+  \item $[\mathcal{C}, \mathcal{D}]$ — ``the functor category from
+        $\mathcal{C}$ to $\mathcal{D}$,'' or ``brackets $\mathcal{C}$,
+        $\mathcal{D}$.'' Common in modern texts.
+  \item $\mathcal{D}^{\mathcal{C}}$ — ``$\mathcal{D}$ to the $\mathcal{C}$''
+        or ``$\mathcal{D}$ exponential $\mathcal{C}$.'' This notation
+        suggests an analogy with exponentiation that becomes precise once
+        we have products.
+  \item $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$ — ``Fun of $\mathcal{C}$,
+        $\mathcal{D}$'' or simply ``the functors from $\mathcal{C}$ to
+        $\mathcal{D}$.''
+\end{itemize}
+This book uses $[\mathcal{C}, \mathcal{D}]$ by default and falls back to
+$\mathcal{D}^{\mathcal{C}}$ when the exponential analogy is the point.
+\end{howtosay}
+
+\subsection{Reorganizing: A Familiar Example}
+
+The category $[\mathbf{1}, \mathcal{C}]$ has:
+\begin{itemize}
+  \item Objects: functors from $\mathbf{1}$ to $\mathcal{C}$, which (we
+        showed in \S3.2) correspond exactly to objects of $\mathcal{C}$.
+  \item Morphisms: natural transformations between such functors. A natural
+        transformation between two such functors $F$ and $G$, picking out
+        objects $A = F(*)$ and $B = G(*)$, has one component
+        $\alpha_* : A \to B$. Naturality at $\mathrm{id}_*$ is automatic.
+\end{itemize}
+
+So $[\mathbf{1}, \mathcal{C}]$ is essentially the same as $\mathcal{C}$
+itself --- objects are objects of $\mathcal{C}$, morphisms are morphisms of
+$\mathcal{C}$. This is our first ``equivalence of categories,'' though we
+have not yet defined that term precisely. It will become precise in a later
+chapter.
+
+\subsection{Simplifying: The Exponential Notation}
+
+\begin{equation*}
+  \mathcal{D}^{\mathcal{C}}
+  \;=\; \text{the category whose objects are functors}\; \mathcal{C} \to \mathcal{D}.
+\end{equation*}
+
+\subsection{Formally: Functor Categories Are Categories}
+
+\formalnote{Existence}
+For any (small) $\mathcal{C}$ and any $\mathcal{D}$, the functor category
+$[\mathcal{C}, \mathcal{D}]$ exists and is itself a category.
+
+\formalnote{Size considerations}
+If $\mathcal{C}$ is small and $\mathcal{D}$ is locally small, then
+$[\mathcal{C}, \mathcal{D}]$ is locally small. If both are small,
+$[\mathcal{C}, \mathcal{D}]$ is small.
+
+\formalnote{Why this matters}
+Functor categories are the natural setting for many results that follow.
+The Yoneda lemma, presheaves, sheaves, and most universal constructions
+either live inside a functor category or are characterized in terms of one.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Natural Isomorphism}
+\label{sec:nat-iso}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: When Two Functors Are ``the Same''}
+
+In Chapter~2 we said two objects $A$ and $B$ of a category are
+\emph{isomorphic} when there is an invertible morphism between them. The
+same idea, applied to the functor category $[\mathcal{C}, \mathcal{D}]$,
+gives a notion of two \emph{functors} being isomorphic. Two functors $F$ and
+$G$ are \emph{naturally isomorphic} when there is an invertible natural
+transformation between them.
+
+A natural isomorphism is just an isomorphism in a functor category, no more,
+no less. But because functors carry so much structure, this is one of the
+most useful notions in the entire subject.
+
+\subsection{Expanding: Componentwise Invertibility}
+
+A natural transformation $\alpha : F \Rightarrow G$ has an inverse
+$\alpha^{-1} : G \Rightarrow F$ exactly when there is a natural
+transformation in the other direction such that the two vertical composites
+are identity natural transformations:
+\begin{align*}
+  \alpha^{-1} \cdot \alpha &= \mathrm{id}_F, \\
+  \alpha \cdot \alpha^{-1} &= \mathrm{id}_G.
+\end{align*}
+
+By the componentwise pattern, these equations hold iff for every $A$:
+\begin{align*}
+  (\alpha^{-1})_A \circ \alpha_A &= \mathrm{id}_{F(A)}, \\
+  \alpha_A \circ (\alpha^{-1})_A &= \mathrm{id}_{G(A)}.
+\end{align*}
+
+So $\alpha$ is a natural isomorphism iff every component $\alpha_A$ is an
+isomorphism in $\mathcal{D}$, with $(\alpha^{-1})_A = (\alpha_A)^{-1}$.
+
+\subsection{Formalizing: Definition and Notation}
+
+A natural transformation $\alpha : F \Rightarrow G$ is a \term{natural
+isomorphism} if there exists a natural transformation $\alpha^{-1} :
+G \Rightarrow F$ with $\alpha^{-1} \cdot \alpha = \mathrm{id}_F$ and
+$\alpha \cdot \alpha^{-1} = \mathrm{id}_G$.
+
+Equivalently: $\alpha$ is a natural isomorphism iff every component
+$\alpha_A : F(A) \to G(A)$ is an isomorphism in $\mathcal{D}$.
+
+Two functors $F$ and $G$ are \term{naturally isomorphic}, written
+$F \cong G$, if there is a natural isomorphism between them.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $F \cong G$ — ``$F$ is naturally isomorphic to $G$,'' or ``$F$ and
+        $G$ are naturally isomorphic,'' or (in informal speech) ``$F$ and
+        $G$ are the same up to natural isomorphism.''
+  \item The double arrow with a tilde, $F \xRightarrow{\sim} G$ or
+        $F \overset{\sim}{\Rightarrow} G$, indicates that the natural
+        transformation $\alpha$ is a natural isomorphism. Reads as
+        ``alpha is a natural iso from $F$ to $G$.''
+  \item Some authors say ``isomorphic'' (without ``naturally'') when the
+        context is clear that the isomorphism is in a functor category.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Naturality of the Inverse Is Automatic}
+
+It is worth checking explicitly that if $\alpha$ has componentwise inverses
+$(\alpha_A)^{-1}$ in $\mathcal{D}$, then the family of inverses is itself a
+natural transformation. We verify the naturality square for the candidate
+inverse:
+\begin{align*}
+  F(f) \circ (\alpha_A)^{-1}
+    &= (\alpha_B)^{-1} \circ \alpha_B \circ F(f) \circ (\alpha_A)^{-1}
+       && \text{(inserting identity)} \\
+    &= (\alpha_B)^{-1} \circ G(f) \circ \alpha_A \circ (\alpha_A)^{-1}
+       && \text{(naturality of $\alpha$)} \\
+    &= (\alpha_B)^{-1} \circ G(f)
+       && \text{(inverse cancels)}.
+\end{align*}
+The outer equality is precisely the naturality square for the inverse at
+$f : A \to B$. So having componentwise inverses suffices --- the naturality
+of the inverse comes for free.
+
+\subsection{Simplifying: Three Equivalent Statements}
+
+The following are equivalent for $\alpha : F \Rightarrow G$:
+\begin{align*}
+  &\text{(i)} \quad \alpha \text{ is an isomorphism in } [\mathcal{C}, \mathcal{D}]. \\
+  &\text{(ii)} \quad \text{there exists } \alpha^{-1} \text{ with }
+    \alpha^{-1} \cdot \alpha = \mathrm{id}_F \text{ and }
+    \alpha \cdot \alpha^{-1} = \mathrm{id}_G. \\
+  &\text{(iii)} \quad \text{every component } \alpha_A \text{ is an isomorphism in } \mathcal{D}.
+\end{align*}
+
+The third is by far the most useful test: to check a natural isomorphism,
+check that every component is an isomorphism in the target category.
+
+\subsection{Formally: Natural Isomorphism in Practice}
+
+\formalnote{Natural vs.\ unnatural isomorphism}
+Sometimes one can find isomorphisms $F(A) \cong G(A)$ for every object
+$A$, but no single choice of isomorphisms that is natural in $A$. In that
+case $F$ and $G$ are \emph{not} naturally isomorphic, even though they are
+``pointwise isomorphic.'' Naturality forces the family of isomorphisms to
+cohere with morphisms.
+
+This distinction is one of the historical motivations for the entire
+subject: Eilenberg and Mac~Lane introduced natural transformations
+precisely to formalize ``natural'' versus ``arbitrary'' choices.
+
+\formalnote{Functor categories have isomorphism}
+Just as in any category, ``naturally isomorphic'' is an equivalence
+relation on the objects of $[\mathcal{C}, \mathcal{D}]$ (the functors). The
+proof is the same proof as for ordinary isomorphism --- it works in any
+category, and the functor category is no exception.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+A \textbf{natural transformation} $\alpha : F \Rightarrow G$ between two
+parallel functors $F, G : \mathcal{C} \to \mathcal{D}$ consists of a
+component $\alpha_A : F(A) \to G(A)$ for each object $A$, such that for
+every morphism $f : A \to B$ in $\mathcal{C}$, the naturality square
+commutes:
+\begin{equation*}
+  G(f) \circ \alpha_A \;=\; \alpha_B \circ F(f).
+\end{equation*}
+
+\textbf{Vertical composition}: $(\beta \cdot \alpha)_A = \beta_A \circ
+\alpha_A$. Associative; identity natural transformations are units.
+
+\textbf{Functor categories}: $[\mathcal{C}, \mathcal{D}]$ (also written
+$\mathcal{D}^{\mathcal{C}}$) has functors as objects and natural
+transformations as morphisms.
+
+\textbf{Natural isomorphism} $F \cong G$: an isomorphism in
+$[\mathcal{C}, \mathcal{D}]$, equivalently a natural transformation whose
+every component is an isomorphism in $\mathcal{D}$.
+
+\medskip
+\textbf{The three levels:}
+\begin{enumerate}
+  \item objects (live in a category),
+  \item morphisms (between objects in the same category),
+  \item natural transformations (between functors with the same source and
+        target categories).
+\end{enumerate}
+\end{summarybox}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Natural transformation.}\quad
+For $F, G : \mathcal{C} \to \mathcal{D}$, a natural transformation
+$\alpha : F \Rightarrow G$ assigns to each $A \in \mathcal{C}$ a morphism
+$\alpha_A : F(A) \to G(A)$ in $\mathcal{D}$, subject to:
+\begin{equation*}
+  G(f) \circ \alpha_A \;=\; \alpha_B \circ F(f)
+  \qquad \text{for all } f : A \to B \text{ in } \mathcal{C}.
+\end{equation*}
+
+\medskip
+\textbf{Identity.}\quad $\mathrm{id}_F : F \Rightarrow F$ has components
+$(\mathrm{id}_F)_A = \mathrm{id}_{F(A)}$.
+
+\medskip
+\textbf{Vertical composition.}\quad For $\alpha : F \Rightarrow G$ and
+$\beta : G \Rightarrow H$:
+\begin{equation*}
+  (\beta \cdot \alpha)_A \;=\; \beta_A \circ \alpha_A.
+\end{equation*}
+Associative; $\mathrm{id}_G \cdot \alpha = \alpha = \alpha \cdot \mathrm{id}_F$.
+
+\medskip
+\textbf{Functor category.}\quad
+$[\mathcal{C}, \mathcal{D}] = \mathcal{D}^{\mathcal{C}}$ has functors
+$\mathcal{C} \to \mathcal{D}$ as objects and natural transformations as
+morphisms.
+
+\medskip
+\textbf{Natural isomorphism.}\quad
+$\alpha : F \Rightarrow G$ is a natural isomorphism iff $\alpha$ is
+invertible in $[\mathcal{C}, \mathcal{D}]$ iff every component $\alpha_A$
+is an isomorphism in $\mathcal{D}$. Two functors $F$ and $G$ are naturally
+isomorphic, $F \cong G$, when such an $\alpha$ exists.
+
+\medskip
+\noindent\textit{Chapter~5 introduces universal properties, beginning with
+initial and terminal objects: the first examples of objects characterized
+by their relationship to everything else.}
+\end{formalrestatement}

@@ -7,10 +7,15 @@ feedback as the project evolves. See `history/` for the immutable record._
 
 ## Current state
 
-- **Branch:** `claude/category-theory-book-mdgQ3`
-- **Last build round:** v0.1 (initial scaffold)
-- **Chapters written:** Preface, Chapter 1 (Things and Arrows)
-- **Chapters planned:** 2+ (see roadmap below)
+- **Integration branch:** `main`
+- **Feature branch under review:** `feature/ch04-ch05-and-style`
+- **Last build round:** v0.11 (Ch 4, Ch 5, font→8pt, multi-line eqns,
+  howtosay callouts)
+- **Chapters written:** Preface, Chapter 1–5
+- **Chapters planned:** 6 (Limits and Colimits), 7 (Adjunctions),
+  8 (Monads), 9+ (Theorems and connections to other math)
+- **Merged PRs**: #1 (v0.7 cycle structure), #2 (v0.10 typography into rebuild branch),
+  #3 (undefined ref fix), #4 (v0.10 → main), #5 (Ch 2 + Ch 3)
 
 ---
 
@@ -78,55 +83,36 @@ Design rules:
 
 ---
 
-## Pending feedback to integrate
+## Style directives in effect (cumulative)
 
-### preamble.tex — paper size (v0.8)
-- Switch geometry from 6×9in to A4 (`a4paper`, 210mm×297mm).
-- Proposed margins: top/bottom 25mm, inner 30mm, outer 25mm.
-- No content changes needed.
+These apply going forward; existing chapters may be retrofitted in batches.
+
+- **Font size**: 8pt body via `extbook` document class (v0.11)
+- **Paper**: A4 with 25/25/30/25mm margins (v0.10)
+- **Multi-line equations**: use `align*` / `gather` for grouped equations
+  and multi-stage proofs (v0.11)
+- **"How to say this" callouts**: use `\sayit{...}` inline for single
+  readings, `howtosay` tcolorbox for notation with multiple conventions (v0.11)
+- **Cycle vocabulary**: Informally → Expanding → Formalizing → Reorganizing
+  → Simplifying → Formally; carried by subsection headings, no chip labels (v0.7/v0.9)
+- **Chapter bookends**: Overview at top, Summary + Formal Restatement at bottom
+- **Examples**: no borrowed mathematical examples until foundations are built
+- **Temperature notation**: Celsius (0°C, 20°C, 37°C, 100°C)
 
 ---
 
-## Implementation plan for next edit batch (COMPLETED in v0.7)
+## Pending: retrofit of Ch 1–3
 
-This batch requires a **new feature branch**. Changes are significant enough
-that the existing ch01 and preamble both need substantial revision.
+The v0.11 style directives (multi-line equations, `howtosay` callouts) apply
+to new content (Ch 4, Ch 5). The existing chapters (1, 2, 3, preface) contain
+material that would benefit from a retrofit pass:
 
-### preamble.tex changes
+- Multi-equation passages that could combine into `align*` blocks
+- Notation introductions (`f : A \to B`, `\mathrm{Hom}`, `\circ`, `\mathrm{id}_A`,
+  `g \circ f`, `\mathcal{C}^{\mathrm{op}}`, `F : \mathcal{C} \to \mathcal{D}`,
+  `F(g \circ f) = F(g) \circ F(f)`) that could carry `howtosay` callouts
 
-1. **Font size**: `\documentclass[11pt]` → `[10pt]` (v0.3)
-2. **New label commands** for the full cycle vocabulary:
-   - `\InformalLabel` (replaces or aliases `\CoreLabel`)
-   - `\ExpandingLabel` (replaces `\ExpOneLabel`)
-   - `\FormalizingLabel` (replaces `\ExpTwoLabel` or `\ExpThreeLabel`)
-   - `\ReorganizingLabel`
-   - `\SimplifyingLabel`
-   - `\FormallyLabel`
-   - Keep old aliases for backward compat during transition
-3. **New environments**:
-   - `overviewbox` — chapter intro bookend
-   - `formalrestatement` — chapter conclusion bookend (distinct from summarybox)
-
-### ch00_preface.tex changes
-
-- Update the description of the section structure to reflect the full cycle
-  (expand + compress) and the re-reader optimization goal.
-- Be explicit that the cycle is intentional and openly labeled.
-
-### ch01_things_and_arrows.tex changes
-
-1. **Temperature notation** (v0.2, v0.6): use Celsius —
-   `$0°\text{C}$`, `$20°\text{C}$`, `$37°\text{C}$`, `$100°\text{C}$`
-2. **Add chapter Overview** (intro bookend) — the informal statements of
-   objects, morphisms, composition, identity, commutative diagrams in plain
-   language, before the first section.
-3. **Retrofit sections** to use cycle labels and add compression/return steps:
-   - Each section that has 3+ expansion levels gets Reorganizing + Simplifying
-     steps before the Formally step.
-   - Sections with 1–2 expansion levels: add at minimum a Simplifying step.
-4. **Add Formal Restatement** (conclusion bookend) — the axioms of a category
-   stated in CT-idiomatic notation with commutative diagram form of the laws.
-5. **Keep the existing summary box** before the Formal Restatement.
+Defer to its own batch; do not mix retrofits with new-content writing.
 
 ---
 
@@ -136,9 +122,13 @@ that the existing ch01 and preamble both need substantial revision.
 - [ ] Tone calibration: Core/Informal sections accessible enough? Watch for
       reader feedback after next revision.
 - [ ] Composition notation: right-to-left ($g \circ f$) vs also introducing
-      left-to-right ($f ; g$)? Deferred to Chapter 3.
+      left-to-right ($f ; g$)? Decided in Ch 3: stayed with $g \circ f$.
+      Could revisit if a CS-oriented appendix is added.
 - [ ] Commutative diagrams §1.5 Exp 1: English/French example may be too
       abstract; consider a second concrete example in next revision.
+- [ ] Is 8pt too small for body text? (v0.11) — pending render check.
+- [ ] `howtosay` callout length calibration — currently varies by notation
+      richness. Watch for reader feedback.
 - [ ] Appendix: "How to read a diagram" — annotated worked example.
 - [ ] Appendix: Glossary.
 
@@ -151,8 +141,8 @@ that the existing ch01 and preamble both need substantial revision.
 | 1  | Things and Arrows | Objects, morphisms, composition, identity, commutative diagrams |
 | 2  | Categories | The full definition; small examples built from scratch |
 | 3  | Functors | Maps between categories |
-| 4  | Natural Transformations | Maps between functors |
-| 5  | Universal Properties | Optimal solutions; initial and terminal objects |
+| 4  | Natural Transformations | Maps between functors (v0.11) |
+| 5  | Universal Properties | Initial/terminal, the universal pattern, products/coproducts preview (v0.11) |
 | 6  | Limits and Colimits | Products, coproducts, equalizers, pullbacks |
 | 7  | Adjunctions | The fundamental relationship between functors |
 | 8  | Monads | Adjunctions that compose |
@@ -174,3 +164,8 @@ that the existing ch01 and preamble both need substantial revision.
 | 2026-05-11 | Chapter bookends (Overview + Restatement) when multiple cycles | User directive v0.5 |
 | 2026-05-11 | Summary box + Formal Restatement both kept | User directive v0.5 |
 | 2026-05-11 | Cycle openly acknowledged to reader | User directive v0.5 |
+| 2026-05-11 | A4 paper, chip labels removed (no-ops) | User directive v0.8/v0.9 |
+| 2026-05-12 | Font size 10pt → 8pt via `extbook` | User directive v0.11 |
+| 2026-05-12 | Multi-line equation environments preferred | User directive v0.11 |
+| 2026-05-12 | `howtosay` callouts / `\sayit` inline for notation pronunciation | User directive v0.11 |
+| 2026-05-12 | Defer retrofit of Ch 1–3 to its own batch | Avoid mixing retrofit with new-content writing |
