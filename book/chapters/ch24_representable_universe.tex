@@ -1,0 +1,432 @@
+% ch24_representable_universe.tex — Volume II Chapter 12
+
+\chapter{The Representable Universe}
+
+\begin{overviewbox}
+We have arrived at the synthesis chapter for Volume II. Over these two
+volumes we have built the entire toolkit of basic category theory:
+categories, functors, natural transformations, limits and colimits,
+adjunctions, monads, the Yoneda lemma, and the adjoint functor theorems.
+
+Looking back, every construction we have studied shares a single organizing
+principle: \term{representability}. A terminal object is a representable
+functor. A product is a representable functor. A limit is a representable
+functor. An adjunction is a natural isomorphism of hom-functors. A monad
+algebra is a representable structure on a category. The Yoneda lemma is
+the foundational fact about representability itself.
+
+This chapter makes that thread explicit. We trace representability through
+every major construction, state it as a uniform principle, and use the
+resulting picture to understand the \term{presheaf category}
+$[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ as the ``free completion''
+of $\mathcal{C}$ --- the universe in which all universal constructions live.
+
+We close with a preview of Volume III, where enriched categories, weighted
+limits, ends/coends, and the full 2-categorical language will allow us to
+state everything in maximum generality.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Representability Thread}
+\label{sec:rep-thread}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Unifying Principle}
+
+The \term{representability principle} says: to understand a construction
+in $\mathcal{C}$, express it as the object that \emph{represents} a
+certain functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.
+
+Concretely: a functor $F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ is
+\term{representable} if there exists $c \in \mathcal{C}$ and an isomorphism
+$F \cong \mathrm{Hom}(-, c)$.
+
+When $F$ is representable, the representing object $c$ is the
+\emph{universal solution}: every element of $F(a)$, for any $a$,
+corresponds to a unique morphism $a \to c$. The Yoneda lemma then says
+this correspondence is natural, and the representing object is unique up
+to unique isomorphism.
+
+\subsection{Terminal Objects}
+
+Let $\mathcal{C}$ be a category. Define $F : \mathcal{C}^{\mathrm{op}} \to
+\mathbf{Set}$ by $F(a) = \{*\}$ (the single-element set, constantly).
+
+$F$ is representable iff there exists $1 \in \mathcal{C}$ with
+$\mathrm{Hom}(-, 1) \cong F = \{*\}$, i.e., iff for every $a$ there is
+a unique map $a \to 1$. This is exactly the definition of a
+\term{terminal object}.
+
+\begin{quote}
+\emph{A terminal object is the representing object for the constant functor
+$a \mapsto \{*\}$.}
+\end{quote}
+
+\subsection{Products}
+
+Fix $b, c \in \mathcal{C}$. Define $F : \mathcal{C}^{\mathrm{op}} \to
+\mathbf{Set}$ by $F(a) = \mathrm{Hom}(a, b) \times \mathrm{Hom}(a, c)$
+(pairs of maps from $a$ to $b$ and $c$).
+
+$F$ is representable iff there exists $b \times c$ with
+$\mathrm{Hom}(-, b \times c) \cong \mathrm{Hom}(-, b) \times \mathrm{Hom}(-,c)$.
+By Yoneda, this means: for every $a$, a map $a \to b \times c$ is the
+same data as a pair of maps $a \to b$ and $a \to c$. This is the
+universal property of the \term{binary product}.
+
+\begin{quote}
+\emph{A binary product $b \times c$ represents the functor $a \mapsto
+\mathrm{Hom}(a, b) \times \mathrm{Hom}(a, c)$.}
+\end{quote}
+
+\subsection{Limits}
+
+Let $D : \mathcal{J} \to \mathcal{C}$ be a diagram. Define
+$F : \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$ by
+\[
+  F(a) = \mathrm{Cone}(a, D) = \text{set of cones from } a \text{ to } D.
+\]
+Explicitly, $F(a)$ is the set of families $(f_j : a \to Dj)_{j \in
+\mathcal{J}}$ compatible with the diagram.
+
+$F$ is representable iff there exists $\lim D$ with $\mathrm{Hom}(-,
+\lim D) \cong F$: a map $a \to \lim D$ corresponds to a compatible cone
+from $a$. This is the definition of the \term{limit}.
+
+\begin{quote}
+\emph{The limit $\lim D$ represents the functor of cones:
+$\mathrm{Hom}(-, \lim D) \cong \mathrm{Cone}(-, D)$.}
+\end{quote}
+
+\subsection{Adjunctions}
+
+An adjunction $L \dashv R$ is precisely a natural isomorphism:
+\[
+  \mathrm{Hom}_\mathcal{D}(L-, -) \;\cong\; \mathrm{Hom}_\mathcal{C}(-, R-)
+  \qquad : \mathcal{C}^{\mathrm{op}} \times \mathcal{D} \to \mathbf{Set}.
+\]
+Reading this: the functor $d \mapsto \mathrm{Hom}_\mathcal{D}(Lc, d)$ is
+naturally isomorphic to $d \mapsto \mathrm{Hom}_\mathcal{C}(c, Rd)$.
+
+For fixed $c \in \mathcal{C}$, the functor $\mathrm{Hom}_\mathcal{D}(Lc, -)$
+is representable (represented by $Lc$). The adjunction says that $Lc$
+also represents $\mathrm{Hom}_\mathcal{C}(c, R-)$: the left adjoint value
+$Lc$ is the representing object for the ``maps from $c$ that go through $R$.''
+
+\begin{quote}
+\emph{An adjunction is a statement that two families of representable
+functors are naturally isomorphic.}
+\end{quote}
+
+\subsection{Monads and Kan Extensions}
+
+A monad algebra $(a, h: Ta \to a)$ is the structure that makes $a$ a
+\emph{model} of the monad: the structure map $h$ is the data that
+represents the monad's action on $a$. In the language of Kan extensions
+(Volume III), a monad is itself a Kan extension --- the left Kan extension
+of the identity functor along itself --- and its algebras represent
+certain functors out of the Kleisli category.
+
+The pattern is: every piece of structure in category theory is captured
+by which functor it represents, or by what it is the left/right Kan
+extension of.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Yoneda Philosophy}
+\label{sec:yoneda-philosophy}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Yoneda Embedding}
+
+The \term{Yoneda embedding} is the functor
+\[
+  \mathcal{Y} : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}],
+  \qquad c \mapsto \mathrm{Hom}(-, c).
+\]
+The Yoneda lemma says this functor is \emph{fully faithful}: the natural
+bijection
+\[
+  \mathrm{Nat}(\mathrm{Hom}(-, c), \mathrm{Hom}(-, c')) \;\cong\;
+  \mathrm{Hom}(c, c')
+\]
+means that natural transformations between representable functors are
+exactly the morphisms between the representing objects. No information
+is lost; $\mathcal{C}$ embeds into the presheaf category without
+distortion.
+
+\subsection{The Presheaf Category as the Free World}
+
+The presheaf category $\hat{\mathcal{C}} = [\mathcal{C}^{\mathrm{op}},
+\mathbf{Set}]$ is, in a precise sense, the ``free cocompletion'' of
+$\mathcal{C}$:
+
+\begin{theorem}[Presheaf category as free cocompletion]
+Every presheaf $P \in \hat{\mathcal{C}}$ is a colimit of representables:
+\[
+  P \;\cong\; \mathrm{colim}_{(c, x) \in \int P}\, \mathrm{Hom}(-, c)
+\]
+where $\int P$ is the \term{category of elements} of $P$ (objects: pairs
+$(c \in \mathcal{C}, x \in Pc)$; morphisms: maps $f: c \to c'$ with
+$Pf(x') = x$).
+\end{theorem}
+
+This is the \term{co-Yoneda lemma}. It says: in the presheaf category,
+every object is ``built'' from representables by colimits. The
+representables $\mathrm{Hom}(-, c)$ are the building blocks; colimits are
+the glue.
+
+\begin{dialog}
+Think of $\hat{\mathcal{C}}$ as the ``free world'' where any diagram in
+$\mathcal{C}$ can be formally completed. If $\mathcal{C}$ is a category
+of geometric shapes (simplices, cubes, globes), then $\hat{\mathcal{C}}$
+is the category of spaces (simplicial sets, cubical sets, globular sets)
+built by gluing those shapes. Every space is a colimit of elementary
+shapes, and the elementary shapes are exactly the representables.
+\end{dialog}
+
+\subsection{The Universal Property of $\hat{\mathcal{C}}$}
+
+The Yoneda embedding $\mathcal{Y}: \mathcal{C} \to \hat{\mathcal{C}}$
+is universal among functors from $\mathcal{C}$ to cocomplete categories
+that preserve colimits:
+
+\begin{theorem}[Universal property of the presheaf category]
+For any cocomplete category $\mathcal{E}$ and functor $F: \mathcal{C}
+\to \mathcal{E}$, there is an essentially unique colimit-preserving functor
+$\bar F: \hat{\mathcal{C}} \to \mathcal{E}$ with $\bar F \circ \mathcal{Y}
+\cong F$. The functor $\bar F$ is given by left Kan extension:
+$\bar F(P) = \int^c P(c) \cdot Fc$ (the coend formula).
+\end{theorem}
+
+In this sense, $\hat{\mathcal{C}}$ is the \term{free cocompletion} of
+$\mathcal{C}$: it freely adds all colimits, and any functor from
+$\mathcal{C}$ extends uniquely to a colimit-preserving functor from
+$\hat{\mathcal{C}}$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Universe of Constructions}
+\label{sec:universe-table}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Everything as Representability or Adjointness}
+
+The following table summarizes the universal constructions of Volumes I
+and II as representability or adjointness statements. The pattern is
+uniform: every construction is either (a) the representing object for a
+canonically defined functor, or (b) one side of an adjunction that
+expresses a natural isomorphism of hom-functors.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{@{}>{\bfseries}p{3cm}p{4.5cm}p{5cm}@{}}
+\hline
+Construction & Functor Represented & Adjointness Statement \\
+\hline
+Terminal object $1$ &
+  $a \mapsto \{*\}$ (constant singleton) &
+  $\mathrm{Hom}(-, 1) \cong !$ \\
+Product $b \times c$ &
+  $a \mapsto \mathrm{Hom}(a,b) \times \mathrm{Hom}(a,c)$ &
+  $\Delta \dashv \times$ (diagonal left adjoint to product) \\
+Equalizer &
+  $a \mapsto \{f: a \to b \mid uf = vf\}$ &
+  Limit of the equalizer diagram \\
+Limit $\lim D$ &
+  $a \mapsto \mathrm{Cone}(a, D)$ &
+  $\Delta \dashv \lim$ (constant diagram left adjoint to limit) \\
+Left adjoint $Lc$ &
+  $d \mapsto \mathrm{Hom}(c, Rd)$ &
+  $\mathrm{Hom}(Lc, d) \cong \mathrm{Hom}(c, Rd)$ \\
+Free algebra $TX$ &
+  $A \mapsto \mathrm{Hom}(X, GA)$ in $\mathrm{Alg}(T)$ &
+  Free/forgetful adjunction \\
+Monad algebra $(a,h)$ &
+  Action of $T$ on $a$ via $h: Ta \to a$ &
+  EM category $\mathcal{C}^T$ as maximal resolution \\
+Sheafification $\mathrm{sh}(P)$ &
+  $\mathcal{F} \mapsto \mathrm{Hom}(P, i\mathcal{F})$ in $\mathbf{Sh}$ &
+  $\mathrm{sh} \dashv i$ (sheafification left adjoint to inclusion) \\
+Kan extension $\mathrm{Lan}_K F$ &
+  $G \mapsto \mathrm{Nat}(F, G \circ K)$ &
+  $\mathrm{Lan}_K \dashv (- \circ K)$ (precomposition) \\
+\hline
+\end{tabular}
+\end{center}
+
+\begin{dialog}
+The table makes a philosophical point: category theory does not invent
+new constructions --- it observes that constructions already present in
+mathematics share the same logical form. Each entry in the table is a
+well-known mathematical object; what category theory contributes is the
+observation that they all live in the same conceptual house.
+\end{dialog}
+
+\subsection{The Two Dual Perspectives}
+
+There are two dual ways to see this uniformity:
+
+\textbf{Limits / representability:} Every object representing a
+``right-hand'' hom-functor (cone functor, mapping-in functor) is a limit.
+Limits live in $\mathcal{C}$ and represent \emph{contravariant} functors
+$\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.
+
+\textbf{Colimits / corepresentability:} Every object representing a
+``left-hand'' hom-functor (cocone functor, mapping-out functor) is a
+colimit. Colimits live in $\mathcal{C}$ and represent \emph{covariant}
+functors $\mathcal{C} \to \mathbf{Set}$.
+
+The two perspectives are related by Yoneda: every covariant representable
+functor on $\mathcal{C}$ is a contravariant representable functor on
+$\mathcal{C}^{\mathrm{op}}$. Duality in category theory is literally
+\emph{reversing the variance of the hom-functor}.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Preview of Volume III}
+\label{sec:vol3-preview}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{What Remains}
+
+Volumes I and II have laid the foundation. But every construction we have
+studied still has a more general form:
+\begin{itemize}
+  \item \textbf{Enriched categories}: Categories where the hom-sets are
+        not sets but objects of some monoidal category $\mathcal{V}$ ---
+        abelian groups, chain complexes, topological spaces, simplicial sets.
+        The ordinary category theory of Volumes I--II is the case
+        $\mathcal{V} = \mathbf{Set}$.
+  \item \textbf{Weighted limits}: The ``cone'' definition of a limit uses
+        the terminal weight. Weighted limits allow arbitrary
+        $\mathcal{V}$-valued weight functors. This covers homotopy limits,
+        ends, coends, and much more.
+  \item \textbf{Ends and coends}: Generalizations of limit and colimit to
+        ``mixed-variance'' functors $T : \mathcal{C}^{\mathrm{op}} \times
+        \mathcal{C} \to \mathbf{Set}$. The coend $\int^c T(c,c)$ and
+        end $\int_c T(c,c)$ are fundamental in enriched category theory,
+        the Yoneda extension formula, and the calculus of natural
+        transformations.
+  \item \textbf{2-categorical structure}: The interchange law and
+        bicategories (Chapter 22) are the beginning. Volume III develops
+        the full theory of 2-adjunctions, 2-limits, and pseudofunctors.
+\end{itemize}
+
+\subsection{Enriched Category Theory}
+
+An \term{enriched category} $\mathcal{C}$ over a monoidal category
+$(\mathcal{V}, \otimes, I)$ has:
+\begin{itemize}
+  \item Objects: as usual.
+  \item Hom-objects: $\mathcal{C}(a,b) \in \mathcal{V}$ (not a set, but
+        an object of $\mathcal{V}$).
+  \item Composition: a morphism $\mathcal{C}(b,c) \otimes \mathcal{C}(a,b)
+        \to \mathcal{C}(a,c)$ in $\mathcal{V}$.
+  \item Identity: a morphism $I \to \mathcal{C}(a,a)$ for each $a$.
+\end{itemize}
+When $\mathcal{V} = \mathbf{Ab}$, enriched categories are $\mathbf{Ab}$-categories
+(additive categories). When $\mathcal{V} = \mathbf{Ch}$ (chain complexes),
+they are dg-categories (differential graded categories), the setting for
+homological algebra. When $\mathcal{V} = \mathbf{sSet}$ (simplicial sets),
+they are simplicial categories, the setting for homotopy theory.
+
+\subsection{Weighted Limits and Coends}
+
+An ordinary limit of $D: \mathcal{J} \to \mathcal{C}$ is the limit
+\emph{weighted} by the constant functor $W: \mathcal{J} \to \mathbf{Set}$
+sending everything to $\{*\}$. A \term{weighted limit} allows $W:
+\mathcal{J} \to \mathbf{Set}$ to be any functor; the weighted limit
+$\{W, D\}$ (if it exists) represents the functor
+$c \mapsto \mathrm{Nat}(W, \mathcal{C}(c, D-))$.
+
+The \term{coend} $\int^c T(c,c)$ of $T: \mathcal{C}^{\mathrm{op}} \times
+\mathcal{C} \to \mathbf{Set}$ is a colimit that ``contracts'' the two
+copies of $c$ into one. The Yoneda lemma has a coend form:
+\[
+  \int^c \mathrm{Hom}(a, c) \cdot Fc \;\cong\; Fa
+\]
+(the ``ninja Yoneda lemma''), which is the coend expression for the
+co-Yoneda formula. Ends and coends are the universal tools for computing
+with natural transformations and enriched functors.
+
+\subsection{The Same Constructions, More General}
+
+Volume III will revisit every construction of Volumes I and II:
+\begin{itemize}
+  \item Limits $\leadsto$ weighted limits in enriched categories.
+  \item Adjunctions $\leadsto$ enriched adjunctions.
+  \item The Yoneda lemma $\leadsto$ the enriched Yoneda lemma.
+  \item Kan extensions $\leadsto$ enriched Kan extensions (which, via
+        coend formulas, become the foundational operation).
+  \item Beck's theorem $\leadsto$ enriched monadicity.
+\end{itemize}
+The philosophical punchline: the \emph{form} of every theorem stays the
+same. Enrichment generalizes the coefficients from $\mathbf{Set}$ to an
+arbitrary $\mathcal{V}$. The representability principle, the Yoneda
+philosophy, the AFTs --- all survive the generalization, often becoming
+\emph{cleaner} in the enriched setting because more structure is available.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:rep-universe-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{State the representability principle informally.}{Every universal construction in $\mathcal{C}$ is the representing object for a canonically defined functor $\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$.}
+\qaitem{Which functor does a terminal object represent?}{The constant functor $a \mapsto \{*\}$.}
+\qaitem{Which functor does a product $b \times c$ represent?}{The functor $a \mapsto \mathrm{Hom}(a,b) \times \mathrm{Hom}(a,c)$.}
+\qaitem{State the co-Yoneda lemma (also called the density theorem).}{Every presheaf $P \in [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is a colimit of representables: $P \cong \mathrm{colim}_{(c,x) \in \int P} \mathrm{Hom}(-,c)$ over the category of elements of $P$.}
+\qaitem{What is the category of elements $\int P$ of a presheaf $P: \mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$?}{Objects: pairs $(c \in \mathcal{C}, x \in Pc)$. Morphisms $(c,x) \to (c', x')$: maps $f: c \to c'$ in $\mathcal{C}$ with $Pf(x') = x$.}
+\qaitem{What is the universal property of the presheaf category $\hat{\mathcal{C}}$?}{For any cocomplete $\mathcal{E}$ and $F: \mathcal{C} \to \mathcal{E}$, there is an essentially unique colimit-preserving $\bar F: \hat{\mathcal{C}} \to \mathcal{E}$ with $\bar F \circ \mathcal{Y} \cong F$. So $\hat{\mathcal{C}}$ is the free cocompletion of $\mathcal{C}$.}
+\qaitem{What is an enriched category over $(\mathcal{V}, \otimes, I)$?}{A category where hom-sets are replaced by hom-objects in $\mathcal{V}$, with composition $\mathcal{C}(b,c) \otimes \mathcal{C}(a,b) \to \mathcal{C}(a,c)$ and identity $I \to \mathcal{C}(a,a)$ satisfying associativity and unit axioms in $\mathcal{V}$.}
+\qaitem{What is a coend $\int^c T(c,c)$?}{A colimit that ``contracts'' a functor $T: \mathcal{C}^{\mathrm{op}} \times \mathcal{C} \to \mathcal{V}$ along the diagonal: it satisfies the universal property for ``dinatural transformations,'' natural in a mixed covariant/contravariant sense.}
+\qaitem{Write the Yoneda lemma as a coend.}{$Fa \cong \int^c \mathrm{Hom}(a,c) \cdot Fc$. This ``ninja Yoneda'' formula says every functor value is a coend of representables weighted by the hom-sets.}
+\qaitem{What is a weighted limit?}{A limit $\{W, D\}$ of $D: \mathcal{J} \to \mathcal{C}$ weighted by $W: \mathcal{J} \to \mathbf{Set}$, representing the functor $c \mapsto \mathrm{Nat}(W, \mathcal{C}(c, D-))$. Ordinary limits are the case $W = \Delta\{*\}$.}
+\qaitem{What monoidal category does ordinary category theory correspond to in the enriched setting?}{$\mathcal{V} = (\mathbf{Set}, \times, \{*\})$: ordinary category theory is the $\mathbf{Set}$-enriched case.}
+\qaitem{What are dg-categories?}{Categories enriched over chain complexes $\mathbf{Ch}$. Their hom-objects are chain complexes; composition respects the differential. They are the natural home for homological algebra and derived categories.}
+\qaitem{Express the adjunction bijection $\mathrm{Hom}(Lc,d) \cong \mathrm{Hom}(c,Rd)$ in terms of representability.}{For fixed $c$: the functor $d \mapsto \mathrm{Hom}(c, Rd)$ is represented by $Lc$. For fixed $d$: the functor $c \mapsto \mathrm{Hom}(Lc, d)$ is represented by $Rd$.}
+\qaitem{What is the left Kan extension formula involving coends?}{$(\mathrm{Lan}_K F)(d) \cong \int^c \mathrm{Hom}(Kc, d) \cdot Fc$ --- the left Kan extension of $F: \mathcal{C} \to \mathcal{E}$ along $K: \mathcal{C} \to \mathcal{D}$ is a coend formula.}
+\qaitem{What does the ``free cocompletion'' statement say concretely for $\mathcal{C} = \Delta$ (the simplex category)?}{Presheaves on $\Delta$ are simplicial sets. Every simplicial set is a colimit of standard simplices $\Delta[n] = \mathrm{Hom}(-,[n])$. The simplex category $\Delta$ is the ``generating shapes,'' and simplicial sets are their free colimit completion.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{summarybox}
+\textbf{The representability thread.}\quad Every universal construction
+--- terminal objects, products, equalizers, limits, adjoints, free
+algebras, sheafification --- is the representing object for a canonically
+defined functor. The Yoneda lemma is the foundation: it says representing
+objects are unique up to unique isomorphism and are determined by their
+universal properties.
+
+\textbf{The presheaf category as free world.}\quad Every presheaf is a
+colimit of representables (co-Yoneda / density theorem). The category
+$[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ is the free cocompletion of
+$\mathcal{C}$: any functor from $\mathcal{C}$ to a cocomplete category
+extends uniquely (as a colimit-preserving functor) to the presheaf
+category.
+
+\textbf{The table of constructions.}\quad Terminal object, product,
+equalizer, limit, left adjoint, free algebra, monad algebra, sheafification,
+Kan extension: each is a representability or adjointness statement. They
+form a coherent family organized by the single principle that every
+construction is a universal solution to a mapping problem.
+
+\textbf{Volume III preview.}\quad Enriched category theory generalizes
+hom-sets to hom-objects in a monoidal category $\mathcal{V}$. Weighted
+limits and coends are the enriched generalizations of limits. Ends and
+coends are the computational tools for working with natural transformations
+and enriched functors. All theorems of Volumes I--II survive in enriched
+form, often in cleaner statements.
+
+\textbf{The philosophical punchline.}\quad Category theory does not
+construct new mathematics from nothing. It observes that all of mathematics
+is organized by representability --- by the pattern of which objects can
+play the role of ``universal recipient'' for which kinds of morphisms.
+Everything we have seen is a variation on this single theme.
+\end{summarybox}

@@ -1,0 +1,478 @@
+% ch18_kan_extensions_as_adjoints.tex — Volume II Chapter 6
+
+\chapter{Kan Extensions as Universal Adjoints}
+
+\begin{overviewbox}
+Chapter~11 introduced Kan extensions and their colimit/limit formulas. This
+chapter reveals the deeper organizational role of Kan extensions: they are
+themselves adjoint functors, and the restriction functor sits between a left
+and a right Kan extension as the middle of an adjoint triple. This triple
+\begin{equation*}
+  \operatorname{Lan}_p \;\dashv\; (-) \circ p \;\dashv\; \operatorname{Ran}_p
+\end{equation*}
+is one of the most important structural facts in category theory. It means every
+Kan extension is an instance of the universal adjoint phenomenon, and conversely,
+every adjunction can be \emph{computed} as a Kan extension along the Yoneda
+embedding.
+
+We also examine the distinction between pointwise and non-pointwise Kan
+extensions: only the former behave well with respect to representability and
+composition.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Recap: The Restriction Adjoint Triple}
+\label{sec:kan-recap}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Restriction as the Middle}
+
+Fix a functor $p : \mathcal{C} \to \mathcal{E}$ and a target category
+$\mathcal{D}$. The \term{restriction functor} (or \term{precomposition functor})
+along $p$ is
+\begin{equation*}
+  p^* = (-) \circ p : [\mathcal{E}, \mathcal{D}] \to [\mathcal{C}, \mathcal{D}],
+  \qquad
+  p^*(H) = H \circ p.
+\end{equation*}
+It takes a functor defined on all of $\mathcal{E}$ and restricts it to
+$\mathcal{C}$.
+
+The key fact: $p^*$ has a left adjoint ($\operatorname{Lan}_p$, the left Kan
+extension) and a right adjoint ($\operatorname{Ran}_p$, the right Kan extension).
+These are not coincidental --- they are exactly what it means for a functor to
+have best approximations from the left and from the right.
+
+\subsection{Expanding: The Triple in Full}
+
+\begin{theorem}
+\label{thm:kan-adjoint-triple}
+When all relevant Kan extensions exist, there is an adjoint triple
+\begin{equation*}
+  \operatorname{Lan}_p \;\dashv\; p^* \;\dashv\; \operatorname{Ran}_p
+\end{equation*}
+between $[\mathcal{C}, \mathcal{D}]$ and $[\mathcal{E}, \mathcal{D}]$.
+\end{theorem}
+
+The unit of $\operatorname{Lan}_p \dashv p^*$ is the natural transformation
+$\alpha : F \Rightarrow p^*(\operatorname{Lan}_p F) = (\operatorname{Lan}_p F) \circ p$,
+which is exactly the universal natural transformation into the Kan extension.
+
+The counit of $p^* \dashv \operatorname{Ran}_p$ is the natural transformation
+$\varepsilon : p^*(\operatorname{Ran}_p F) \Rightarrow F$, i.e., the canonical
+map $(\operatorname{Ran}_p F) \circ p \Rightarrow F$.
+
+\subsection{Formalizing: What the Adjunctions Say}
+
+For $H \in [\mathcal{E}, \mathcal{D}]$ and $F \in [\mathcal{C}, \mathcal{D}]$,
+the bijection for $\operatorname{Lan}_p \dashv p^*$ is:
+\begin{equation*}
+  [\mathcal{E}, \mathcal{D}](\operatorname{Lan}_p F,\; H)
+  \;\cong\;
+  [\mathcal{C}, \mathcal{D}](F,\; H \circ p).
+\end{equation*}
+A natural transformation from the left Kan extension to $H$ corresponds to a
+natural transformation from $F$ to the restriction of $H$.
+
+The bijection for $p^* \dashv \operatorname{Ran}_p$ is:
+\begin{equation*}
+  [\mathcal{C}, \mathcal{D}](H \circ p,\; F)
+  \;\cong\;
+  [\mathcal{E}, \mathcal{D}](H,\; \operatorname{Ran}_p F).
+\end{equation*}
+A natural transformation from the restriction of $H$ to $F$ corresponds to a
+natural transformation from $H$ to the right Kan extension.
+
+\begin{howtosay}
+\begin{itemize}
+  \item $\operatorname{Lan}_p F$ is the \emph{left Kan extension} of $F$ along $p$.
+        Read ``Lan-sub-$p$ of $F$.''
+  \item $\operatorname{Ran}_p F$ is the \emph{right Kan extension} of $F$ along $p$.
+  \item The restriction $p^*$ is sometimes written $- \circ p$ or $p^\circ$
+        in older literature.
+  \item The triple $\operatorname{Lan}_p \dashv p^* \dashv \operatorname{Ran}_p$
+        is pronounced ``Lan-$p$ is left adjoint to restriction, which is left
+        adjoint to Ran-$p$.''
+\end{itemize}
+\end{howtosay}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Proof That $\operatorname{Lan}_p \dashv p^*$}
+\label{sec:lan-adjoint-proof}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: The Colimit Formula as the Key}
+
+When $\mathcal{D}$ has all small colimits, the left Kan extension can be computed
+by the \term{colimit formula}:
+\begin{equation*}
+  (\operatorname{Lan}_p F)(e) = \operatorname{colim}_{(c, f : p(c) \to e)} F(c),
+\end{equation*}
+where the colimit is taken over the \term{comma category} $(p \downarrow e)$.
+This formula is the explicit construction that witnesses the adjunction.
+
+\subsection{Expanding: The Adjunction Bijection via Colimits}
+
+To show $\operatorname{Lan}_p \dashv p^*$, we need a natural bijection
+\begin{equation*}
+  [\mathcal{E}, \mathcal{D}](\operatorname{Lan}_p F, H) \;\cong\;
+  [\mathcal{C}, \mathcal{D}](F, H \circ p).
+\end{equation*}
+The key calculation uses the universal property of colimits on the left-hand side.
+
+\begin{prooflog}
+\proofstep{Let $\sigma : \operatorname{Lan}_p F \Rightarrow H$ be a natural
+transformation.}{This is an element of the left-hand side.}
+\proofstep{At each $e \in \mathcal{E}$, $\sigma_e : (\operatorname{Lan}_p F)(e)
+\to H(e)$ is a morphism from the colimit over $(p \downarrow e)$ to $H(e)$.}{
+By the colimit formula.}
+\proofstep{By the universal property of colimits, $\sigma_e$ corresponds to a
+cocone: for each $(c, f : p(c) \to e)$ in $(p \downarrow e)$, a morphism
+$\sigma_e^{(c,f)} : F(c) \to H(e)$.}{Colimits are defined by their universal
+property: morphisms from the colimit biject with cocones.}
+\proofstep{Taking $e = p(c')$ and $(c, f) = (c', \mathrm{id}_{p(c')})$, we
+obtain $\sigma_{p(c')}^{(c', \mathrm{id})} : F(c') \to H(p(c'))$.}{Choosing a
+specific object in $(p \downarrow p(c'))$.}
+\proofstep{These morphisms assemble into a natural transformation
+$\tau : F \Rightarrow H \circ p$, with $\tau_{c'} =
+\sigma_{p(c')}^{(c', \mathrm{id})}$.}{Naturality follows from naturality of
+$\sigma$ and functoriality of the colimit construction.}
+\proofstep{Conversely, given $\tau : F \Rightarrow H \circ p$, define $\sigma_e$
+at each $e$ using the composite $F(c) \xrightarrow{\tau_c} H(p(c)) \xrightarrow{H(f)} H(e)$
+as the $(c,f)$-component of a cocone over $(p \downarrow e)$.}{$H(f) \circ
+\tau_c$ is the $e$-component of the candidate cocone.}
+\proofstep{This cocone is compatible with morphisms in $(p \downarrow e)$:
+for $h : c \to c'$ with $f' \circ p(h) = f$, naturality of $\tau$ gives
+$H(f') \circ \tau_{c'} \circ F(h) = H(f') \circ H(p(h)) \circ \tau_c =
+H(f) \circ \tau_c$.}{The cocone condition follows from naturality of $\tau$ and
+functoriality of $H$.}
+\proofstep{The universal property of the colimit then produces a unique
+$\sigma_e : (\operatorname{Lan}_p F)(e) \to H(e)$.}{Colimit universal property.}
+\proofstep{The two constructions ($\sigma \mapsto \tau$ and $\tau \mapsto \sigma$)
+are inverse.}{Follows by unfolding the colimit universal property in each direction.}
+\proofstep{Naturality of the bijection in $F$ and $H$ follows from the
+naturality of colimits in their parameters.}{Standard argument: colimits are
+functorial in $F$, and the bijection respects composition with natural transformations.}
+\end{prooflog}
+
+\subsection{Formalizing: The Coend Formula}
+
+When the comma category is expressed as a coend, the colimit formula becomes:
+\begin{equation*}
+  (\operatorname{Lan}_p F)(e)
+  \;=\;
+  \int^{c \in \mathcal{C}} \mathcal{E}(p(c), e) \cdot F(c),
+\end{equation*}
+where $S \cdot X$ denotes the copower (coproduct of $|S|$ copies of $X$). This
+coend formula is the ``tensor product'' of the hom-functor $\mathcal{E}(p(-), e)$
+with $F$, and it makes precise the sense in which Kan extensions are ``weighted
+colimits.'' The adjunction $\operatorname{Lan}_p \dashv p^*$ then becomes a
+special case of the general hom-tensor adjunction.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Pointwise Kan Extensions}
+\label{sec:pointwise-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: When Kan Extensions Are ``Really'' Colimits}
+
+Not every Kan extension is computed by the colimit formula. When it is, we call
+it \term{pointwise}, and pointwise Kan extensions have much better properties
+than general ones.
+
+A Kan extension $\operatorname{Lan}_p F$ is \term{pointwise} if for each
+$e \in \mathcal{E}$ and representable $\mathcal{E}(e, -)$, we have:
+\begin{equation*}
+  \operatorname{Lan}_p F(e) \cong \operatorname{colim}_{(p \downarrow e)} F.
+\end{equation*}
+Equivalently, the Kan extension is preserved by all representable functors
+$\mathcal{D}(d, -)$ for $d \in \mathcal{D}$.
+
+\subsection{Expanding: Why Pointwise Is Better}
+
+\begin{example}{Pointwise Kan Extensions Compose}
+If $\operatorname{Lan}_p F$ and $\operatorname{Lan}_q (\operatorname{Lan}_p F)$
+are both pointwise, then they compose correctly:
+$\operatorname{Lan}_{q \circ p} F \cong \operatorname{Lan}_q (\operatorname{Lan}_p F)$.
+This fails for general (non-pointwise) Kan extensions.
+\end{example}
+
+\begin{example}{Pointwise Extensions Commute with Composition}
+If $\operatorname{Lan}_p F$ is pointwise and $G : \mathcal{D} \to \mathcal{D}'$
+is any functor, then $G \circ \operatorname{Lan}_p F \cong \operatorname{Lan}_p (G \circ F)$
+iff $G$ preserves the relevant colimits. For a right adjoint $G$, this is
+automatic.
+\end{example}
+
+\subsection{Formalizing: The Characterization}
+
+\begin{theorem}
+\label{thm:pointwise-kan}
+A left Kan extension $\operatorname{Lan}_p F$ is pointwise iff for every
+$e \in \mathcal{E}$, there is an isomorphism
+\begin{equation*}
+  (\operatorname{Lan}_p F)(e) \;\cong\; \operatorname{colim}\bigl(
+    (p \downarrow e) \to \mathcal{C} \xrightarrow{F} \mathcal{D}
+  \bigr)
+\end{equation*}
+natural in $e$, where the first arrow is the forgetful functor from the comma
+category to $\mathcal{C}$.
+\end{theorem}
+
+\begin{corollary}
+If $\mathcal{D}$ has all small colimits, then the colimit formula defines a
+pointwise Kan extension. In particular, for $\mathcal{D}$ cocomplete, all left
+Kan extensions along any $p$ exist and are pointwise.
+\end{corollary}
+
+\subsection{Reorganizing: Absolute Kan Extensions}
+
+A further special case: an \term{absolute} Kan extension is one preserved by
+\emph{every} functor $G : \mathcal{D} \to \mathcal{D}'$. Absolute Kan extensions
+exist even without colimits in $\mathcal{D}$ and play a role in formal category
+theory (the study of 2-categories via enrichment in $\mathbf{Cat}$). Every
+adjunction gives rise to absolute Kan extensions: $\operatorname{Lan}_F(\mathrm{id})
+\cong G$ whenever $F \dashv G$.
+
+\begin{dialog}
+If pointwise Kan extensions are so much better, why bother with the general case?
+
+General Kan extensions arise naturally when $\mathcal{D}$ does not have enough
+colimits, or when working in enriched or $\infty$-categorical settings where the
+colimit formula requires modification. The general notion is the correct one
+2-categorically; pointwise-ness is a bonus when it holds.
+\end{dialog}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Global Kan Extensions and Failure Modes}
+\label{sec:global-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: When Can Extensions Always Be Computed?}
+
+We say $\mathcal{D}$ \term{admits all left Kan extensions along $p$} if
+$\operatorname{Lan}_p F$ exists for every $F : \mathcal{C} \to \mathcal{D}$.
+When this holds for all $p$, we say $\mathcal{D}$ \term{admits global Kan
+extensions}.
+
+For $\mathcal{D}$ cocomplete, global left Kan extensions exist (by the colimit
+formula). But the colimit formula requires colimits indexed by the comma
+categories $(p \downarrow e)$, which may be large even when $\mathcal{C}$ and
+$\mathcal{E}$ are small. This is a genuine issue in non-cocomplete $\mathcal{D}$.
+
+\subsection{Expanding: Failure Modes}
+
+\begin{example}{No Colimits, No Kan Extension}
+Let $\mathcal{D}$ be a category with no colimits (e.g., the category of fields
+and field maps, which has no pushouts in general). There will be functors $F$
+and $p$ for which $\operatorname{Lan}_p F$ does not exist.
+\end{example}
+
+\begin{example}{Non-Pointwise from Small Size}
+In the enriched setting, there exist Kan extensions that satisfy the universal
+property (as adjunctions) but are not computed by the colimit formula. These
+``non-pointwise'' extensions behave badly: they may not compose, may not be
+preserved by other functors, and do not have a clean colimit interpretation.
+\end{example}
+
+\subsection{Formalizing: A Sufficient Condition}
+
+\begin{theorem}
+Let $p : \mathcal{C} \to \mathcal{E}$ with $\mathcal{C}$ small, and let
+$\mathcal{D}$ be cocomplete. Then for every $F : \mathcal{C} \to \mathcal{D}$,
+the left Kan extension $\operatorname{Lan}_p F$ exists and is pointwise.
+Moreover the functor $\operatorname{Lan}_p : [\mathcal{C}, \mathcal{D}] \to
+[\mathcal{E}, \mathcal{D}]$ is the left adjoint to $p^*$.
+\end{theorem}
+
+When $\mathcal{C}$ is not small, one must work in a universe-relative setting
+or impose additional cocompleteness conditions on $\mathcal{D}$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Kan Extensions as Formulas for Adjoints}
+\label{sec:kan-as-adjoint-formula}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Every Adjoint Is a Kan Extension}
+
+There is a profound theorem: every right adjoint $G : \mathcal{D} \to
+\mathcal{C}$ can be computed as a right Kan extension along the Yoneda
+embedding. Similarly for left adjoints. This means Kan extensions are not just
+a generalization of adjunctions --- they \emph{subsume} them.
+
+Let $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ be the
+Yoneda embedding $Y(c) = \mathcal{C}(-, c)$.
+
+\begin{theorem}[Kan's Formula for Adjoints]
+\label{thm:kan-formula}
+Let $F : \mathcal{C} \to \mathcal{D}$ be a functor with a right adjoint $G$.
+Then $G$ is naturally isomorphic to the right Kan extension of $F$ along $Y$,
+viewed appropriately:
+\begin{equation*}
+  G \cong \operatorname{Ran}_Y F.
+\end{equation*}
+More precisely: if $\mathcal{D}$ is locally small and cocomplete, the left
+adjoint $F$ to a given $G$ can be \emph{computed} as
+\begin{equation*}
+  F(c) \;=\; \operatorname{colim}_{(\mathcal{C}(c,-) \Rightarrow G)} \mathrm{Id}_{\mathcal{D}},
+\end{equation*}
+the colimit over all natural transformations from the representable $\mathcal{C}(c,-)$
+to the composite $G \circ (-)$.
+\end{theorem}
+
+\subsection{Expanding: The Nerve/Realization Paradigm}
+
+A particularly clean case: suppose $\mathcal{C}$ is small and we have a functor
+$i : \mathcal{C} \to \mathcal{D}$ (thinking of $\mathcal{C}$ as a category of
+``shapes''). Then:
+\begin{itemize}
+  \item The \term{nerve functor} $N : \mathcal{D} \to [\mathcal{C}^{\mathrm{op}},
+        \mathbf{Set}]$ is $N(d) = \mathcal{D}(i(-), d)$.
+  \item The \term{realization functor} $|{-}| : [\mathcal{C}^{\mathrm{op}},
+        \mathbf{Set}] \to \mathcal{D}$ is $\operatorname{Lan}_Y i$ (when
+        $\mathcal{D}$ is cocomplete).
+\end{itemize}
+The adjunction $|{-}| \dashv N$ is exactly $\operatorname{Lan}_Y i \dashv i^*$,
+where $i^*$ is restriction along $i$. The left Kan extension along Yoneda always
+gives the realization, and its right adjoint is always the nerve.
+
+\begin{example}{Geometric Realization}
+Take $\mathcal{C} = \Delta$ (the simplex category), $\mathcal{D} = \mathbf{Top}$,
+and $i : \Delta \to \mathbf{Top}$ sending $[n]$ to the standard $n$-simplex
+$\Delta^n$. Then $\operatorname{Lan}_Y i$ is geometric realization, and the nerve
+$N$ sends a space $X$ to its singular simplicial set $\mathbf{Top}(\Delta^-, X)$.
+The adjunction $|{-}| \dashv N$ is the fundamental adjunction of homotopy theory.
+\end{example}
+
+\begin{example}{Free Colimit Completion}
+The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$
+exhibits the presheaf category as the free cocomplete category on $\mathcal{C}$.
+Any functor $F : \mathcal{C} \to \mathcal{D}$ with $\mathcal{D}$ cocomplete
+extends to $\operatorname{Lan}_Y F : [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]
+\to \mathcal{D}$ preserving all colimits.
+\end{example}
+
+\subsection{Formalizing: The Universal Property of Presheaves}
+
+The theorem captures the universal property of presheaf categories:
+
+\begin{theorem}[Free Cocompletion]
+For a small category $\mathcal{C}$ and a cocomplete category $\mathcal{D}$,
+restriction along the Yoneda embedding $Y$ gives an equivalence
+\begin{equation*}
+  \mathrm{Fun}_{\mathrm{colim}}([\mathcal{C}^{\mathrm{op}}, \mathbf{Set}], \mathcal{D})
+  \;\simeq\;
+  \mathrm{Fun}(\mathcal{C}, \mathcal{D}),
+\end{equation*}
+where the left side is the category of colimit-preserving functors. The inverse
+sends $F$ to $\operatorname{Lan}_Y F$.
+\end{theorem}
+
+This says: prescribing where objects of $\mathcal{C}$ go in $\mathcal{D}$
+determines a unique colimit-preserving functor out of the presheaf category.
+The Kan extension is the unique colimit-preserving extension.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Write the adjoint triple for Kan extensions along $p$.}{$\operatorname{Lan}_p \dashv (-) \circ p \dashv \operatorname{Ran}_p$.}
+\qaitem{What is the restriction functor $p^*$?}{Precomposition with $p$: $p^*(H) = H \circ p$.}
+\qaitem{What is the hom-set bijection for $\operatorname{Lan}_p \dashv p^*$?}{$[\mathcal{E},\mathcal{D}](\operatorname{Lan}_p F, H) \cong [\mathcal{C},\mathcal{D}](F, H \circ p)$.}
+\qaitem{State the colimit formula for a left Kan extension.}{$(\operatorname{Lan}_p F)(e) = \operatorname{colim}_{(c, f: p(c) \to e)} F(c)$.}
+\qaitem{What is the coend formula for the left Kan extension?}{$(\operatorname{Lan}_p F)(e) = \int^c \mathcal{E}(p(c),e) \cdot F(c)$.}
+\qaitem{In the proof that $\operatorname{Lan}_p \dashv p^*$, what does the colimit universal property do?}{It converts a natural transformation from the colimit to a cocone, bijecting with natural transformations $F \Rightarrow H \circ p$.}
+\qaitem{What does it mean for a Kan extension to be pointwise?}{$(\operatorname{Lan}_p F)(e) \cong \operatorname{colim}_{(p \downarrow e)} F$ for each $e$.}
+\qaitem{Under what conditions do pointwise Kan extensions compose?}{When both $\operatorname{Lan}_p F$ and $\operatorname{Lan}_q(\operatorname{Lan}_p F)$ are pointwise.}
+\qaitem{Does the composition law $\operatorname{Lan}_{q \circ p} \cong \operatorname{Lan}_q \operatorname{Lan}_p$ hold in general?}{Only for pointwise Kan extensions; it can fail otherwise.}
+\qaitem{What is an absolute Kan extension?}{One preserved by every functor out of $\mathcal{D}$.}
+\qaitem{Give an example of an absolute Kan extension.}{If $F \dashv G$, then $\operatorname{Lan}_F(\mathrm{Id}) \cong G$ absolutely.}
+\qaitem{When does $\mathcal{D}$ admit all left Kan extensions along $p$?}{When $\mathcal{D}$ is cocomplete, by the colimit formula.}
+\qaitem{What is the nerve functor for $i : \mathcal{C} \to \mathcal{D}$?}{$N(d) = \mathcal{D}(i(-), d)$, a presheaf on $\mathcal{C}$.}
+\qaitem{What is the realization functor?}{$\operatorname{Lan}_Y i$, the left Kan extension of $i$ along Yoneda.}
+\qaitem{What adjunction does the nerve/realization pair form?}{$|{-}| \dashv N$, i.e., $\operatorname{Lan}_Y i \dashv i^*$.}
+\qaitem{Give a geometric example of the nerve/realization adjunction.}{Geometric realization $|{-}|$ left adjoint to singular simplicial set functor $\mathbf{Top}(\Delta^-,-)$.}
+\qaitem{What is the presheaf category $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$ called in the context of Kan extensions?}{The free cocompletion of $\mathcal{C}$.}
+\qaitem{State the free cocompletion theorem.}{Colimit-preserving functors $[\mathcal{C}^{\mathrm{op}}, \mathbf{Set}] \to \mathcal{D}$ biject with all functors $\mathcal{C} \to \mathcal{D}$ when $\mathcal{D}$ is cocomplete.}
+\qaitem{Why does $p^*$ preserve limits and colimits (as the middle of an adjoint triple)?}{Because $p^*$ is simultaneously a left adjoint ($p^* \dashv \operatorname{Ran}_p$) and a right adjoint ($\operatorname{Lan}_p \dashv p^*$).}
+\qaitem{What goes wrong with non-pointwise Kan extensions?}{They may not compose, may not be preserved under composition with other functors, and lack a clean colimit interpretation.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Adjoint triple.} The restriction functor $p^* = (-) \circ p$ sits in
+$\operatorname{Lan}_p \dashv p^* \dashv \operatorname{Ran}_p$. The hom-set bijection
+for $\operatorname{Lan}_p \dashv p^*$ follows directly from the universal property
+of colimits applied to the colimit formula.
+
+\textbf{Pointwise Kan extensions.} A Kan extension is pointwise if it is
+computed at each $e$ by $\operatorname{colim}_{(p \downarrow e)} F$. Pointwise
+extensions compose correctly, are preserved by representables, and exist whenever
+$\mathcal{D}$ is cocomplete.
+
+\textbf{Non-pointwise failure.} Without cocompleteness, Kan extensions may exist
+abstractly (as adjoints) without being pointwise, and then lose the good
+compositional properties.
+
+\textbf{Kan formula for adjoints.} Every adjunction can be computed as a Kan
+extension along Yoneda: $F(c) = \operatorname{Lan}_Y i (c)$ and the right
+adjoint is the nerve. The presheaf category is the free cocompletion: every
+functor $F : \mathcal{C} \to \mathcal{D}$ extends uniquely (up to iso) to a
+colimit-preserving $\operatorname{Lan}_Y F$ on the presheaf category.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Adjoint triple for Kan extensions.}
+$\operatorname{Lan}_p \dashv p^* \dashv \operatorname{Ran}_p$ between
+$[\mathcal{C},\mathcal{D}]$ and $[\mathcal{E},\mathcal{D}]$, where
+$p : \mathcal{C} \to \mathcal{E}$ and $p^*(H) = H \circ p$.
+
+\medskip
+\textbf{Adjunction bijections.}
+\begin{align*}
+  [\mathcal{E},\mathcal{D}](\operatorname{Lan}_p F, H) &\cong
+  [\mathcal{C},\mathcal{D}](F, p^* H), \\
+  [\mathcal{C},\mathcal{D}](p^* H, F) &\cong
+  [\mathcal{E},\mathcal{D}](H, \operatorname{Ran}_p F).
+\end{align*}
+
+\medskip
+\textbf{Colimit formula.}
+$(\operatorname{Lan}_p F)(e) = \operatorname{colim}_{(p \downarrow e)} F
+= \int^c \mathcal{E}(p(c), e) \cdot F(c)$.
+An extension is \emph{pointwise} iff it is computed by this formula for each $e$.
+
+\medskip
+\textbf{Free cocompletion.}
+$Y : \mathcal{C} \hookrightarrow [\mathcal{C}^{\mathrm{op}}, \mathbf{Set}]$
+is the free cocompletion: any $F : \mathcal{C} \to \mathcal{D}$ ($\mathcal{D}$
+cocomplete) extends uniquely to a colimit-preserving $\operatorname{Lan}_Y F$.
+The induced adjunction $\operatorname{Lan}_Y i \dashv i^*$ is the
+realization--nerve adjunction.
+
+\medskip
+\noindent\textit{Chapter~19 turns to monoidal categories, which are what
+category theory says when we ask ``what is a monoid in a category of
+categories?''}
+\end{formalrestatement}

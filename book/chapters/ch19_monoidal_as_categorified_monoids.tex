@@ -1,0 +1,506 @@
+% ch19_monoidal_as_categorified_monoids.tex — Volume II Chapter 7
+
+\chapter{Monoidal Categories as Categorified Monoids}
+
+\begin{overviewbox}
+Chapter~12 introduced monoidal categories and their coherence theorem. This
+chapter takes a step back and asks: what \emph{is} a monoidal category from a
+higher categorical perspective? The answer is that a monoidal category is a
+\term{categorified monoid}: a monoid in which the underlying set has been
+replaced by a category, and the equations of a monoid have been replaced by
+natural isomorphisms.
+
+This perspective makes the coherence theorem inevitable (the natural isos must
+be compatible), clarifies the distinction between strict and weak monoidal
+categories, and connects monoidal categories to the theory of monads through
+the concept of a ``monoid in a monoidal category.'' We also develop monoidal
+functors in their three flavors (lax, oplax, strong) and conclude with the
+beautiful observation that monoids in various monoidal categories recover all
+the algebraic structures one cares about.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Decategorification}
+\label{sec:decategorification}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Going Down One Level}
+
+\term{Decategorification} means: take a categorical structure, forget about
+morphisms (or collapse them), and see what algebraic structure remains. It is a
+lossy map from the richer world to the poorer world, but it illuminates what
+the richer world is a categorification \emph{of}.
+
+For monoidal categories: if we take a monoidal category $(\mathcal{V}, \otimes,
+I)$ and decategorify by collapsing all morphisms (keeping only the objects and
+recording whether they are isomorphic), we obtain a \emph{commutative monoid}
+when the monoidal category is symmetric --- and a \emph{monoid} in general.
+
+\subsection{Expanding: The Decategorification Map}
+
+Given a monoidal category $\mathcal{V}$, form the set $|\mathcal{V}|$ of
+isomorphism classes of objects. The tensor product $\otimes$ descends: if
+$A \cong A'$ and $B \cong B'$, then $A \otimes B \cong A' \otimes B'$. So
+$\otimes$ induces a binary operation on $|\mathcal{V}|$, with unit $[I]$.
+
+The associator $\alpha_{A,B,C} : (A \otimes B) \otimes C \cong A \otimes (B \otimes C)$
+becomes an equality $([A][B])[C] = [A]([B][C])$ in $|\mathcal{V}|$. The unitors
+become $[I][A] = [A]$ and $[A][I] = [A]$.
+
+Result: $(|\mathcal{V}|, \cdot, [I])$ is a monoid.
+
+\begin{dialog}
+So a monoidal category is to a monoid as a category is to a set?
+
+Exactly. A set is a category with only identity morphisms. A monoid is a set with
+a binary operation. A monoidal category is a category with a tensor product
+(binary operation on objects, functorial on morphisms). The equations of a monoid
+become isomorphisms in the monoidal category. This is categorification.
+\end{dialog}
+
+\subsection{Formalizing: The Categorification Slogan}
+
+\begin{center}
+\begin{tabular}{ll}
+\textbf{Monoid} & \textbf{Monoidal category} \\
+\hline
+Set of elements & Category of objects and morphisms \\
+Binary operation $m \cdot n$ & Tensor functor $A \otimes B$ \\
+Unit element $e$ & Unit object $I$ \\
+Associativity equation & Associator natural isomorphism $\alpha$ \\
+Unit equations & Unitor natural isomorphisms $\lambda, \rho$ \\
+--- & Coherence: pentagon and triangle commute \\
+\end{tabular}
+\end{center}
+
+The coherence diagrams (pentagon for $\alpha$, triangle for $\lambda, \rho$)
+have no monoid analogue because in a monoid, the corresponding equations are
+strict. In a monoidal category, the isomorphisms need to be ``glued together''
+consistently --- that is what coherence demands.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Strict vs.\ Weak Monoidal Categories}
+\label{sec:strict-vs-weak}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: When Coherence Is Trivial}
+
+A \term{strict monoidal category} is one where the associator and unitors are
+\emph{identities}, not merely natural isomorphisms:
+\begin{equation*}
+  (A \otimes B) \otimes C = A \otimes (B \otimes C), \qquad
+  I \otimes A = A = A \otimes I.
+\end{equation*}
+These are on-the-nose equalities of objects. In a strict monoidal category,
+parenthesization is irrelevant by definition, not merely up to isomorphism.
+
+The prototypical example is $(\mathbf{Set}, \times, \{*\})$ \emph{if} we choose
+a specific product, but most constructions in nature produce only weak monoidal
+categories with non-identity coherence isomorphisms.
+
+\subsection{Expanding: Why Strict Is Rare}
+
+Consider $(\mathbf{Vect}_k, \otimes_k, k)$: the tensor product of vector spaces.
+We have $(U \otimes V) \otimes W \cong U \otimes (V \otimes W)$, but this is a
+canonical isomorphism, not an equality. The two sides have the same dimension
+but are \emph{different sets} of tensors. Similarly, $k \otimes V \cong V$ via
+the scalar multiplication isomorphism, but $k \otimes V$ and $V$ are not
+literally equal.
+
+Strict monoidal categories do arise: the endofunctor category $[\mathcal{C},
+\mathcal{C}]$ with composition is strict (functor composition is associative
+and has strict units). The category of strict 2-functors between 2-categories
+is also strict.
+
+\subsection{Formalizing: The Definitions}
+
+\begin{definition}
+A \term{monoidal category} $(\mathcal{V}, \otimes, I, \alpha, \lambda, \rho)$
+is called \term{strict} if $\alpha$, $\lambda$, $\rho$ are all identity natural
+transformations (equivalently, identity morphisms at every object).
+\end{definition}
+
+\begin{definition}
+A \term{weak monoidal category} (or simply monoidal category) has $\alpha$,
+$\lambda$, $\rho$ as natural isomorphisms satisfying the pentagon and triangle
+axioms.
+\end{definition}
+
+The pentagon axiom says the two ways to reassociate $(A \otimes B) \otimes (C
+\otimes D)$ to $A \otimes (B \otimes (C \otimes D))$ agree. The triangle axiom
+says $\rho_A \otimes \mathrm{id}_B = (\mathrm{id}_A \otimes \lambda_B) \circ
+\alpha_{A,I,B}$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Mac Lane's Coherence Theorem}
+\label{sec:maclane-coherence}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Why Every Diagram Commutes}
+
+When we write $A \otimes B \otimes C \otimes D$ in a monoidal category, there
+are many ways to parenthesize this expression, and between any two
+parenthesizations there are multiple composite natural isomorphisms built from
+$\alpha$, $\lambda$, $\rho$. Mac Lane's coherence theorem guarantees they all
+agree.
+
+\begin{theorem}[Mac Lane's Coherence Theorem]
+\label{thm:maclane-coherence}
+In any monoidal category, every diagram built from instances of $\alpha$,
+$\lambda$, $\rho$ and their inverses, using tensor product and composition,
+commutes.
+\end{theorem}
+
+This is why we write $A \otimes B \otimes C$ without parentheses: any
+parenthesization gives an isomorphic result, and the isomorphisms between
+different parenthesizations are all equal.
+
+\subsection{Expanding: The Normal Form Strategy}
+
+The proof strategy is to reduce every parenthesization to a \term{normal form}
+(fully right-associated, with no $I$ factors) using the coherence isomorphisms,
+and then show that any two paths to the normal form give the same result.
+
+The key lemma: any two composites of coherence isomorphisms between the same
+source and target are equal. This is proved by induction on the complexity of
+the composites, using the pentagon and triangle axioms as the base cases.
+
+\subsection{Formalizing: Key Step via Prooflog}
+
+We prove the key step: the pentagon axiom implies that any two ways to
+reassociate a four-fold tensor product agree.
+
+\begin{prooflog}
+\proofstep{Let $P$ be the pentagon: $(\mathrm{id}_A \otimes \alpha_{B,C,D})
+\circ \alpha_{A,B \otimes C, D} \circ (\alpha_{A,B,C} \otimes \mathrm{id}_D)
+= \alpha_{A,B,C \otimes D} \circ \alpha_{A \otimes B, C, D}$.}{Pentagon axiom
+for $(A,B,C,D)$.}
+\proofstep{There are five distinct parenthesizations of $A \otimes B \otimes C
+\otimes D$, corresponding to the five vertices of the Mac Lane pentagon.}{Vertices:
+$((AB)C)D$, $(A(BC))D$, $A((BC)D)$, $A(B(CD))$, $(AB)(CD)$.}
+\proofstep{The five edges of the pentagon are instances of $\alpha$. The pentagon
+axiom says the diagram of these five edges commutes.}{Each edge applies $\alpha$
+at one level.}
+\proofstep{For a general diagram of coherence morphisms, we define the
+\emph{normal form functor} $N$ that reduces any parenthesization to a unique
+right-associated form $A_1 \otimes (A_2 \otimes (\cdots \otimes A_n)\cdots)$
+using $\alpha$.}{Definition of $N$ by structural recursion.}
+\proofstep{Any coherence morphism $\theta : P \to Q$ factors as $N(Q)^{-1} \circ
+n_\theta \circ N(P)$ where $n_\theta$ is a morphism in normal form.}{By
+induction on the structure of $\theta$.}
+\proofstep{The pentagon axiom implies that $n_\theta$ is uniquely determined by
+its source and target normal forms.}{The pentagon says there is only one way to
+pass between adjacent parenthesizations in normal form.}
+\proofstep{Therefore any two coherence morphisms with the same source and target
+have the same normal form component, hence are equal.}{Two paths through the
+same source/target reduce to the same normal-form morphism.}
+\end{prooflog}
+
+\subsection{Reorganizing: What Coherence Buys}
+
+The coherence theorem has a slick reformulation:
+
+\begin{corollary}
+Every monoidal category is monoidally equivalent to a strict monoidal category.
+\end{corollary}
+
+\begin{proof}[Sketch]
+Build the ``strictification'' $\mathcal{V}^{\mathrm{st}}$ whose objects are
+\emph{finite lists} of objects of $\mathcal{V}$ and whose tensor product is
+list concatenation (strict!). The functor $\mathcal{V}^{\mathrm{st}} \to
+\mathcal{V}$ sends a list to its tensor product. The coherence theorem implies
+this is an equivalence.
+\end{proof}
+
+This means we may always \emph{assume without loss of generality} that a
+monoidal category is strict when doing abstract arguments. In concrete situations
+(like $\mathbf{Vect}$) the non-strict form is necessary, but for proving
+abstract theorems, strictification reduces to the easier case.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monoidal Functors}
+\label{sec:monoidal-functors}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Preserving the Tensor Structure}
+
+A functor between monoidal categories should ``preserve the tensor product,''
+but there are three flavors of how well it does so.
+
+A \term{lax monoidal functor} $F : \mathcal{V} \to \mathcal{W}$ comes with a
+\emph{comparison morphism}
+\begin{equation*}
+  \phi_{A,B} : F(A) \otimes F(B) \to F(A \otimes B)
+\end{equation*}
+and a unit comparison $\phi_0 : I_\mathcal{W} \to F(I_\mathcal{V})$, satisfying
+coherence conditions. The morphism $\phi$ goes in the direction ``product of
+images maps to image of product,'' but is not required to be an isomorphism.
+
+An \term{oplax monoidal functor} has $\phi$ going the other direction:
+$\phi_{A,B} : F(A \otimes B) \to F(A) \otimes F(B)$.
+
+A \term{strong monoidal functor} (sometimes just ``monoidal functor'') has $\phi$
+an isomorphism in both cases.
+
+\subsection{Expanding: Examples}
+
+\begin{example}{Free Monoid Is Lax}
+The free monoid functor $L : \mathbf{Set} \to \mathbf{Mon}$ is lax monoidal
+(with $\mathbf{Set}$ and $\mathbf{Mon}$ both having cartesian product as their
+tensor). The comparison $L(A) \times L(B) \to L(A \times B)$ sends a pair of
+words $(w, v)$ to the sequence of pairs. This is not an isomorphism (a word in
+$L(A \times B)$ contains more interleaved information than a pair of words).
+\end{example}
+
+\begin{example}{Forgetful Functor Is Lax}
+The forgetful functor from monoids to sets is lax monoidal in the reverse
+direction: it is \emph{oplax}, with $|M \times N| \to |M| \times |N|$ the
+identity (here it happens to be strict).
+\end{example}
+
+\begin{example}{Symmetric Monoidal Functors in Algebra}
+A strong monoidal functor $F : \mathbf{Ab} \to \mathbf{Ab}$ (with tensor
+product) that is additionally symmetric carries the structure of a Hopf algebra
+or similar in some categorical sense.
+\end{example}
+
+\subsection{Formalizing: The Definitions}
+
+\begin{definition}
+A \term{lax monoidal functor} $(F, \phi, \phi_0) : (\mathcal{V}, \otimes, I)
+\to (\mathcal{W}, \otimes, J)$ consists of:
+\begin{itemize}
+  \item A functor $F : \mathcal{V} \to \mathcal{W}$.
+  \item A natural transformation $\phi_{A,B} : FA \otimes FB \to F(A \otimes B)$.
+  \item A morphism $\phi_0 : J \to FI$.
+\end{itemize}
+These must satisfy the coherence conditions: two diagrams expressing compatibility
+of $\phi$ with $\alpha$ and with $\lambda$, $\rho$.
+\end{definition}
+
+\begin{definition}
+A \term{strong monoidal functor} is a lax monoidal functor where $\phi$ and
+$\phi_0$ are isomorphisms.
+\end{definition}
+
+\begin{howtosay}
+\begin{itemize}
+  \item ``Lax monoidal'' means the comparison goes \emph{toward} the image:
+        $FA \otimes FB \to F(A \otimes B)$.
+  \item ``Oplax monoidal'' means the comparison goes \emph{away} from the
+        image: $F(A \otimes B) \to FA \otimes FB$.
+  \item ``Strong monoidal'' means both are isomorphisms (so it doesn't matter
+        which direction you specify).
+  \item In the literature, a ``monoidal functor'' with no adjective often means
+        \emph{strong} monoidal. Check the convention.
+\end{itemize}
+\end{howtosay}
+
+\subsection{Reorganizing: Functors and Algebras}
+
+A key reason to study lax monoidal functors: a lax monoidal functor sends monoids
+to monoids. If $M$ is a monoid in $\mathcal{V}$ (see Section~\ref{sec:monoids-in-monoidal})
+and $F$ is lax monoidal, then $FM$ is a monoid in $\mathcal{W}$. The multiplication
+of $FM$ is $FM \otimes FM \xrightarrow{\phi} F(M \otimes M) \xrightarrow{F\mu} FM$.
+
+This is why lax monoidal functors are more useful than mere functors between
+monoidal categories: they respect the algebraic structure.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Monoids in Monoidal Categories}
+\label{sec:monoids-in-monoidal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Algebra Inside a Category}
+
+Once we have a monoidal category $(\mathcal{V}, \otimes, I)$, we can ask: what
+does a ``monoid'' look like inside $\mathcal{V}$? The answer is an object $M$
+with a multiplication $\mu : M \otimes M \to M$ and a unit $\eta : I \to M$,
+satisfying associativity and unit laws in the form of commutative diagrams.
+
+This is the correct abstraction because it recovers all the classical notions
+of ``algebra'' for different choices of $\mathcal{V}$:
+
+\begin{center}
+\begin{tabular}{lll}
+$\mathcal{V}$ & Monoidal structure & Monoid in $\mathcal{V}$ \\
+\hline
+$\mathbf{Set}$ & Cartesian $\times$ & Ordinary monoid \\
+$\mathbf{Ab}$ & Tensor $\otimes_\mathbb{Z}$ & Ring \\
+$\mathbf{Vect}_k$ & Tensor $\otimes_k$ & $k$-algebra \\
+$\mathbf{Grp}$ & Direct product & Group (with extra structure) \\
+$[\mathcal{C}, \mathcal{C}]$ & Composition & Monad \\
+\end{tabular}
+\end{center}
+
+\subsection{Expanding: The Monad Connection}
+
+The last row deserves emphasis: a \emph{monad} on $\mathcal{C}$ is precisely a
+monoid in the monoidal category $[\mathcal{C}, \mathcal{C}]$ of endofunctors
+with composition.
+
+\begin{itemize}
+  \item The object $M$ is an endofunctor $T : \mathcal{C} \to \mathcal{C}$.
+  \item The multiplication $\mu : T \circ T \to T$ is the monad multiplication.
+  \item The unit $\eta : \mathrm{Id} \to T$ is the monad unit.
+  \item Associativity: $\mu \circ (T\mu) = \mu \circ (\mu T)$.
+  \item Unit laws: $\mu \circ (T\eta) = \mathrm{id}_T = \mu \circ (\eta T)$.
+\end{itemize}
+
+These are exactly the monad axioms from Chapter~8. The monoidal structure of
+$[\mathcal{C}, \mathcal{C}]$ is the reason monads are ``monoids in endofunctors.''
+
+\subsection{Formalizing: Monoids Precisely}
+
+\begin{definition}
+Let $(\mathcal{V}, \otimes, I)$ be a monoidal category. A \term{monoid} in
+$\mathcal{V}$ is a triple $(M, \mu, \eta)$ where $M \in \mathcal{V}$,
+$\mu : M \otimes M \to M$, and $\eta : I \to M$, such that:
+\begin{align*}
+  \mu \circ (\mu \otimes \mathrm{id}_M) &= \mu \circ (\mathrm{id}_M \otimes \mu)
+  \circ \alpha_{M,M,M},
+  \quad \text{(associativity)} \\
+  \mu \circ (\eta \otimes \mathrm{id}_M) &= \lambda_M,
+  \quad \text{(left unit)} \\
+  \mu \circ (\mathrm{id}_M \otimes \eta) &= \rho_M.
+  \quad \text{(right unit)}
+\end{align*}
+A \term{monoid homomorphism} $(M, \mu, \eta) \to (M', \mu', \eta')$ is a
+morphism $f : M \to M'$ with $f \circ \mu = \mu' \circ (f \otimes f)$ and
+$f \circ \eta = \eta'$.
+\end{definition}
+
+\begin{definition}
+A \term{comonoid} in $\mathcal{V}$ is a monoid in $\mathcal{V}^{\mathrm{op}}$:
+an object $C$ with comultiplication $\delta : C \to C \otimes C$ and counit
+$\varepsilon : C \to I$ satisfying co-associativity and co-unit laws.
+\end{definition}
+
+\subsection{Reorganizing: The Eckmann--Hilton Argument}
+
+In a braided monoidal category (one with a coherent swap $\sigma_{A,B} : A
+\otimes B \cong B \otimes A$), monoids with compatible braidings are
+\emph{commutative}. The Eckmann--Hilton argument shows that a monoid in a
+category of monoids must be commutative:
+
+\begin{proposition}[Eckmann--Hilton]
+If $M$ is simultaneously a monoid $(M, \mu, \eta)$ and $(M, \nu, \epsilon)$
+in $\mathbf{Set}$ and the two operations are compatible ($\mu$ is a monoid
+homomorphism for $\nu$), then $\mu = \nu$ and both are commutative.
+\end{proposition}
+
+Categorically, this says that a monoid in $(\mathbf{Mon}, \times, \{e\})$ is
+the same as a commutative monoid. This is why double loop spaces are abelian
+group objects: they carry two compatible multiplication structures that force
+commutativity.
+
+\subsection{Simplifying: The Internal Algebra Slogan}
+
+\begin{equation*}
+  \boxed{
+    \text{Monoid in } (\mathcal{V}, \otimes, I)
+    = \text{algebra internal to } \mathcal{V}
+    \text{ with respect to } \otimes
+  }
+\end{equation*}
+
+This single observation subsumes rings, algebras, and monads as special cases.
+The monoidal structure of $\mathcal{V}$ determines what kind of algebra is
+possible; different monoidal structures give different theories.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is decategorification of a monoidal category?}{Forget morphisms, keep isomorphism classes; the tensor product descends to a binary operation making $|\mathcal{V}|$ a monoid.}
+\qaitem{What monoid does $(\mathbf{Vect}_k, \otimes_k, k)$ decategorify to?}{The monoid of isomorphism classes of vector spaces under $\otimes$, isomorphic to $(\mathbb{N}, +, 0)$ via dimension.}
+\qaitem{What is a strict monoidal category?}{One where the associator and unitors are identities (not merely natural isomorphisms).}
+\qaitem{Give an example of a strict monoidal category.}{The endofunctor category $[\mathcal{C},\mathcal{C}]$ with composition.}
+\qaitem{Why is $(\mathbf{Vect}_k, \otimes_k, k)$ not strict?}{Because $(U \otimes V) \otimes W$ and $U \otimes (V \otimes W)$ are isomorphic but not literally equal as sets.}
+\qaitem{State Mac Lane's coherence theorem.}{Every diagram built from $\alpha$, $\lambda$, $\rho$ and their inverses commutes.}
+\qaitem{What is the key proof strategy for coherence?}{Reduce each parenthesization to a normal form (right-associated, $I$-free) and show any two composites agree by the pentagon and triangle axioms.}
+\qaitem{What does the coherence theorem imply about strictification?}{Every monoidal category is monoidally equivalent to a strict one.}
+\qaitem{What are the five vertices of the Mac Lane pentagon for $(A,B,C,D)$?}{$((AB)C)D$, $(A(BC))D$, $A((BC)D)$, $A(B(CD))$, $(AB)(CD)$.}
+\qaitem{What is a lax monoidal functor?}{A functor with comparison morphisms $\phi_{A,B} : FA \otimes FB \to F(A\otimes B)$ and $\phi_0 : J \to FI$ satisfying coherence, but not required to be isomorphisms.}
+\qaitem{What is an oplax monoidal functor?}{Same as lax but with comparisons going the other direction: $F(A\otimes B) \to FA \otimes FB$.}
+\qaitem{What is a strong monoidal functor?}{A lax monoidal functor where all comparison morphisms are isomorphisms.}
+\qaitem{Why do lax monoidal functors send monoids to monoids?}{Given $\mu: M\otimes M \to M$ and lax comparison $\phi$, compose $FM \otimes FM \xrightarrow{\phi} F(M\otimes M) \xrightarrow{F\mu} FM$.}
+\qaitem{What is a monoid in a monoidal category $(\mathcal{V}, \otimes, I)$?}{An object $M$ with $\mu: M\otimes M \to M$ and $\eta: I \to M$ satisfying associativity and unit diagrams.}
+\qaitem{What kind of structure is a monoid in $(\mathbf{Ab}, \otimes_\mathbb{Z}, \mathbb{Z})$?}{A ring (associative and unital).}
+\qaitem{What kind of structure is a monoid in $([\mathcal{C},\mathcal{C}], \circ, \mathrm{Id})$?}{A monad on $\mathcal{C}$.}
+\qaitem{State the Eckmann--Hilton argument.}{A set with two compatible monoid structures must have them equal and commutative.}
+\qaitem{What does Eckmann--Hilton say about a monoid in $(\mathbf{Mon}, \times)$?}{It is a commutative monoid.}
+\qaitem{What coherence data does a monoidal category have beyond the tensor functor?}{Associator $\alpha$, left unitor $\lambda$, right unitor $\rho$ satisfying pentagon and triangle axioms.}
+\qaitem{What is a comonoid in $\mathcal{V}$?}{An object with comultiplication $C \to C\otimes C$ and counit $C \to I$ satisfying co-associativity and co-unit laws.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Categorification.} A monoidal category is a categorified monoid:
+equations become natural isomorphisms (coherence data). Decategorifying a
+monoidal category recovers a monoid on isomorphism classes of objects.
+
+\textbf{Strict vs.\ weak.} Strict monoidal categories have identity coherence
+morphisms. Most natural examples are only weakly monoidal. By Mac Lane's
+coherence theorem, every weak monoidal category is equivalent to a strict one,
+so we can always strictify for abstract arguments.
+
+\textbf{Monoidal functors.} Lax monoidal functors carry comparison morphisms
+$FA \otimes FB \to F(A \otimes B)$ that need not be isomorphisms. They send
+monoids to monoids. Oplax and strong are the directional variants.
+
+\textbf{Monoids in monoidal categories.} An object $M$ with multiplication and
+unit morphisms satisfying categorical associativity/unit laws. This subsumes:
+ordinary monoids (in $\mathbf{Set}$), rings (in $\mathbf{Ab}$), $k$-algebras
+(in $\mathbf{Vect}_k$), and monads (in $[\mathcal{C},\mathcal{C}]$). The Eckmann--Hilton
+argument shows that double-monoid structures force commutativity.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Monoidal category.} $(\mathcal{V}, \otimes, I, \alpha, \lambda, \rho)$
+with $\otimes : \mathcal{V} \times \mathcal{V} \to \mathcal{V}$, natural isos
+$\alpha_{A,B,C} : (A \otimes B) \otimes C \cong A \otimes (B \otimes C)$,
+$\lambda_A : I \otimes A \cong A$, $\rho_A : A \otimes I \cong A$, satisfying
+the pentagon and triangle axioms.
+
+\medskip
+\textbf{Coherence theorem.} Every diagram of coherence morphisms commutes.
+Every monoidal category is monoidally equivalent to a strict one.
+
+\medskip
+\textbf{Lax monoidal functor.} $(F, \phi, \phi_0)$ with $\phi_{A,B} : FA
+\otimes FB \to F(A \otimes B)$ and $\phi_0 : J \to FI$ natural and coherent.
+Strong if $\phi, \phi_0$ invertible; oplax if reversed.
+
+\medskip
+\textbf{Monoid in $\mathcal{V}$.} $(M, \mu : M \otimes M \to M, \eta : I \to
+M)$ with $\mu(\mu \otimes \mathrm{id}) = \mu(\mathrm{id} \otimes \mu)\alpha$
+and $\mu(\eta \otimes \mathrm{id}) = \lambda$, $\mu(\mathrm{id} \otimes \eta)
+= \rho$. Instances: monoids, rings, algebras, monads.
+
+\medskip
+\noindent\textit{Chapter~20 enriches this picture by replacing the hom-sets
+of a category with objects of a monoidal category $\mathcal{V}$, yielding the
+full theory of $\mathcal{V}$-enriched categories.}
+\end{formalrestatement}

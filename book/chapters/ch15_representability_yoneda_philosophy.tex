@@ -1,0 +1,267 @@
+% ch15_representability_yoneda_philosophy.tex — Volume II Chapter 3
+
+\chapter{Representability and the Yoneda Philosophy}
+
+Volume I proved the Yoneda lemma and noted its importance. This chapter
+takes the Yoneda perspective seriously as the central organizing principle
+of all of category theory: \emph{to know an object is to know how everything
+maps into and out of it}.
+
+We prove the Yoneda lemma again, this time via the prooflog format that
+makes the structure of the argument visible. Then we unpack the philosophical
+content: universal properties are representability conditions, and the Yoneda
+embedding is an embedding precisely because knowing hom-sets determines objects
+up to isomorphism.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Representable Functors}
+
+\begin{definition}
+A functor $F : \mathcal{C}^{op} \to \mathbf{Set}$ is \term{representable} if
+there exists an object $c \in \mathcal{C}$ and a natural isomorphism
+$F \cong \mathcal{C}(-, c)$.
+
+Dually, a covariant functor $F : \mathcal{C} \to \mathbf{Set}$ is
+\term{corepresentable} if $F \cong \mathcal{C}(c, -)$ for some $c$.
+
+The object $c$ is called the \term{representing object}, and the natural
+isomorphism is the \term{representation}.
+\end{definition}
+
+The Yoneda lemma says exactly how many representations an object has: natural
+transformations $\mathcal{C}(-,c) \Rightarrow F$ are in bijection with elements
+of $F(c)$. In particular, representations of $F$ by $c$ correspond to
+``universal elements'' — special elements $u \in F(c)$ such that every
+element of $F(d)$ is in the image of some morphism $d \to c$.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{The Yoneda Lemma: Full Proof}
+
+\begin{theorem}[Yoneda Lemma]
+Let $\mathcal{C}$ be a locally small category, $c \in \mathcal{C}$, and
+$F : \mathcal{C}^{op} \to \mathbf{Set}$. There is a bijection
+\[
+  \Phi : [\mathcal{C}^{op}, \mathbf{Set}](\mathcal{C}(-,c),\, F) \;\xrightarrow{\sim}\; F(c),
+\]
+natural in both $c$ and $F$, given by $\Phi(\alpha) = \alpha_c(\operatorname{id}_c)$.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Define $\Phi : \operatorname{Nat}(\mathcal{C}(-,c), F) \to F(c)$ by
+           $\Phi(\alpha) = \alpha_c(\operatorname{id}_c)$.}
+           {Evaluate the natural transformation $\alpha$ at $c$, then at the
+            identity morphism $\operatorname{id}_c \in \mathcal{C}(c,c)$.}
+\proofstep{Define $\Psi : F(c) \to \operatorname{Nat}(\mathcal{C}(-,c), F)$ as follows:
+           for $x \in F(c)$, set $\Psi(x)_d(f) = F(f)(x)$ for $f : d \to c$.}
+           {Given $x \in F(c)$ and a morphism $f : d \to c$, apply $F$ to $f$
+            to get $F(f) : F(c) \to F(d)$, then evaluate at $x$.}
+\proofstep{Check that $\Psi(x)$ is natural: for $g : e \to d$, we need
+           $\Psi(x)_e(f \circ g) = F(g)(\Psi(x)_d(f))$, i.e.,
+           $F(f \circ g)(x) = F(g)(F(f)(x))$.}
+           {This holds because $F$ is a functor: $F(f \circ g) = F(g) \circ F(f)$.}
+\proofstep{$\Phi \circ \Psi = \operatorname{id}$: $\Phi(\Psi(x)) = \Psi(x)_c(\operatorname{id}_c)
+           = F(\operatorname{id}_c)(x) = x$.}
+           {$F(\operatorname{id}_c) = \operatorname{id}_{F(c)}$ since $F$ is a functor.}
+\proofstep{$\Psi \circ \Phi = \operatorname{id}$: given $\alpha$,
+           $\Psi(\Phi(\alpha))_d(f) = F(f)(\alpha_c(\operatorname{id}_c))$.}
+           {By definition of $\Psi$ and $\Phi$.}
+\proofstep{Naturality of $\alpha$ at $f : d \to c$ says:
+           $\alpha_d(f) = \alpha_d(\mathcal{C}(f,c)(\operatorname{id}_c))
+           = F(f)(\alpha_c(\operatorname{id}_c))$.}
+           {The naturality square for $\alpha$ at $f$: $\alpha_d \circ \mathcal{C}(f,c) = F(f) \circ \alpha_c$.}
+\proofstep{So $\Psi(\Phi(\alpha))_d(f) = F(f)(\alpha_c(\operatorname{id}_c)) = \alpha_d(f)$.
+           Hence $\Psi(\Phi(\alpha)) = \alpha$.}
+           {This holds for all $d$ and all $f : d \to c$, confirming $\Psi \circ \Phi = \operatorname{id}$.}
+\proofstep{The bijection $\Phi$ is natural in $c$: for $g : c \to c'$,
+           $\Phi(\mathcal{C}(-,g) \circ \alpha) = \alpha_{c'}(g)$; and
+           $F(g)(\Phi(\alpha)) = F(g)(\alpha_c(\operatorname{id}_c)) = \alpha_{c'}(g)$.}
+           {Functoriality and the naturality of $\alpha$ at $g$.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{The Yoneda Embedding}
+
+\begin{theorem}[Yoneda Embedding]
+The functor $Y : \mathcal{C} \to [\mathcal{C}^{op}, \mathbf{Set}]$ defined by
+$Y(c) = \mathcal{C}(-, c)$ and $Y(f) = \mathcal{C}(-, f)$ is fully faithful.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{We need to show: for all $c, c' \in \mathcal{C}$, the function
+           $Y_{c,c'} : \mathcal{C}(c,c') \to [\mathcal{C}^{op},\mathbf{Set}](Y(c), Y(c'))$
+           is a bijection.}
+           {Fully faithful = bijective on all hom-sets.}
+\proofstep{Apply Yoneda with $F = Y(c') = \mathcal{C}(-,c')$:
+           $[\mathcal{C}^{op},\mathbf{Set}](\mathcal{C}(-,c),\,\mathcal{C}(-,c'))
+           \cong \mathcal{C}(-,c')(c) = \mathcal{C}(c,c')$.}
+           {The Yoneda bijection with $F = Y(c')$.}
+\proofstep{Under this bijection, $f : c \to c'$ corresponds to the natural
+           transformation $\mathcal{C}(-,f)$ given by post-composition with $f$.}
+           {Tracing through $\Psi$: $\Psi(f)_d(g) = \mathcal{C}(d,f)(g) = f \circ g = \mathcal{C}(-,f)_d(g)$.}
+\proofstep{So $Y_{c,c'}$ is the Yoneda bijection, hence a bijection. $Y$ is fully faithful.}
+           {The Yoneda lemma directly implies the Yoneda embedding is fully faithful.}
+\end{prooflog}
+
+\begin{dialog}
+``So the Yoneda embedding says that $\mathcal{C}$ embeds into its presheaf category
+as the full subcategory of representable presheaves?''
+
+Exactly. The Yoneda embedding is fully faithful, meaning $\mathcal{C}$ and the
+subcategory of representable presheaves in $[\mathcal{C}^{op}, \mathbf{Set}]$ are
+equivalent. Every category can be ``linearized'' into a presheaf category without
+losing any information.
+\end{dialog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Universal Properties as Representability}
+
+The Yoneda philosophy has a practical payoff: every universal property is a
+representability statement, and the Yoneda lemma converts between them.
+
+A product $a \times b$ in $\mathcal{C}$ is an object representing the functor
+\[
+  T_{a,b}(c) = \mathcal{C}(c, a) \times \mathcal{C}(c, b) : \mathcal{C}^{op} \to \mathbf{Set}.
+\]
+The universal pair of projections $(\pi_1, \pi_2)$ is the universal element in
+$T_{a,b}(a \times b) = \mathcal{C}(a\times b, a) \times \mathcal{C}(a\times b, b)$.
+
+A coequalizer of $f, g : a \to b$ is an object representing
+\[
+  E_{f,g}(c) = \{h : b \to c \mid h \circ f = h \circ g\} \subseteq \mathcal{C}(b, c).
+\]
+
+An exponential $b^a$ in a cartesian closed category represents
+$c \mapsto \mathcal{C}(c \times a, b)$, and the evaluation morphism is the
+universal element.
+
+\begin{theorem}
+An object $r \in \mathcal{C}$ together with a natural isomorphism
+$F \cong \mathcal{C}(-,r)$ is precisely an initial object of the category of
+elements $\int F$ of $F$.
+\end{theorem}
+
+The \term{category of elements} $\int F$ of $F : \mathcal{C}^{op} \to \mathbf{Set}$
+has objects $(c, x)$ with $x \in F(c)$ and morphisms $(c,x) \to (c', x')$ the
+morphisms $f : c' \to c$ in $\mathcal{C}$ (note the reversal) with $F(f)(x) = x'$.
+The universal element is initial in this category.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What does it mean for $F : \mathcal{C}^{op} \to \mathbf{Set}$ to be representable?}
+       {There exists $c \in \mathcal{C}$ with $F \cong \mathcal{C}(-,c)$ naturally.}
+
+\qaitem{What is the representing object?}
+       {The object $c$ such that $F \cong \mathcal{C}(-,c)$.}
+
+\qaitem{State the Yoneda lemma as a bijection.}
+       {$[\mathcal{C}^{op}, \mathbf{Set}](\mathcal{C}(-,c), F) \cong F(c)$,
+        natural in $c$ and $F$.}
+
+\qaitem{What is the bijection map $\Phi$ in the Yoneda lemma?}
+       {$\Phi(\alpha) = \alpha_c(\operatorname{id}_c)$: evaluate $\alpha$ at $c$
+        then at the identity.}
+
+\qaitem{What is the inverse $\Psi$ of $\Phi$?}
+       {$\Psi(x)_d(f) = F(f)(x)$ for $f : d \to c$ and $x \in F(c)$.}
+
+\qaitem{What key step proves $\Psi \circ \Phi = \operatorname{id}$?}
+       {The naturality of $\alpha$: $\alpha_d(f) = F(f)(\alpha_c(\operatorname{id}_c))$.}
+
+\qaitem{What does it mean for the Yoneda embedding to be fully faithful?}
+       {The function $\mathcal{C}(c,c') \to \operatorname{Nat}(\mathcal{C}(-,c),\mathcal{C}(-,c'))$
+        is a bijection for all $c, c'$.}
+
+\qaitem{Is the Yoneda embedding an equivalence of categories?}
+       {Not in general: it need not be essentially surjective (not every presheaf
+        is representable).}
+
+\qaitem{What is the Yoneda philosophy in one sentence?}
+       {An object is completely determined by its hom-functors — knowing
+        $\mathcal{C}(-,c)$ or $\mathcal{C}(c,-)$ determines $c$ up to isomorphism.}
+
+\qaitem{What functor does a product $a \times b$ represent?}
+       {$T_{a,b}(c) = \mathcal{C}(c,a) \times \mathcal{C}(c,b)$: pairs of
+        morphisms from $c$ to both $a$ and $b$.}
+
+\qaitem{What is a universal element of a representable functor $F$?}
+       {An element $u \in F(r)$ corresponding to $\operatorname{id}_r$ under
+        the Yoneda bijection; equivalently, the image of $\operatorname{id}_r$
+        under the representation isomorphism.}
+
+\qaitem{What is the category of elements $\int F$ of $F : \mathcal{C}^{op} \to \mathbf{Set}$?}
+       {Objects: pairs $(c, x)$ with $x \in F(c)$. Morphisms $(c,x) \to (c',x')$:
+        morphisms $f : c' \to c$ in $\mathcal{C}$ with $F(f)(x) = x'$.}
+
+\qaitem{What does the universal element correspond to in $\int F$?}
+       {The initial object of $\int F$.}
+
+\qaitem{What does the Yoneda lemma say about natural transformations between
+        representable functors?}
+       {$\operatorname{Nat}(\mathcal{C}(-,c), \mathcal{C}(-,c')) \cong \mathcal{C}(c,c')$:
+        natural transformations between representables are exactly morphisms
+        between the representing objects.}
+
+\qaitem{Does the Yoneda lemma hold for enriched categories?}
+       {Yes, with the appropriate enriched version: $[\mathcal{C},\mathcal{V}]_\mathcal{V}
+        (\mathcal{C}(a,-), F) \cong F(a)$ in $\mathcal{V}$.}
+
+\qaitem{What does it mean that ``the Yoneda embedding is the free cocompletion''?}
+       {$[\mathcal{C}^{op},\mathbf{Set}]$ is the universal cocomplete category receiving
+        $\mathcal{C}$ via a functor that preserves all colimits that exist in $\mathcal{C}$.}
+
+\qaitem{How does the Yoneda lemma imply that $\mathcal{C}$ determines
+        $[\mathcal{C}^{op},\mathbf{Set}]$?}
+       {The Yoneda embedding $Y : \mathcal{C} \hookrightarrow [\mathcal{C}^{op},\mathbf{Set}]$
+        is fully faithful, so $\mathcal{C}$ embeds as a full subcategory, and
+        $[\mathcal{C}^{op},\mathbf{Set}]$ is the free cocompletion of this subcategory.}
+
+\qaitem{Why does $\mathcal{C}(-, c) \cong \mathcal{C}(-, c')$ imply $c \cong c'$?}
+       {The Yoneda embedding is fully faithful, so it reflects isomorphisms.}
+
+\qaitem{What is a contravariant representable presheaf?}
+       {A functor $\mathcal{C}^{op} \to \mathbf{Set}$ of the form $\mathcal{C}(-,c)$
+        for some $c$.}
+
+\qaitem{Give the Yoneda lemma as a statement about adjunctions.}
+       {The Yoneda embedding $Y : \mathcal{C} \to [\mathcal{C}^{op}, \mathbf{Set}]$
+        gives a bijection: natural transformations $Y(c) \Rightarrow F$ are in
+        natural bijection with elements of $F(c)$.}
+\end{qa}
+\end{exercisesbox}
+
+\begin{summarybox}
+A functor $F : \mathcal{C}^{op} \to \mathbf{Set}$ is \textbf{representable} when
+$F \cong \mathcal{C}(-,c)$. The \textbf{Yoneda lemma} says
+$\operatorname{Nat}(\mathcal{C}(-,c), F) \cong F(c)$ naturally, with bijection
+$\alpha \mapsto \alpha_c(\operatorname{id}_c)$. The \textbf{Yoneda embedding}
+$Y : \mathcal{C} \hookrightarrow [\mathcal{C}^{op}, \mathbf{Set}]$ is fully faithful,
+embedding $\mathcal{C}$ into its presheaf category. Every universal property is a
+representability condition; the universal element is the initial object of the
+category of elements.
+\end{summarybox}
+
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Representable.} $F : \mathcal{C}^{op} \to \mathbf{Set}$ representable
+iff $\exists\, c,\, u \in F(c)$ with $\Psi(u) : \mathcal{C}(-,c) \xrightarrow{\sim} F$
+a natural isomorphism.
+
+\textbf{Yoneda lemma.}
+$\operatorname{Nat}(\mathcal{C}(-,c), F) \cong F(c)$, naturally in $c \in \mathcal{C}$
+and $F \in [\mathcal{C}^{op},\mathbf{Set}]$.
+Bijection: $\Phi(\alpha) = \alpha_c(\operatorname{id}_c)$;
+inverse: $\Psi(x)_d(f) = F(f)(x)$.
+
+\textbf{Yoneda embedding.}
+$Y : \mathcal{C} \hookrightarrow [\mathcal{C}^{op},\mathbf{Set}]$, $Y(c) = \mathcal{C}(-,c)$,
+fully faithful. Consequence: $c \cong c'$ iff $Y(c) \cong Y(c')$;
+$\mathcal{C}(-,c) \cong \mathcal{C}(-,c') \Rightarrow c \cong c'$.
+
+\textbf{Category of elements.}
+$\int F$: objects $(c,x)$ with $x \in F(c)$; morphisms $(c,x) \to (c',x')$
+are $f : c' \to c$ with $F(f)(x) = x'$. Universal element = initial object of $\int F$.
+\end{formalrestatement}

@@ -1,0 +1,452 @@
+% ch21_monads_beck.tex — Volume II Chapter 9
+
+\chapter{Monads: Algebraic Theory and Beck's Theorem}
+
+\begin{overviewbox}
+Chapter 8 introduced monads and showed how every adjunction $F \dashv G$
+gives rise to a monad $T = GF$ on $\mathcal{C}$. But it left a gap:
+different adjunctions can produce the \emph{same} monad. Which adjunction
+is the ``right'' one? And conversely, given a monad $(T,\eta,\mu)$, can
+we always recover an adjunction that produces it?
+
+The answer is yes --- and in fact there are two canonical adjunctions, one
+minimal (the \term{Kleisli category} $\mathcal{C}_T$) and one maximal (the
+\term{Eilenberg--Moore category} $\mathcal{C}^T$). All adjunctions that
+resolve $T$ factor through these two extremes via a \term{comparison
+functor}.
+
+The climax of this chapter is \term{Beck's monadicity theorem}: a precise
+criterion for when a functor $F : \mathcal{C} \to \mathcal{D}$ is
+\emph{monadic} --- meaning $\mathcal{D}$ is equivalent, over $\mathcal{C}$,
+to the Eilenberg--Moore category of the induced monad. Beck's theorem
+transforms an abstract question about equivalence of categories into a
+concrete checklist involving coequalizers, and is one of the most useful
+recognition theorems in all of category theory.
+
+Along the way we meet \term{$F$-split coequalizers}, a remarkable class
+of coequalizers that ``know how to split themselves'' when lifted along
+$F$, and we see why they are the right notion of coequalizer for algebraic
+categories.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Recap: Monads from Adjunctions}
+\label{sec:monads-from-adj}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Induced Monad}
+
+Let $F : \mathcal{C} \rightleftharpoons \mathcal{D} : G$ be an adjunction
+$F \dashv G$ with unit $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow GF$ and
+counit $\varepsilon : FG \Rightarrow \mathrm{Id}_\mathcal{D}$.
+
+Set $T = GF : \mathcal{C} \to \mathcal{C}$. The monad structure is:
+\begin{itemize}
+  \item \textbf{Unit:} $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow T = GF$.
+        This is already the adjunction unit.
+  \item \textbf{Multiplication:} $\mu = G\varepsilon F : GFGF \Rightarrow GF$.
+        At component $c$: $\mu_c = G(\varepsilon_{Fc}) : GF GF c \to GF c$.
+\end{itemize}
+The monad axioms --- associativity $\mu \circ \mu T = \mu \circ T \mu$ and
+the unit laws $\mu \circ \eta T = \mathrm{id}_T = \mu \circ T\eta$ ---
+follow directly from the triangle identities for $F \dashv G$.
+
+\begin{dialog}
+So the monad carries only the ``shadow'' of the adjunction that lands back
+on $\mathcal{C}$. The functor $F$ disappears; only the composite $GF$
+survives. This information loss is precisely what Beck's theorem measures.
+\end{dialog}
+
+\subsection{The Eilenberg--Moore Category}
+
+Given a monad $(T,\eta,\mu)$ on $\mathcal{C}$, the
+\term{Eilenberg--Moore category} $\mathcal{C}^T$ has:
+\begin{itemize}
+  \item \textbf{Objects:} \term{$T$-algebras}: pairs $(a, h)$ where
+        $a \in \mathcal{C}$ and $h : Ta \to a$ (the \emph{structure map}),
+        satisfying:
+        \begin{align*}
+          h \circ \eta_a &= \mathrm{id}_a & &\text{(unit law)} \\
+          h \circ \mu_a &= h \circ Th & &\text{(associativity law)}
+        \end{align*}
+  \item \textbf{Morphisms:} $(a,h) \to (b,k)$: morphisms $f : a \to b$
+        in $\mathcal{C}$ such that $k \circ Tf = f \circ h$.
+\end{itemize}
+The forgetful functor $G^T : \mathcal{C}^T \to \mathcal{C}$ sends $(a,h)
+\mapsto a$ and has a left adjoint $F^T : \mathcal{C} \to \mathcal{C}^T$
+sending $a \mapsto (Ta, \mu_a)$. The induced monad of $F^T \dashv G^T$ is
+exactly $(T,\eta,\mu)$.
+
+\subsection{The Kleisli Category}
+
+The \term{Kleisli category} $\mathcal{C}_T$ has:
+\begin{itemize}
+  \item \textbf{Objects:} the same objects as $\mathcal{C}$.
+  \item \textbf{Morphisms:} $a \to b$ in $\mathcal{C}_T$ are morphisms
+        $a \to Tb$ in $\mathcal{C}$ (``$T$-decorated'' or effectful maps).
+  \item \textbf{Composition:} if $f : a \to Tb$ and $g : b \to Tc$ in
+        $\mathcal{C}$, then $g \star f = \mu_c \circ Tg \circ f : a \to Tc$.
+  \item \textbf{Identity on $a$:} the unit $\eta_a : a \to Ta$.
+\end{itemize}
+There is a free functor $F_T : \mathcal{C} \to \mathcal{C}_T$ (identity
+on objects, $f \mapsto \eta_b \circ f$ on morphisms) and a forgetful
+functor $G_T : \mathcal{C}_T \to \mathcal{C}$ (objects to $Ta$, morphisms
+$f$ to $\mu_b \circ Tf$). These form an adjunction $F_T \dashv G_T$
+inducing $(T,\eta,\mu)$.
+
+\begin{howtosay}
+\begin{itemize}
+  \item A morphism $f : a \to Tb$ in $\mathcal{C}$ is called a
+        \term{Kleisli morphism} or an \term{effectful computation} from $a$
+        to $b$.
+  \item Kleisli composition is the categorical form of ``bind'' ($>>=$ in
+        Haskell).
+  \item $\mathcal{C}_T$ is the minimal resolution; $\mathcal{C}^T$ is the
+        maximal resolution.
+\end{itemize}
+\end{howtosay}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Comparison Functor}
+\label{sec:comparison-functor}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Every Resolution Factors Between the Two Extremes}
+
+Suppose $F \dashv G$ resolves the monad $T = GF$. We define a functor
+\[
+  K : \mathcal{D} \to \mathcal{C}^T
+\]
+called the \term{comparison functor}, by:
+\begin{itemize}
+  \item On objects: $d \mapsto (Gd, G\varepsilon_d)$.
+  \item On morphisms: $f \mapsto Gf$.
+\end{itemize}
+
+\begin{lemma}
+The pair $(Gd, G\varepsilon_d)$ is indeed a $T$-algebra: the map
+$G\varepsilon_d : GFGd \to Gd$ satisfies the $T$-algebra axioms.
+\end{lemma}
+
+\begin{proof}
+Unit law: $G\varepsilon_d \circ \eta_{Gd} = \mathrm{id}_{Gd}$ by the
+triangle identity $G\varepsilon \circ \eta G = \mathrm{id}_G$.
+
+Associativity: $G\varepsilon_d \circ \mu_{Gd} = G\varepsilon_d \circ
+GFG\varepsilon_d$ is the equation $G\varepsilon_d \circ G(\varepsilon_{FGd})
+= G\varepsilon_d \circ GF(G\varepsilon_d)$, which is the naturality of
+$\varepsilon$ applied to $\varepsilon_d$.
+\end{proof}
+
+Furthermore, $K$ commutes with the forgetful functors: $G^T \circ K = G$.
+The comparison functor measures ``how much of the structure of $\mathcal{D}$
+is captured by $T$-algebras.''
+
+\subsection{When is $K$ an Equivalence?}
+
+The functor $F \dashv G$ is called \term{monadic} if the comparison functor
+$K : \mathcal{D} \to \mathcal{C}^T$ is an equivalence of categories. In this
+case, $\mathcal{D}$ \emph{is} (up to equivalence) the category of algebras
+for the monad $T$ on $\mathcal{C}$.
+
+Examples:
+\begin{itemize}
+  \item The free/forgetful adjunction for groups is monadic: $\mathbf{Grp}
+        \simeq \mathbf{Set}^T$ for the free-group monad.
+  \item The free/forgetful adjunction for rings is monadic.
+  \item The global-sections/constant-sheaf adjunction for sheaves is
+        \emph{not} monadic in general.
+\end{itemize}
+
+Beck's theorem gives the exact criterion.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Beck's Monadicity Theorem}
+\label{sec:beck}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Statement}
+
+\begin{theorem}[Beck's Monadicity Theorem]
+Let $F : \mathcal{C} \to \mathcal{D}$ be a functor with right adjoint
+$G : \mathcal{D} \to \mathcal{C}$, and let $T = GF$ be the induced monad.
+The comparison functor $K : \mathcal{D} \to \mathcal{C}^T$ is an
+equivalence of categories if and only if:
+\begin{enumerate}
+  \item[(B1)] $F$ \term{reflects isomorphisms}: if $Ff$ is an iso in
+              $\mathcal{C}$, then $f$ is an iso in $\mathcal{D}$.
+  \item[(B2)] $\mathcal{D}$ has coequalizers of all \term{$F$-split
+              pairs}, and $F$ preserves these coequalizers.
+\end{enumerate}
+\end{theorem}
+
+\subsection{Proof Sketch via the Prooflog}
+
+We prove that under (B1) and (B2), the comparison functor $K$ is full,
+faithful, and essentially surjective.
+
+\begin{proof}
+We trace the essential surjectivity argument, as it is the most
+illuminating. Let $(a, h : Ta \to a)$ be any $T$-algebra. We need to find
+$d \in \mathcal{D}$ with $Kd \cong (a,h)$.
+
+\begin{prooflog}
+\proofstep{Consider the pair $Fa \underset{\eta_{Fa}}{\overset{F h}{\rightrightarrows}} FTa = F GFa$}{$h : Ta \to a$ in $\mathcal{C}$; apply $F$ to get $Fh : FTa \to Fa$ and also have $\varepsilon_{Fa} : FGFa \to Fa$}
+\proofstep{Actually the relevant pair is $FTa \overset{F h}{\underset{\varepsilon_{Fa}}{\rightrightarrows}} Fa$}{Both $Fh$ and $\varepsilon_{Fa}$ are morphisms $FTa = FGFa \to Fa$; the pair $(Fh, \varepsilon_{Fa})$ is $F$-split}
+\proofstep{This pair is $F$-split via: $h : Ta \to a$, $\eta_a : a \to Ta$}{Check: $G(Fh) \circ \eta_a = Th \circ \eta_a$; $G(\varepsilon_{Fa}) \circ \eta_a = \mathrm{id}_a$ (triangle identity)}
+\proofstep{By (B2), the coequalizer $d = \mathrm{coeq}(Fh, \varepsilon_{Fa})$ exists in $\mathcal{D}$}{Let $q : Fa \to d$ be the coequalizer morphism}
+\proofstep{Apply $G$: since $F$ preserves this coequalizer and $G$ is right adjoint, $Gq$ is a split epi in $\mathcal{C}$}{The $F$-split condition propagates through the adjunction}
+\proofstep{One shows $Kd = (Gd, G\varepsilon_d) \cong (a, h)$ as $T$-algebras}{The algebra map $Gd \to a$ is constructed from $q$ via the universal property of the coequalizer; the $T$-algebra laws follow from the $F$-split splitting data}
+\proofstep{Faithfulness of $K$ follows from $F$ reflecting isomorphisms (B1): $K$-faithful + $F$-iso-reflecting forces $K$-faithful}{If $Kf = Kg$ then $GFf = GFg$; since the coequalizer structure forces uniqueness, $f = g$}
+\proofstep{Fullness follows from the coequalizer presentation of free algebras}{Every $T$-algebra morphism lifts uniquely to a morphism in $\mathcal{D}$ via the universal property}
+\end{prooflog}
+
+Therefore $K$ is an equivalence. The converse direction checks that if $K$
+is an equivalence, then conditions (B1) and (B2) must hold by abstract
+properties of equivalences and the structure of $\mathcal{C}^T$.
+\end{proof}
+
+\begin{dialog}
+Why are $F$-split pairs the right notion? Because split coequalizers are
+\emph{absolute}: they are preserved by every functor. So requiring the
+coequalizer to exist only after applying $F$ is the minimal assumption
+needed to do the construction. If you demand more --- say, all reflexive
+coequalizers --- you get a stronger (``crude'') form of monadicity that is
+easier to apply but less sharp.
+\end{dialog}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$F$-Split Coequalizers}
+\label{sec:f-split}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Definition}
+
+\begin{definition}[$F$-split pair and split coequalizer]
+A \term{split coequalizer} is a diagram
+\[
+  a \;\underset{g}{\overset{f}{\rightrightarrows}}\; b \;\overset{q}{\to}\; c
+\]
+together with morphisms $s : c \to b$ and $t : b \to a$ satisfying:
+\begin{align*}
+  q \circ s &= \mathrm{id}_c \\
+  f \circ t &= \mathrm{id}_b \\
+  g \circ t &= s \circ q
+\end{align*}
+Such a diagram is a coequalizer of $(f,g)$, and it is preserved by every
+functor (the splitting data witnesses the coequalizer purely equationally).
+
+A pair $(f, g) : a \rightrightarrows b$ in $\mathcal{D}$ is called an
+\term{$F$-split pair} (for a functor $F : \mathcal{D} \to \mathcal{C}$)
+if the pair $(Ff, Fg)$ has a split coequalizer in $\mathcal{C}$.
+\end{definition}
+
+\subsection{The Key Example: Free Algebra Pairs}
+
+Given a $T$-algebra $(a, h : Ta \to a)$, the pair
+\[
+  T^2 a \;\underset{Th}{\overset{\mu_a}{\rightrightarrows}}\; Ta
+\]
+is always split in $\mathcal{C}$ (via $\eta_{Ta}$ and $\eta_a$), and its
+coequalizer is $a$ with coequalizer map $h$. This is the prototype of
+every $F$-split pair that arises in Beck's theorem.
+
+\begin{example}{$F$-split pairs for the free-module monad}
+Let $R$ be a ring, $F = R \otimes_\mathbb{Z} - : \mathbf{Ab} \to
+R\text{-}\mathbf{Mod}$ the free $R$-module functor (left adjoint to
+the forgetful functor $G$). A pair $(f,g) : M \rightrightarrows N$ in
+$R\text{-}\mathbf{Mod}$ is $F$-split iff the underlying abelian group pair
+$(Gf, Gg) : GM \rightrightarrows GN$ has a split coequalizer in
+$\mathbf{Ab}$.
+
+In practice: this pair is split iff the coequalizer in $\mathbf{Ab}$
+happens to be the underlying abelian group of an $R$-module that $R$
+can act on in a compatible way.
+\end{example}
+
+\subsection{Absolute Coequalizers}
+
+The splitting data $(s,t)$ is remarkable: it makes the coequalizer
+\emph{absolute}, meaning it is preserved by every functor without any
+assumption on that functor. Contrast:
+\begin{itemize}
+  \item Ordinary coequalizers: preserved by left adjoints.
+  \item Reflexive coequalizers: preserved by categories satisfying
+        additional exactness properties.
+  \item \textbf{Split coequalizers: preserved by every functor.}
+\end{itemize}
+This is why split coequalizers are the right setting for Beck's theorem:
+the condition ``$F$ preserves the coequalizer'' is automatically satisfied
+once the coequalizer is split.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Applications}
+\label{sec:monads-applications}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Rings and Modules}
+
+Let $R$ be a commutative ring. The free $R$-module functor
+$F = R[-] : \mathbf{Set} \to R\text{-}\mathbf{Mod}$, sending a set $X$
+to the free $R$-module $R[X] = \bigoplus_{x \in X} R$, is left adjoint to
+the forgetful functor $G$.
+
+\begin{theorem}
+The adjunction $F \dashv G$ is monadic: $R\text{-}\mathbf{Mod} \simeq
+\mathbf{Set}^T$ where $T = GF$ is the free $R$-module monad.
+\end{theorem}
+
+\begin{proof}
+We verify Beck's conditions.
+\begin{prooflog}
+\proofstep{$G$ reflects isomorphisms}{A map of $R$-modules is an iso iff its underlying set map is a bijection; $G$ is the forgetful functor}
+\proofstep{$G$ creates coequalizers of $G$-split pairs}{Given a $G$-split pair $f,g : M \rightrightarrows N$ in $R\text{-}\mathbf{Mod}$, its set-level split coequalizer has a unique $R$-module structure making it the coequalizer in $R\text{-}\mathbf{Mod}$}
+\proofstep{$G$ preserves these coequalizers}{Since the coequalizer is split at the set level, it is preserved by every functor, including $G$}
+\proofstep{Both Beck conditions satisfied; apply the theorem}{$K : R\text{-}\mathbf{Mod} \to \mathbf{Set}^T$ is an equivalence}
+\end{prooflog}
+\end{proof}
+
+This result generalizes: for any algebraic theory (a set of operations and
+equations), the category of models is equivalent to $\mathbf{Set}^T$ for
+the corresponding monad.
+
+\subsection{Algebraic Theories as Monads}
+
+A \term{Lawvere theory} or \term{algebraic theory} is a category $\mathbf{T}$
+with finite products, whose objects are finite powers $n = 1^n$ of a
+distinguished object $1$. A model of $\mathbf{T}$ in $\mathbf{Set}$ is a
+product-preserving functor $M : \mathbf{T} \to \mathbf{Set}$.
+
+\textbf{Main fact}: the category of models $\mathrm{Mod}(\mathbf{T},
+\mathbf{Set})$ is equivalent to the Eilenberg--Moore category $\mathbf{Set}^T$
+for a naturally constructed monad $T$ on $\mathbf{Set}$. The monad $T(X)$
+is the set of $\mathbf{T}$-terms in variables $X$.
+
+This connection --- Beck's theorem applied to Lawvere theories --- is one
+of the deepest results in categorical algebra: \emph{monads on $\mathbf{Set}$
+are exactly algebraic theories} (in a precise sense, with appropriate
+finiteness conditions).
+
+\subsection{Crude Monadicity}
+
+In practice, one often uses a simpler sufficient criterion:
+
+\begin{theorem}[Crude Monadicity / Barr--Beck]
+$F \dashv G$ is monadic if $F$ reflects isomorphisms and $\mathcal{D}$ has
+and $G$ preserves coequalizers of all \emph{reflexive pairs} (pairs $(f,g)$
+that admit a common right inverse).
+\end{theorem}
+
+This handles many algebraic cases without having to identify $F$-split pairs
+explicitly.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:monads-beck-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is the multiplication $\mu$ of the monad $T = GF$ arising from an adjunction $F \dashv G$?}{$\mu = G\varepsilon F : GFGF \Rightarrow GF$, where $\varepsilon$ is the counit of the adjunction. At component $c$: $\mu_c = G(\varepsilon_{Fc})$.}
+\qaitem{What are the two canonical adjunctions that resolve a monad $T$?}{The Kleisli adjunction $F_T \dashv G_T$ with $\mathcal{C}_T$ (minimal, initial among all resolutions), and the Eilenberg--Moore adjunction $F^T \dashv G^T$ with $\mathcal{C}^T$ (maximal, terminal among resolutions).}
+\qaitem{What is a $T$-algebra for a monad $(T,\eta,\mu)$?}{A pair $(a, h: Ta \to a)$ where $h \circ \eta_a = \mathrm{id}_a$ (unit law) and $h \circ \mu_a = h \circ Th$ (associativity law). The map $h$ is the ``structure map'' or ``action.'' }
+\qaitem{What is the comparison functor $K$?}{Given an adjunction $F \dashv G$ inducing $T = GF$, the functor $K : \mathcal{D} \to \mathcal{C}^T$ sending $d \mapsto (Gd, G\varepsilon_d)$. It commutes with the forgetful functors over $\mathcal{C}$.}
+\qaitem{State Beck's monadicity theorem.}{$K$ is an equivalence iff: (B1) $F$ reflects isomorphisms, and (B2) $\mathcal{D}$ has coequalizers of $F$-split pairs and $F$ preserves them.}
+\qaitem{What is a split coequalizer?}{A diagram $a \rightrightarrows b \to c$ with extra maps $s: c \to b$ and $t: b \to a$ satisfying $qs = \mathrm{id}$, $ft = \mathrm{id}$, $gt = sq$. These equations make $c$ the coequalizer of $(f,g)$ without requiring any universal property argument.}
+\qaitem{Why are split coequalizers preserved by every functor?}{Because the splitting is expressed purely by equations between morphisms, and every functor preserves equations. No colimit universal property needs to be checked.}
+\qaitem{What does ``$F$-split pair'' mean?}{A pair $(f,g): a \rightrightarrows b$ in $\mathcal{D}$ such that $(Ff, Fg)$ has a split coequalizer in $\mathcal{C}$. The split structure may not lift to $\mathcal{D}$; it only needs to exist downstairs.}
+\qaitem{Why is the free-module adjunction monadic?}{The forgetful functor $G: R\text{-}\mathbf{Mod} \to \mathbf{Set}$ reflects isomorphisms (module isos are exactly underlying-set bijections) and creates coequalizers of $G$-split pairs (the coequalizer set has a unique $R$-module structure).}
+\qaitem{What is a morphism in the Kleisli category $\mathcal{C}_T$?}{A morphism $a \to b$ in $\mathcal{C}_T$ is a morphism $a \to Tb$ in $\mathcal{C}$. Kleisli composition of $f: a \to Tb$ and $g: b \to Tc$ is $\mu_c \circ Tg \circ f : a \to Tc$.}
+\qaitem{What is the identity morphism on $a$ in $\mathcal{C}_T$?}{The unit $\eta_a : a \to Ta$.}
+\qaitem{What does it mean for a functor to reflect isomorphisms?}{$F$ reflects isomorphisms if: whenever $Ff$ is an isomorphism in the codomain, $f$ was already an isomorphism in the domain.}
+\qaitem{Give an example of an adjunction that is \emph{not} monadic.}{The inclusion $i: \mathbf{Ab} \hookrightarrow \mathbf{Grp}$ with left adjoint the abelianization functor $(-)/[G,G]$ is not monadic: the comparison functor is not full.}
+\qaitem{What is the Crude Monadicity Theorem?}{$F \dashv G$ is monadic if $F$ reflects isomorphisms and the domain has and $G$ preserves coequalizers of reflexive pairs.}
+\qaitem{What is a reflexive pair?}{A pair of morphisms $f, g: a \rightrightarrows b$ that share a common right inverse: there exists $s: b \to a$ with $fs = \mathrm{id}_b = gs$.}
+\qaitem{Why does the Eilenberg--Moore category earn the name ``maximal resolution''?}{Every adjunction $F' \dashv G'$ resolving $T$ factors through $\mathcal{C}^T$ via the comparison functor $K$: $\mathcal{D} \xrightarrow{K} \mathcal{C}^T$. So $\mathcal{C}^T$ is final among all such factorizations.}
+\qaitem{Why does the Kleisli category earn the name ``minimal resolution''?}{Every adjunction resolving $T$ receives a functor from $\mathcal{C}_T$: there is a canonical $J: \mathcal{C}_T \to \mathcal{D}$ for any resolution, making $\mathcal{C}_T$ initial.}
+\qaitem{What is the free $T$-algebra on $a$?}{The pair $(Ta, \mu_a)$, where the structure map is $\mu_a : T^2 a \to Ta$. The associativity and unit laws for $(Ta, \mu_a)$ are exactly the monad axioms for $(T,\eta,\mu)$.}
+\qaitem{What pair of morphisms does every $T$-algebra $(a,h)$ present as a coequalizer?}{The pair $\mu_a, Th : T^2 a \rightrightarrows Ta$. The coequalizer is $a$ with map $h: Ta \to a$. This pair is always split by $\eta_{Ta}$ and $\eta_a$.}
+\qaitem{In functional programming, what corresponds to the Kleisli composition?}{The ``bind'' operation ($>>=$ in Haskell). If $f: a \to M\,b$ and $g: b \to M\,c$, then $g \star f = $ `a >>= f >>= g'. The monad laws for $>>=$ are exactly the Kleisli category axioms.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\begin{summarybox}
+\textbf{The two canonical resolutions.}\quad
+Every monad $(T,\eta,\mu)$ on $\mathcal{C}$ arises from an adjunction.
+The minimal such adjunction lives in the Kleisli category $\mathcal{C}_T$
+(objects of $\mathcal{C}$, morphisms are $T$-decorated maps); the maximal
+one lives in the Eilenberg--Moore category $\mathcal{C}^T$ ($T$-algebras).
+Every other resolution factors between these two extremes.
+
+\textbf{The comparison functor.}\quad
+Any adjunction $F \dashv G$ inducing $T$ gives a comparison functor
+$K: \mathcal{D} \to \mathcal{C}^T$, $d \mapsto (Gd, G\varepsilon_d)$.
+The question ``is this adjunction monadic?'' is the question ``is $K$ an
+equivalence?''
+
+\textbf{Beck's theorem.}\quad
+$K$ is an equivalence iff $F$ reflects isomorphisms and $\mathcal{D}$
+has, with $F$ preserving, coequalizers of $F$-split pairs. The key notion
+is an $F$-split pair: one whose image under $F$ has a \emph{split}
+(absolute) coequalizer.
+
+\textbf{Algebraic significance.}\quad
+The Eilenberg--Moore category of the free-algebra monad over $\mathbf{Set}$
+is exactly the category of algebras for the corresponding algebraic theory.
+This makes Beck's theorem the precise categorical statement that monads on
+$\mathbf{Set}$ are the same as equational algebraic theories.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Formal Restatement}
+\label{sec:monads-beck-formal}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+
+\textbf{Monad.}\quad A monad on $\mathcal{C}$ is a monoid object in the
+strict monoidal category $(\mathrm{End}(\mathcal{C}), \circ, \mathrm{Id})$
+of endofunctors: a triple $(T, \eta: \mathrm{Id} \Rightarrow T,
+\mu: T^2 \Rightarrow T)$ with $\mu \circ \mu T = \mu \circ T\mu$,
+$\mu \circ \eta T = \mathrm{id}_T = \mu \circ T\eta$.
+
+\textbf{Eilenberg--Moore category.}\quad $\mathcal{C}^T$ is the category
+of $T$-algebras $(a, h: Ta \to a)$ satisfying the two coherence laws, with
+morphisms the $T$-equivariant maps. The forgetful $G^T: \mathcal{C}^T \to
+\mathcal{C}$ and free $F^T: \mathcal{C} \to \mathcal{C}^T$ ($a \mapsto
+(Ta, \mu_a)$) form an adjunction inducing $T$.
+
+\textbf{Kleisli category.}\quad $\mathcal{C}_T$ has the same objects as
+$\mathcal{C}$ and $\mathrm{Hom}_{\mathcal{C}_T}(a,b) = \mathrm{Hom}_\mathcal{C}(a, Tb)$,
+with Kleisli composition $g \star f = \mu \circ Tg \circ f$ and
+identity $\eta_a$. The inclusion $F_T: \mathcal{C} \to \mathcal{C}_T$ and
+resolution $G_T: \mathcal{C}_T \to \mathcal{C}$ form an adjunction inducing $T$.
+
+\textbf{Comparison functor.}\quad For any adjunction $F \dashv G$ with
+induced monad $T$, the comparison functor $K: \mathcal{D} \to \mathcal{C}^T$
+is $Kd = (Gd, G\varepsilon_d)$, $Kf = Gf$. It satisfies $G^T \circ K = G$.
+
+\textbf{Split coequalizer.}\quad A diagram $a \overset{f}{\underset{g}{\rightrightarrows}} b \overset{q}{\to} c$
+with $s: c \to b$ and $t: b \to a$ satisfying $qs = \mathrm{id}_c$, $ft = \mathrm{id}_b$,
+$gt = sq$. Every functor preserves split coequalizers.
+
+\textbf{$F$-split pair.}\quad A pair $(f,g): a \rightrightarrows b$ in
+$\mathcal{D}$ such that $(Ff, Fg)$ admits a split coequalizer in $\mathcal{C}$.
+
+\textbf{Beck's Monadicity Theorem.}\quad $K$ is an equivalence of
+categories iff (B1) $F$ reflects isomorphisms; and (B2) $\mathcal{D}$ has
+coequalizers of all $F$-split pairs, and $F$ preserves them.
+
+\textbf{Crude monadicity.}\quad Sufficient: (B1) holds and $\mathcal{D}$
+has, with $G$ preserving, coequalizers of all reflexive pairs in $\mathcal{D}$.
+
+\end{formalrestatement}
