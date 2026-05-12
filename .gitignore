@@ -1,0 +1,5 @@
+# Build artifacts
+book/build/
+
+# Claude Code session data
+.claude/

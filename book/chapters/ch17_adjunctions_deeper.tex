@@ -1,0 +1,550 @@
+% ch17_adjunctions_deeper.tex — Volume II Chapter 5
+
+\chapter{Adjunctions: A Deeper Account}
+
+\begin{overviewbox}
+Chapter~7 introduced adjunctions through examples and established the triangle
+identities as a convenient alternative to the hom-set bijection. In this chapter
+we take adjunctions apart more carefully. The triangle identities are not merely
+\emph{convenient} --- they are \emph{equivalent} to the hom-set bijection, and
+that equivalence has a genuine proof. We also show that the right adjoint of a
+functor is unique up to natural isomorphism (not merely asserted so), construct
+adjunctions from initial objects in comma categories, and ask what happens when
+the right adjoint itself has a right adjoint.
+
+By the end you will understand adjunctions from multiple angles
+simultaneously: as bijections, as universal morphisms, and as structure in
+comma categories. That triangulation is the sign of deep understanding.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Triangle Identities Revisited}
+\label{sec:triangle-revisited}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: What Needs Proof}
+
+Chapter~7 stated that from the natural bijection
+$\varphi_{A,B} : \mathcal{D}(FA, B) \xrightarrow{\cong} \mathcal{C}(A, GB)$
+one derives a unit $\eta : \mathrm{Id} \Rightarrow GF$ and a counit
+$\varepsilon : FG \Rightarrow \mathrm{Id}$ satisfying
+\begin{align*}
+  (G\varepsilon)(\eta G) &= \mathrm{id}_G, \\
+  (\varepsilon F)(F\eta) &= \mathrm{id}_F.
+\end{align*}
+But we also claimed the converse: given $\eta$ and $\varepsilon$ satisfying
+these equations, one can reconstruct the bijection $\varphi$. The full proof
+of this equivalence is the business of this section.
+
+\subsection{Expanding: The Two Directions}
+
+The key insight is that $\varphi$ and its inverse can be written entirely in
+terms of $\eta$, $\varepsilon$, and the functors:
+\begin{align*}
+  \varphi(f) &= G(f) \circ \eta_A, \qquad f : FA \to B, \\
+  \varphi^{-1}(g) &= \varepsilon_B \circ F(g), \qquad g : A \to GB.
+\end{align*}
+That these formulas actually define a bijection, and that the bijection is
+natural, follow from the triangle identities. Let us verify this in a
+structured proof.
+
+\begin{theorem}
+\label{thm:triangle-bijection}
+Let $F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to \mathcal{C}$
+be functors. The following data are equivalent:
+\begin{enumerate}
+  \item A natural bijection $\varphi_{A,B} : \mathcal{D}(FA, B) \cong \mathcal{C}(A, GB)$.
+  \item Natural transformations $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow GF$
+        and $\varepsilon : FG \Rightarrow \mathrm{Id}_\mathcal{D}$ satisfying
+        the triangle identities.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+We prove that (1) implies (2), and that (2) implies (1), and that the
+constructions are mutually inverse.
+
+\textbf{(1) $\Rightarrow$ (2).} Define $\eta_A = \varphi_{A,FA}(\mathrm{id}_{FA})$
+and $\varepsilon_B = \varphi^{-1}_{GB,B}(\mathrm{id}_{GB})$. Naturality of
+$\varphi$ implies naturality of $\eta$ and $\varepsilon$. The triangle
+identities follow from the naturality squares for $\varphi$ evaluated at the
+identity morphisms.
+
+\textbf{(2) $\Rightarrow$ (1).} Define $\varphi(f) = G(f) \circ \eta_A$ and
+$\psi(g) = \varepsilon_B \circ F(g)$. The triangle identities ensure $\psi
+\circ \varphi = \mathrm{id}$ and $\varphi \circ \psi = \mathrm{id}$, as we
+verify in the proof log below.
+\end{proof}
+
+\subsection{Formalizing: Triangle Identities $\Leftrightarrow$ Bijection}
+
+\begin{prooflog}
+\proofstep{Goal: $\psi(\varphi(f)) = f$ for $f : FA \to B$.}{We want to show the
+composite is the identity on each morphism.}
+\proofstep{$\psi(\varphi(f)) = \varepsilon_B \circ F(\varphi(f))$}{By definition
+of $\psi$.}
+\proofstep{$= \varepsilon_B \circ F(G(f) \circ \eta_A)$}{Substituting $\varphi(f)
+= G(f) \circ \eta_A$.}
+\proofstep{$= \varepsilon_B \circ FG(f) \circ F(\eta_A)$}{$F$ is a functor, so
+it preserves composition.}
+\proofstep{$= f \circ \varepsilon_{FA} \circ F(\eta_A)$}{Naturality of
+$\varepsilon$: $\varepsilon_B \circ FG(f) = f \circ \varepsilon_{FA}$.}
+\proofstep{$= f \circ \mathrm{id}_{FA} = f$}{The second triangle identity:
+$(\varepsilon F)(F\eta) = \mathrm{id}_F$, so $\varepsilon_{FA} \circ F(\eta_A) =
+\mathrm{id}_{FA}$.}
+\proofstep{Goal: $\varphi(\psi(g)) = g$ for $g : A \to GB$.}{The dual
+computation.}
+\proofstep{$\varphi(\psi(g)) = G(\psi(g)) \circ \eta_A$}{By definition of
+$\varphi$.}
+\proofstep{$= G(\varepsilon_B \circ F(g)) \circ \eta_A$}{Substituting $\psi(g)
+= \varepsilon_B \circ F(g)$.}
+\proofstep{$= G(\varepsilon_B) \circ GF(g) \circ \eta_A$}{$G$ preserves composition.}
+\proofstep{$= G(\varepsilon_B) \circ \eta_{GB} \circ g$}{Naturality of $\eta$:
+$GF(g) \circ \eta_A = \eta_{GB} \circ g$.}
+\proofstep{$= \mathrm{id}_{GB} \circ g = g$}{First triangle identity:
+$(G\varepsilon)(\eta G) = \mathrm{id}_G$, so $G(\varepsilon_B) \circ \eta_{GB} =
+\mathrm{id}_{GB}$.}
+\proofstep{Naturality of $\varphi$.}{For $h : A' \to A$ in $\mathcal{C}$ and
+$k : B \to B'$ in $\mathcal{D}$, the naturality squares for $\varphi$ in both
+variables follow from the fact that $\eta$ and $\varepsilon$ are natural
+transformations and from functoriality of $F$ and $G$.}
+\end{prooflog}
+
+\begin{dialog}
+Why do we need naturality of $\varepsilon$ in the fourth step above?
+
+The naturality square for $\varepsilon$ at $f : FA \to B$ says
+$\varepsilon_B \circ FG(f) = f \circ \varepsilon_{FA}$.
+This is exactly the equation that moves $\varepsilon$ past $FG(f)$, trading
+the outer $B$-component for the inner $FA$-component. Without it, the proof
+would be stuck.
+\end{dialog}
+
+\subsection{Reorganizing: Why Both Directions Matter}
+
+The theorem tells us that neither formulation is more fundamental than the
+other. In practice:
+\begin{itemize}
+  \item The \emph{hom-set bijection} form is easiest for computing and
+        identifying adjunctions.
+  \item The \emph{unit/counit} form is easiest for working in 2-categories
+        and proving things about composites of adjunctions.
+  \item The formulas $\varphi(f) = Gf \circ \eta$ and $\varphi^{-1}(g) =
+        \varepsilon \circ Fg$ let you move between the two whenever needed.
+\end{itemize}
+
+\begin{howtosay}
+\begin{itemize}
+  \item The equations $(G\varepsilon)(\eta G) = \mathrm{id}_G$ and
+        $(\varepsilon F)(F\eta) = \mathrm{id}_F$ are called the
+        \emph{triangle identities} because they correspond to two triangular
+        diagrams (one for each functor).
+  \item In the literature you will also see them written as
+        $G\varepsilon_B \circ \eta_{GB} = \mathrm{id}_{GB}$ (the $G$-triangle)
+        and $\varepsilon_{FA} \circ F\eta_A = \mathrm{id}_{FA}$ (the
+        $F$-triangle).
+  \item Some authors call these the ``zig-zag identities,'' because the
+        composites zig from $\mathcal{C}$ to $\mathcal{D}$ and zag back.
+\end{itemize}
+\end{howtosay}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Uniqueness of Adjoints}
+\label{sec:uniqueness-adjoints}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Two Right Adjoints Must Be Isomorphic}
+
+Chapter~7 stated without full proof that adjoints are unique up to natural
+isomorphism. Now we can prove it rigorously. If $F \dashv G$ and $F \dashv G'$,
+then $G \cong G'$ via a canonical natural isomorphism. The proof is the cleanest
+illustration of the ``Yoneda argument'': two representable functors agreeing on
+all hom-sets must be isomorphic.
+
+\subsection{Expanding: The Idea}
+
+Suppose $G$ and $G'$ are both right adjoints to $F$. For each object $B \in
+\mathcal{D}$, we have natural bijections
+\begin{align*}
+  \mathcal{C}(A, GB) &\cong \mathcal{D}(FA, B), \\
+  \mathcal{C}(A, G'B) &\cong \mathcal{D}(FA, B).
+\end{align*}
+Composing, $\mathcal{C}(A, GB) \cong \mathcal{C}(A, G'B)$ naturally in $A$.
+By the Yoneda lemma, a natural isomorphism of representable functors
+$\mathcal{C}(-, GB) \cong \mathcal{C}(-, G'B)$ comes from a unique isomorphism
+$GB \cong G'B$. Since this works for every $B$, and the isomorphisms assemble
+naturally in $B$, we get a natural isomorphism $G \cong G'$.
+
+\begin{theorem}
+\label{thm:uniqueness-of-adjoints}
+If $F \dashv G$ and $F \dashv G'$, then there is a natural isomorphism
+$G \cong G'$. Dually, if $G \dashv F$ and $G' \dashv F$, then $G \cong G'$.
+\end{theorem}
+
+\begin{proof}
+We construct the isomorphism $\theta : G \Rightarrow G'$ explicitly.
+\end{proof}
+
+\begin{prooflog}
+\proofstep{For each $B \in \mathcal{D}$, apply both bijections at
+$A = G'B$.}{We want a specific isomorphism $GB \to G'B$.}
+\proofstep{The bijection for $G'$: $\mathcal{D}(F(G'B), B) \cong
+\mathcal{C}(G'B, G'B)$.}{Set $A = G'B$.}
+\proofstep{The counit $\varepsilon'_B : F(G'B) \to B$ corresponds to
+$\mathrm{id}_{G'B}$ under this bijection.}{Definition of counit as image of
+the identity.}
+\proofstep{Apply the bijection for $G$ with $A = G'B$, $B = B$:
+$\mathcal{D}(F(G'B), B) \cong \mathcal{C}(G'B, GB)$.}{Use the $F \dashv G$
+bijection on $\varepsilon'_B$.}
+\proofstep{Define $\theta_B := \varphi_G(\varepsilon'_B) = G(\varepsilon'_B)
+\circ \eta_{G'B} : G'B \to GB$.}{This is a specific morphism
+$G'B \to GB$ for each $B$.}
+\proofstep{Symmetrically define $\theta^{-1}_B = G'(\varepsilon_B) \circ
+\eta'_{GB} : GB \to G'B$.}{Using the same construction with $G$ and $G'$
+swapped.}
+\proofstep{$\theta^{-1}_B \circ \theta_B = \mathrm{id}_{G'B}$: compute
+$G'(\varepsilon_B) \circ \eta'_{GB} \circ G(\varepsilon'_B) \circ \eta_{G'B}$.}{
+Composing the two morphisms.}
+\proofstep{By naturality of $\eta'$ and the triangle identity for $G'$
+this collapses to $\mathrm{id}_{G'B}$.}{Each triangle identity cancels one
+of the zigs.}
+\proofstep{Similarly $\theta_B \circ \theta^{-1}_B = \mathrm{id}_{GB}$.}{Symmetric
+argument.}
+\proofstep{Naturality: for $k : B \to B'$, both sides of $\theta_{B'} \circ
+G'(k) = G(k) \circ \theta_B$ follow from naturality of $\eta$, $\varepsilon$,
+$\eta'$, $\varepsilon'$.}{Standard naturality check.}
+\proofstep{Therefore $\theta : G \Rightarrow G'$ is a natural isomorphism.}{All
+components are isomorphisms and assembly is natural.}
+\end{prooflog}
+
+\subsection{Reorganizing: The Yoneda Shortcut}
+
+The proof above constructs $\theta_B$ by hand, but the Yoneda lemma offers a
+cleaner perspective. The composite
+\begin{equation*}
+  \mathcal{C}(-, GB) \cong \mathcal{D}(F(-), B) \cong \mathcal{C}(-, G'B)
+\end{equation*}
+is a natural isomorphism of representable presheaves on $\mathcal{C}$. The
+Yoneda lemma says that any natural isomorphism $\mathcal{C}(-, X) \cong
+\mathcal{C}(-, Y)$ arises from a unique isomorphism $X \cong Y$. Applied here,
+this gives $\theta_B : GB \cong G'B$ for each $B$, naturally in $B$.
+
+The two approaches are equivalent, but the Yoneda version is shorter once you
+internalize the lemma.
+
+\subsection{Simplifying: The Slogan}
+
+\begin{equation*}
+  \boxed{\;F \dashv G \;\text{ and }\; F \dashv G'
+  \;\Longrightarrow\;
+  G \cong G' \;\text{(naturally)}.\;}
+\end{equation*}
+
+This means we may speak of \emph{the} right adjoint to $F$ without
+ambiguity, knowing it is determined up to unique natural isomorphism.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjoints as Initial Objects in Comma Categories}
+\label{sec:adjoints-initial}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: The Comma Category Perspective}
+
+There is a third, very geometric way to understand adjunctions. The left
+adjoint $F(c)$ is characterized as the \emph{initial object in the comma
+category $(c \downarrow G)$}. Let us unpack this.
+
+The comma category $(c \downarrow G)$ has:
+\begin{itemize}
+  \item Objects: pairs $(d, f)$ where $d \in \mathcal{D}$ and $f : c \to G(d)$
+        is a morphism in $\mathcal{C}$.
+  \item Morphisms from $(d, f)$ to $(d', f')$: a morphism $h : d \to d'$ in
+        $\mathcal{D}$ such that $G(h) \circ f = f'$.
+\end{itemize}
+An initial object in $(c \downarrow G)$ is an object $(d_0, f_0)$ such that for
+every $(d, f)$ there is a unique morphism $(d_0, f_0) \to (d, f)$.
+
+\begin{dialog}
+What does an initial object in $(c \downarrow G)$ look like in the free-monoid
+example?
+
+Take $c = \{a, b\}$ (a two-element set), $G = $ forgetful functor from monoids
+to sets, $\mathcal{D} = \mathbf{Mon}$. The comma category $(c \downarrow G)$ has
+objects: pairs $(\text{monoid } M, \text{function } c \to M)$. The initial
+object is the free monoid on $\{a, b\}$: it has a canonical function $c \to F(c)$
+(send each generator to itself), and any function $c \to M$ factors uniquely
+through $F(c)$ by the universal property.
+\end{dialog}
+
+\subsection{Expanding: The Theorem}
+
+\begin{theorem}
+\label{thm:adjoint-initial}
+Let $F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to \mathcal{C}$.
+The following are equivalent:
+\begin{enumerate}
+  \item $F$ is left adjoint to $G$.
+  \item For every $c \in \mathcal{C}$, there exists an initial object in the
+        comma category $(c \downarrow G)$.
+\end{enumerate}
+When these hold, the initial object of $(c \downarrow G)$ is $(F(c), \eta_c)$,
+where $\eta_c : c \to GF(c)$ is the unit of the adjunction.
+\end{theorem}
+
+\begin{proof}
+(1) $\Rightarrow$ (2): Given $F \dashv G$, we claim $(F(c), \eta_c)$ is initial
+in $(c \downarrow G)$.
+
+Let $(d, f : c \to Gd)$ be any object of $(c \downarrow G)$. By the adjunction
+bijection, $f$ corresponds uniquely to a morphism $\tilde{f} : F(c) \to d$ in
+$\mathcal{D}$ with $\varphi(\tilde{f}) = f$. That is, $G(\tilde{f}) \circ
+\eta_c = f$. This says $\tilde{f}$ is a morphism $(F(c), \eta_c) \to (d, f)$
+in $(c \downarrow G)$. Uniqueness of $\tilde{f}$ from bijectivity of $\varphi$
+says it is the unique such morphism.
+
+(2) $\Rightarrow$ (1): Given initial objects $(F(c), \eta_c)$ in each $(c
+\downarrow G)$, define $\varphi_{c,d}(h) = G(h) \circ \eta_c$ for $h : F(c)
+\to d$. Initiality gives a unique $h$ for each $f : c \to Gd$, making $\varphi$
+a bijection. Naturality follows from functoriality of $G$ and naturality of $\eta$.
+
+The construction of $F$ on morphisms: for $k : c \to c'$ in $\mathcal{C}$, the
+morphism $F(k) : F(c) \to F(c')$ is the unique morphism in $\mathcal{D}$
+corresponding (under the adjunction at $c$) to $\eta_{c'} \circ k : c \to GF(c')$.
+\end{proof}
+
+\subsection{Formalizing: The Universal Arrow}
+
+The pair $(F(c), \eta_c)$ is called a \term{universal arrow from $c$ to $G$}.
+The universal property says: for every $d \in \mathcal{D}$ and morphism $f :
+c \to Gd$, there is a unique $\tilde{f} : F(c) \to d$ with $G(\tilde{f}) \circ
+\eta_c = f$.
+
+\begin{equation*}
+\begin{tikzcd}
+  c \arrow[r, "\eta_c"] \arrow[dr, "f"'] & GF(c) \arrow[d, "G(\tilde{f})"] \\
+  & Gd
+\end{tikzcd}
+\quad \leftrightarrow \quad
+\begin{tikzcd}
+  F(c) \arrow[r, dashed, "\exists!\, \tilde{f}"] & d
+\end{tikzcd}
+\end{equation*}
+
+This is the ``initial universal arrow'' form of the adjunction. Compare with
+the construction of free objects in algebra: the free group on $S$ has a
+universal property of exactly this form, with $G$ the forgetful functor.
+
+\subsection{Reorganizing: Three Forms Compared}
+
+\begin{center}
+\begin{tabular}{lll}
+\textbf{Form} & \textbf{Data} & \textbf{Best for} \\
+\hline
+Hom-set bijection & $\varphi_{A,B}$ natural & Computing examples \\
+Unit/counit & $\eta, \varepsilon$ + triangle ids & 2-categorical arguments \\
+Initial in $(c \downarrow G)$ & Universal arrows & Proving existence \\
+\end{tabular}
+\end{center}
+
+The Adjoint Functor Theorems (Chapter~10) use the third form: to construct a
+left adjoint to $G$, show that each comma category $(c \downarrow G)$ has an
+initial object.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjoint of an Adjoint}
+\label{sec:adjoint-of-adjoint}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Can We Keep Going?}
+
+If $F \dashv G$, can $G$ have a right adjoint too? Certainly. The question is
+whether it is related to $F$ in any systematic way, and what the structure of
+an adjoint triple looks like.
+
+An \term{adjoint triple} is a sequence $F \dashv G \dashv H$ meaning $F \dashv G$
+and $G \dashv H$. In this situation $F$ is a left adjoint of $G$ and $H$ is a
+right adjoint of $G$ --- so $G$ is the middle piece with an adjoint on each side.
+
+\subsection{Expanding: Adjoint Triples in Nature}
+
+\begin{example}{Constant Diagram and Limit/Colimit}
+Let $\mathcal{J}$ be a small category and consider the functor categories. The
+\term{diagonal functor} $\Delta : \mathcal{C} \to \mathcal{C}^\mathcal{J}$ sends
+an object $c$ to the constant diagram at $c$. We have:
+\begin{equation*}
+  \operatorname{colim} \dashv \Delta \dashv \lim,
+\end{equation*}
+an adjoint triple. The colimit functor is left adjoint to $\Delta$ (since
+$\operatorname{colim} D \to c$ corresponds to $D \to \Delta c$), and $\Delta$ is
+left adjoint to the limit functor.
+\end{example}
+
+\begin{example}{Restriction and Extensions of Sheaves}
+For an open inclusion $j : U \hookrightarrow X$ of topological spaces, the
+restriction functor $j^* : \mathbf{Sh}(X) \to \mathbf{Sh}(U)$ has both a left
+adjoint $j_!$ (extension by zero) and a right adjoint $j_*$ (direct image):
+\begin{equation*}
+  j_! \dashv j^* \dashv j_*.
+\end{equation*}
+\end{example}
+
+\begin{example}{Kan Extensions Along a Functor}
+For $p : \mathcal{C} \to \mathcal{E}$, the restriction functor
+$(-) \circ p : [\mathcal{E}, \mathcal{D}] \to [\mathcal{C}, \mathcal{D}]$ (which
+precomposes with $p$) sits in an adjoint triple
+\begin{equation*}
+  \operatorname{Lan}_p \dashv (-) \circ p \dashv \operatorname{Ran}_p.
+\end{equation*}
+The left Kan extension is the left adjoint, the right Kan extension is the
+right adjoint. This is the content of Chapter~18.
+\end{example}
+
+\subsection{Formalizing: Structure of an Adjoint Triple}
+
+\begin{definition}
+An \term{adjoint triple} $(F, G, H)$ between categories $\mathcal{C}$ and
+$\mathcal{D}$ consists of functors $F, H : \mathcal{C} \to \mathcal{D}$ and
+$G : \mathcal{D} \to \mathcal{C}$ (or the transposed version) with $F \dashv G$
+and $G \dashv H$.
+\end{definition}
+
+An important structural consequence:
+
+\begin{proposition}
+In an adjoint triple $F \dashv G \dashv H$, the functor $F$ preserves colimits,
+$G$ preserves both limits and colimits, and $H$ preserves limits.
+\end{proposition}
+
+\begin{proof}
+$F$ is a left adjoint, so it preserves colimits (LAPC). $H$ is a right adjoint,
+so it preserves limits (RAPL). $G$ is simultaneously a right adjoint (to $F$,
+so RAPL applies) and a left adjoint (to $H$, so LAPC applies). Thus $G$ preserves
+both.
+\end{proof}
+
+\subsection{Reorganizing: The Double Right Adjoint}
+
+Starting from $F \dashv G$, the ``double right adjoint'' question asks: is
+$G \dashv ?$. The answer depends entirely on the specific functors involved ---
+there is no general construction of a right adjoint to $G$ from $F$ alone. The
+existence of a right adjoint to $G$ is an independent piece of structure.
+
+What \emph{can} be said: by uniqueness of adjoints (Theorem~\ref{thm:uniqueness-of-adjoints}),
+if $G$ has any right adjoint, that right adjoint is unique up to natural
+isomorphism. So the set of adjoint triples containing a given $F \dashv G$ is
+either empty or essentially unique.
+
+\subsection{Simplifying: Higher Adjoints}
+
+One can ask about adjoint \emph{quadruples}, quintuples, and so on. In good
+situations (locally presentable categories, Grothendieck toposes) these finite
+adjoint towers arise naturally. In the theory of $\infty$-categories there are
+even infinite adjoint chains. The pattern of limit/colimit preservation escalates
+accordingly.
+
+\begin{dialog}
+Is there a way to tell in advance whether $G$ has a right adjoint, without
+constructing one?
+
+Yes: the Adjoint Functor Theorems (Chapter~10) give conditions. Roughly, $G$
+has a right adjoint iff it preserves colimits and a smallness/solution-set
+condition holds. The theorem tells you to check preservation rather than construct.
+\end{dialog}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Exercises}
+\addcontentsline{toc}{section}{Exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{State the triangle identities in terms of the unit and counit.}{$(G\varepsilon)(\eta G) = \mathrm{id}_G$ and $(\varepsilon F)(F\eta) = \mathrm{id}_F$.}
+\qaitem{Write the adjunction bijection $\varphi$ in terms of unit and counit.}{$\varphi(f) = G(f) \circ \eta_A$ for $f : FA \to B$.}
+\qaitem{Write $\varphi^{-1}$ in terms of unit and counit.}{$\varphi^{-1}(g) = \varepsilon_B \circ F(g)$ for $g : A \to GB$.}
+\qaitem{Which naturality of $\varepsilon$ is used in the proof that $\psi \circ \varphi = \mathrm{id}$?}{The naturality $\varepsilon_B \circ FG(f) = f \circ \varepsilon_{FA}$.}
+\qaitem{What does it mean for $\psi \circ \varphi = \mathrm{id}$?}{The formula $\varphi^{-1}(\varphi(f)) = f$ for all $f : FA \to B$.}
+\qaitem{Suppose $F \dashv G$ and $F \dashv G'$. What is the canonical isomorphism $\theta_B : G'B \to GB$?}{$\theta_B = G(\varepsilon'_B) \circ \eta_{G'B}$, using the $G'$-counit applied via the $G$-unit.}
+\qaitem{What is the Yoneda argument for uniqueness of adjoints?}{The bijection $\mathcal{C}(-,GB) \cong \mathcal{D}(F-,B) \cong \mathcal{C}(-,G'B)$ is a natural iso of representables, so the Yoneda lemma gives $GB \cong G'B$.}
+\qaitem{What is the comma category $(c \downarrow G)$?}{Objects are pairs $(d, f : c \to Gd)$; morphisms are $h : d \to d'$ with $G(h) \circ f = f'$.}
+\qaitem{What is the initial object in $(c \downarrow G)$ when $F \dashv G$ exists?}{$(F(c), \eta_c : c \to GF(c))$.}
+\qaitem{What is a universal arrow from $c$ to $G$?}{A pair $(F(c), \eta_c)$ such that every $f : c \to Gd$ factors uniquely as $G(\tilde{f}) \circ \eta_c$.}
+\qaitem{Reformulate the adjunction $F \dashv G$ purely using universal arrows.}{For every $c \in \mathcal{C}$, there is a universal arrow from $c$ to $G$.}
+\qaitem{Give an example of an adjoint triple involving the diagonal functor.}{$\operatorname{colim} \dashv \Delta \dashv \lim$.}
+\qaitem{In $j_! \dashv j^* \dashv j_*$ for an open inclusion $j$, which functor preserves both limits and colimits?}{The restriction $j^*$, being both a left and right adjoint.}
+\qaitem{In an adjoint triple $F \dashv G \dashv H$, which functor preserves limits?}{Both $G$ (as right adjoint to $F$) and $H$ (as right adjoint to $G$).}
+\qaitem{Does $F \dashv G$ force $G$ to have a right adjoint?}{No; the existence of a right adjoint to $G$ is independent structure.}
+\qaitem{If $G$ has a right adjoint, how many essentially different ones does it have?}{Exactly one, up to natural isomorphism (by uniqueness of adjoints).}
+\qaitem{What does RAPL say about the middle functor in an adjoint triple?}{It preserves limits (being a right adjoint) and colimits (being a left adjoint).}
+\qaitem{What is the adjoint triple for Kan extensions along $p : \mathcal{C} \to \mathcal{E}$?}{$\operatorname{Lan}_p \dashv (-) \circ p \dashv \operatorname{Ran}_p$.}
+\qaitem{What is the ``solution-set condition'' used for?}{It is a smallness hypothesis in the Adjoint Functor Theorem that, combined with limit-preservation, guarantees the existence of a left adjoint.}
+\qaitem{Are there categories admitting infinite adjoint chains?}{Yes: in sufficiently well-behaved categories (like presheaf toposes) one finds arbitrarily long adjoint chains.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Triangle identities $\Leftrightarrow$ hom-set bijection.} The formulas
+$\varphi(f) = G(f) \circ \eta_A$ and $\varphi^{-1}(g) = \varepsilon_B \circ F(g)$
+convert between the two presentations of an adjunction. The triangle identities
+are exactly the condition that these formulas define inverse bijections.
+
+\textbf{Uniqueness.} If $F \dashv G$ and $F \dashv G'$, then $G \cong G'$
+canonically. The canonical isomorphism $\theta_B$ is constructed by applying
+one adjunction bijection to the counit of the other.
+
+\textbf{Comma categories.} The left adjoint $F(c)$ is the initial object in
+the comma category $(c \downarrow G)$. Equivalently, $(F(c), \eta_c)$ is the
+universal arrow from $c$ to $G$. This third formulation of adjunctions is the
+basis for the Adjoint Functor Theorems.
+
+\textbf{Adjoint triples.} When $G$ itself has a right adjoint $H$, we get
+$F \dashv G \dashv H$. The middle functor $G$ then preserves both limits and
+colimits. Examples: $\operatorname{colim} \dashv \Delta \dashv \lim$, and Kan
+extensions $\operatorname{Lan}_p \dashv (-) \circ p \dashv \operatorname{Ran}_p$.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Triangle identities.} Given $F : \mathcal{C} \to \mathcal{D}$,
+$G : \mathcal{D} \to \mathcal{C}$, $\eta : \mathrm{Id}_\mathcal{C} \Rightarrow GF$,
+$\varepsilon : FG \Rightarrow \mathrm{Id}_\mathcal{D}$, the following are
+equivalent: (i) $F \dashv G$ with unit $\eta$ and counit $\varepsilon$; (ii)
+$(G\varepsilon)(\eta G) = \mathrm{id}_G$ and $(\varepsilon F)(F\eta) =
+\mathrm{id}_F$. Under these conditions, $\varphi_{A,B}(f) = G(f) \circ \eta_A$
+and $\varphi^{-1}_{A,B}(g) = \varepsilon_B \circ F(g)$ are mutually inverse
+natural bijections.
+
+\medskip
+\textbf{Uniqueness.} If $F \dashv G$ and $F \dashv G'$, then $G \cong G'$
+via $\theta_B = G(\varepsilon'_B) \circ \eta_{G'B}$, a natural isomorphism.
+
+\medskip
+\textbf{Comma category characterization.} $F \dashv G$ iff for each $c$,
+the comma category $(c \downarrow G)$ has an initial object, which is
+$(F(c), \eta_c : c \to GF(c))$.
+
+\medskip
+\textbf{Adjoint triple.} $F \dashv G \dashv H$ means $F \dashv G$ and
+$G \dashv H$. The middle functor $G$ preserves limits (RAPL applied to
+$F \dashv G$) and colimits (LAPC applied to $G \dashv H$).
+
+\medskip
+\noindent\textit{Chapter~18 develops Kan extensions as adjoint triples and
+shows how every adjunction can be expressed using Kan extensions along the
+Yoneda embedding.}
+\end{formalrestatement}

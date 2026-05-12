@@ -1,0 +1,288 @@
+% ch13_categories_as_algebra.tex — Volume II Chapter 1
+
+\chapter{Categories as Algebraic Structures}
+
+The first volume introduced categories from the outside: objects, morphisms,
+composition, identity. This chapter looks at them from the inside, as algebraic
+structures in the sense of abstract algebra. The key insight is that a category
+is a \emph{monoid with multiple objects} — and that monoids, groups, preorders,
+and groupoids are each a special type of category.
+
+This algebraic viewpoint sharpens the intuition for what is ``categorically
+natural'' versus what is a coincidence of a specific example.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Categories as Generalized Monoids}
+
+A monoid is a set $M$ with an associative binary operation and a unit element.
+A category has objects, morphisms, associative composition, and identity morphisms.
+The difference: in a monoid, any two elements can be multiplied. In a category,
+two morphisms $f : a \to b$ and $g : c \to d$ can only be composed when $b = c$.
+Composition is \emph{partial}.
+
+\begin{dialog}
+``A category is just a monoid where the multiplication might not be defined?''
+
+Exactly. The technical term is \term{monoidoid} — rarely used — but the idea is
+precise: a category is to a monoid what a groupoid is to a group.
+\end{dialog}
+
+The correspondence is made exact by passing to one-object categories.
+
+\begin{theorem}
+There is a bijection between monoids and categories with exactly one object.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Let $\mathcal{C}$ be a category with one object, say $\star$.}
+           {$\mathcal{C}$ has exactly the morphisms $\mathcal{C}(\star, \star)$.}
+\proofstep{Composition $\circ : \mathcal{C}(\star,\star) \times \mathcal{C}(\star,\star) \to \mathcal{C}(\star,\star)$
+           is total, since all morphisms share domain and codomain $\star$.}
+           {In a one-object category, every morphism has both domain and codomain equal to $\star$.}
+\proofstep{Composition is associative (category axiom); $\operatorname{id}_\star$ is
+           a two-sided unit.}
+           {This is precisely the monoid axioms for $(\mathcal{C}(\star,\star), \circ, \operatorname{id}_\star)$.}
+\proofstep{Conversely, given a monoid $(M, \cdot, e)$, define a category $\mathbf{B}M$
+           with one object $\star$ and morphisms $\mathbf{B}M(\star,\star) = M$.}
+           {$\mathbf{B}$ stands for ``delooping'' — a standard construction.}
+\proofstep{Composition in $\mathbf{B}M$ is multiplication in $M$; identity is $e$.
+           Associativity and unit laws hold because $M$ is a monoid.}
+           {The two constructions are inverses: $\mathbf{B}M$ round-trips a monoid
+            back to itself.}
+\end{prooflog}
+
+\begin{howtosay}
+$\mathbf{B}M$ is read ``the delooping of $M$'' or ``$M$ viewed as a one-object category.''
+The ``B'' comes from the classifying space construction in topology.
+\end{howtosay}
+
+The same pattern gives a bijection between groups and one-object groupoids (categories
+where every morphism is an isomorphism).
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Preorders, Groupoids, and the Algebraic Taxonomy}
+
+A \term{preorder} $(P, \leq)$ gives a category: objects are elements, and there
+is exactly one morphism $a \to b$ if $a \leq b$, no morphism otherwise. The
+category axioms become: $a \leq a$ (reflexivity = identity) and $a \leq b$,
+$b \leq c$ implies $a \leq c$ (transitivity = composition). A preorder is
+a category where each hom-set has at most one element.
+
+A \term{groupoid} is a category where every morphism is an isomorphism.
+Groups are one-object groupoids. Equivalence relations, viewed as preorders,
+are groupoids that are also preorders: since $a \sim b \Leftrightarrow b \sim a$,
+every morphism $a \to b$ has an inverse $b \to a$.
+
+\begin{center}
+\renewcommand{\arraystretch}{1.4}
+\begin{tabular}{lll}
+\hline
+\textbf{Algebraic structure} & \textbf{As a category} & \textbf{Condition} \\
+\hline
+Monoid & 1-object category & --- \\
+Group & 1-object groupoid & every morphism invertible \\
+Preorder & thin category & at most 1 morphism per hom-set \\
+Partial order & thin category with no cycles & thin + no $a \neq b$ with $a \leq b \leq a$ \\
+Groupoid & category & every morphism invertible \\
+Equivalence relation & thin groupoid & thin + invertible \\
+\hline
+\end{tabular}
+\end{center}
+
+These are not just analogies — they are literal special cases. The category
+$\mathbf{Mon}$ of monoids is a full subcategory of $\mathbf{Cat}$ via $\mathbf{B}$.
+The category $\mathbf{Grp}$ embeds into $\mathbf{Gpd}$ (groupoids). The category
+$\mathbf{Pos}$ of partial orders embeds into $\mathbf{Cat}$.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Ab-Enriched Categories and the Additive Setting}
+
+A category is \term{$\mathbf{Ab}$-enriched} when each hom-set $\mathcal{C}(a,b)$
+is an abelian group and composition is bilinear:
+\[
+  (f + f') \circ g = f \circ g + f' \circ g,
+  \qquad
+  f \circ (g + g') = f \circ g + f \circ g'.
+\]
+Such categories are called \term{preadditive}. The zero morphism $0_{a,b} : a \to b$
+is the zero element of the abelian group $\mathcal{C}(a,b)$.
+
+When a preadditive category also has a zero object ($0$ with $\mathcal{C}(0,a)$ and
+$\mathcal{C}(a,0)$ each having one element for all $a$), and all finite products
+and coproducts, it is called \term{additive}. In additive categories, products and
+coproducts coincide and are called \term{biproducts}, written $A \oplus B$.
+
+\begin{theorem}
+In a preadditive category $\mathcal{C}$, if a product $A \times B$ and a
+coproduct $A + B$ both exist for objects $A, B$, then they are isomorphic.
+\end{theorem}
+
+\begin{prooflog}
+\proofstep{Write $\iota_1 : A \to A+B$, $\iota_2 : B \to A+B$ for the coproduct
+           inclusions, and $\pi_1 : A\times B \to A$, $\pi_2 : A\times B \to B$
+           for the product projections.}
+           {Standard notation for the universal morphisms.}
+\proofstep{The universal property of $A\times B$ gives a unique morphism
+           $\phi : A+B \to A\times B$ such that
+           $\pi_1 \circ \phi \circ \iota_1 = \operatorname{id}_A$,
+           $\pi_2 \circ \phi \circ \iota_2 = \operatorname{id}_B$,
+           $\pi_1 \circ \phi \circ \iota_2 = 0$,
+           $\pi_2 \circ \phi \circ \iota_1 = 0$.}
+           {The cross-terms vanish because the only morphisms involving $0_{a,b}$
+            in the preadditive structure allow them to be zero.}
+\proofstep{By the bilinearity of composition and the universal property of the
+           coproduct, $\phi \circ (\iota_1 \circ \pi_1 + \iota_2 \circ \pi_2) =
+           \operatorname{id}_{A\times B}$ and
+           $(\iota_1 \circ \pi_1 + \iota_2 \circ \pi_2) \circ \phi =
+           \operatorname{id}_{A+B}$.}
+           {The sum is well-defined because hom-sets are abelian groups.}
+\proofstep{So $\phi$ is an isomorphism $A+B \xrightarrow{\sim} A\times B$.}
+           {This isomorphism is the biproduct structure.}
+\end{prooflog}
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Functors Between Algebraic Categories}
+
+Under the algebraic interpretation, functors between one-object categories are
+precisely monoid homomorphisms. A functor $F : \mathbf{B}M \to \mathbf{B}N$
+maps the single object $\star_M$ to $\star_N$ and acts on morphisms as
+$F : M \to N$; functoriality requires $F(m \cdot m') = F(m) \cdot F(m')$ and
+$F(e_M) = e_N$. That is precisely a monoid homomorphism.
+
+Similarly, a functor $F : \mathcal{P} \to \mathcal{Q}$ between preorder categories
+is an order-preserving map: $a \leq b \Rightarrow F(a) \leq F(b)$.
+
+Natural transformations between functors of one-object categories are
+elements of the target monoid satisfying a conjugation condition. A natural
+transformation $\alpha : F \Rightarrow G$ between functors
+$F, G : \mathbf{B}M \to \mathbf{B}N$ is a single element $n \in N$ such that
+for every $m \in M$:
+\[
+  G(m) \cdot n = n \cdot F(m).
+\]
+This is a \term{bimodule map condition} or \term{intertwining condition}.
+
+% ─────────────────────────────────────────────────────────────────────────────
+\section{Exercises}
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What algebraic structure corresponds to a one-object category?}
+       {A monoid. The single hom-set $\mathcal{C}(\star,\star)$ with composition
+        as multiplication and the identity morphism as unit.}
+
+\qaitem{What notation is used for the one-object category associated to a monoid $M$?}
+       {$\mathbf{B}M$, the ``delooping'' of $M$.}
+
+\qaitem{What algebraic structure corresponds to a one-object groupoid?}
+       {A group. Every morphism has an inverse, so the monoid is a group.}
+
+\qaitem{What is a thin category?}
+       {A category where each hom-set has at most one element. Preorders are
+        the thin categories.}
+
+\qaitem{What category axioms become when a category is a preorder?}
+       {Reflexivity ($a \leq a$) = identity; transitivity = composition. No further axioms.}
+
+\qaitem{What is a groupoid?}
+       {A category in which every morphism is an isomorphism.}
+
+\qaitem{How does an equivalence relation embed into category theory?}
+       {As a thin groupoid: a thin category where every morphism (arrow $a \to b$
+        when $a \sim b$) is invertible.}
+
+\qaitem{What is a preadditive category?}
+       {An $\mathbf{Ab}$-enriched category: hom-sets are abelian groups and
+        composition is bilinear.}
+
+\qaitem{What is a zero morphism in a preadditive category?}
+       {The zero element $0_{a,b} \in \mathcal{C}(a,b)$; it factors through
+        any zero object.}
+
+\qaitem{What is a biproduct?}
+       {An object $A \oplus B$ that is simultaneously a product and a coproduct
+        of $A$ and $B$; exists in additive categories.}
+
+\qaitem{In a preadditive category, when do products equal coproducts?}
+       {When both exist, they are isomorphic (the biproduct theorem). The isomorphism
+        is constructed via the bilinear structure.}
+
+\qaitem{What is a functor between one-object categories?}
+       {A monoid homomorphism. Functoriality is exactly the homomorphism conditions.}
+
+\qaitem{What is a natural transformation between functors of one-object categories?}
+       {An element $n$ of the target monoid satisfying $G(m) \cdot n = n \cdot F(m)$
+        for all $m$ — an intertwining condition.}
+
+\qaitem{What is a functor between preorder categories?}
+       {An order-preserving map: $a \leq b \Rightarrow F(a) \leq F(b)$.}
+
+\qaitem{Why is the algebraic perspective useful?}
+       {It shows that classical algebraic structures (monoids, groups, orders) are
+        not just analogous to categories but literally special cases, making their
+        theorems instances of general categorical theorems.}
+
+\qaitem{What is the category $\mathbf{Gpd}$ of groupoids?}
+       {Objects are groupoids; morphisms are functors between them. It contains
+        $\mathbf{Grp}$ as a full subcategory via $\mathbf{B}$.}
+
+\qaitem{What does it mean for a category to be ``skeletally small''?}
+       {It has only a set of isomorphism classes of objects; equivalently, it is
+        equivalent to a small category.}
+
+\qaitem{What is a free category on a directed graph?}
+       {Objects are vertices; morphisms are finite paths (sequences of composable edges);
+        composition is path concatenation; identity is the empty path at each vertex.}
+
+\qaitem{What universal property does the free category satisfy?}
+       {Any function from the graph to the underlying graph of a category $\mathcal{C}$
+        extends uniquely to a functor from the free category to $\mathcal{C}$.}
+
+\qaitem{How does the free-forgetful adjunction for categories go?}
+       {Free category functor $\mathbf{F} : \mathbf{Grph} \to \mathbf{Cat}$ is left
+        adjoint to the underlying-graph functor $U : \mathbf{Cat} \to \mathbf{Grph}$.}
+
+\qaitem{What is a congruence on a category?}
+       {An equivalence relation on each hom-set, compatible with composition;
+        used to form quotient categories.}
+
+\qaitem{What is the relationship between relations on a monoid and congruences?}
+       {A congruence on the one-object category $\mathbf{B}M$ is exactly a congruence
+        on the monoid $M$ in the algebraic sense.}
+\end{qa}
+\end{exercisesbox}
+
+\begin{summarybox}
+A category is a \textbf{monoid with multiple objects}: composition is a partially
+defined associative operation. One-object categories are exactly monoids; one-object
+groupoids are groups; thin categories are preorders. Enriched over $\mathbf{Ab}$,
+categories become preadditive; with biproducts and zero object, additive. Functors
+between algebraic categories recover algebraic homomorphisms; natural transformations
+recover intertwining conditions.
+\end{summarybox}
+
+\section{Formal Restatement}
+
+\begin{formalrestatement}
+\textbf{Algebraic taxonomy.}
+A category $\mathcal{C}$ is:
+\begin{itemize}
+  \item a \term{monoid} iff $|\operatorname{ob}\mathcal{C}| = 1$;
+  \item a \term{group} iff it is a monoid and a groupoid;
+  \item a \term{preorder} iff $|\mathcal{C}(a,b)| \leq 1$ for all $a,b$;
+  \item a \term{groupoid} iff every morphism is an isomorphism.
+\end{itemize}
+
+\textbf{Delooping.} $\mathbf{B} : \mathbf{Mon} \hookrightarrow \mathbf{Cat}$,
+$\mathbf{B}M$ has one object $\star$ and $\mathbf{B}M(\star,\star) = M$.
+
+\textbf{Preadditive.} $\mathcal{C}$ is preadditive iff it is $\mathbf{Ab}$-enriched:
+each $\mathcal{C}(a,b) \in \mathbf{Ab}$; composition bilinear.
+
+\textbf{Biproduct theorem.} In a preadditive category, if $A\times B$ and $A+B$
+both exist, then $A+B \cong A\times B$.
+
+\textbf{Nat transf between $\mathbf{B}M$-functors.} $\alpha : F \Rightarrow G$
+for $F, G : \mathbf{B}M \to \mathbf{B}N$ is an element $n \in N$ with
+$G(m) \cdot n = n \cdot F(m)$ for all $m \in M$.
+\end{formalrestatement}
