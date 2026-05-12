@@ -1,0 +1,624 @@
+\chapter{Functors}
+
+\begin{overviewbox}
+A category is a world of objects connected by morphisms. A \emph{functor} is
+a map between two such worlds that respects their structure. It sends objects
+to objects and morphisms to morphisms, but not arbitrarily: it must preserve
+composition and identity. A functor that ignores the structure --- sending
+everything to a single point --- is still a functor; one that scrambles the
+composition rules is not.
+
+By the end of this chapter we will have seen that categories and functors
+themselves form a category. This is one of the first signs that category theory
+is ``self-referential'' in a productive way: the tools we build can be applied
+to the framework that built them.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Structure-Preserving Maps}
+\label{sec:structure-preserving}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Translating Between Categories}
+
+Suppose you have two categories. A functor from the first to the second is a
+systematic translation: every object in the first world is sent to some object
+in the second, and every arrow in the first world is sent to an arrow in the
+second --- in a way that respects the structure.
+
+``Respects the structure'' has two precise requirements:
+\begin{itemize}
+  \item Composites translate to composites.
+  \item Identity morphisms translate to identity morphisms.
+\end{itemize}
+
+If these two conditions hold, the translation is a functor.
+
+\subsection{Expanding: A Functor from Recipes to Approvals}
+
+We have seen the recipe category (Chop $\to$ Sauté $\to$ Add) and the
+approval chain category (Request $\to$ Approved $\to$ Final). Both are
+thin categories with three objects in a line. A functor between them is
+a systematic renaming that preserves the ordering structure.
+
+\begin{example}{The Status Functor}
+Define $F$ as follows:
+
+\medskip
+\begin{center}
+\begin{tabular}{ll}
+  \textit{Recipe} & \textit{Approval chain} \\[4pt]
+  \hline\\[-6pt]
+  Chop & $\mapsto$ Request \\
+  Sauté & $\mapsto$ Approved \\
+  Add & $\mapsto$ Final \\
+\end{tabular}
+\end{center}
+\medskip
+
+On objects: $F(\mathrm{Chop}) = \mathrm{Request}$, and so on. On morphisms:
+$F(f) = $ the unique morphism from Request to Approved (the manager's
+approval). $F(g) = $ the unique morphism from Approved to Final. $F(g \circ f)
+= $ the unique morphism from Request to Final.
+
+Is this a functor? We check:
+\begin{itemize}
+  \item \textbf{Preserves composition}: $F(g \circ f) = F(g) \circ F(f)$.
+        Both sides are the unique morphism from Request to Final. \checkmark
+  \item \textbf{Preserves identity}: $F(\mathrm{id}_{\mathrm{Chop}}) =
+        \mathrm{id}_{\mathrm{Request}}$. In a thin category, identity
+        morphisms are the only morphisms from an object to itself, so this
+        is automatic. \checkmark
+\end{itemize}
+
+$F$ is a functor.
+\end{example}
+
+\begin{example}{A Functor Between Orderings}
+Consider the temperature ordering $\mathcal{T}$:
+\[
+  0°\text{C} \;\to\; 20°\text{C} \;\to\; 37°\text{C} \;\to\; 100°\text{C}
+\]
+and the size ordering $\mathcal{S}$: Small $\to$ Medium $\to$ Large.
+
+Define $G : \mathcal{T} \to \mathcal{S}$ by:
+\[
+  G(0°\text{C}) = \mathrm{Small},\quad
+  G(20°\text{C}) = \mathrm{Small},\quad
+  G(37°\text{C}) = \mathrm{Medium},\quad
+  G(100°\text{C}) = \mathrm{Large}.
+\]
+
+Two temperature values (freezing and room temperature) both map to Small.
+On morphisms: if $A \leq B$ in $\mathcal{T}$, then $G(A) \leq G(B)$ in
+$\mathcal{S}$ (check: $G(0°) = G(20°) = \mathrm{Small} \leq \mathrm{Small}$,
+and so on). Composition and identity are preserved because all hom-sets have
+at most one element.
+
+$G$ is a functor. It ``collapses'' two temperature values into one size value
+without breaking the ordering structure.
+\end{example}
+
+\begin{dialog}
+When I want to check that $F$ is a functor from $\mathcal{C}$ to
+$\mathcal{D}$, I run two checks:
+\begin{enumerate}
+  \item \textbf{Composition}: For every composable pair $f : A \to B$ and
+        $g : B \to C$ in $\mathcal{C}$: is $F(g \circ f) = F(g) \circ F(f)$?
+  \item \textbf{Identity}: For every object $A$ in $\mathcal{C}$: is
+        $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$?
+\end{enumerate}
+If both hold for all morphisms and objects, $F$ is a functor. Note that the
+composition on the left of each equation is in $\mathcal{C}$, and on the
+right it is in $\mathcal{D}$.
+\end{dialog}
+
+\subsection{Formalizing: The Two Conditions}
+
+A \term{functor} $F : \mathcal{C} \to \mathcal{D}$ consists of:
+\begin{enumerate}
+  \item An \term{object assignment}: for each $A \in \mathrm{Ob}(\mathcal{C})$,
+        an object $F(A) \in \mathrm{Ob}(\mathcal{D})$.
+  \item A \term{morphism assignment}: for each $f \in \mathrm{Hom}_\mathcal{C}(A,B)$,
+        a morphism $F(f) \in \mathrm{Hom}_\mathcal{D}(F(A), F(B))$.
+\end{enumerate}
+
+Satisfying:
+\begin{itemize}
+  \item \textbf{Functoriality (composition)}: $F(g \circ f) = F(g) \circ F(f)$
+        for all composable $f, g$ in $\mathcal{C}$.
+  \item \textbf{Functoriality (identity)}: $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$
+        for all $A \in \mathrm{Ob}(\mathcal{C})$.
+\end{itemize}
+
+We say $F$ is a functor \emph{from} $\mathcal{C}$ \emph{to} $\mathcal{D}$,
+or a \term{covariant functor}, or just a functor. ($\mathcal{C}$ is the
+\term{source} or \term{domain}; $\mathcal{D}$ is the \term{target} or
+\term{codomain}.)
+
+\subsection{Reorganizing: What the Conditions Enforce}
+
+The two conditions enforce that a functor does not invent or destroy structure:
+
+\textbf{Composition condition.} If, in $\mathcal{C}$, the path
+$A \xrightarrow{f} B \xrightarrow{g} C$ exists and composes to $h : A \to C$,
+then in $\mathcal{D}$ the path $F(A) \xrightarrow{F(f)} F(B) \xrightarrow{F(g)}
+F(C)$ exists and composes to $F(h) = F(g) \circ F(f)$. Every composable
+triangle in $\mathcal{C}$ maps to a composable triangle in $\mathcal{D}$,
+and the triangles commute.
+
+\textbf{Identity condition.} Every identity loop $A \xrightarrow{\mathrm{id}_A} A$
+in $\mathcal{C}$ maps to the identity loop $F(A) \xrightarrow{\mathrm{id}_{F(A)}}
+F(A)$ in $\mathcal{D}$. Functors do not turn identity morphisms into
+non-trivial morphisms.
+
+Together: \emph{a functor sends commutative diagrams to commutative diagrams}.
+
+\subsection{Simplifying: The Functoriality Conditions}
+
+\[
+  F(g \circ f) = F(g) \circ F(f)
+\]
+\[
+  F(\mathrm{id}_A) = \mathrm{id}_{F(A)}
+\]
+
+The first equation says composition commutes with $F$. The second says
+identity commutes with $F$. These two equations are the complete definition
+of a functor (given the object and morphism assignments).
+
+\subsection{Formally: Functors and Commutative Diagrams}
+
+\formalnote{Functors preserve commutativity}
+If a diagram in $\mathcal{C}$ commutes, its image under any functor
+$F : \mathcal{C} \to \mathcal{D}$ commutes in $\mathcal{D}$. This follows
+directly from the functoriality conditions: every path in the original
+diagram corresponds to an equal composite, and $F$ maps that equality to
+an equality of composites in $\mathcal{D}$.
+
+\formalnote{Functors and isomorphisms}
+If $f : A \to B$ is an isomorphism in $\mathcal{C}$, then $F(f) : F(A) \to
+F(B)$ is an isomorphism in $\mathcal{D}$, with inverse $F(f^{-1})$.
+Proof: $F(f^{-1}) \circ F(f) = F(f^{-1} \circ f) = F(\mathrm{id}_A) =
+\mathrm{id}_{F(A)}$, and similarly on the other side.
+
+Functors \emph{preserve} isomorphisms. They may also \emph{create} them:
+two non-isomorphic objects in $\mathcal{C}$ can have isomorphic images in
+$\mathcal{D}$.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{More Examples of Functors}
+\label{sec:functor-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Functors Are Everywhere}
+
+Once you have the definition, you start seeing functors in many places. Some
+translate faithfully, preserving all distinctions. Some collapse distinctions.
+Some ignore most of the source and map everything to a single point. All of
+these are functors, provided the two conditions hold.
+
+\subsection{Expanding: Four Functors}
+
+\begin{example}{The Identity Functor}
+For any category $\mathcal{C}$, define $\mathrm{Id}_\mathcal{C} :
+\mathcal{C} \to \mathcal{C}$ by:
+\[
+  \mathrm{Id}_\mathcal{C}(A) = A, \qquad \mathrm{Id}_\mathcal{C}(f) = f.
+\]
+Everything goes to itself. Both functoriality conditions hold trivially.
+This is the ``do nothing'' functor on $\mathcal{C}$.
+\end{example}
+
+\begin{example}{A Constant Functor}
+For any categories $\mathcal{C}$ and $\mathcal{D}$, and any fixed object
+$D \in \mathcal{D}$, define $\Delta_D : \mathcal{C} \to \mathcal{D}$ by:
+\[
+  \Delta_D(A) = D \text{ for all } A, \qquad
+  \Delta_D(f) = \mathrm{id}_D \text{ for all } f.
+\]
+Every object maps to $D$, every morphism maps to $\mathrm{id}_D$.
+
+Check: $\Delta_D(g \circ f) = \mathrm{id}_D = \mathrm{id}_D \circ \mathrm{id}_D
+= \Delta_D(g) \circ \Delta_D(f)$. \checkmark\;
+$\Delta_D(\mathrm{id}_A) = \mathrm{id}_D = \mathrm{id}_{\Delta_D(A)}$. \checkmark
+
+The constant functor collapses all of $\mathcal{C}$ to a single point in
+$\mathcal{D}$. It is the most forgetful functor possible.
+\end{example}
+
+\begin{example}{A Functor from $\mathbf{1}$ to $\mathcal{C}$}
+A functor $F : \mathbf{1} \to \mathcal{C}$ (from the one-object category
+to $\mathcal{C}$) picks out one object in $\mathcal{C}$: whatever $F(*)$
+is. The only morphism in $\mathbf{1}$ is $\mathrm{id}_*$, and it must map
+to $\mathrm{id}_{F(*)}$.
+
+This means: \emph{functors from $\mathbf{1}$ are in exact correspondence with
+objects of $\mathcal{C}$}. The category $\mathbf{1}$ is the ``object selector.''
+A functor from $\mathbf{1}$ is a way of pointing at a single object.
+\end{example}
+
+\begin{example}{A Functor from $\mathbf{2}$ to $\mathcal{C}$}
+A functor $F : \mathbf{2} \to \mathcal{C}$ picks out a single morphism in
+$\mathcal{C}$: the image of $\iota : 0 \to 1$. The two identity morphisms
+of $\mathbf{2}$ must map to identities, and $F(\iota)$ can be any morphism
+$F(0) \to F(1)$.
+
+\emph{Functors from $\mathbf{2}$ are in exact correspondence with morphisms
+of $\mathcal{C}$}. The category $\mathbf{2}$ is the ``morphism selector.''
+
+This is why $\mathbf{2}$ is called the ``walking morphism'': it is the
+minimal category containing a non-trivial morphism, and any morphism in any
+category can be captured by a functor from it.
+\end{example}
+
+\subsection{Formalizing: Forgetful and Inclusion Functors}
+
+Some functors appear so often they deserve names.
+
+A \term{forgetful functor} is one that ``forgets'' some of the structure of
+its source. We have not yet built enough structure to give a formal example,
+but the constant functor $\Delta_D$ is an extreme case: it forgets everything.
+The temperature-to-size functor $G$ from the previous section is a mild
+forgetfulness: it forgets which of $0°\text{C}$ and $20°\text{C}$ you started
+at.
+
+An \term{inclusion functor} is one that embeds a subcategory into a larger
+category without changing any object or morphism. For example, any category
+$\mathcal{C}$ that contains the recipe category as a subcategory has an
+inclusion functor $\mathrm{Recipe} \hookrightarrow \mathcal{C}$ that is the
+identity on all objects and morphisms of $\mathrm{Recipe}$.
+
+\subsection{Reorganizing: What Functors See and Ignore}
+
+\begin{center}
+\begin{tabular}{lll}
+  Functor & What it sees & What it ignores \\[4pt]
+  \hline\\[-6pt]
+  $\mathrm{Id}_\mathcal{C}$ & everything & nothing \\
+  $\Delta_D$ & nothing & everything \\
+  Temperature $\to$ Size & ordering & which of two temps is cooler \\
+  $\mathbf{1} \to \mathcal{C}$ & one object & all other objects and morphisms \\
+  $\mathbf{2} \to \mathcal{C}$ & one morphism & all other morphisms \\
+\end{tabular}
+\end{center}
+
+\medskip
+Every functor lies on a spectrum from ``sees everything'' to ``sees nothing.''
+The two conditions (preserve composition, preserve identity) constrain what it
+can ignore, but leave a great deal of freedom.
+
+\subsection{Simplifying: Functors as Translations}
+
+A functor $F : \mathcal{C} \to \mathcal{D}$ is a translation of $\mathcal{C}$-
+language into $\mathcal{D}$-language. The two conditions guarantee that every
+sentence that is true in $\mathcal{C}$ (every commutative diagram) translates
+to a true sentence in $\mathcal{D}$. The translation may collapse distinctions
+but cannot introduce falsehoods.
+
+\subsection{Formally: Faithful, Full, and Essentially Surjective}
+
+\formalnote{Faithfulness and fullness}
+A functor $F : \mathcal{C} \to \mathcal{D}$ is:
+\begin{itemize}
+  \item \term{faithful} if for all $A, B \in \mathcal{C}$, the function
+        $F : \mathrm{Hom}_\mathcal{C}(A,B) \to \mathrm{Hom}_\mathcal{D}(F(A),F(B))$
+        is injective (no two distinct morphisms get identified).
+  \item \term{full} if that function is surjective (every morphism between
+        the images is hit).
+  \item \term{fully faithful} if it is both.
+\end{itemize}
+
+A faithful functor ``doesn't identify'' morphisms; a full one ``doesn't miss''
+morphisms between images. The identity functor is fully faithful. The constant
+functor is neither (if $\mathcal{C}$ has more than one morphism).
+
+\formalnote{Essentially surjective}
+$F$ is \term{essentially surjective} if for every $D \in \mathcal{D}$, there
+exists $C \in \mathcal{C}$ with $F(C) \cong D$. Combined with full
+faithfulness, this gives an \term{equivalence of categories} --- the
+categorical substitute for isomorphism between categories, which we will
+develop in a later chapter.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Composition of Functors}
+\label{sec:functor-composition}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Translating Twice}
+
+If $F$ translates from $\mathcal{C}$ to $\mathcal{D}$, and $G$ translates
+from $\mathcal{D}$ to $\mathcal{E}$, then following $F$ then $G$ gives a
+translation directly from $\mathcal{C}$ to $\mathcal{E}$. This composite
+translation is a functor, called the \term{composite functor} $G \circ F$.
+
+\subsection{Expanding: Composing the Examples}
+
+We have $F : \mathrm{Recipe} \to \mathrm{Approval}$ (the status functor from
+§3.1) and suppose $H : \mathrm{Approval} \to \mathcal{S}$ maps each approval
+stage to a project phase (Request $\mapsto$ Planning, Approved $\mapsto$
+Building, Final $\mapsto$ Done).
+
+The composite $H \circ F : \mathrm{Recipe} \to \mathcal{S}$ maps:
+\[
+  \mathrm{Chop} \mapsto \mathrm{Planning},\quad
+  \mathrm{Sauté} \mapsto \mathrm{Building},\quad
+  \mathrm{Add} \mapsto \mathrm{Done}.
+\]
+
+\begin{dialog}
+I check that $H \circ F$ is a functor:
+\begin{itemize}
+  \item $(H \circ F)(g \circ f) = H(F(g \circ f)) = H(F(g) \circ F(f)) =
+        H(F(g)) \circ H(F(f)) = (H \circ F)(g) \circ (H \circ F)(f)$. \checkmark
+  \item $(H \circ F)(\mathrm{id}_A) = H(F(\mathrm{id}_A)) = H(\mathrm{id}_{F(A)})
+        = \mathrm{id}_{H(F(A))} = \mathrm{id}_{(H \circ F)(A)}$. \checkmark
+\end{itemize}
+Each step uses the functoriality of $F$ (first) and $G$ (second). The
+argument works for any two composable functors.
+\end{dialog}
+
+\subsection{Formalizing: The Composite Functor}
+
+Given functors $F : \mathcal{C} \to \mathcal{D}$ and $G : \mathcal{D} \to
+\mathcal{E}$, their \term{composite} $G \circ F : \mathcal{C} \to \mathcal{E}$
+is defined by:
+\[
+  (G \circ F)(A) = G(F(A)),\qquad (G \circ F)(f) = G(F(f)).
+\]
+
+\textbf{$G \circ F$ is a functor.} Functoriality for composition:
+\[
+  (G \circ F)(g \circ f) = G(F(g \circ f)) = G(F(g) \circ F(f))
+  = G(F(g)) \circ G(F(f)) = (G \circ F)(g) \circ (G \circ F)(f).
+\]
+Functoriality for identity: $(G \circ F)(\mathrm{id}_A) = G(F(\mathrm{id}_A))
+= G(\mathrm{id}_{F(A)}) = \mathrm{id}_{G(F(A))} = \mathrm{id}_{(G \circ F)(A)}$.
+
+\textbf{Composition of functors is associative.} For $F : \mathcal{C} \to
+\mathcal{D}$, $G : \mathcal{D} \to \mathcal{E}$, $H : \mathcal{E} \to
+\mathcal{F}$:
+\[
+  (H \circ G) \circ F = H \circ (G \circ F).
+\]
+This holds because it holds pointwise on objects and morphisms (function
+composition is associative).
+
+\textbf{Identity functors are neutral.} $\mathrm{Id}_\mathcal{D} \circ F =
+F = F \circ \mathrm{Id}_\mathcal{C}$.
+
+\subsection{Reorganizing: Functors Are Morphisms}
+
+We now have:
+\begin{itemize}
+  \item \textbf{Objects}: categories $\mathcal{C}$, $\mathcal{D}$, $\ldots$
+  \item \textbf{Morphisms}: functors $F : \mathcal{C} \to \mathcal{D}$
+  \item \textbf{Composition}: $G \circ F : \mathcal{C} \to \mathcal{E}$,
+        associative
+  \item \textbf{Identity}: $\mathrm{Id}_\mathcal{C} : \mathcal{C} \to
+        \mathcal{C}$, neutral
+\end{itemize}
+
+This matches the pattern for a category exactly. Categories and functors
+form a category.
+
+\subsection{Simplifying: Functor Composition}
+
+\[
+  (G \circ F)(A) = G(F(A)),\qquad (G \circ F)(f) = G(F(f))
+\]
+\[
+  (H \circ G) \circ F = H \circ (G \circ F),\qquad
+  \mathrm{Id}_\mathcal{D} \circ F = F = F \circ \mathrm{Id}_\mathcal{C}
+\]
+
+These are the same associativity and unit equations as for morphisms in any
+category --- because functors \emph{are} morphisms, in the category of
+categories.
+
+\subsection{Formally: The Category $\mathbf{Cat}$}
+
+\formalnote{Definition}
+The \term{category of categories} $\mathbf{Cat}$ has:
+\begin{itemize}
+  \item Objects: (small) categories.
+  \item Morphisms: functors between them.
+  \item Composition: composite functor $G \circ F$.
+  \item Identity: identity functor $\mathrm{Id}_\mathcal{C}$.
+\end{itemize}
+The axioms are verified above. $\mathbf{Cat}$ is a category.
+
+\formalnote{Size remark}
+To avoid set-theoretic paradoxes (a ``category of all categories'' including
+itself), $\mathbf{Cat}$ is typically defined to have \emph{small} categories
+as objects. The category of all locally small categories is sometimes called
+$\mathbf{CAT}$. We will not belabor this point, but the reader should be
+aware that size considerations are lurking.
+
+\formalnote{Endofunctors}
+A functor $F : \mathcal{C} \to \mathcal{C}$ from a category to itself is
+called an \term{endofunctor}. Endofunctors can be composed repeatedly:
+$F^n = F \circ F \circ \cdots \circ F$ ($n$ times). Endofunctors on a
+category $\mathcal{C}$ form a category $[\mathcal{C}, \mathcal{C}]$ (a
+\term{functor category}, to be developed in Chapter~4).
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Contravariant Functors}
+\label{sec:contravariant}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Going Backwards}
+
+Some translations between categories send morphisms in the \emph{opposite}
+direction. An arrow $f : A \to B$ in the source gets sent to an arrow
+$F(f) : F(B) \to F(A)$ in the target --- the direction is reversed.
+
+Such a translation still has to respect composition and identity, but the
+composition rule looks like a reversal. This is a \term{contravariant functor}.
+
+\subsection{Expanding: The Reversal Pattern}
+
+\begin{example}{An Opposite Ordering}
+Consider the temperature ordering $\mathcal{T}$ (colder to warmer) and the
+size ordering $\mathcal{S}^{\mathrm{op}}$ (larger to smaller: Large $\to$
+Medium $\to$ Small).
+
+Define $F : \mathcal{T} \to \mathcal{S}^{\mathrm{op}}$ by: colder things
+are \emph{larger} in $\mathcal{S}^{\mathrm{op}}$:
+\[
+  F(0°\text{C}) = \mathrm{Large},\quad F(20°\text{C}) = \mathrm{Medium},
+  \quad F(37°\text{C}) = \mathrm{Small},\quad F(100°\text{C}) = \mathrm{Small}.
+\]
+A morphism $0°\text{C} \to 37°\text{C}$ in $\mathcal{T}$ (colder to warmer)
+maps to Large $\to$ Small in $\mathcal{S}^{\mathrm{op}}$ (larger to smaller).
+The direction of the ordering is preserved in the opposite sense.
+
+This is a covariant functor $\mathcal{T} \to \mathcal{S}^{\mathrm{op}}$, or
+equivalently a contravariant functor $\mathcal{T} \to \mathcal{S}$.
+\end{example}
+
+\begin{dialog}
+I see a map $F$ that sends morphisms ``backwards'': $f : A \to B$ maps to
+$F(f) : F(B) \to F(A)$. I ask:
+
+\begin{itemize}
+  \item Does $F(g \circ f) = F(f) \circ F(g)$? (Note the reversed order.)
+  \item Does $F(\mathrm{id}_A) = \mathrm{id}_{F(A)}$?
+\end{itemize}
+
+If yes to both, $F$ is a contravariant functor. The reversal in composition
+is not a mistake --- it is forced by the direction flip.
+\end{dialog}
+
+\subsection{Formalizing: Contravariance as a Functor from the Opposite}
+
+A \term{contravariant functor} $F : \mathcal{C} \to \mathcal{D}$ is exactly
+a (covariant) functor $F : \mathcal{C}^{\mathrm{op}} \to \mathcal{D}$.
+
+On objects: $F$ assigns an object $F(A) \in \mathcal{D}$ to each $A \in
+\mathcal{C}$. On morphisms: for $f : A \to B$ in $\mathcal{C}$, $F$ assigns
+$F(f) : F(B) \to F(A)$ in $\mathcal{D}$.
+
+Functoriality:
+\[
+  F(g \circ f) = F(f) \circ F(g) \qquad\text{(note reversed order)}
+\]
+\[
+  F(\mathrm{id}_A) = \mathrm{id}_{F(A)}
+\]
+
+This is the covariant functoriality applied to $\mathcal{C}^{\mathrm{op}}$:
+in $\mathcal{C}^{\mathrm{op}}$, composition of $f^{\mathrm{op}}$ and
+$g^{\mathrm{op}}$ gives $(f \circ g)^{\mathrm{op}}$, and $F$ applied to
+$(f \circ g)^{\mathrm{op}}$ gives $F(f \circ g) = F(g) \circ F(f)$... wait,
+applying the covariant rule to $\mathcal{C}^{\mathrm{op}}$ correctly gives
+$F(f^{\mathrm{op}} \circ_{\mathrm{op}} g^{\mathrm{op}}) = F(f^{\mathrm{op}})
+\circ F(g^{\mathrm{op}})$, which translates back to $F(g \circ f) =
+F(f) \circ F(g)$ in $\mathcal{D}$.
+
+\subsection{Reorganizing: Contravariance = Covariance on the Opposite}
+
+We do not need a new concept for contravariant functors. Every contravariant
+functor $\mathcal{C} \to \mathcal{D}$ is a covariant functor
+$\mathcal{C}^{\mathrm{op}} \to \mathcal{D}$. The opposite category absorbs
+the reversal.
+
+This is the first example of the \emph{duality principle} in practice: instead
+of developing a parallel theory for ``backwards'' maps, we build the reversal
+into the objects (via $\mathcal{C}^{\mathrm{op}}$) and reuse the existing
+theory.
+
+\subsection{Simplifying: Contravariance in One Line}
+
+A contravariant functor from $\mathcal{C}$ to $\mathcal{D}$ is a covariant
+functor:
+\[
+  F : \mathcal{C}^{\mathrm{op}} \longrightarrow \mathcal{D}.
+\]
+
+\subsection{Formally: Bifunctors}
+
+\formalnote{Bifunctors}
+A \term{bifunctor} is a functor of two arguments: $F : \mathcal{C} \times
+\mathcal{D} \to \mathcal{E}$, where $\mathcal{C} \times \mathcal{D}$ is
+the \term{product category} whose objects are pairs $(C, D)$ and whose
+morphisms are pairs $(f, g)$. A mixed-variance bifunctor has the form
+$F : \mathcal{C}^{\mathrm{op}} \times \mathcal{D} \to \mathcal{E}$:
+contravariant in the first argument, covariant in the second. The
+hom-functor $\mathrm{Hom}(-, -)$ (to be studied in Chapter~5) is the
+canonical example.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+A \textbf{functor} $F : \mathcal{C} \to \mathcal{D}$ assigns objects to
+objects and morphisms to morphisms, satisfying:
+\[
+  F(g \circ f) = F(g) \circ F(f), \qquad F(\mathrm{id}_A) = \mathrm{id}_{F(A)}.
+\]
+
+Functors \textbf{preserve commutativity} of diagrams and \textbf{preserve
+isomorphisms}.
+
+\textbf{Composition of functors} $(G \circ F)(A) = G(F(A))$ is associative
+and has the identity functor as neutral element.
+
+\textbf{Categories and functors form a category}, called $\mathbf{Cat}$.
+
+A \textbf{contravariant functor} $\mathcal{C} \to \mathcal{D}$ is a covariant
+functor $\mathcal{C}^{\mathrm{op}} \to \mathcal{D}$.
+
+\textbf{Special functors:} identity ($\mathrm{Id}_\mathcal{C}$), constant
+($\Delta_D$), faithful (injective on hom-sets), full (surjective on hom-sets).
+Functors from $\mathbf{1}$ pick out objects; functors from $\mathbf{2}$ pick
+out morphisms.
+\end{summarybox}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Functor.}\quad $F : \mathcal{C} \to \mathcal{D}$ assigns
+$F : \mathrm{Ob}(\mathcal{C}) \to \mathrm{Ob}(\mathcal{D})$ and
+$F : \mathrm{Hom}_\mathcal{C}(A,B) \to \mathrm{Hom}_\mathcal{D}(F(A),F(B))$,
+satisfying:
+\[
+  F(g \circ f) = F(g) \circ F(f), \qquad F(\mathrm{id}_A) = \mathrm{id}_{F(A)}.
+\]
+
+\medskip
+\textbf{Composition.}\quad $(G \circ F)(A) = G(F(A))$, $(G \circ F)(f) =
+G(F(f))$; associative; $\mathrm{Id}_\mathcal{D} \circ F = F =
+F \circ \mathrm{Id}_\mathcal{C}$.
+
+\medskip
+\textbf{Properties.}\quad $F$ is \emph{faithful} iff injective on each
+hom-set; \emph{full} iff surjective on each hom-set; \emph{essentially
+surjective} iff every $D \in \mathcal{D}$ satisfies $D \cong F(C)$ for some
+$C$.
+
+\medskip
+\textbf{Contravariant.}\quad A contravariant functor $\mathcal{C} \to
+\mathcal{D}$ is a covariant functor $\mathcal{C}^{\mathrm{op}} \to
+\mathcal{D}$; sends $f : A \to B$ to $F(f) : F(B) \to F(A)$; satisfies
+$F(g \circ f) = F(f) \circ F(g)$.
+
+\medskip
+\textbf{$\mathbf{Cat}$.}\quad The category of small categories and functors:
+objects are small categories, morphisms are functors, composition and identity
+as above.
+
+\medskip
+\noindent\textit{Chapter~4 introduces natural transformations: morphisms
+between functors, which complete the three-level hierarchy of category theory.}
+\end{formalrestatement}

@@ -1,0 +1,681 @@
+\chapter{Categories}
+
+\begin{overviewbox}
+Chapter~1 introduced four ideas: objects, morphisms, composition, and identity.
+Each came with rules --- composition is associative, identity is neutral --- but
+we never packaged all four ideas and their rules into a single named thing.
+
+This chapter does that. A \emph{category} is the name for the package. Once we
+have the name and the definition, we can look at many different situations and
+ask: ``is this a category?'' The answer is often yes --- and recognizing that
+two very different-looking situations are both categories is the first payoff of
+the theory.
+
+The chapter also introduces \emph{isomorphism} --- the precise meaning of
+``these two objects are the same for our purposes'' --- and the \emph{opposite
+category}, which reverses all arrows and will recur throughout the book.
+
+The Formal Restatement at the end collects the definitions in compact notation.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Definition of a Category}
+\label{sec:category-definition}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Packaging What We Have}
+
+We have been working with objects and morphisms for an entire chapter. We have
+two rules: composition is associative, and identity morphisms are neutral. Now
+we bundle everything together and give the bundle a name.
+
+A \term{category} is a collection of objects and morphisms, equipped with
+composition and identity morphisms, satisfying the associativity and unit laws.
+
+That's it. A category is not a complicated new idea. It is a name for the
+structure we have already been using.
+
+\subsection{Expanding: Checking Our Examples}
+
+The three running examples from Chapter~1 are all categories. Let's verify
+this for one of them in detail.
+
+\begin{example}{The Recipe as a Category}
+Recall the recipe with three steps: Chop, Sauté, Add.
+
+\medskip
+\begin{center}
+\begin{tikzcd}[column sep=2.5em]
+  \text{Chop}
+    \arrow[r, "f"]
+    \arrow[loop left, "\mathrm{id}_C"]
+  & \text{Sauté}
+    \arrow[r, "g"]
+    \arrow[loop above, "\mathrm{id}_S"]
+  & \text{Add}
+    \arrow[loop right, "\mathrm{id}_A"]
+\end{tikzcd}
+\end{center}
+\medskip
+
+We check each requirement:
+
+\begin{itemize}
+  \item \textbf{Objects?} Yes: Chop, Sauté, Add.
+  \item \textbf{Morphisms?} Yes: $f$, $g$, $g \circ f$, and the three
+        identity morphisms.
+  \item \textbf{Composition?} Yes: $g \circ f$ exists and goes from Chop
+        to Add, as required.
+  \item \textbf{Identity?} Yes: each step has a ``do nothing at this step''
+        morphism.
+  \item \textbf{Associativity?} There are only two non-identity, non-composed
+        morphisms ($f$ and $g$), so the only chain of three is degenerate ---
+        associativity holds vacuously.
+  \item \textbf{Unit laws?} $f \circ \mathrm{id}_C = f$,\;
+        $\mathrm{id}_S \circ f = f$. Checked.
+\end{itemize}
+
+The recipe is a category.
+\end{example}
+
+\begin{dialog}
+When I want to verify that something is a category, I run through a
+checklist:
+\begin{enumerate}
+  \item Can I name the objects?
+  \item Can I name the morphisms, with domains and codomains?
+  \item Is composition defined wherever it should be, and associative?
+  \item Does every object have an identity morphism that is neutral?
+\end{enumerate}
+If all four answers are yes, I have a category. This checklist applies
+to every example in this book and every example I'll encounter elsewhere.
+\end{dialog}
+
+\subsection{Formalizing: The Four-Part Definition}
+
+A \term{category} $\mathcal{C}$ consists of four pieces of data:
+
+\begin{enumerate}
+  \item A collection $\mathrm{Ob}(\mathcal{C})$, whose elements are called
+        \term{objects}.
+  \item For each pair of objects $A, B \in \mathrm{Ob}(\mathcal{C})$, a
+        collection $\mathrm{Hom}_{\mathcal{C}}(A, B)$, whose elements are
+        called \term{morphisms} from $A$ to $B$.
+  \item For each triple of objects $A, B, C$, a \term{composition} function
+        \[
+          \circ\;:\;\mathrm{Hom}(B, C) \times \mathrm{Hom}(A, B)
+          \;\longrightarrow\; \mathrm{Hom}(A, C).
+        \]
+  \item For each object $A$, a distinguished \term{identity morphism}
+        $\mathrm{id}_A \in \mathrm{Hom}(A, A)$.
+\end{enumerate}
+
+This data must satisfy two \term{axioms}:
+
+\begin{itemize}
+  \item \textbf{Associativity}: For all $f \in \mathrm{Hom}(A,B)$,
+        $g \in \mathrm{Hom}(B,C)$, $h \in \mathrm{Hom}(C,D)$:
+        \[
+          (h \circ g) \circ f = h \circ (g \circ f).
+        \]
+  \item \textbf{Unit laws}: For all $f \in \mathrm{Hom}(A,B)$:
+        \[
+          f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
+        \]
+\end{itemize}
+
+\begin{readernote}
+When you meet a definition with this structure --- ``consists of'' followed
+by ``satisfying'' --- read the ``consists of'' part as a list of
+\emph{what you must supply}, and the ``satisfying'' part as a list of
+\emph{what your supply must pass}. The data is what you bring to the table;
+the axioms are the tests your data must survive.
+\end{readernote}
+
+\subsection{Reorganizing: The Examples Pass the Tests}
+
+\textbf{Recipe category.} We supply: objects $\{\mathrm{Chop}, \mathrm{Sauté},
+\mathrm{Add}\}$; morphisms $f$, $g$, $g \circ f$, and three identities;
+composition by the rule of chaining steps; identity by the ``stay at this
+step'' morphism. The associativity test passes (checked above). The unit
+test passes.
+
+\textbf{Transit category.} The stations are objects. The train lines are
+morphisms. The ``stay at station'' routes are identities. Any journey along
+lines in sequence is a composite. Since real transit routes are unambiguous
+regardless of how you mentally group the legs, associativity holds. The
+transit map is a category.
+
+\textbf{Temperature ordering.} The readings $\{0°\text{C}, 20°\text{C},
+37°\text{C}, 100°\text{C}\}$ are objects. A morphism $A \to B$ exists
+exactly when $A \leq B$ (``is no warmer than''). Identity: every temperature
+is no warmer than itself. Composition: if $A \leq B$ and $B \leq C$ then
+$A \leq C$. Associativity holds because $\leq$ is transitive, and there is
+at most one morphism between any two objects so associativity is automatic.
+This is a category.
+
+\subsection{Simplifying: The Definition in Brief}
+
+A category packages four things: objects, morphisms, composition,
+identity. It satisfies two laws:
+\[
+  (h \circ g) \circ f = h \circ (g \circ f)
+  \qquad\text{and}\qquad
+  f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
+\]
+Every example we have seen passes both laws. These two equations are the
+entire content of the definition.
+
+\subsection{Formally: The Standard Formulation}
+
+\formalnote{Notation}
+We write $\mathcal{C}$, $\mathcal{D}$, $\mathcal{E}$ for categories and
+use bold letters $\mathbf{C}$, $\mathbf{D}$ in some contexts. The notation
+$f \in \mathcal{C}(A, B)$ is an alternative to $f \in \mathrm{Hom}_\mathcal{C}(A,B)$.
+When the category is clear from context we write $\mathrm{Hom}(A,B)$.
+
+\formalnote{Size}
+In the definition above we said ``collection'' rather than ``set.'' The
+distinction matters: if $\mathrm{Ob}(\mathcal{C})$ is a set, $\mathcal{C}$
+is called \term{small}; if the hom-sets $\mathrm{Hom}(A,B)$ are all sets,
+$\mathcal{C}$ is called \term{locally small}. Most categories we encounter are
+at least locally small. We will not dwell on set-theoretic foundations here;
+the interested reader may consult Appendix~A (to be written).
+
+\formalnote{Uniqueness of identities revisited}
+The proof from Chapter~1 that identity morphisms are unique works
+uniformly in any category: if $e, e'$ both satisfy the unit laws at $A$,
+then $e = e \circ e' = e'$. No additional hypotheses are needed.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{A Catalogue of Small Categories}
+\label{sec:small-categories}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Categories Can Be Tiny}
+
+Not all categories are large. Some have very few objects and morphisms.
+These tiny categories are not toys --- they are the building blocks used
+throughout the rest of category theory to state definitions and theorems
+in a compact, diagram-based way.
+
+We build five small categories from scratch.
+
+\subsection{Expanding: Five Small Categories}
+
+\begin{example}{$\mathbf{0}$: The Empty Category}
+Objects: none. Morphisms: none.
+
+Does it satisfy the axioms? Every axiom has the form ``for all objects
+$A$\ldots'' or ``for all morphisms $f$\ldots''. With nothing to quantify over,
+every such statement is true \emph{vacuously} --- it holds because there is
+nothing that could fail it.
+
+The empty category is valid. It is the categorical equivalent of a blank
+page: a place where nothing has been written, not a place where something
+is wrong.
+\end{example}
+
+\begin{example}{$\mathbf{1}$: One Object, One Morphism}
+Objects: one object, call it $*$. Morphisms: one morphism, $\mathrm{id}_*$.
+
+The only composition is $\mathrm{id}_* \circ \mathrm{id}_* = \mathrm{id}_*$.
+The only unit law is $\mathrm{id}_* \circ \mathrm{id}_* = \mathrm{id}_*$.
+Both are satisfied. The category $\mathbf{1}$ is the simplest non-empty
+category: one dot, one loop.
+\end{example}
+
+\begin{example}{$\mathbf{2}$: Two Objects, One Arrow}
+Objects: $0$ and $1$. Morphisms: $\mathrm{id}_0$, $\mathrm{id}_1$, and one
+morphism $\iota : 0 \to 1$.
+
+\medskip
+\begin{center}
+\begin{tikzcd}
+  0 \arrow[loop left, "\mathrm{id}_0"] \arrow[r, "\iota"] &
+  1 \arrow[loop right, "\mathrm{id}_1"]
+\end{tikzcd}
+\end{center}
+\medskip
+
+There is no morphism from $1$ back to $0$. The only non-trivial
+composition would require a morphism starting at $1$, but there is none
+(besides $\mathrm{id}_1$ which goes $1 \to 1$). So composition is
+complete. The unit laws hold for $\iota$ because
+$\iota \circ \mathrm{id}_0 = \iota = \mathrm{id}_1 \circ \iota$.
+
+The category $\mathbf{2}$ is sometimes called the \term{walking morphism}:
+it contains exactly one non-identity morphism and nothing else. It is used
+later to ``pick out'' a single morphism from a category.
+\end{example}
+
+\begin{example}{An Ordering Category}
+Take any collection of objects with a relation $\leq$ that is:
+\begin{itemize}
+  \item \textbf{Reflexive}: $A \leq A$ for all $A$ (gives identity),
+  \item \textbf{Transitive}: $A \leq B$ and $B \leq C$ implies $A \leq C$
+        (gives composition).
+\end{itemize}
+
+Define $\mathrm{Hom}(A, B)$ to contain exactly one morphism when $A \leq B$,
+and to be empty otherwise. Since there is at most one morphism between any
+two objects, associativity is automatic. Identity comes from reflexivity.
+
+Such a category is called a \term{preorder category}. Our temperature
+example is a preorder category on $\{0°\text{C}, 20°\text{C}, 37°\text{C},
+100°\text{C}\}$ with the usual $\leq$ on temperatures.
+
+A preorder category where $A \leq B$ and $B \leq A$ implies $A = B$ is
+called a \term{poset category}.
+\end{example}
+
+\begin{example}{A One-Object Category}
+Take a single object $*$. Let the morphisms from $*$ to $*$ be some
+collection $M$ of ``actions'' that can be composed in sequence, where
+composition is associative and there is a ``do nothing'' action.
+
+For concreteness: suppose $*$ is a light panel, and the morphisms are
+sequences of button presses. Pressing button A then button B is a composite
+action. The ``do nothing'' action is the identity. If button presses compose
+associatively (which they do, since doing A then B then C is the same
+regardless of grouping), this is a category.
+
+A one-object category is precisely a \term{monoid}: a set with an
+associative binary operation and an identity element. We will return to
+this connection when we discuss functors.
+\end{example}
+
+\begin{dialog}
+When I encounter a small category, I draw it as a directed graph and check
+two things:
+\begin{enumerate}
+  \item Is the graph \emph{closed under composition}? For every two
+        composable edges, is there an edge representing their composite?
+  \item Does every vertex have a \emph{loop} for its identity?
+\end{enumerate}
+If both hold and composition is associative, I have a category. For tiny
+categories, associativity is often automatic because there simply are not
+enough morphisms to chain in three different ways.
+\end{dialog}
+
+\subsection{Formalizing: What Makes a Category Small?}
+
+In the example above we used the word ``small'' informally. Let's be
+precise.
+
+\begin{itemize}
+  \item $\mathcal{C}$ is \term{small} if $\mathrm{Ob}(\mathcal{C})$ is a
+        set (not a proper class).
+  \item $\mathcal{C}$ is \term{finite} if $\mathrm{Ob}(\mathcal{C})$ and all
+        hom-sets are finite sets.
+  \item $\mathcal{C}$ is \term{discrete} if the only morphisms are
+        identity morphisms: $\mathrm{Hom}(A,B) = \varnothing$ for $A \neq B$
+        and $\mathrm{Hom}(A,A) = \{\mathrm{id}_A\}$.
+  \item $\mathcal{C}$ is \term{thin} (or a \term{preorder}) if there is at
+        most one morphism between any two objects.
+\end{itemize}
+
+The categories $\mathbf{0}$, $\mathbf{1}$, $\mathbf{2}$ are all small and
+finite. The temperature example is small, finite, and thin. A discrete
+category on $n$ objects has $n$ objects and $n$ morphisms (just identities).
+
+\subsection{Reorganizing: Naming What We Already Know}
+
+Our examples from Chapter~1 now have names:
+\begin{itemize}
+  \item The recipe (Chop $\to$ Sauté $\to$ Add) is a small, finite,
+        \emph{thin} category --- there is exactly one morphism from any
+        step to any step that comes later, and none in the other direction.
+  \item The temperature ordering is a small, finite, \emph{poset} category.
+  \item The approval chain is a small, finite, thin category, identical in
+        shape to the recipe.
+\end{itemize}
+
+The single-object category $\mathbf{1}$ is both a category and a monoid.
+We will see later that any monoid can be viewed as a one-object category,
+and vice versa.
+
+\subsection{Simplifying: A Table of Small Categories}
+
+\medskip
+\begin{center}
+\begin{tabular}{lllll}
+  Name & Objects & Non-id morphisms & Thin? & Finite? \\[4pt]
+  \hline\\[-6pt]
+  $\mathbf{0}$ & 0 & 0 & yes & yes \\
+  $\mathbf{1}$ & 1 & 0 & yes & yes \\
+  $\mathbf{2}$ & 2 & 1 & yes & yes \\
+  Preorder & any & varies & yes & varies \\
+  One-object (monoid) & 1 & varies & no & varies \\
+\end{tabular}
+\end{center}
+\medskip
+
+\subsection{Formally: Discrete and Indiscrete Categories}
+
+\formalnote{Discrete category on a collection $S$}
+Given any collection $S$, the \term{discrete category} $\mathrm{Disc}(S)$
+has $\mathrm{Ob} = S$ and $\mathrm{Hom}(A,B) = \varnothing$ for $A \neq B$,
+$\mathrm{Hom}(A,A) = \{\mathrm{id}_A\}$. Composition and identity are
+trivially defined. This is the ``objects only'' category: all structure has
+been stripped away except the objects themselves.
+
+\formalnote{Indiscrete category on $S$}
+The \term{indiscrete category} $\mathrm{Indis}(S)$ has $\mathrm{Ob} = S$
+and $\mathrm{Hom}(A,B) = \{*_{AB}\}$ for every pair $A, B$ (including
+$A = B$, where $*_{AA} = \mathrm{id}_A$). Composition is forced: the only
+possible composite of any two composable morphisms is the unique morphism
+between the appropriate objects. All axioms hold automatically.
+
+Discrete and indiscrete categories are the two extremes: one has no
+morphisms beyond identities, the other has exactly one morphism between
+every pair.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Isomorphism}
+\label{sec:isomorphism}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Going There and Back}
+
+Two objects are ``the same for our purposes'' when you can travel from
+one to the other and then back, and both round trips (there-and-back, or
+back-and-there) leave you exactly where you started --- not approximately
+where you started, but \emph{exactly}.
+
+This is the categorical meaning of ``these two things are interchangeable.''
+We call this an \term{isomorphism}.
+
+\subsection{Expanding: Round Trips}
+
+\begin{example}{The Two-Road Town}
+Suppose two stations, $A$ and $B$, have a road from $A$ to $B$ and a road
+from $B$ to $A$. These roads are an isomorphism if: driving from $A$ to $B$
+and then immediately back puts you exactly at $A$ with nothing changed, and
+driving from $B$ to $A$ and then immediately back puts you exactly at $B$.
+
+This is stronger than just saying the roads exist. It requires that the
+round trips are identity journeys.
+\end{example}
+
+\begin{example}{A Recipe Step You Can Undo}
+Suppose a recipe step ``chill the dough'' has a corresponding step ``bring
+dough to room temperature.'' If doing both in either order leaves the dough
+in its original state, the two steps are inverse morphisms. Chilling and
+then warming = identity. Warming and then chilling = identity.
+
+Note: in reality, chilling and warming might not be perfect inverses
+(some moisture is lost, some structure changes). Whether they are isomorphisms
+is a question about your specific model of the process, not about the
+real-world chemistry.
+\end{example}
+
+\begin{dialog}
+I see two morphisms $f : A \to B$ and $g : B \to A$. I ask:
+\begin{itemize}
+  \item Does $g \circ f = \mathrm{id}_A$? (Going from $A$ to $B$ then back
+        returns to $A$ as if nothing happened.)
+  \item Does $f \circ g = \mathrm{id}_B$? (Going from $B$ to $A$ then back
+        returns to $B$ as if nothing happened.)
+\end{itemize}
+If both hold, $f$ and $g$ are inverse to each other, and both are
+isomorphisms.
+\end{dialog}
+
+\subsection{Formalizing: The Definition}
+
+A morphism $f : A \to B$ is an \term{isomorphism} if there exists a morphism
+$g : B \to A$ such that:
+\[
+  g \circ f = \mathrm{id}_A \qquad \text{and} \qquad f \circ g = \mathrm{id}_B.
+\]
+The morphism $g$ is called the \term{inverse} of $f$, written $f^{-1}$.
+
+Two objects $A$ and $B$ are \term{isomorphic}, written $A \cong B$, if there
+exists an isomorphism $f : A \to B$.
+
+\textbf{Inverses are unique.} If $g$ and $g'$ are both inverses of $f$, then:
+\[
+  g = g \circ \mathrm{id}_B = g \circ (f \circ g') = (g \circ f) \circ g'
+  = \mathrm{id}_A \circ g' = g'.
+\]
+Every isomorphism has exactly one inverse.
+
+\subsection{Reorganizing: Which Objects Are Isomorphic?}
+
+\textbf{In $\mathbf{2}$}: the objects $0$ and $1$ are \emph{not} isomorphic.
+The only morphism $0 \to 1$ is $\iota$, and there is no morphism $1 \to 0$.
+Without a morphism in both directions, there is no isomorphism.
+
+\textbf{In the temperature ordering}: $20°\text{C}$ and $37°\text{C}$ are
+not isomorphic. A morphism $20°\text{C} \to 37°\text{C}$ exists (the
+``is colder than'' relation), but no morphism goes in the other direction.
+In a poset category, two distinct objects are \emph{never} isomorphic.
+
+\textbf{In $\mathbf{1}$}: the single object $*$ is isomorphic to itself,
+via $\mathrm{id}_*$. Every object is always isomorphic to itself, via its
+identity morphism.
+
+\textbf{In the indiscrete category on $\{A, B\}$}: $A \cong B$. There is a
+morphism $*_{AB} : A \to B$ and a morphism $*_{BA} : B \to A$, and their
+composites are the unique morphisms $*_{AA} = \mathrm{id}_A$ and
+$*_{BB} = \mathrm{id}_B$.
+
+\subsection{Simplifying: Isomorphism in One Line}
+
+$f : A \to B$ is an isomorphism iff $\exists\, g : B \to A$ such that
+$g \circ f = \mathrm{id}_A$ and $f \circ g = \mathrm{id}_B$.
+
+The inverse $g$ is then unique and denoted $f^{-1}$.
+
+$A \cong B$ means an isomorphism between them exists.
+
+\subsection{Formally: Properties of Isomorphism}
+
+\formalnote{Isomorphism is an equivalence relation on objects}
+\begin{itemize}
+  \item \textbf{Reflexive}: $A \cong A$ via $\mathrm{id}_A$ (its own inverse).
+  \item \textbf{Symmetric}: if $f : A \xrightarrow{\sim} B$ then
+        $f^{-1} : B \xrightarrow{\sim} A$.
+  \item \textbf{Transitive}: if $f : A \xrightarrow{\sim} B$ and
+        $g : B \xrightarrow{\sim} C$, then $g \circ f : A \xrightarrow{\sim} C$
+        with inverse $f^{-1} \circ g^{-1}$.
+\end{itemize}
+
+The notation $\xrightarrow{\sim}$ over an arrow marks it as an isomorphism.
+
+\formalnote{Isomorphisms in special categories}
+In a thin (preorder) category, the only isomorphisms are identity morphisms
+--- since $f : A \to B$ and $g : B \to A$ existing simultaneously forces
+$A = B$ (by antisymmetry, if the preorder is a poset). In a groupoid
+(a category where \emph{every} morphism is an isomorphism), all morphisms
+are invertible.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Opposite Category}
+\label{sec:opposite-category}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally: Turning All Arrows Around}
+
+Every category has a mirror image. In the mirror, every arrow points the
+other way. An arrow that went from $A$ to $B$ now goes from $B$ to $A$.
+Composition still works --- you just have to track the reversal.
+
+This mirror is called the \term{opposite category}.
+
+\subsection{Expanding: Reversing Familiar Examples}
+
+\begin{example}{The Recipe Reversed}
+The original recipe category has $f : \mathrm{Chop} \to \mathrm{Sauté}$ and
+$g : \mathrm{Sauté} \to \mathrm{Add}$. The opposite category has
+$f^{\mathrm{op}} : \mathrm{Sauté} \to \mathrm{Chop}$ and
+$g^{\mathrm{op}} : \mathrm{Add} \to \mathrm{Sauté}$.
+
+The original morphism $g \circ f : \mathrm{Chop} \to \mathrm{Add}$ becomes
+$(g \circ f)^{\mathrm{op}} : \mathrm{Add} \to \mathrm{Chop}$.
+
+Importantly, $(g \circ f)^{\mathrm{op}} = f^{\mathrm{op}} \circ g^{\mathrm{op}}$.
+The order of composition reverses when you reverse arrows. This is the key
+bookkeeping fact.
+\end{example}
+
+\begin{example}{The Opposite of a Preorder}
+The opposite of the temperature preorder has morphisms going from warmer to
+colder: $100°\text{C} \to 37°\text{C} \to 20°\text{C} \to 0°\text{C}$.
+This is the ``is no colder than'' relation.
+
+In general, the opposite of a preorder category is another preorder category,
+with the order reversed.
+\end{example}
+
+\begin{dialog}
+When I reverse a category, I keep two things straight:
+\begin{enumerate}
+  \item Every morphism $f : A \to B$ becomes $f^{\mathrm{op}} : B \to A$.
+        Domain and codomain swap.
+  \item Composition reverses order: if $h = g \circ f$ in $\mathcal{C}$,
+        then $h^{\mathrm{op}} = f^{\mathrm{op}} \circ g^{\mathrm{op}}$ in
+        $\mathcal{C}^{\mathrm{op}}$.
+\end{enumerate}
+The objects stay the same. Only the arrows and their order change.
+\end{dialog}
+
+\subsection{Formalizing: The Definition}
+
+Given a category $\mathcal{C}$, its \term{opposite category}
+$\mathcal{C}^{\mathrm{op}}$ is defined as follows:
+
+\begin{itemize}
+  \item $\mathrm{Ob}(\mathcal{C}^{\mathrm{op}}) = \mathrm{Ob}(\mathcal{C})$
+        (same objects).
+  \item $\mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(A, B) =
+        \mathrm{Hom}_{\mathcal{C}}(B, A)$ (morphisms are reversed).
+  \item Composition in $\mathcal{C}^{\mathrm{op}}$: given
+        $f^{\mathrm{op}} \in \mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(A, B)$
+        and $g^{\mathrm{op}} \in \mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(B,C)$,
+        their composite is $(f \circ g)^{\mathrm{op}}$, where $\circ$ is
+        composition in $\mathcal{C}$.
+  \item Identity: $\mathrm{id}_A^{\mathrm{op}} = \mathrm{id}_A$.
+\end{itemize}
+
+\textbf{$\mathcal{C}^{\mathrm{op}}$ is a category.} We verify:
+\begin{itemize}
+  \item \textit{Associativity}: inherited from $\mathcal{C}$, with order
+        reversed.
+  \item \textit{Unit laws}: $f^{\mathrm{op}} \circ \mathrm{id}_A^{\mathrm{op}}
+        = (\mathrm{id}_A \circ f)^{\mathrm{op}} = f^{\mathrm{op}}$, and
+        similarly on the other side.
+\end{itemize}
+
+\subsection{Reorganizing: The Opposite of the Opposite}
+
+Applying the opposite construction twice returns to the original:
+$(\mathcal{C}^{\mathrm{op}})^{\mathrm{op}} = \mathcal{C}$. Reversing arrows
+twice gives back the original arrows.
+
+\subsection{Simplifying: Opposite in Notation}
+
+\[
+  \mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(A, B)
+  = \mathrm{Hom}_{\mathcal{C}}(B, A)
+\]
+\[
+  (g \circ_{\mathcal{C}^{\mathrm{op}}} f) = (f \circ_\mathcal{C} g)^{\mathrm{op}}
+\]
+\[
+  (\mathcal{C}^{\mathrm{op}})^{\mathrm{op}} = \mathcal{C}
+\]
+
+\subsection{Formally: Why the Opposite Category Matters}
+
+\formalnote{Duality}
+The opposite category is the engine of \term{categorical duality}. Any
+statement that is true of all categories remains true when you replace every
+$\mathcal{C}$ with $\mathcal{C}^{\mathrm{op}}$ --- but the statement it
+becomes may sound quite different. Every theorem has a \emph{dual theorem},
+obtained by reversing all arrows. This doubles the value of every proof.
+
+\formalnote{Contravariant functors}
+In Chapter~3 we will define functors. A \term{contravariant functor} from
+$\mathcal{C}$ to $\mathcal{D}$ is simply a (covariant) functor from
+$\mathcal{C}^{\mathrm{op}}$ to $\mathcal{D}$. The opposite category allows
+us to treat contravariance as a special case of covariance rather than a
+separate concept.
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+A \textbf{category} $\mathcal{C}$ packages: objects, hom-sets, composition,
+and identity morphisms, satisfying associativity and the unit laws.
+
+\textbf{Small categories} include $\mathbf{0}$ (empty), $\mathbf{1}$ (one
+object), $\mathbf{2}$ (the walking morphism), preorder categories (at most
+one morphism between any two objects), and one-object categories (monoids).
+
+An \textbf{isomorphism} $f : A \to B$ has an inverse $g : B \to A$ with
+$g \circ f = \mathrm{id}_A$ and $f \circ g = \mathrm{id}_B$. Isomorphic
+objects are interchangeable. The inverse is unique.
+
+The \textbf{opposite category} $\mathcal{C}^{\mathrm{op}}$ has the same
+objects as $\mathcal{C}$ but all morphisms reversed. Every theorem about
+categories has a dual obtained by replacing $\mathcal{C}$ with
+$\mathcal{C}^{\mathrm{op}}$.
+
+\medskip
+\textbf{The category checklist:}
+\begin{enumerate}
+  \item Name the objects.
+  \item Name the morphisms (with domains and codomains).
+  \item Verify composition is defined and associative.
+  \item Verify every object has a neutral identity morphism.
+\end{enumerate}
+\end{summarybox}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Category.}\quad A category $\mathcal{C}$ consists of
+$\mathrm{Ob}(\mathcal{C})$, hom-sets $\mathrm{Hom}(A,B)$ for all $A,B$,
+composition $\circ$, and identities $\mathrm{id}_A$, satisfying:
+\[
+  (h \circ g) \circ f = h \circ (g \circ f),
+  \qquad
+  f \circ \mathrm{id}_A = f = \mathrm{id}_B \circ f.
+\]
+
+\medskip
+\textbf{Special classes.}\quad
+$\mathcal{C}$ is \emph{small} if $\mathrm{Ob}(\mathcal{C})$ is a set;
+\emph{thin} if $|\mathrm{Hom}(A,B)| \leq 1$ for all $A,B$;
+\emph{discrete} if $\mathrm{Hom}(A,B) = \varnothing$ for $A \neq B$.
+
+\medskip
+\textbf{Isomorphism.}\quad
+$f : A \to B$ is an isomorphism iff $\exists\, f^{-1} : B \to A$ with
+$f^{-1} \circ f = \mathrm{id}_A$ and $f \circ f^{-1} = \mathrm{id}_B$.
+$A \cong B$ means such $f$ exists. The inverse is unique.
+
+\medskip
+\textbf{Opposite category.}\quad
+$\mathrm{Ob}(\mathcal{C}^{\mathrm{op}}) = \mathrm{Ob}(\mathcal{C})$;
+$\mathrm{Hom}_{\mathcal{C}^{\mathrm{op}}}(A,B) = \mathrm{Hom}_\mathcal{C}(B,A)$;
+composition $(g^{\mathrm{op}} \circ_{\mathrm{op}} f^{\mathrm{op}}) =
+(f \circ g)^{\mathrm{op}}$;
+$(\mathcal{C}^{\mathrm{op}})^{\mathrm{op}} = \mathcal{C}$.
+
+\medskip
+\noindent\textit{Chapter~3 introduces functors: structure-preserving maps
+between categories.}
+\end{formalrestatement}
