@@ -1,5 +1,41 @@
 % preamble.tex — shared LaTeX setup for Elementary Category Theory
 
+% ── 8pt base font size (without extsizes) ────────────────────────────────────
+% fix-cm is part of LaTeX base and lifts the size restrictions on CM/LM fonts.
+% We then redefine all the size commands to make 8pt the document normal size.
+\usepackage{fix-cm}
+\makeatletter
+\renewcommand\normalsize{%
+   \@setfontsize\normalsize\@viiipt{9.5}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listI}
+\normalsize
+\renewcommand\small{%
+   \@setfontsize\small\@viipt{8.5}%
+   \abovedisplayskip 6\p@ \@plus2\p@ \@minus\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 3\p@ \@plus\p@ \@minus\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listsi}
+\renewcommand\footnotesize{%
+   \@setfontsize\footnotesize\@vipt{7.5}%
+   \abovedisplayskip 5\p@ \@plus2\p@ \@minus\p@
+   \abovedisplayshortskip \z@ \@plus\p@
+   \belowdisplayshortskip 2.5\p@ \@plus\p@ \@minus\p@
+   \belowdisplayskip \abovedisplayskip
+   \let\@listi\@listsi}
+\renewcommand\scriptsize{\@setfontsize\scriptsize\@vpt\@vipt}
+\renewcommand\tiny{\@setfontsize\tiny\@ivpt\@vpt}
+\renewcommand\large{\@setfontsize\large\@ixpt{11}}
+\renewcommand\Large{\@setfontsize\Large\@xpt\@xiipt}
+\renewcommand\LARGE{\@setfontsize\LARGE\@xiipt{14}}
+\renewcommand\huge{\@setfontsize\huge{14.4}{18}}
+\renewcommand\Huge{\@setfontsize\Huge{17.28}{22}}
+\makeatother
+
 \usepackage[T1]{fontenc}
 \usepackage[utf8]{inputenc}
 \usepackage{lmodern}
