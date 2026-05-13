@@ -196,6 +196,15 @@
 % Inline pronunciation hint, for notation with a single common reading.
 \newcommand{\sayit}[1]{\textit{\,(read: #1)}}
 
+% ── Naming origin / etymology callout ────────────────────────────────────────
+% Companion to `howtosay`. Used at the first introduction of a \term{...} to
+% explain the origin of the name: whose work, what metaphor, what loan from
+% another field. Goal: give the reader a memory hook beyond the formal
+% definition.
+\definecolor{NameOriginBg}{HTML}{F8F1F4}
+\definecolor{NameOriginBorder}{HTML}{8B4A6B}
+\newtcolorbox{nameorigin}[1][]{enhanced,breakable,colback=NameOriginBg,colframe=NameOriginBorder!70,fonttitle=\bfseries\footnotesize,title={Where the Name Comes From},left=6pt, right=6pt, top=3pt, bottom=3pt,attach boxed title to top left={yshift=-2mm, xshift=4mm},boxed title style={colback=NameOriginBorder!70, colframe=NameOriginBorder!70,fontupper=\color{white}\bfseries\footnotesize},#1}
+
 % ── Exercises (Little-Schemer Q/A style) ────────────────────────────────────
 \usepackage{tabularx}
 \usepackage{array}
