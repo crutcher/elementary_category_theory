@@ -1,4 +1,5 @@
 % ch44_mapping_spaces_joyal.tex — Volume IV Chapter 8
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Mapping Spaces, Equivalences, and the Joyal Model Structure}
 
@@ -62,6 +63,18 @@ There are several models for the mapping space, all weakly equivalent
 as Kan complexes. We give the simplest definition (the \term{slice
 model}) and refer to alternatives in the Formal Restatement.
 
+\begin{nameorigin}
+The term \term{mapping space} is from algebraic topology, where the
+\emph{mapping space} $\mathrm{Map}(X, Y)$ between two topological
+spaces is the space of continuous maps with the compact-open topology.
+The $\infty$-categorical $\mathrm{Map}_\mathcal{C}(x, y)$ is the
+combinatorial analogue: a Kan complex encoding the homotopy types of
+1-morphisms, 2-morphisms-between-them, etc.\ from $x$ to $y$. The use
+of ``space'' (rather than ``set'' or ``object'') signals that the
+mapping data is a \emph{higher-dimensional} thing, not a discrete
+collection.
+\end{nameorigin}
+
 \begin{definition}[Slice mapping space]
 \label{def:slice-mapping}
 For a quasi-category $\mathcal{C}$ and $x, y \in \mathcal{C}_0$, define
@@ -111,6 +124,16 @@ information lost to $\mathrm{ho}$.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Equivalence} in $\infty$-category theory generalizes the classical
+notion of equivalence between objects of a category (mutual inverse
+arrows). For $\infty$-categories, equality is too strict and even
+``natural isomorphism'' is too strict; the right notion is invertibility
+\emph{up to coherent homotopy}, which requires the entire infinite tower
+of higher 2-cells, 3-cells, etc.\ to commute. The terminology and
+formalization is mostly due to Joyal (2002) and Lurie (HTT 2009).
+\end{nameorigin}
 
 \begin{definition}[Equivalence in a quasi-category]
 \label{def:equivalence-1simplex}
@@ -165,6 +188,14 @@ equivalence}) if any (equivalently, all) of:
 \end{enumerate}
 \end{definition}
 
+\begin{nameorigin}
+\term{Whitehead's theorem} (cross-ref Ch.~40) generalizes from spaces
+to quasi-categories: a functor is an equivalence iff essentially
+surjective + fully faithful (mapping-space). The analogue for spaces
+was J.H.C.\ Whitehead's 1949 theorem on CW complexes; the
+$\infty$-categorical version is due to Joyal--Tierney and Lurie.
+\end{nameorigin}
+
 \begin{theorem}[Whitehead's theorem for quasi-categories]
 \label{thm:whitehead-qcat}
 $F : \mathcal{C} \to \mathcal{D}$ is an equivalence iff:
@@ -197,6 +228,17 @@ structure on each $\mathrm{Map}$. \qed
 
 \subsection{Formalizing}
 
+\begin{readernote}
+The Joyal model structure is the technical home of $\infty$-category
+theory in the simplicial-set framework. The same underlying category
+$\mathbf{sSet}$ carries two distinct model structures: \emph{Kan--Quillen}
+(fibrant objects = Kan complexes = $\infty$-groupoids) and \emph{Joyal}
+(fibrant objects = quasi-categories = $\infty$-categories). The same
+simplicial set $X$ can be a fibrant Kan-complex but not a fibrant
+quasi-category, or vice versa: the two notions are genuinely different,
+just as $\infty$-groupoids and $\infty$-categories are different.
+\end{readernote}
+
 \begin{theorem}[Joyal's model structure on $\mathbf{sSet}$]
 \label{thm:joyal-model}
 The category $\mathbf{sSet}$ admits a model structure — the \term{Joyal
@@ -215,6 +257,25 @@ The fibrations are characterized by RLP against inner-anodyne maps,
 where \term{inner-anodyne} maps are generated under saturation by the
 inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta^n$ ($0 < k < n$).
 \end{theorem}
+
+\begin{nameorigin}
+\term{Isofibration} is the term used for Joyal fibrations between
+quasi-categories. The prefix ``iso-'' (Greek \emph{isos}, ``equal'')
+reflects the additional condition: an isofibration must lift not only
+inner horns (giving an inner fibration) but also equivalences (i.e.,
+the inclusion $\{0\} \hookrightarrow J$ from the walking-equivalence
+groupoid). The combination of ``inner fibrant'' plus ``lift-equivalences''
+is captured in this one word.
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Anodyne} (as in ``inner anodyne map'') is from Greek
+\emph{anōdunos} — ``free from pain, painless.'' Joyal's terminology:
+the anodyne maps are the trivial cofibrations of the Joyal model
+structure — they lift against every isofibration ``without trouble.''
+The metaphor: they are ``painless'' to lift past, in the same way an
+analgesic eases pain.
+\end{nameorigin}
 
 \begin{remark}[Joyal fibrations vs.\ Kan fibrations]
 \label{rem:joyal-vs-kan-fib}
@@ -267,6 +328,15 @@ $\mathbf{sSet}$).
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+The \term{core} $\mathcal{C}^{\mathrm{core}}$ (also written
+$\mathcal{C}^{\simeq}$) of a quasi-category is named by analogy with
+the \emph{core} of a group or ring — the largest sub-structure of a
+specified kind. Here, the maximal Kan subcomplex (i.e., the maximal
+$\infty$-groupoid contained in $\mathcal{C}$). The terminology is due
+to Joyal.
+\end{nameorigin}
 
 \begin{definition}[Homotopy $n$-category]
 \label{def:homotopy-n-cat}

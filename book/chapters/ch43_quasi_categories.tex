@@ -1,4 +1,5 @@
 % ch43_quasi_categories.tex — Volume IV Chapter 7
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Quasi-Categories: Definition and First Examples}
 
@@ -56,6 +57,31 @@ fillers give different composites, all related by higher-dimensional
 simplices.
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Quasi-category} was coined by \emph{André Joyal} around 2002,
+following an earlier name \term{weak Kan complex} introduced by
+\emph{Boardman} and \emph{Vogt} in their 1973 book \emph{Homotopy
+Invariant Algebraic Structures on Topological Spaces}. ``Quasi-''
+(Latin \emph{quasi}, ``as if, almost'') marks the structure as
+\emph{almost a category}: composition exists but is not strictly
+unique; associativity holds up to coherent homotopy rather than on the
+nose. The Joyal terminology has won out because it is shorter, more
+mnemonic, and clearly distinguishes the class from Kan complexes (which
+have a stronger condition, not weaker).
+\end{nameorigin}
+
+\begin{nameorigin}
+The alternative name \term{$\infty$-category} reflects the modern
+viewpoint: a quasi-category is a categorical structure with
+\emph{$\infty$-many levels of morphisms} (objects, 1-morphisms,
+2-morphisms between those, 3-morphisms, \ldots), where coherence is
+witnessed by higher-dimensional simplices rather than by axioms. The
+``$\infty$'' marks the unbounded tower of higher cells. The two names
+are interchangeable in this book; ``quasi-category'' emphasizes the
+simplicial combinatorics, ``$\infty$-category'' emphasizes the
+categorical content.
+\end{nameorigin}
 
 \begin{definition}[Quasi-category]
 \label{def:quasi-category}
@@ -123,6 +149,16 @@ witnesses to all the higher coherences.
 
 A quasi-category has too much higher-dimensional data to be a category in
 the ordinary sense — but it has a quotient that is.
+
+\begin{readernote}
+The ``homotopy category'' of a quasi-category $\mathcal{C}$ is the
+\emph{$1$-categorical shadow} obtained by collapsing all the higher
+coherence data: a single $1$-category with the same objects and
+hom-sets given by equivalence classes of $1$-simplices. The map
+$\mathcal{C} \to \mathrm{ho}(\mathcal{C})$ is structurally analogous to
+``take $\pi_0$ of mapping spaces'' — the construction discards all
+higher homotopical information and keeps only the categorical skeleton.
+\end{readernote}
 
 \begin{definition}[Homotopy between $1$-simplices]
 \label{def:homotopy-1simplex}
@@ -228,6 +264,18 @@ distinguishes quasi-categories from ordinary categories.
 
 \subsection{Differential graded categories}
 
+\begin{nameorigin}
+A \term{differential graded category} (dg-category) is a category
+enriched over chain complexes: hom-objects are chain complexes (with
+differential), composition is a chain map. The dg-nerve
+$\mathrm{N}^{\mathrm{dg}}(\mathcal{D})$ converts a dg-category to a
+quasi-category by encoding the chain-complex structure via
+$\mathbb{E}_\infty$-multiplicative simplicial data. Hinich (1997) and
+Tabuada (2005) developed the modern theory; the resulting
+$\infty$-categories model triangulated/derived categories and are the
+standard home of homological algebra in higher form (Chapter~53).
+\end{nameorigin}
+
 \begin{remark}[The dg-nerve]
 \label{rem:dg-nerve}
 For a differential graded (dg) category $\mathcal{D}$ over a ring $k$, the
@@ -241,6 +289,16 @@ source of \emph{stable} quasi-categories arising in homological algebra
 \end{remark}
 
 \subsection{Topological categories}
+
+\begin{nameorigin}
+The \term{coherent nerve} $\mathrm{N}^{\mathrm{coh}}$ is also called the
+\emph{simplicial nerve} or \emph{Cordier nerve}, after \emph{Jean-Marc
+Cordier} (1982) who introduced an early version. Lurie's 2009 book
+\emph{Higher Topos Theory} established the modern form as left adjoint to
+the rigidification functor $\mathfrak{C}$. The ``coherent'' modifier
+reflects that the nerve produces homotopy-coherent rather than strict
+diagrams.
+\end{nameorigin}
 
 \begin{remark}[The coherent nerve]
 \label{rem:coherent-nerve}
@@ -261,6 +319,17 @@ agree.
 \end{remark}
 
 \subsection{The $\infty$-category of spaces}
+
+\begin{nameorigin}
+The name \term{anima} for an object of $\mathcal{S}$ was popularized
+recently (post-2018) by \emph{Cisinski}, \emph{Khan}, and the broader
+French school. The Latin \emph{anima} (``soul, life'') was suggested
+to displace the historically loaded names ``space,'' ``homotopy type,''
+and ``$\infty$-groupoid.'' Each prior name has connotations that don't
+always fit; \emph{anima} carries the spirit of the object without the
+baggage. The terminology is gaining adoption in younger circles; ``space''
+remains the dominant usage in HTT-style literature.
+\end{nameorigin}
 
 \begin{example_thm}[The $\infty$-category $\mathcal{S}$ of spaces (anima)]
 \label{ex:infty-spaces}
