@@ -1,29 +1,31 @@
 % ch38_simplicial_sets.tex — Volume IV Chapter 2
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Simplicial Sets}
 
 \begin{overviewbox}
-A \term{simplicial set} is a presheaf on the simplex category: a functor
-$X : \Delta^{\mathrm{op}} \to \mathbf{Set}$. Concretely, a sequence of sets
-$X_0, X_1, X_2, \ldots$ — the sets of $n$-simplices, for $n = 0, 1, 2, \ldots$ —
-together with face operators $d_i : X_n \to X_{n-1}$ and degeneracy operators
-$s_i : X_n \to X_{n+1}$ satisfying the simplicial identities.
+With $\Delta$ in hand we can now name the combinatorial structures it
+indexes. A \term{simplicial set} is a contravariant functor $X :
+\Delta^{\mathrm{op}} \to \mathbf{Set}$ — equivalently, a sequence of
+sets $X_0, X_1, X_2, \ldots$ together with face operators $d_i :
+X_n \to X_{n-1}$ and degeneracy operators $s_i : X_n \to X_{n+1}$
+satisfying the \emph{simplicial identities}, which are the cosimplicial
+identities of Chapter~37 with arrows reversed.
 
-This chapter develops the category $\mathbf{sSet} = \mathbf{Set}^{\Delta^{\mathrm{op}}}$
-and its key combinatorial objects: the \emph{standard $n$-simplices}
-$\Delta^n$, the \emph{boundaries} $\partial\Delta^n$, and the \emph{horns}
-$\Lambda^n_k$. The distinction between \emph{inner} horns ($0 < k < n$)
-and \emph{outer} horns ($k = 0$ or $k = n$) will be the central technical
-fact organizing the next chapter and all of $\infty$-category theory.
+This chapter develops the category $\mathbf{sSet} =
+\mathbf{Set}^{\Delta^{\mathrm{op}}}$ and its core combinatorial objects:
+the \term{standard $n$-simplices} $\Delta^n$, the \term{boundaries}
+$\partial\Delta^n$, and the \term{horns} $\Lambda^n_k$. The distinction
+between \emph{inner} horns ($0 < k < n$) and \emph{outer} horns ($k = 0$
+or $k = n$) is the central technical fact organizing the next chapter
+and all of $\infty$-category theory.
 
-Examples drive the chapter. We construct the simplicial circle $S^1$ by
-gluing two edges, exhibit the nerve $\mathrm{N}(\mathcal{C})$ of an ordinary
-category (the first taste of Chapter~39), and preview the singular
-simplicial set $\mathrm{Sing}(X)$ of a topological space. Skeleta and
-coskeleta are the truncation tools — every simplicial set is determined
-by its $n$-simplices for $n$ large enough, and the simplicial-set category
-admits explicit ``low-dimensional approximations'' that we will use
-throughout Volume~IV.
+Examples drive the chapter. We build the simplicial circle $S^1$ by
+gluing two endpoints of an edge, exhibit the nerve $\mathrm{N}(\mathcal{C})$
+of an ordinary category (the first taste of Chapter~39), and preview the
+singular simplicial set $\mathrm{Sing}(X)$ of a topological space.
+Skeleta and coskeleta provide the truncation tools — every simplicial
+set is determined by its $n$-simplices for $n$ large enough.
 \end{overviewbox}
 
 
@@ -34,24 +36,125 @@ throughout Volume~IV.
 
 \subsection{Informally}
 
-A simplicial set encodes a combinatorial shape built out of simplices of
-each dimension. To specify one we say:
+Let us begin with a non-categorical description, before reorganizing
+into a clean functor definition.
+
+A \emph{simplicial set} is a recipe for a combinatorial shape built out
+of simplices of every dimension. To specify one, we say:
 \begin{itemize}
   \item How many $0$-simplices there are (vertices).
-  \item How many $1$-simplices there are (edges), each with two endpoints.
+  \item How many $1$-simplices there are (edges), each with two endpoints
+        (specified by face operators).
   \item How many $2$-simplices there are (triangles), each with three
-        edges and three vertices.
-  \item And so on for each $n$.
+        edges and three vertices (again specified by face operators).
+  \item And so on for each dimension $n$.
 \end{itemize}
-On top of the counts, we record how lower-dimensional simplices sit
-inside higher ones — the face maps — and how higher simplices may collapse
-onto lower ones — the degeneracy maps.
 
-The combinatorial constraints on face and degeneracy maps are exactly the
-\emph{simplicial identities}: the relations of Theorem~37.\ref{thm:cosimplicial-identities}
-(cosimplicial identities) with all arrows reversed. Stating the package as a
-functor $X : \Delta^{\mathrm{op}} \to \mathbf{Set}$ subsumes the entire
-identity system into the single sentence ``$X$ is a functor.''
+On top of the counts, we record \emph{how} the simplices fit together:
+\begin{itemize}
+  \item \term{Face operators} $d_i : X_n \to X_{n-1}$: tell us, for each
+        $n$-simplex, what its $(n-1)$-dimensional faces are.
+  \item \term{Degeneracy operators} $s_i : X_n \to X_{n+1}$: produce
+        higher-dimensional ``degenerate'' simplices by repeating
+        vertices.
+\end{itemize}
+
+The face and degeneracy operators must satisfy a tower of compatibility
+conditions — the \emph{simplicial identities} — that ensure the
+combinatorial geometry hangs together coherently. The miracle of
+Chapter~37 is that all those compatibility conditions are subsumed by a
+single sentence: ``$X$ is a contravariant functor from $\Delta$ to
+$\mathbf{Set}$.''
+
+\begin{nameorigin}
+\term{Simplicial} is the adjectival form of \emph{simplex} (Latin
+\emph{simplex}, ``simple''). A simplicial set is ``a set indexed by
+simplices,'' just as a \emph{topological} set is one indexed by topology
+or a \emph{measurable} set one indexed by measurable structure. The
+terminology dates to Eilenberg–Zilber (1950), who isolated the category
+of \emph{semisimplicial} complexes (face maps only); the modern
+``simplicial sets'' (with both face and degeneracy operators) was
+standardized by Kan in the late 1950s.
+\end{nameorigin}
+
+\begin{readernote}
+The set of all simplicial-set data is enormous: even small simplicial
+sets have infinitely many degeneracies (every simplex of every dimension
+generates an infinite tower of higher-dimensional degenerate simplices).
+The bookkeeping looks daunting at first. The trick is to focus on the
+\emph{non-degenerate} simplices — these are finitely many for many
+simplicial sets of interest, and they determine everything else.
+\end{readernote}
+
+\subsection{Expanding}
+
+A simplicial set $X$ has \emph{three} layers of structure, building on
+one another:
+
+\paragraph{Layer 1: the sets $X_n$.}
+For each $n \geq 0$, a set $X_n$ — the ``set of $n$-simplices.''
+
+\paragraph{Layer 2: the face operators.}
+For each $i, n$ with $0 \leq i \leq n$, a function $d_i : X_n \to
+X_{n-1}$. Reading: ``the $i$-th face operator on $X_n$.'' Applied to an
+$n$-simplex $x \in X_n$, $d_i x \in X_{n-1}$ is the face of $x$
+opposite vertex $i$.
+
+\paragraph{Layer 3: the degeneracy operators.}
+For each $i, n$ with $0 \leq i \leq n$, a function $s_i : X_n \to
+X_{n+1}$. Applied to $x \in X_n$, $s_i x$ is the ``degenerate''
+$(n+1)$-simplex obtained by repeating vertex $i$.
+
+\paragraph{The simplicial identities.}
+The face and degeneracy operators must satisfy a small finite list of
+compatibility conditions — the \term{simplicial identities}
+(Theorem~\ref{thm:sset-combinatorial}). These are the duals of the
+cosimplicial identities of Chapter~37, obtained by reversing arrow order.
+
+\paragraph{Why a functor?}
+Specifying the three layers above and verifying the identities is
+exactly equivalent to specifying a contravariant functor $X :
+\Delta^{\mathrm{op}} \to \mathbf{Set}$, where:
+\begin{itemize}
+  \item $X([n]) = X_n$.
+  \item $X(\delta^i) = d_i$.
+  \item $X(\sigma^i) = s_i$.
+\end{itemize}
+The simplicial identities become automatic consequences of $X$ being a
+functor on $\Delta^{\mathrm{op}}$ (functoriality $=$ all relations among
+generators preserved). This functorial repackaging is the modern style.
+
+\begin{dialog}
+\textbf{Reader:} Why a \emph{contravariant} functor? Why not just go in
+the same direction as $\Delta$?
+
+\textbf{Author:} The contravariance lines up the geometric expectation
+with the algebra. In $\Delta$, the face map $\delta^i : [n-1] \to [n]$
+goes \emph{up} in dimension. A simplicial set $X$ assigns sets to
+ordinals, and a face operator $d_i : X_n \to X_{n-1}$ goes \emph{down}
+in dimension (because a face has \emph{lower} dimension than its
+ambient simplex). To get the directions to match — face maps go up,
+face operators go down — we use the opposite category.
+
+\textbf{Reader:} So \emph{cosimplicial} objects, which use $\Delta$
+directly, have the dimensions going up?
+
+\textbf{Author:} Yes. Cosimplicial = covariant on $\Delta$ = ``dimensions
+go up.'' Simplicial = contravariant on $\Delta$ = ``dimensions go down.''
+We will see both kinds: cosimplicial spaces (Chapter~37); simplicial
+spaces (this chapter).
+\end{dialog}
+
+\begin{nameorigin}
+A \term{presheaf} on a category $\mathcal{C}$ is a contravariant functor
+$\mathcal{C}^{\mathrm{op}} \to \mathbf{Set}$. The name \emph{presheaf}
+predates the modern definition: Jean Leray (1946) introduced
+\emph{faisceau} (French ``sheaf''), and \emph{préfaisceau} (presheaf)
+was coined for the underlying data of a sheaf \emph{before} imposing
+the gluing axiom. ``Pre-'' from Latin \emph{prae-} (``before, in front
+of'') — the data exists \emph{prior to} the sheaf condition. Simplicial
+sets are presheaves on $\Delta$.
+\end{nameorigin}
 
 \subsection{Formalizing}
 
@@ -74,10 +177,22 @@ $X \to Y$. The category of simplicial sets is denoted $\mathbf{sSet} :=
 
 \begin{howtosay}
 $\mathbf{sSet}$ \sayit{``simplicial sets''}; $X_n$ \sayit{``the $n$-simplices
-of $X$''}; $d_i$ \sayit{``$i$-th face of''}; $s_i$ \sayit{``$i$-th degeneracy of''}.
+of $X$''} or \sayit{``$X$ at level $n$''}; $d_i$ \sayit{``$i$-th face of''} or
+\sayit{``$d$-sub-$i$''}; $s_i$ \sayit{``$i$-th degeneracy of''} or \sayit{``$s$-sub-$i$''}.
 The boldface $\mathbf{sSet}$ distinguishes the category from individual
-simplicial sets; some texts write $\mathrm{Set}_\Delta$ or $\widehat{\Delta}$.
+simplicial sets; some texts write $\mathrm{Set}_\Delta$ or
+$\widehat{\Delta}$ (the latter using the standard ``hat'' notation for
+presheaf categories).
 \end{howtosay}
+
+\begin{readernote}
+The notation $d_i$ and $s_i$ uses subscripts where Chapter~37 used
+superscripts ($\delta^i$, $\sigma^i$). This is intentional: the
+superscript variants live in $\Delta$ itself (covariant); the subscript
+variants are induced by the contravariant functor $X$, so they ``go the
+other way.'' Keep the subscript/superscript convention in mind whenever
+you see a face or degeneracy.
+\end{readernote}
 
 \begin{theorem}[Equivalent combinatorial description]
 \label{thm:sset-combinatorial}
@@ -104,7 +219,8 @@ morphisms (Theorem~37.\ref{thm:delta-generators}). Hence specifying a
 functor $X$ on $\Delta^{\mathrm{op}}$ is the same as specifying its values
 on $\delta^i$ and $\sigma^i$, namely the $d_i$ and $s_i$. The relations
 that hold between $\delta^i$ and $\sigma^i$ (the cosimplicial identities)
-become, under the contravariant $X$, the simplicial identities above. \qed
+become, under the contravariant $X$, the simplicial identities above.
+\qed
 \end{proof}
 
 \begin{remark}[Dualizing the indexing]
@@ -122,6 +238,28 @@ identities that one sees in different references.
 \label{sec:simplices-boundaries-horns}
 % ═══════════════════════════════════════════════════════════════════════════
 
+\subsection{Informally}
+
+There are three foundational simplicial sets that every other will be
+built from:
+\begin{itemize}
+  \item The \term{standard $n$-simplex} $\Delta^n$: the ``free'' simplicial
+        set with one distinguished non-degenerate $n$-simplex. This is
+        the Yoneda image of $[n] \in \Delta$.
+  \item The \term{boundary} $\partial\Delta^n$: the standard $n$-simplex
+        with its top-dimensional simplex removed, leaving only the
+        ``shell.''
+  \item The \term{horn} $\Lambda^n_k$: the boundary with one more face
+        ($\delta^k$) also removed, leaving an open ``$U$-shaped'' or
+        ``$\mathsf{L}$-shaped'' partial simplex.
+\end{itemize}
+These three sit in a sequence
+$\Lambda^n_k \;\hookrightarrow\; \partial\Delta^n \;\hookrightarrow\; \Delta^n$,
+removing one $n$-simplex and one face at a time. The combinatorics of
+filling horns and boundaries — extending a partial map back up to a
+full $\Delta^n$-map — is the central technical content of
+$\infty$-category theory.
+
 \subsection{Formalizing}
 
 \begin{definition}[Standard $n$-simplex]
@@ -138,16 +276,28 @@ operators by precomposition with $\sigma^i : [k+1] \to [k]$.
 
 \begin{howtosay}
 $\Delta^n$ \sayit{``Delta-$n$'' or ``the standard $n$-simplex''}; the
-``standard'' modifier distinguishes the simplicial set from the topological
-simplex $\lvert\Delta^n\rvert$ (\S37.\ref{sec:geometric-realization-preview}).
-Context usually makes which is meant clear.
+``standard'' modifier distinguishes the simplicial set $\Delta^n$ from
+the topological simplex $\lvert\Delta^n\rvert$
+(\S37.\ref{sec:geometric-realization-preview}). Context usually makes
+which is meant clear; when ambiguous, ``combinatorial'' vs.\ ``topological''
+disambiguates.
 \end{howtosay}
+
+\begin{nameorigin}
+The notation $\Delta^n$ (with superscript $n$, not the bracket $[n]$ of
+$\Delta$ itself) names the \emph{simplicial set represented by} $[n]$
+under the Yoneda embedding $\Delta \hookrightarrow \mathbf{sSet}$. The
+convention comes from algebraic topology, where the ``standard
+$n$-simplex'' was the canonical name for the geometric object
+$\lvert\Delta^n\rvert$; when the combinatorial avatar emerged, the
+notation $\Delta^n$ (without bars) was kept for the simplicial set.
+\end{nameorigin}
 
 \begin{example_thm}[Low-dimensional $\Delta^n$]
 $\Delta^0$ is the constant simplicial set with one $k$-simplex in every
 dimension (the unique monotone $[k] \to [0]$). It is the terminal object
-of $\mathbf{sSet}$. $\Delta^1$ has two $0$-simplices (the maps $[0] \to [1]$
-named $0$ and $1$), three $1$-simplices (the identity and the two
+of $\mathbf{sSet}$. $\Delta^1$ has two $0$-simplices (the maps $[0] \to
+[1]$ named $0$ and $1$), three $1$-simplices (the identity and the two
 constants), and a growing number of degenerate $k$-simplices for $k \geq 2$.
 \end{example_thm}
 
@@ -164,15 +314,18 @@ $\mathbf{sSet}$ is naturally bijective with $X_n$:
 This is the Yoneda lemma (Chapter~9 / Chapter~15) applied to the
 representable $\Delta^n = \Delta(-, [n])$ in $\mathbf{sSet} =
 [\Delta^{\mathrm{op}}, \mathbf{Set}]$. The bijection sends $f : \Delta^n
-\to X$ to $f_{[n]}(\mathrm{id}_{[n]}) \in X_n$. \qed
+\to X$ to $f_{[n]}(\mathrm{id}_{[n]}) \in X_n$.
+\qed
 \end{proof}
 
-\begin{remark}[Computational power of Yoneda]
-The Yoneda lemma here says that an $n$-simplex of $X$ \emph{is} a map
-$\Delta^n \to X$. We constantly switch between the two descriptions: an
-$n$-simplex named $x \in X_n$ is also a map ``picking it out,'' and the
-universal $n$-simplex is $\mathrm{id}_{[n]} \in \Delta^n_n$.
-\end{remark}
+\begin{readernote}
+Yoneda for $\mathbf{sSet}$ is the single most-used computational fact
+in the chapter. It says: \emph{``an $n$-simplex of $X$ is the same as a
+map $\Delta^n \to X$''}. We will switch fluidly between the two
+descriptions. A given $n$-simplex $x \in X_n$ corresponds to its
+``picking-out map'' $\widehat{x} : \Delta^n \to X$, and the universal
+$n$-simplex of $\Delta^n$ itself is $\mathrm{id}_{[n]} \in \Delta^n_n$.
+\end{readernote}
 
 \begin{definition}[Boundary of $\Delta^n$]
 \label{def:boundary}
@@ -185,6 +338,16 @@ images of the $n+1$ face maps $\delta^i : \Delta^{n-1} \to \Delta^n$,
 \end{equation*}
 For $n = 0$, we set $\partial\Delta^0 = \emptyset$ (the empty simplicial set).
 \end{definition}
+
+\begin{nameorigin}
+The symbol \term{$\partial$} for ``boundary'' is from classical topology,
+where it denoted the boundary operator on chain complexes (Poincaré's
+work in the late 1800s). The combinatorial boundary $\partial\Delta^n$ is
+the simplicial set version: it removes the one top-dimensional
+non-degenerate simplex, leaving the union of the $n+1$ codimension-$1$
+faces. Geometrically, $\lvert\partial\Delta^n\rvert$ is homeomorphic to
+the $(n-1)$-sphere $S^{n-1}$.
+\end{nameorigin}
 
 \begin{definition}[Horn $\Lambda^n_k$]
 \label{def:horn}
@@ -205,6 +368,22 @@ opposite vertex $k$ removed, leaving an open ``horn'' that bends toward
 the missing $k$-th face.
 \end{howtosay}
 
+\begin{nameorigin}
+The letter \term{$\Lambda$} (Greek capital lambda, ``L'') was chosen by
+Joyal in the late 1990s for the horn simplicial set because:
+\begin{itemize}
+  \item The shape $\Lambda$ visually resembles the case $n = 2$:
+        $\Lambda^2_1$ is two edges joined at the middle vertex,
+        forming a wide ``$\Lambda$'' shape (or an inverted ``$\mathsf{V}$'').
+  \item More mundanely, $\Lambda$ is one of the few unused Greek
+        capitals close to $\Delta$, making the typographic pairing
+        natural.
+\end{itemize}
+The terminology \term{horn} reflects the geometric intuition: $\Lambda^n_k$
+is the boundary $\partial\Delta^n$ with one face removed, leaving an
+``open horn'' that bends or curves around the missing face.
+\end{nameorigin}
+
 \begin{example_thm}[Horns of low dimension]
 \label{ex:horns-low}
 $\Lambda^2_1$ is the inner horn of the $2$-simplex (triangle): two edges
@@ -223,6 +402,22 @@ either the face opposite vertex $1$ or the face opposite vertex $2$.
 The inner/outer horn distinction is the central technical fact of
 $\infty$-category theory.
 
+\begin{nameorigin}
+The distinction between \term{inner} and \term{outer} horns refers to
+\emph{which vertex} is at the bend:
+\begin{itemize}
+  \item \emph{Inner} ($0 < k < n$): the missing face is opposite an
+        ``interior'' vertex (not the first or last). The horn closes
+        around an inner vertex.
+  \item \emph{Outer} ($k = 0$ or $k = n$): the missing face is opposite
+        the first or last vertex. The horn is at the ``outer'' edge of
+        the index range.
+\end{itemize}
+The terminology dates to Boardman–Vogt (1973), who originally called
+the inner-horn-filling condition the ``restricted Kan condition.''
+Joyal's preferred ``inner/outer'' terminology stuck.
+\end{nameorigin}
+
 \begin{remark}[Foreshadowing the Kan condition]
 A simplicial set in which every inner horn $\Lambda^n_k \to X$ (with
 $0 < k < n$) extends to $\Delta^n \to X$ is called a \term{quasi-category}
@@ -236,6 +431,16 @@ long edge $0 \to 2$. The inner-horn condition makes composition
 existential but non-unique; the choice of filler is the witness that an
 $\infty$-category has \emph{coherent} rather than strict associativity.
 \end{remark}
+
+\begin{readernote}
+The mnemonic: \emph{inner horns let you compose; outer horns let you
+invert}. Filling $\Lambda^2_1$ (inner) takes two composable arrows and
+produces their composite. Filling $\Lambda^2_0$ (outer) takes
+$f, g : a \to b$ with $f$ given, and asks for an arrow $h : a \to a$
+making the triangle commute — effectively asking $f$ to have a
+``left inverse.'' Quasi-categories impose only the composition
+condition; Kan complexes (= $\infty$-groupoids) impose both.
+\end{readernote}
 
 \subsection{Formally}
 
@@ -251,6 +456,40 @@ those missing at least one element other than $j$.
 \section{Skeleta and Coskeleta}
 \label{sec:skeleta}
 % ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+The category $\mathbf{sSet}$ has objects of \emph{every} dimension, so
+it is reasonable to ask: \emph{how much information is in the first $n$
+dimensions of a simplicial set?} Two limit-style answers:
+
+\begin{itemize}
+  \item Take the simplicial subset generated by the $\leq n$-simplices,
+        with higher dimensions added back only as degeneracies of those.
+        This is the \term{$n$-skeleton} $\mathrm{sk}_n X$.
+  \item Take the largest simplicial set whose $\leq n$-simplices agree
+        with $X$'s, freely adding back simplices of higher dimension
+        subject only to boundary constraints. This is the \term{$n$-coskeleton}
+        $\mathrm{cosk}_n X$.
+\end{itemize}
+
+Both come from the same kind of construction (Kan extension along a
+truncation functor), but they go in opposite directions: $\mathrm{sk}_n$
+adds as little as possible, $\mathrm{cosk}_n$ adds as much as possible.
+
+\begin{nameorigin}
+The terms \term{skeleton} and \term{coskeleton} are loans from
+algebraic topology and the theory of CW complexes. A CW complex's
+\emph{$n$-skeleton} is the union of its cells of dimension $\leq n$ — the
+skeletal structure beneath the higher cells. In simplicial sets, the
+$n$-skeleton plays the same role: the part of $X$ in dimensions
+$\leq n$, with everything higher derived from it.
+
+The prefix \emph{co-} in ``coskeleton'' signals \emph{dual} (the right
+adjoint instead of the left), matching the long category-theoretic
+tradition: cofibration, colimit, cohomology — all duals of the
+corresponding ``un-prefixed'' notions.
+\end{nameorigin}
 
 \subsection{Formalizing}
 
@@ -277,12 +516,20 @@ $\mathrm{sk}_n \iota_n^* X \to X$ is an isomorphism; it is
 \term{$n$-coskeletal} if the unit $X \to \mathrm{cosk}_n \iota_n^* X$ is.
 \end{definition}
 
+\begin{howtosay}
+$\mathrm{sk}_n X$ \sayit{``the $n$-skeleton of $X$''}; $\mathrm{cosk}_n X$
+\sayit{``the $n$-coskeleton of $X$''}. ``Skeletal'' and ``coskeletal''
+are adjectives applied to simplicial sets: $X$ is \emph{$n$-skeletal}
+if it agrees with its own $n$-skeleton; $X$ is \emph{$n$-coskeletal} if
+it agrees with its own $n$-coskeleton.
+\end{howtosay}
+
 \begin{remark}[The skeleta in pictures]
-$\mathrm{sk}_n X$ is the smallest simplicial subset of $X$ containing all
-$k$-simplices of $X$ for $k \leq n$, with all simplices of higher dimension
-degenerated from those. $\mathrm{cosk}_n X$ is the largest simplicial set
-agreeing with $X$ in dimensions $\leq n$: it freely adds back $k$-simplices
-for $k > n$ subject only to the boundary constraints.
+$\mathrm{sk}_n X$ is the smallest simplicial subset of $X$ containing
+all $k$-simplices of $X$ for $k \leq n$, with all simplices of higher
+dimension being degeneracies of those. $\mathrm{cosk}_n X$ is the largest
+simplicial set agreeing with $X$ in dimensions $\leq n$: it freely adds
+back $k$-simplices for $k > n$ subject only to the boundary constraints.
 
 In particular: $\Delta^n$ is $n$-skeletal (it is generated by its unique
 non-degenerate $n$-simplex $\mathrm{id}_{[n]}$); $\partial\Delta^n$ is
@@ -299,14 +546,16 @@ For any $X \in \mathbf{sSet}$, the canonical maps assemble into a filtration
 with $X = \mathrm{colim}_n \mathrm{sk}_n X$.
 \end{lemma}
 
-\begin{remark}[Why skeleta matter]
-Inductive arguments on simplicial sets routinely proceed by induction on
-the skeleton filtration: prove the statement for $\mathrm{sk}_n X$,
+\begin{readernote}
+The skeleton filtration is the simplicial-set version of the cell-complex
+filtration in topology. Inductive arguments on simplicial sets routinely
+proceed up this filtration: prove the statement for $\mathrm{sk}_n X$,
 assuming it for $\mathrm{sk}_{n-1} X$. The step usually amounts to
 filling in non-degenerate $n$-simplices one at a time, via boundary
-inclusions $\partial\Delta^n \hookrightarrow \Delta^n$. We will see
-this argument pattern repeatedly in Chapters~41 and~43.
-\end{remark}
+inclusions $\partial\Delta^n \hookrightarrow \Delta^n$. We will see this
+argument pattern repeatedly in Chapters~41 (model categories) and 43
+(quasi-categories).
+\end{readernote}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -332,6 +581,19 @@ Geometrically, $S^1$'s realization (Chapter~39) is the topological circle.
 
 \subsection{The nerve of a category (preview)}
 
+\begin{nameorigin}
+The \term{nerve} of a category was introduced by Alexander Grothendieck
+in correspondence around 1960 and developed in detail by Graeme Segal
+(1968) in his work on classifying spaces of categories and topological
+operads. The word ``nerve'' is a biological metaphor: just as the nervous
+system of an organism is the structural backbone that transmits
+information throughout the body, the nerve of a category is the
+simplicial structure that ``transmits'' the categorical information into
+the world of simplicial sets. The metaphor predates Grothendieck — Hilbert
+used ``nerve of a covering'' (Nerv einer Bedeckung) in topology around
+1932 — but Grothendieck's categorical nerve is the modern usage.
+\end{nameorigin}
+
 \begin{example_thm}[Nerve of a category]
 \label{ex:nerve-preview}
 For an ordinary category $\mathcal{C}$, the \term{nerve} $\mathrm{N}(\mathcal{C}) \in
@@ -356,6 +618,18 @@ $\infty$-categories within $\mathbf{sSet}$.
 
 \subsection{The singular complex of a space (preview)}
 
+\begin{nameorigin}
+The \term{singular} simplicial set, \term{$\mathrm{Sing}(X)$}, was
+introduced by Samuel Eilenberg (1944) as the foundation of singular
+homology. The adjective ``singular'' contrasts with ``smooth'' or
+``polyhedral'': a singular simplex in $X$ is merely a continuous map
+$\lvert\Delta^n\rvert \to X$, which can land on or pass through
+``singular points'' (corners, edges, non-smooth locations) of $X$.
+Earlier theories required smoother conditions; Eilenberg's insight was
+that allowing arbitrary continuous maps gave a homology theory defined
+for \emph{all} topological spaces.
+\end{nameorigin}
+
 \begin{example_thm}[Singular complex $\mathrm{Sing}(X)$]
 \label{ex:singular}
 For a topological space $X$, the \term{singular simplicial set} is
@@ -376,6 +650,21 @@ Kan complexes will be our model for ``spaces up to homotopy'' in
 Chapter~39.
 \end{remark}
 
+\begin{readernote}
+The pair (nerve, singular complex) gives two contrasting examples of
+simplicial sets:
+\begin{itemize}
+  \item Nerve of a category: \emph{rigid}; inner horns extend uniquely;
+        outer horns might not extend at all.
+  \item Singular complex of a space: \emph{flexible}; \emph{all} horns
+        extend; the extensions are non-unique (every continuous
+        deformation gives one).
+\end{itemize}
+The two examples bookend the spectrum: Chapter~39 develops both, and
+Chapter~43 introduces quasi-categories as the in-between case
+(inner horns extend, but possibly not uniquely).
+\end{readernote}
+
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{Exercises}
@@ -387,24 +676,32 @@ Chapter~39.
 \qaitem{What is a simplicial set?}{A functor $X : \Delta^{\mathrm{op}} \to \mathbf{Set}$; equivalently, a sequence of sets $X_n$ with face and degeneracy operators satisfying the simplicial identities.}
 \qaitem{What is $X_n$?}{The set of $n$-simplices of $X$, i.e., $X([n])$.}
 \qaitem{Why is the indexing $\Delta^{\mathrm{op}}$ and not $\Delta$?}{So that face operators decrease dimension: $d_i : X_n \to X_{n-1}$. A covariant functor $\Delta \to \mathbf{Set}$ is a \emph{cosimplicial} set, where ``face'' goes the other way.}
+\qaitem{Where does ``presheaf'' come from?}{Leray (1946) coined \emph{préfaisceau} as the data of a sheaf \emph{before} (Latin \emph{prae-}) imposing the gluing axiom. A simplicial set is a presheaf on $\Delta$.}
 \qaitem{What are the face operators $d_i$?}{For each $0 \leq i \leq n$, $d_i = X(\delta^i) : X_n \to X_{n-1}$. They project an $n$-simplex onto its $i$-th $(n-1)$-face.}
+\qaitem{Why subscripts $d_i$, $s_i$ rather than superscripts?}{To signal direction: $\delta^i, \sigma^i$ live in $\Delta$ (covariant); $d_i, s_i$ are induced by the contravariant functor $X$ and thus ``go the other way.''}
 \qaitem{State one simplicial identity.}{$d_i s_i = \mathrm{id}$ (and $d_{i+1} s_i = \mathrm{id}$): degenerate then face-extract returns the original.}
 \qaitem{What is the standard $n$-simplex $\Delta^n$?}{The representable simplicial set $\Delta(-, [n])$. Its $k$-simplices are the monotone maps $[k] \to [n]$.}
 \qaitem{State Yoneda for simplicial sets.}{$\mathbf{sSet}(\Delta^n, X) \cong X_n$, natural in both variables. An $n$-simplex of $X$ is a map $\Delta^n \to X$.}
 \qaitem{What is the boundary $\partial\Delta^n$?}{The simplicial subset of $\Delta^n$ consisting of non-surjective monotone maps into $[n]$. Equivalently, the union of the $n+1$ face inclusions $\Delta^{n-1} \hookrightarrow \Delta^n$.}
+\qaitem{Why the symbol $\partial$?}{From topology: $\partial$ is the classical boundary operator on chains (Poincaré, late 1800s). The simplicial $\partial\Delta^n$ is the combinatorial version of the topological boundary sphere $S^{n-1}$.}
 \qaitem{What is the horn $\Lambda^n_k$?}{The simplicial subset of $\partial\Delta^n$ obtained by removing the $k$-th face: $\Lambda^n_k = \bigcup_{i \neq k} \delta^i(\Delta^{n-1})$.}
-\qaitem{Inner vs.\ outer horns?}{Inner: $0 < k < n$. Outer: $k = 0$ or $k = n$. The distinction is central to the Kan/quasi-category dichotomy.}
+\qaitem{Why the letter $\Lambda$ for horns?}{Joyal's choice. The Greek capital lambda visually resembles $\Lambda^2_1$ — two edges joined at a middle vertex form an inverted ``V'' shape, like the letter $\Lambda$. The term \emph{horn} reflects the geometric ``open'' shape with one face removed.}
+\qaitem{Inner vs.\ outer horns?}{Inner: $0 < k < n$ (the missing face is opposite an interior vertex). Outer: $k = 0$ or $k = n$ (opposite the first or last vertex). The distinction is central to the Kan/quasi-category dichotomy.}
 \qaitem{Picture $\Lambda^2_1$ and $\Lambda^2_0$.}{$\Lambda^2_1$: two edges $0 \to 1$ and $1 \to 2$ joined at the middle (inner). $\Lambda^2_0$: two edges sharing endpoint $0$ (outer, ``$\mathsf{L}$''-shape).}
-\qaitem{When does a horn fill?}{Inner horn fills always: quasi-categories. All horns fill: Kan complexes. The latter is a stronger condition; Kan complexes model ``$\infty$-groupoids,'' quasi-categories model ``$\infty$-categories.''}
+\qaitem{Inner horn vs.\ outer horn mnemonic?}{\emph{Inner horns let you compose; outer horns let you invert.} Filling $\Lambda^2_1$ produces a composite; filling $\Lambda^2_0$ produces a left inverse.}
+\qaitem{When does a horn fill?}{Inner horn fills always: quasi-categories. All horns fill: Kan complexes.}
 \qaitem{What is the $n$-skeleton $\mathrm{sk}_n X$?}{The smallest simplicial subset of $X$ generated by simplices of dimension $\leq n$. Equivalently: the left Kan extension along $\Delta_{\leq n} \hookrightarrow \Delta$ applied to $X|_{\Delta_{\leq n}}$.}
 \qaitem{What is the $n$-coskeleton $\mathrm{cosk}_n X$?}{The right Kan extension: the largest simplicial set agreeing with $X$ in dimensions $\leq n$. Higher simplices are freely filled subject to boundary constraints.}
+\qaitem{Where does ``skeleton'' come from?}{From CW-complex topology: the $n$-skeleton of a CW complex is the union of its cells of dimension $\leq n$ — the structural backbone beneath higher cells. The simplicial-set version plays the same role.}
 \qaitem{Why are $\Delta^n, \partial\Delta^n, \Lambda^n_k$ all $n$- or $(n-1)$-skeletal?}{Because they are built from finitely many low-dimensional simplices and their degenerations: $\Delta^n$ is generated by one non-degenerate $n$-simplex (so $n$-skeletal); $\partial\Delta^n$ and $\Lambda^n_k$ have no non-degenerate $n$-simplex (so $(n-1)$-skeletal).}
 \qaitem{Describe the simplicial circle $S^1$.}{$S^1 = \Delta^1 / \partial\Delta^1$. One non-degenerate $0$-simplex and one non-degenerate $1$-simplex, both face operators of the latter returning the former.}
 \qaitem{What are the $n$-simplices of $\mathrm{N}(\mathcal{C})$?}{$n$-fold composable chains $c_0 \to c_1 \to \cdots \to c_n$ of morphisms in $\mathcal{C}$.}
+\qaitem{Where does ``nerve'' come from?}{Biological metaphor (Grothendieck $\sim$ 1960; Segal 1968). The nervous system transmits information through an organism; the nerve of a category transmits its categorical information into $\mathbf{sSet}$.}
 \qaitem{Faces of an $n$-simplex in the nerve?}{$d_0$ drops the leftmost morphism (and object); $d_n$ drops the rightmost; for $0 < i < n$, $d_i$ composes adjacent morphisms $f_{i+1} \circ f_i$ to shorten the chain.}
 \qaitem{What is the singular simplicial set $\mathrm{Sing}(X)$?}{$\mathrm{Sing}(X)_n = \mathbf{Top}(\lvert\Delta^n\rvert, X)$: continuous maps from the topological $n$-simplex into $X$.}
+\qaitem{Where does ``singular'' come from?}{Eilenberg (1944): allowed arbitrary continuous maps from $\lvert\Delta^n\rvert$ into $X$, not just smooth or polyhedral ones. ``Singular'' contrasts with ``smooth'' — the simplex may pass through singular points of $X$.}
 \qaitem{Is $\mathrm{Sing}(X)$ a Kan complex?}{Yes — every horn $\Lambda^n_k \to \mathrm{Sing}(X)$ extends to $\Delta^n \to \mathrm{Sing}(X)$, because $\lvert\Lambda^n_k\rvert$ is a deformation retract of $\lvert\Delta^n\rvert$.}
-\qaitem{Why does Yoneda for sSet pay off practically?}{It identifies maps out of $\Delta^n$ with $n$-simplices of the target — converting universal mapping properties into concrete simplex-counting statements.}
+\qaitem{Why does Yoneda for $\mathbf{sSet}$ pay off practically?}{It identifies maps out of $\Delta^n$ with $n$-simplices of the target — converting universal mapping properties into concrete simplex-counting statements.}
 \qaitem{What is $\mathrm{sk}_0 X$?}{The discrete simplicial set on $X_0$: just the $0$-simplices of $X$, with all higher simplices degenerate.}
 \qaitem{Is $\mathbf{sSet}$ complete and cocomplete?}{Yes — as a presheaf category $[\Delta^{\mathrm{op}}, \mathbf{Set}]$, it inherits all (co)limits from $\mathbf{Set}$, computed pointwise (Chapter~6).}
 \end{qa}
@@ -428,18 +725,20 @@ representable simplicial set; an $n$-simplex of $X$ is a map $\Delta^n
 \to X$ (Yoneda). $\partial\Delta^n$ is the boundary (non-surjective
 monotone maps into $[n]$); $\Lambda^n_k$ is the horn omitting the
 $k$-th face. \emph{Inner} horns have $0 < k < n$; \emph{outer} horns
-have $k = 0$ or $k = n$.
+have $k = 0$ or $k = n$. Mnemonic: \emph{inner horns let you compose;
+outer horns let you invert}.
 
 \textbf{Skeleta and coskeleta.}\quad $\mathrm{sk}_n \dashv \iota_n^*
 \dashv \mathrm{cosk}_n$ gives the canonical filtration $\emptyset \subset
 \mathrm{sk}_0 X \subset \mathrm{sk}_1 X \subset \cdots$, with $X$ as the
 colimit. $\Delta^n$ is $n$-skeletal; $\partial\Delta^n$ and $\Lambda^n_k$
-are $(n-1)$-skeletal.
+are $(n-1)$-skeletal. Borrowed from CW-complex topology.
 
 \textbf{Key examples.}\quad The simplicial circle $S^1 = \Delta^1 /
-\partial\Delta^1$; the nerve $\mathrm{N}(\mathcal{C})$ of a category; the
-singular simplicial set $\mathrm{Sing}(X)$ of a space. The latter is a
-Kan complex — all horns fill, not merely the inner ones. The distinction
+\partial\Delta^1$; the nerve $\mathrm{N}(\mathcal{C})$ of a category
+(Grothendieck/Segal, $\sim$ 1968); the singular simplicial set
+$\mathrm{Sing}(X)$ of a space (Eilenberg, 1944). The latter is a Kan
+complex — all horns fill, not merely the inner ones. The distinction
 foreshadows quasi-categories (Chapter~43).
 \end{summarybox}
 
