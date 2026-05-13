@@ -17,6 +17,23 @@ is a Kan extension; every limit is a Kan extension.}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Pointwise Kan extension} (also \emph{absolute} when stronger
+conditions hold) is the variant of Kan extension that is computable
+``at each point'' via a (co)limit formula. The terminology distinguishes
+from \emph{non-pointwise} extensions, which may exist but are not
+computable from local data. Most natural Kan extensions are pointwise.
+
+\term{Codensity monad} (Kock 1966): for a functor $G : \mathcal{B}
+\to \mathcal{C}$, the right Kan extension $\mathrm{Ran}_G G$ is a
+canonical monad on $\mathcal{C}$. The terminology marks the dual of
+``density'': if $G$ is dense (every $\mathcal{C}$-object is a colimit of
+$G$-images), the codensity monad is trivial; obstruction to density
+\emph{is} the codensity monad. The classical Manes example: the
+ultrafilter monad on $\mathbf{Set}$ is the codensity of
+$\mathbf{FinSet} \hookrightarrow \mathbf{Set}$.
+\end{nameorigin}
+
 \section{Pointwise Kan Extensions in $\mathcal{V}$-$\mathbf{Cat}$}
 \label{sec:pointwise-kan}
 % ═══════════════════════════════════════════════════════════════════════════

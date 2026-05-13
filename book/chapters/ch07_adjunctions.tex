@@ -29,6 +29,24 @@ tool for proving preservation theorems.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Adjunction} (or \emph{adjoint pair}) was introduced by
+\emph{Daniel Kan} in his 1958 paper ``Adjoint Functors.'' The name is
+borrowed from linear algebra: in a Hilbert space, the \emph{adjoint}
+$T^*$ of an operator $T$ is the unique operator satisfying the pairing
+$\langle T x, y\rangle = \langle x, T^* y\rangle$. Kan's categorical
+adjoint follows the same template: the hom-set bijection
+$\mathcal{D}(LA, B) \cong \mathcal{C}(A, RB)$ is the categorical version
+of the inner-product pairing, with $\mathrm{Hom}$ playing the role of
+$\langle -, -\rangle$. Kan's insight was that this pattern is
+\emph{everywhere}: free/forgetful pairs, tensor/hom pairs, base-change
+pairs in geometry, modal operators in logic — all are adjunctions.
+
+The symbol $\dashv$ (``left tack'' or ``turnstile'') is read ``left
+adjoint to.'' It evokes the asymmetry: $L$ on the left of $\dashv$ is
+the left adjoint; $R$ on the right is the right adjoint.
+\end{nameorigin}
+
 \section{The Hom-Set Bijection}
 \label{sec:hom-set-bijection}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -269,6 +287,23 @@ between $\mathcal{C}$ and $\mathcal{E}$. The bijection composes:
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+The \term{unit} $\eta$ and \term{counit} $\epsilon$ of an adjunction are
+named for the role they play. The \emph{unit} $\eta : \mathrm{id} \Rightarrow
+RL$ is the ``coming-in'' transformation (analogous to the multiplicative
+unit ``$1$'' in a monoid); the \emph{counit} $\epsilon : LR \Rightarrow
+\mathrm{id}$ is the ``going-out'' transformation. The triangle identities
+($\epsilon L \circ L\eta = \mathrm{id}_L$ and $R\epsilon \circ \eta R =
+\mathrm{id}_R$) say that going around the unit-counit-cycle on either
+side returns to the identity — a coherence condition. The Greek letters
+$\eta$ (eta) and $\epsilon$ (epsilon) are conventional.
+
+\term{RAPL} and \term{LAPC} are mnemonic acronyms: \emph{Right Adjoints
+Preserve Limits}, \emph{Left Adjoints Preserve Colimits}. They are
+universally taught in category theory courses and are perhaps the most
+useful one-line summaries of adjunction theory.
+\end{nameorigin}
+
 \section{Adjunctions and Limits}
 \label{sec:adjunctions-and-limits}
 % ═══════════════════════════════════════════════════════════════════════════

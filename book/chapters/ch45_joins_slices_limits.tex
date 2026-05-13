@@ -1,4 +1,5 @@
 % ch45_joins_slices_limits.tex — Volume IV Chapter 9
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Joins, Slices, and Limits in a Quasi-Category}
 
@@ -41,6 +42,18 @@ contractible slice. This will be used repeatedly in Chapters~48--51.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+The \term{join} $X \star Y$ takes its name from the classical
+join operation in convex geometry: the join of two polytopes (or
+topological spaces) $A \star B$ is the polytope/space obtained by
+``joining every point of $A$ to every point of $B$'' via line segments.
+For simplicial complexes, $\Delta^a \star \Delta^b = \Delta^{a+b+1}$:
+joining an $a$-simplex with a $b$-simplex produces an
+$(a+b+1)$-simplex. The combinatorial join on $\mathbf{sSet}$ is the
+simplicial-set version of this geometric operation. The symbol $\star$
+(``star'') is universal; the alternative $*$ (asterisk) is also used.
+\end{nameorigin}
+
 \begin{definition}[Join of simplicial sets]
 \label{def:join}
 For $X, Y \in \mathbf{sSet}$, the \term{join} $X \star Y$ is the
@@ -75,6 +88,14 @@ three pieces match the three summands in
 Definition~\ref{def:join}. \qed
 \end{proof}
 
+\begin{nameorigin}
+The \term{right cone} $X^\rhd$ and \term{left cone} $X^\lhd$ generalize
+the classical \emph{cone} on a space (a point joined to every point of
+$X$ by line segments). The triangular shapes $\rhd$ and $\lhd$ are
+visual mnemonics: the bare ``$\rhd$'' faces right (cone point at the
+right end) and $\lhd$ faces left. The notation is due to Joyal.
+\end{nameorigin}
+
 \begin{example_thm}[Cones]
 \label{ex:cones}
 For any $X \in \mathbf{sSet}$:
@@ -102,6 +123,19 @@ $\infty$-categorical tensor product without modification.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+The \term{slice category} construction (Vol~I/II) takes a category
+$\mathcal{C}$ and an object $x$ to the category $\mathcal{C}_{/x}$ of
+``things with a map to $x$.'' In the $\infty$-categorical setting the
+construction is upgraded: $\mathcal{C}_{/p}$ for a diagram $p : K \to
+\mathcal{C}$ consists of ``cones over $p$.'' The fundamental fact is
+that this slice operation is the \emph{right adjoint} of the join
+construction: $- \star K \dashv (-)_{/K}$. The naming convention is
+inherited from Vol~I/II; the join-slice adjunction generalizes the
+classical fact that $\mathrm{Cat}(C \star K, \mathcal{D})$ corresponds
+to cones over a diagram of shape $K$.
+\end{nameorigin}
 
 \begin{definition}[Slice quasi-category over a diagram]
 \label{def:slice-over}
@@ -174,6 +208,14 @@ all this data as: an object of $\mathcal{C}_{/p}$ — namely the limit cone
 — that is \emph{terminal} in $\mathcal{C}_{/p}$.
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Initial} and \term{terminal} objects extend from Vol~I/II's
+$1$-categorical definitions (object with a unique map to / from every
+other) to the $\infty$-setting. ``Unique'' becomes ``contractible space
+of maps'' — the natural $\infty$-categorical version of uniqueness, by
+the same logic as Vol~II's representability principle.
+\end{nameorigin}
 
 \begin{definition}[Initial and terminal objects]
 \label{def:initial-terminal-qcat}
@@ -251,6 +293,17 @@ particular cases.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Cofinal} (sometimes \term{final}) comes from the order-theoretic
+notion: a subset $S \subseteq P$ of a poset is \emph{cofinal} if every
+element of $P$ is dominated by some element of $S$. The categorical
+generalization (a functor $i : K' \to K$ such that every object of $K$
+``factors through'' $K'$ in the appropriate sense) has the same
+intuitive content: $K'$ captures enough of $K$ to compute colimits
+correctly. The Joyal--Lurie cofinality criterion makes this precise
+for $\infty$-colimits.
+\end{nameorigin}
 
 \begin{definition}[Cofinal map]
 \label{def:cofinal}

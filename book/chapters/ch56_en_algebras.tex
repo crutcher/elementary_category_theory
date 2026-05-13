@@ -1,4 +1,5 @@
 % ch56_en_algebras.tex — Volume IV Chapter 20
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$\mathbb{E}_n$-Algebras and the Little Disks Operads}
 
@@ -69,6 +70,23 @@ the infinite-dimensional configuration space ``has room for everything.''
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Little disks operad} was introduced by \emph{J.\ Michael Boardman}
+and \emph{Rainer Vogt} (1973) in their book \emph{Homotopy Invariant
+Algebraic Structures on Topological Spaces}. The original
+operad-of-little-cubes models the structure of $n$-fold loop spaces:
+the space of $k$ disjoint $n$-cubes embedded in a larger $n$-cube
+parameterizes ``$k$-fold operations'' that can be performed on an
+$n$-fold loop space. Boardman--Vogt's recognition theorem characterizes
+$n$-fold loop spaces as algebras over the $\mathbb{E}_n$ operad.
+
+The notation \term{$\mathbb{E}_n$} is due to \emph{Peter May}: ``E'' for
+\emph{everything} (an $\mathbb{E}_\infty$-algebra has \emph{everything}
+commutative, including all higher homotopies), with the subscript $n$
+recording the dimension at which commutativity is enforced. The naming
+convention has become universal in higher algebra.
+\end{nameorigin}
 
 \begin{definition}[Little disks $\mathbb{E}_n$]
 \label{def:little-disks}
@@ -161,6 +179,18 @@ between commuting elements.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Dunn additivity} is named for \emph{Gerald Dunn}, who proved
+the theorem in his 1988 paper ``Tensor product of operads and iterated
+loop spaces.'' The result is striking: the operadic tensor product
+$\mathbb{E}_m \otimes \mathbb{E}_n \simeq \mathbb{E}_{m+n}$ shows that
+codimensions \emph{add} under the tensor product of little-disks
+operads. The Eckmann-Hilton argument is the $m = n = 1$ special case:
+two compatible monoid structures on a set are equivalent to a single
+commutative monoid (i.e., $\mathbb{E}_1 \otimes \mathbb{E}_1 \simeq
+\mathbb{E}_2$, weakened in the $1$-categorical case to commutativity).
+\end{nameorigin}
 
 \begin{theorem}[Dunn additivity]
 \label{thm:dunn}

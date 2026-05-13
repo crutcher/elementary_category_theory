@@ -24,6 +24,20 @@ where ``monoidal Yoneda'' takes us next.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Day convolution} is named for \emph{Brian J.\ Day}, who
+introduced the construction in his 1970 paper \emph{On Closed Categories
+of Functors}. The terminology echoes \emph{convolution} from analysis
+(the convolution of two functions $f * g$); Day's categorical
+convolution is the coend formula
+$(F * G)(c) = \int^{c_1, c_2} \mathcal{C}(c_1 \otimes c_2, c) \otimes
+F(c_1) \otimes G(c_2)$,
+which combines two functors using the monoidal structure of the source
+category. Day convolution is the canonical way to lift monoidal
+structure from $\mathcal{C}$ to the presheaf category
+$[\mathcal{C}^{\mathrm{op}}, \mathcal{V}]$.
+\end{nameorigin}
+
 \section{The Day Convolution Construction}
 \label{sec:day-convolution}
 % ═══════════════════════════════════════════════════════════════════════════

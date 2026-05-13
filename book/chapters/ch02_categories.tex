@@ -94,6 +94,22 @@ to every example in this book and every example I'll encounter elsewhere.
 
 \subsection{Formalizing: The Four-Part Definition}
 
+\begin{nameorigin}
+\term{Category} as a mathematical term was introduced by \emph{Samuel
+Eilenberg} (1913--1998, Polish-American mathematician) and
+\emph{Saunders Mac Lane} (1909--2005, American mathematician) in their
+1945 paper \emph{General Theory of Natural Equivalences}. The original
+motivation: they needed a precise framework to formulate the notion of
+``natural transformation,'' which in turn required ``functor,'' which
+required \emph{the things functors go between} — i.e., \emph{categories}.
+
+The word \emph{category} predates the math: it's from Greek
+\emph{katēgoria} (``predicate, statement, accusation''), via Aristotle's
+\emph{Categories} (4th c.\ BCE) and Kant's table of categories (1781).
+Eilenberg and Mac Lane chose the word for its sense of ``a class of
+mathematical structures of the same kind'' — a class one can speak \emph{about}.
+\end{nameorigin}
+
 A \term{category} $\mathcal{C}$ consists of four pieces of data:
 
 \begin{enumerate}
@@ -375,6 +391,15 @@ every pair.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Isomorphism} is from Greek \emph{isos} (``equal'') + \emph{morphē}
+(``form'') — ``same form.'' The term was coined by the 19th-century
+algebraists studying group theory; it generalized from groups to all
+algebraic and categorical settings. An isomorphism is, in the category-theoretic
+sense, a morphism with a two-sided inverse — the strongest natural notion of
+``sameness'' available in any category.
+\end{nameorigin}
+
 \section{Isomorphism}
 \label{sec:isomorphism}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -496,6 +521,17 @@ are invertible.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+The \term{opposite category} $\mathcal{C}^{\mathrm{op}}$ reverses the
+direction of every morphism. The notation $^{\mathrm{op}}$ (also written
+$\mathcal{C}^\circ$ or $\mathcal{C}^{*}$) is universal; the superscript
+``op'' is short for \emph{opposite}. The construction is one of the most
+useful — and most underused-by-beginners — operations in category theory.
+Every theorem in $\mathcal{C}$ has a dual theorem in $\mathcal{C}^{\mathrm{op}}$;
+this is the principle behind the dichotomies limit/colimit,
+product/coproduct, terminal/initial.
+\end{nameorigin}
+
 \section{The Opposite Category}
 \label{sec:opposite-category}
 % ═══════════════════════════════════════════════════════════════════════════

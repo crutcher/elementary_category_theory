@@ -1,4 +1,5 @@
 % ch52_presentable.tex — Volume IV Chapter 16
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Presentable $\infty$-Categories}
 
@@ -41,6 +42,19 @@ infrastructure'' assumed throughout Lurie's \emph{Higher Topos Theory}
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Accessible} and \term{presentable} categories were introduced by
+\emph{Jiří Adámek} and \emph{Jiří Rosický} in their 1994 book
+\emph{Locally Presentable and Accessible Categories}. The terminology:
+\emph{accessible} means ``reachable from a small set of generators
+under $\kappa$-filtered colimits'' (the category is ``accessible''
+from a small generating set); \emph{presentable} (or \emph{locally
+presentable}) means accessible + cocomplete (i.e., ``every object has
+a small presentation in terms of generators and relations''). The
+$\infty$-version was developed by Lurie in HTT Ch.~5 with the same
+philosophy.
+\end{nameorigin}
+
 \begin{definition}[$\kappa$-filtered]
 \label{def:kappa-filtered}
 For a regular cardinal $\kappa$, a quasi-category $\mathcal{K}$ is
@@ -50,6 +64,17 @@ $< \kappa$ admits a cocone in $\mathcal{K}$.
 A $\omega$-filtered ($\kappa = \aleph_0$) quasi-category is just a
 filtered quasi-category in the sense of Chapter~49.
 \end{definition}
+
+\begin{nameorigin}
+\term{$\kappa$-compact} (also called \term{$\kappa$-presentable}) is from
+topology / set theory: a topological space is \emph{compact} if every
+open cover has a finite subcover; an object of a category is \emph{$\kappa$-compact}
+if every map from it into a $\kappa$-filtered colimit factors through a
+stage. The terminology was lifted into category theory by Gabriel and
+Ulmer (1971). The classical $\omega$-compact (= compact) objects in
+$\mathbf{Top}$ are the finite CW-complexes — generalizing the
+topological compactness exactly.
+\end{nameorigin}
 
 \begin{definition}[$\kappa$-compact object]
 \label{def:kappa-compact}
@@ -220,6 +245,19 @@ $R$-module} functor, $S \mapsto R \otimes \Sigma^\infty_+ S$.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Bousfield localization} is named for \emph{Aldridge Knight ``Pete''
+Bousfield} (1941--2020), American mathematician who pioneered the
+construction in his 1975 paper ``The Localization of Spectra with
+Respect to Homology.'' Bousfield's insight was that one can localize an
+entire homotopy category at a chosen class of maps without leaving the
+ambient category — by working with the reflective subcategory of
+``$W$-local objects.'' The construction is the homotopy-theoretic
+generalization of the Gabriel-Zisman localization (Ch.~40), and it
+extends naturally to the $\infty$-categorical setting via reflective
+subcategories of presentable $\infty$-cats.
+\end{nameorigin}
 
 \begin{definition}[Reflective subcategory]
 \label{def:reflective}

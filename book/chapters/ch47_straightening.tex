@@ -1,4 +1,5 @@
 % ch47_straightening.tex — Volume IV Chapter 11
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Straightening and Unstraightening}
 
@@ -53,6 +54,32 @@ $\infty$-categories.''
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Straightening} and \term{unstraightening} are Lurie's terminology
+(HTT 2009, building on Joyal's earlier work). The intuition: a Cartesian
+fibration $\mathcal{X} \to \mathcal{S}$ has a ``crooked'' representation
+(coherent rather than strict data); the \emph{straightening} functor
+converts it to a \emph{straight} (functorial) presentation as a
+$\mathrm{Cat}_\infty$-valued functor. \emph{Unstraightening} is the
+reverse operation, building a Cartesian fibration from a functor. The
+adjunction sits between the two presentations and is, in fact, a
+Quillen equivalence.
+
+The classical $1$-categorical version of straightening is the
+\term{Grothendieck construction} (1960), which converts a pseudofunctor
+$F : \mathcal{S}^{\mathrm{op}} \to \mathrm{Cat}$ to a fibred category
+$\int F \to \mathcal{S}$. Lurie's $\infty$-categorical version
+generalizes both constructions to the homotopy-coherent setting.
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Marked simplicial set} refers to the marking of certain edges.
+The marking marks which edges are ``Cartesian'' or ``would-be
+equivalences.'' The terminology is descriptive (mathematical objects
+with extra ``marks'') and goes back at least to model-category
+literature of the 1990s.
+\end{nameorigin}
+
 \begin{definition}[Marked simplicial set]
 \label{def:marked-sset}
 A \term{marked simplicial set} is a pair $(X, M)$ where $X \in \mathbf{sSet}$
@@ -68,6 +95,17 @@ a quasi-category $\mathcal{C}$, the natural marking is its equivalences;
 for a Cartesian fibration $p : \mathcal{X} \to \mathcal{S}$, the natural
 marking on $\mathcal{X}$ is its Cartesian morphisms.
 \end{howtosay}
+
+\begin{nameorigin}
+The \term{rigidification} functor $\mathfrak{C}$ converts a simplicial
+set into a (rigid, i.e., strict) simplicial category, in contrast to
+the coherent-nerve direction which goes the other way. ``Rigid'' here
+means ``strict'' — the resulting structure has on-the-nose composition,
+not just up-to-coherent-homotopy composition. The notation $\mathfrak{C}$
+is German typographer's blackletter (Fraktur), used because Lurie's HTT
+chose Fraktur letters for simplicial-category-valued constructions; the
+choice is suggestive of the older, more rigid mathematical typography.
+\end{nameorigin}
 
 \begin{definition}[Rigidification $\mathfrak{C}$]
 \label{def:rigidification}

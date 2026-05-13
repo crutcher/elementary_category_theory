@@ -1,36 +1,37 @@
 % ch39_realization_nerve_kan.tex — Volume IV Chapter 3
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Geometric Realization, the Nerve, and Kan Complexes}
 
 \begin{overviewbox}
 Two adjunctions package the relationship between simplicial sets and the
-two ``natural'' categories they look like: topological spaces and ordinary
-categories.
+two ``natural'' categories they look like: topological spaces and
+ordinary categories.
 
 The first is \term{geometric realization} $\lvert{-}\rvert :
 \mathbf{sSet} \to \mathbf{Top}$, left adjoint to the singular complex
-$\mathrm{Sing}$. It is the left Kan extension of the cosimplicial space
-$\lvert\Delta^\bullet\rvert$ along the Yoneda embedding — concretely, the
-coend $\lvert X\rvert = \int^{[n]} X_n \cdot \lvert\Delta^n\rvert$. Under
-this adjunction, simplicial sets serve as a combinatorial model for
-topological spaces up to weak equivalence.
+functor $\mathrm{Sing}$ of Chapter~38. It is the left Kan extension of
+the cosimplicial space $\lvert\Delta^\bullet\rvert$ along the Yoneda
+embedding — concretely, the coend $\lvert X\rvert = \int^{[n]} X_n \cdot
+\lvert\Delta^n\rvert$. Under this adjunction, simplicial sets serve as a
+combinatorial model for topological spaces up to weak equivalence.
 
 The second is the \term{nerve} $\mathrm{N} : \mathbf{Cat} \to \mathbf{sSet}$,
 right adjoint to the fundamental category functor $\tau_1 : \mathbf{sSet}
-\to \mathbf{Cat}$. The nerve is fully faithful, and a beautiful theorem of
+\to \mathbf{Cat}$. The nerve is fully faithful, and a theorem of
 Grothendieck identifies its image: the simplicial sets in which every
 \emph{inner} horn has a \emph{unique} filler. Relaxing ``unique'' to
 ``exists'' gives quasi-categories (Chapter~43); insisting on fillers for
 \emph{all} horns gives Kan complexes — the topic of the final section.
 
-Kan complexes are the simplicial-set avatars of $\infty$-groupoids: spaces
-whose homotopical content is fully captured by simplicial combinatorics.
-By the end of the chapter we have the picture
+Kan complexes are the simplicial-set avatars of $\infty$-groupoids:
+spaces whose homotopical content is fully captured by simplicial
+combinatorics. By the end of the chapter we have the picture
 \begin{equation*}
   \text{ordinary categories} \;\hookleftarrow\; \text{simplicial sets} \;\hookrightarrow\;
   \text{Kan complexes} \;\leftrightsquigarrow\; \text{topological spaces},
 \end{equation*}
-which the next two chapters refine via model-categorical machinery.
+which Chapters~40--42 refine via model-categorical machinery.
 \end{overviewbox}
 
 
@@ -48,24 +49,66 @@ along the gluing prescribed by $X$'s face operators. Degenerate simplices
 contribute nothing new: they are already present as faces of lower
 non-degenerate simplices.
 
-In the other direction, every topological space $T$ has a singular
-simplicial set $\mathrm{Sing}(T)$ whose $n$-simplices are continuous maps
-$\lvert\Delta^n\rvert \to T$ (Chapter~38). The two operations are
+In the other direction (Chapter~38), every topological space $T$ has a
+singular simplicial set $\mathrm{Sing}(T)$ whose $n$-simplices are
+continuous maps $\lvert\Delta^n\rvert \to T$. The two operations are
 adjoint — and not by accident: realization is the left Kan extension
 along the Yoneda embedding $\Delta \hookrightarrow \mathbf{sSet}$ of the
 cosimplicial space of standard simplices.
+
+\begin{readernote}
+A useful way to picture realization: imagine the simplicial set as a
+``set of instructions'' for assembling a topological space.
+\begin{itemize}
+  \item ``Take this many vertices.''
+  \item ``Glue these vertices into edges according to the face data.''
+  \item ``Glue these edges into triangles, these triangles into
+        tetrahedra, etc.''
+\end{itemize}
+The realization is the topological space the instructions describe.
+Crucially, only \emph{non-degenerate} simplices add new content;
+degeneracies are bookkeeping.
+\end{readernote}
+
+\subsection{Expanding}
+
+The coend formula $\lvert X\rvert = \int^{[n]} X_n \cdot \lvert\Delta^n\rvert$
+hides a familiar construction. Unrolling:
+
+\begin{itemize}
+  \item For each $n$, take a disjoint union of $\lvert X_n\rvert$-many
+        copies of $\lvert\Delta^n\rvert$: this is $X_n \cdot
+        \lvert\Delta^n\rvert$ (the \emph{copower}).
+  \item Glue along face and degeneracy maps: identify a face of an
+        $n$-simplex copy with the corresponding $(n-1)$-simplex copy,
+        and collapse degenerate copies onto their underlying
+        non-degenerate ones.
+\end{itemize}
+The coend is the universal way to perform all these identifications at once.
+
+\begin{nameorigin}
+The \term{coend} (notation $\int^{[n]} \cdots$) is a categorical
+construction introduced by Yoneda and developed by Day–Kelly (1969). The
+\emph{co-} prefix marks it as the dual of the \emph{end} ($\int_{[n]}$,
+a limit-style construction). The integral notation is a metaphor: just
+as $\int f$ accumulates values of $f$ across the domain, $\int^{[n]} F$
+accumulates the values of $F([n], [n])$ in a categorically-correct way.
+The notation has stuck because the analogies with classical integration
+(Fubini's theorem, etc.) carry over surprisingly well to the categorical
+setting.
+\end{nameorigin}
 
 \subsection{Formalizing}
 
 \begin{definition}[Geometric realization]
 \label{def:geometric-realization}
-The \term{geometric realization} of a simplicial set $X$ is the topological
-space
+The \term{geometric realization} of a simplicial set $X$ is the
+topological space
 \begin{equation*}
   \lvert X\rvert \;=\; \int^{[n] \in \Delta} X_n \cdot \lvert\Delta^n\rvert,
 \end{equation*}
-where $S \cdot T = S \times T$ for a set $S$ and space $T$ (the copower in
-$\mathbf{Top}$). This defines a functor $\lvert{-}\rvert : \mathbf{sSet}
+where $S \cdot T = S \times T$ for a set $S$ and space $T$ (the copower
+in $\mathbf{Top}$). This defines a functor $\lvert{-}\rvert : \mathbf{sSet}
 \to \mathbf{Top}$.
 \end{definition}
 
@@ -73,8 +116,9 @@ $\mathbf{Top}$). This defines a functor $\lvert{-}\rvert : \mathbf{sSet}
 $\lvert X\rvert$ \sayit{``the realization of $X$''}; the coend formula
 \sayit{``integrate over $\Delta$, copowering $X_n$ by the topological
 $n$-simplex''}. The integral notation reflects that the construction
-identifies $X_m \cdot \lvert\Delta^m\rvert$ and $X_n \cdot \lvert\Delta^n\rvert$
-along all face/degeneracy maps (Chapter~26 coend calculus).
+identifies $X_m \cdot \lvert\Delta^m\rvert$ and $X_n \cdot
+\lvert\Delta^n\rvert$ along all face/degeneracy maps (Chapter~26 coend
+calculus).
 \end{howtosay}
 
 \begin{theorem}[Realization–singular adjunction]
@@ -96,7 +140,8 @@ $\hom$-coend adjunction of Chapter~26,
   \;\cong\; \int_{[n]} \mathbf{Set}\bigl(X_n, \mathbf{Top}(\lvert\Delta^n\rvert, T)\bigr).
 \end{equation*}
 The rightmost end is $\mathrm{Nat}(X_\bullet, \mathrm{Sing}(T)_\bullet) =
-\mathbf{sSet}(X, \mathrm{Sing}\, T)$. \qed
+\mathbf{sSet}(X, \mathrm{Sing}\, T)$.
+\qed
 \end{proof}
 
 \begin{remark}[Realization is a left Kan extension]
@@ -108,9 +153,19 @@ embedding $y : \Delta \to \mathbf{sSet}$,
   \lvert{-}\rvert \;=\; \operatorname{Lan}_y \lvert\Delta^\bullet\rvert.
 \end{equation*}
 This is the general construction: a cosimplicial object in any cocomplete
-category $\mathcal{D}$ extends along Yoneda to a colimit-preserving functor
-$\mathbf{sSet} \to \mathcal{D}$ (Chapter~11/18 Kan extension theory).
+category $\mathcal{D}$ extends along Yoneda to a colimit-preserving
+functor $\mathbf{sSet} \to \mathcal{D}$ (Chapter~11/18 Kan extension theory).
 \end{remark}
+
+\begin{readernote}
+The adjunction $\lvert{-}\rvert \dashv \mathrm{Sing}$ is the precise
+bridge between combinatorial and topological category theory. The
+unit and counit are not isomorphisms in general — there are simplicial
+sets that don't recover from their realization, and topological spaces
+that don't recover from their singular complex on the nose — but they
+\emph{are} weak equivalences after suitable replacement (Chapter~42's
+homotopy hypothesis).
+\end{readernote}
 
 \subsection{Formally}
 
@@ -119,20 +174,20 @@ $\mathbf{sSet} \to \mathcal{D}$ (Chapter~11/18 Kan extension theory).
 $\lvert\Delta^n\rvert$ in the abstract is the topological $n$-simplex
 already encountered (\S37.\ref{sec:geometric-realization-preview});
 $\lvert\partial\Delta^n\rvert$ is the topological boundary sphere $S^{n-1}$
-(up to homeomorphism); $\lvert\Lambda^n_k\rvert$ is a contractible
-piece of the boundary obtained by removing one $(n-1)$-face.
+(up to homeomorphism); $\lvert\Lambda^n_k\rvert$ is a contractible piece
+of the boundary obtained by removing one $(n-1)$-face.
 
 The simplicial circle $S^1 = \Delta^1/\partial\Delta^1$
 (Example~38.\ref{ex:simplicial-circle}) realizes to the topological circle.
 \end{example_thm}
 
 \begin{remark}[A common topological subtlety]
-The codomain $\mathbf{Top}$ in Theorem~\ref{thm:realization-sing-adj} should
-strictly be a category of \emph{nice} spaces — compactly generated weak
-Hausdorff is standard — to ensure colimits behave well. In Chapter~41 we
-discuss the model-category framework that makes this precise; for our
-purposes any cartesian-closed category of spaces with the standard simplices
-will do.
+The codomain $\mathbf{Top}$ in Theorem~\ref{thm:realization-sing-adj}
+should strictly be a category of \emph{nice} spaces — compactly generated
+weak Hausdorff is standard — to ensure colimits behave well. In
+Chapter~41 we discuss the model-category framework that makes this
+precise; for our purposes any cartesian-closed category of spaces with
+the standard simplices will do.
 \end{remark}
 
 
@@ -140,6 +195,24 @@ will do.
 \section{The Nerve of a Category}
 \label{sec:nerve}
 % ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+The second adjunction lives between simplicial sets and ordinary
+categories. Every ordinary category $\mathcal{C}$ has a simplicial-set
+shadow — its nerve $\mathrm{N}(\mathcal{C})$ — whose $n$-simplices are
+the length-$n$ composable chains in $\mathcal{C}$:
+\begin{equation*}
+  c_0 \xrightarrow{f_1} c_1 \xrightarrow{f_2} \cdots \xrightarrow{f_n} c_n.
+\end{equation*}
+The face operators perform either dropping (at the ends) or composing
+(in the middle); the degeneracy operators insert identity arrows.
+
+The construction is fully faithful: $\mathbf{Cat} \hookrightarrow
+\mathbf{sSet}$ via the nerve. Grothendieck's theorem identifies the
+image \emph{exactly}: a simplicial set is in the image of the nerve iff
+every inner horn extends \emph{uniquely}. Relax ``uniquely'' to ``at
+least one'' and the resulting class is the quasi-categories.
 
 \subsection{Formalizing}
 
@@ -166,8 +239,18 @@ composable chain $c_0 \xrightarrow{f_1} c_1 \xrightarrow{f_2} \cdots
 $\mathrm{N}(\mathcal{C})$ \sayit{``the nerve of $\mathcal{C}$''}; the
 chain description \sayit{``length-$n$ string of composable arrows in
 $\mathcal{C}$''}. Some texts write $\mathrm{N}_\bullet(\mathcal{C})$ or
-$\mathrm{Ner}(\mathcal{C})$.
+$\mathrm{Ner}(\mathcal{C})$; the bullet ${}_\bullet$ emphasizes
+simpliciality but is omitted when context is clear.
 \end{howtosay}
+
+\begin{nameorigin}
+\term{Nerve} (recall from Chapter~38): biological metaphor introduced by
+Grothendieck around 1960 and developed by Graeme Segal (1968). Just as
+a nervous system transmits information through an organism, the nerve of
+a category transmits its categorical content into the world of
+simplicial sets — letting the tools of simplicial homotopy theory
+operate on categorical structure.
+\end{nameorigin}
 
 \begin{remark}[Face and degeneracy on the nerve]
 For a chain $c_0 \to c_1 \to \cdots \to c_n$:
@@ -182,11 +265,22 @@ For a chain $c_0 \to c_1 \to \cdots \to c_n$:
 \end{itemize}
 \end{remark}
 
+\begin{readernote}
+The asymmetry between $d_0$ / $d_n$ (which drop) and $d_i$ for $0 < i < n$
+(which compose) is the geometric reason that \emph{inner horns} are
+special. Filling an inner horn $\Lambda^n_k$ ($0 < k < n$) asks: ``given
+all the faces except $d_k$, can we recover $d_k$ and the whole
+$n$-simplex?'' For nerves, $d_k$ is forced — it is the composite of two
+adjacent arrows. For an outer horn ($k = 0$ or $k = n$), $d_k$ is a
+\emph{drop}, which is not forced by the other faces (you would need an
+inverse of a morphism, which doesn't generally exist).
+\end{readernote}
+
 \begin{theorem}[Fundamental category–nerve adjunction]
 \label{thm:nerve-tau1-adj}
-The nerve functor $\mathrm{N} : \mathbf{Cat} \to \mathbf{sSet}$ has a left
-adjoint $\tau_1 : \mathbf{sSet} \to \mathbf{Cat}$, the \term{fundamental
-category} (or \emph{homotopy category}) functor:
+The nerve functor $\mathrm{N} : \mathbf{Cat} \to \mathbf{sSet}$ has a
+left adjoint $\tau_1 : \mathbf{sSet} \to \mathbf{Cat}$, the
+\term{fundamental category} (or \emph{homotopy category}) functor:
 \begin{equation*}
   \tau_1 \;\dashv\; \mathrm{N}, \qquad
   \mathbf{Cat}(\tau_1 X, \mathcal{C}) \;\cong\; \mathbf{sSet}(X, \mathrm{N}(\mathcal{C})).
@@ -197,23 +291,46 @@ $2$-simplex says ``$f_2 \circ f_1 = f_3$'' for its three boundary
 $1$-simplices).
 \end{theorem}
 
+\begin{nameorigin}
+The notation \term{$\tau_1$} comes from \emph{truncation}: $\tau_1$ takes
+a simplicial set (which has data in every dimension) and produces a
+$1$-categorical \emph{truncation} of it — discarding the higher
+homotopical information and keeping only the categorical part. The
+subscript $1$ marks the target dimension (an ordinary $1$-category).
+Generalizations $\tau_n$ produce $n$-categorical truncations (Chapter~44).
+\end{nameorigin}
+
 \begin{proof}[Proof sketch]
 $\tau_1 = \operatorname{Lan}_y [-]$, the left Kan extension along Yoneda
-of the cosimplicial category $[-]: \Delta \to \mathbf{Cat}$ — exactly
+of the cosimplicial category $[-] : \Delta \to \mathbf{Cat}$ — exactly
 parallel to the realization construction of
 Remark~\ref{rem:realization-lkan}. Adjointness follows from the Yoneda
-adjunction for Kan extensions. \qed
+adjunction for Kan extensions.
+\qed
 \end{proof}
 
 \subsection{Reorganizing: characterizing the nerve}
 
+\begin{nameorigin}
+The \term{characterization of nerves via unique inner-horn filling} is
+attributed to \emph{Alexander Grothendieck} (1928--2014), one of the
+most influential mathematicians of the 20th century. The result appears
+implicitly in Grothendieck's work on classifying spaces and explicitly
+in subsequent literature on Segal's nerve construction. Grothendieck's
+broader project of reorganizing algebraic geometry through category
+theory pervades Volume~IV: the Grothendieck construction (Chapter~46
+fibrations), Grothendieck universes, Grothendieck topologies (Chapter~58
+DAG), and the homotopy hypothesis (\S\ref{sec:homotopy-hypothesis}
+below) are all his.
+\end{nameorigin}
+
 \begin{theorem}[Grothendieck's characterization of the nerve]
 \label{thm:nerve-characterization}
 The nerve functor $\mathrm{N} : \mathbf{Cat} \to \mathbf{sSet}$ is fully
-faithful. Its essential image consists of the simplicial sets $X$ in which
-every inner horn admits a \emph{unique} filler: for each $0 < k < n$ and
-each map $\Lambda^n_k \to X$, there is exactly one $\Delta^n \to X$
-extending it.
+faithful. Its essential image consists of the simplicial sets $X$ in
+which every inner horn admits a \emph{unique} filler: for each $0 < k
+< n$ and each map $\Lambda^n_k \to X$, there is exactly one $\Delta^n
+\to X$ extending it.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
@@ -230,18 +347,20 @@ composition in $\mathcal{C}$ is uniquely defined. Conversely, if all
 inner horns fill uniquely, the unique-composite $\Lambda^2_1 \to X$
 extension defines a composition law on $X_1$ that is associative (forced
 by $\Lambda^3_1$ and $\Lambda^3_2$ fillings) and unital (forced by
-degeneracies), making $X$ the nerve of a category. \qed
+degeneracies), making $X$ the nerve of a category.
+\qed
 \end{proof}
 
 \begin{remark}[The quasi-category relaxation]
-Theorem~\ref{thm:nerve-characterization} is the gateway to $\infty$-category
-theory. \emph{Drop ``unique''} from the characterization — require inner
-horns to admit at least one filler, not necessarily unique — and the
-resulting class of simplicial sets is the \term{quasi-categories}
-(Chapter~43). Composition becomes existential (a composite exists) rather
-than constructive (a composite is given); associativity holds up to higher
-coherent homotopies rather than on the nose; and the entire structure of
-ordinary category theory generalizes to a ``coherent'' version.
+Theorem~\ref{thm:nerve-characterization} is the gateway to
+$\infty$-category theory. \emph{Drop ``unique''} from the
+characterization — require inner horns to admit at least one filler, not
+necessarily unique — and the resulting class of simplicial sets is the
+\term{quasi-categories} (Chapter~43). Composition becomes existential
+(a composite exists) rather than constructive (a composite is given);
+associativity holds up to higher coherent homotopies rather than on the
+nose; and the entire structure of ordinary category theory generalizes
+to a ``coherent'' version.
 \end{remark}
 
 
@@ -265,6 +384,17 @@ limits/colimits or all morphisms are isomorphisms. Outer horns force
 invertibility; that is why Kan complexes are sometimes called
 \term{$\infty$-groupoids}.
 
+\begin{nameorigin}
+\term{Kan complex} is named for \emph{Daniel M.\ Kan} (1927--2013),
+Israeli-American mathematician primarily at MIT. Kan introduced the
+horn-filling condition in his 1958 paper ``On c.s.s. complexes'' (\emph{c.s.s.}
+= ``complete semi-simplicial,'' an older term that has since been
+superseded by ``simplicial set''). Kan's other major contributions
+include the theory of Kan extensions (Chapters~11, 18, 31, 51), adjoint
+functors (Chapter~7), and the Kan model structure on $\mathbf{sSet}$
+(Chapter~41).
+\end{nameorigin}
+
 \subsection{Formalizing}
 
 \begin{definition}[Kan complex]
@@ -276,8 +406,32 @@ A simplicial set $X$ is a \term{Kan complex} if every horn $\Lambda^n_k
 \begin{howtosay}
 ``Kan complex'' \sayit{``Kan complex'' or ``Kan simplicial set''}, after
 Daniel Kan. The term ``fibrant simplicial set'' is also standard once
-Chapter~41's model structure is in place.
+Chapter~41's model structure is in place — Kan complexes are exactly
+the fibrant objects of the standard (Kan–Quillen) model structure on
+$\mathbf{sSet}$.
 \end{howtosay}
+
+\begin{nameorigin}
+The term \term{$\infty$-groupoid} dates to Grothendieck's \emph{Pursuing
+Stacks} manuscript (1983, unpublished but widely circulated). The word
+\term{groupoid} itself was coined by Heinrich Brandt (1927) for a
+generalization of groups in which composition is only partially defined.
+A groupoid has all morphisms invertible; an $\infty$-groupoid has
+``all morphisms invertible at every level'' — including the homotopies
+between morphisms, the homotopies between those homotopies, and so on
+ad infinitum. Kan complexes are the simplicial-set realization of this
+``invertibility-at-every-level'' picture.
+\end{nameorigin}
+
+\begin{readernote}
+The slogan ``Kan complex = $\infty$-groupoid'' is one of the most
+important slogans of higher category theory. It says: the simplicial
+combinatorial structure where ``all horns fill'' is exactly the
+homotopy-theoretic structure where ``everything is invertible.'' The
+outer-horn condition encodes the invertibility; the inner-horn condition
+encodes the composition. Removing only the outer-horn requirement gives
+quasi-categories — $\infty$-categories where invertibility is not forced.
+\end{readernote}
 
 \begin{theorem}[$\mathrm{Sing}(T)$ is a Kan complex]
 \label{thm:sing-kan}
@@ -293,12 +447,27 @@ $\lvert\Lambda^n_k\rvert$ is a deformation retract of
 $\lvert\Delta^n\rvert$ — collapsing the missing face inward gives the
 retraction — and any retract extends maps along itself, so
 $\lvert\Lambda^n_k\rvert \to T$ extends to $\lvert\Delta^n\rvert \to T$.
-Apply the adjunction in reverse. \qed
+Apply the adjunction in reverse.
+\qed
 \end{proof}
 
+\subsection{The homotopy hypothesis}
+\label{sec:homotopy-hypothesis}
+
+\begin{nameorigin}
+The \term{homotopy hypothesis} was formulated by \emph{Alexander
+Grothendieck} in his 1983 manuscript \emph{Pursuing Stacks} (\emph{À la
+poursuite des champs}). It is the thesis that the homotopy theory of
+topological spaces and the homotopy theory of $\infty$-groupoids are
+\emph{the same thing} — i.e., $\infty$-groupoids are a complete model
+for homotopy types of spaces. The hypothesis ramifies through all of
+modern algebraic topology and provides the philosophical foundation for
+homotopy type theory (Chapter~59).
+\end{nameorigin}
+
 \begin{remark}[The homotopy hypothesis: a preview]
-The functors $\lvert{-}\rvert$ and $\mathrm{Sing}$ are not equivalences of
-categories: they restrict to a \emph{Quillen equivalence} between the
+The functors $\lvert{-}\rvert$ and $\mathrm{Sing}$ are not equivalences
+of categories: they restrict to a \emph{Quillen equivalence} between the
 model category of simplicial sets (Kan model structure, Chapter~41) and
 the model category of topological spaces (Quillen model structure).
 Localizing both sides at weak equivalences produces equivalent homotopy
@@ -323,9 +492,25 @@ The three horn conditions partition the simplicial-set landscape:
 The nerve condition is sharpest; the quasi-category condition relaxes
 uniqueness; the Kan condition adds outer-horn filling. Every nerve of a
 groupoid is a Kan complex; every Kan complex is a quasi-category; and
-both ordinary categories and topological spaces embed into the simplicial
-landscape under these descriptions.
+both ordinary categories and topological spaces embed into the
+simplicial landscape under these descriptions.
 \end{remark}
+
+\begin{readernote}
+A useful diagram of the simplicial-set landscape:
+\begin{itemize}
+  \item \emph{Nerves of categories} (inner horns fill \emph{uniquely}) —
+        the rigid case.
+  \item \emph{Quasi-categories} (inner horns fill, possibly non-uniquely) —
+        the $\infty$-category case (Ch.~43).
+  \item \emph{Kan complexes} (all horns fill, possibly non-uniquely) —
+        the $\infty$-groupoid case.
+  \item Intersection: \emph{nerves of groupoids} — both rigid and
+        invertible.
+\end{itemize}
+The whole of $\infty$-category theory lives in the space between these
+conditions, and the rest of Volume~IV explores it.
+\end{readernote}
 
 \begin{example_thm}[Nerves and groupoids]
 \label{ex:nerve-groupoid}
@@ -348,21 +533,28 @@ lands in the intersection ``nerve $\cap$ Kan.''
 \qaitem{Define the geometric realization $\lvert X\rvert$.}{$\lvert X\rvert = \int^{[n]} X_n \cdot \lvert\Delta^n\rvert$ — the coend that glues $X_n$ copies of the topological $n$-simplex along all face and degeneracy identifications.}
 \qaitem{What adjunction does realization fit into?}{$\lvert{-}\rvert \dashv \mathrm{Sing}$: $\mathbf{Top}(\lvert X\rvert, T) \cong \mathbf{sSet}(X, \mathrm{Sing}\, T)$.}
 \qaitem{Realization as a Kan extension?}{$\lvert{-}\rvert = \operatorname{Lan}_y \lvert\Delta^\bullet\rvert$, the left Kan extension along $y : \Delta \hookrightarrow \mathbf{sSet}$ of the cosimplicial space of standard simplices.}
+\qaitem{Where does the coend notation $\int^{[n]}$ come from?}{Yoneda and Day–Kelly (1969). The \emph{co-} prefix marks it as the dual of the end $\int_{[n]}$; the integral metaphor captures categorical-accumulation analogous to classical integration.}
 \qaitem{What is $\lvert\partial\Delta^n\rvert$?}{Homeomorphic to the $(n-1)$-sphere $S^{n-1}$.}
 \qaitem{What is $\lvert\Lambda^n_k\rvert$?}{A deformation retract of $\lvert\Delta^n\rvert$ — geometrically, the $n$-simplex with one $(n-1)$-face removed; contractible.}
 \qaitem{Define the nerve $\mathrm{N}(\mathcal{C})$.}{$\mathrm{N}(\mathcal{C})_n = \mathbf{Cat}([n], \mathcal{C})$, where $[n]$ is the ordinal $0 \to 1 \to \cdots \to n$ regarded as a category. Equivalently, $n$-fold composable chains in $\mathcal{C}$.}
+\qaitem{Why ``nerve''?}{Biological metaphor: as a nervous system transmits information through an organism, the nerve of a category transmits its categorical content into $\mathbf{sSet}$, letting simplicial-homotopy tools operate on it.}
 \qaitem{What does $d_i$ do on a chain $c_0 \to \cdots \to c_n$ in the nerve?}{$d_0$ drops the leftmost arrow; $d_n$ drops the rightmost; $d_i$ for $0 < i < n$ composes the $i$-th and $(i+1)$-th arrows.}
 \qaitem{What does $s_i$ do?}{Inserts an identity morphism on $c_i$, lengthening the chain by one.}
 \qaitem{What is the fundamental category $\tau_1 X$?}{The category with objects $X_0$, freely generated by $1$-simplices subject to relations from $2$-simplices. $\tau_1 \dashv \mathrm{N}$.}
+\qaitem{Where does the notation $\tau_1$ come from?}{From \emph{truncation}: $\tau_1$ truncates a simplicial set to its $1$-categorical content (discarding higher coherences). The subscript $1$ marks the target dimension.}
 \qaitem{Why is $\mathrm{N}$ fully faithful?}{Natural transformations $\mathrm{N}(F) \to \mathrm{N}(G)$ are determined by their $1$-simplex action, which is exactly a functor $F \to G$.}
 \qaitem{State Grothendieck's characterization of the nerve's image.}{$X$ is in the essential image of $\mathrm{N}$ iff every inner horn $\Lambda^n_k \to X$ ($0 < k < n$) extends \emph{uniquely} to $\Delta^n \to X$.}
+\qaitem{Who is Grothendieck?}{Alexander Grothendieck (1928--2014), one of the most influential mathematicians of the 20th century. Reorganized algebraic geometry through category theory; introduced $\infty$-groupoids and the homotopy hypothesis in \emph{Pursuing Stacks} (1983).}
 \qaitem{What changes when you drop ``uniquely''?}{You get quasi-categories (existence-only inner-horn filling). Composition becomes existential; associativity holds up to coherent homotopy. This is the foundation of $\infty$-category theory.}
 \qaitem{Define a Kan complex.}{A simplicial set in which every horn $\Lambda^n_k \to X$ — inner or outer — extends to $\Delta^n \to X$.}
+\qaitem{Who is Kan?}{Daniel M.\ Kan (1927--2013), Israeli-American mathematician at MIT. Introduced the horn-filling condition in 1958; also developed Kan extensions, adjoint functors, and the Kan model structure.}
+\qaitem{What is an $\infty$-groupoid?}{A categorical structure in which all morphisms are invertible at every level (1-morphisms, 2-morphisms between them, and so on). Realized by Kan complexes.}
+\qaitem{Where does ``groupoid'' come from?}{Heinrich Brandt (1927) coined the term for a generalization of groups in which composition is only partially defined.}
 \qaitem{Is $\mathrm{Sing}(T)$ a Kan complex?}{Yes — because $\lvert\Lambda^n_k\rvert$ is a deformation retract of $\lvert\Delta^n\rvert$, every map from $\lvert\Lambda^n_k\rvert$ extends to $\lvert\Delta^n\rvert$, and the adjunction transports this to $\mathrm{Sing}(T)$.}
 \qaitem{Is the nerve of an ordinary category always a Kan complex?}{No — outer horns fail in general. $\Lambda^2_0 \to \mathrm{N}(\mathcal{C})$ is two arrows out of a common source; filling forces an arrow relating their targets, which exists only if morphisms are invertible.}
 \qaitem{When IS $\mathrm{N}(\mathcal{C})$ a Kan complex?}{When $\mathcal{C}$ is a groupoid (every morphism invertible). The intersection ``nerve $\cap$ Kan complex'' is exactly the image of $\mathbf{Grpd} \hookrightarrow \mathbf{sSet}$.}
 \qaitem{How do nerve, quasi-category, and Kan complex relate?}{Nerve $\subset$ quasi-category (drop ``unique''); Kan complex $\subset$ quasi-category (specialize to all horns). Nerve of a groupoid = intersection of the two.}
-\qaitem{What is the ``homotopy hypothesis''?}{The thesis that $\infty$-groupoids are equivalent to homotopy types — i.e., the homotopy theory of Kan complexes is equivalent to the homotopy theory of topological spaces, by the realization–singular adjunction.}
+\qaitem{What is the ``homotopy hypothesis''?}{Grothendieck's thesis ($\sim$ 1983) that $\infty$-groupoids are equivalent to homotopy types of spaces — i.e., the homotopy theory of Kan complexes is equivalent to the homotopy theory of topological spaces, by the realization–singular adjunction.}
 \qaitem{Why is composition in a quasi-category not strict?}{Because the inner-horn filler gives \emph{a} composite, not \emph{the} composite — different choices of $\Delta^2$ filling a $\Lambda^2_1$ give different witnesses, all linked by higher-dimensional simplices.}
 \qaitem{What category is $\tau_1 \mathrm{Sing}(T)$?}{The fundamental groupoid $\Pi_1(T)$: objects are points, morphisms are homotopy classes of paths, all invertible.}
 \qaitem{Why do face operators on a nerve include composition?}{Because the $i$-th face for $0 < i < n$ drops the object at position $i$ from the chain, and the only way to restore composability is to compose the two adjacent morphisms — exactly what $f_{i+1} \circ f_i$ does.}
@@ -386,21 +578,21 @@ along Yoneda.
 
 \textbf{The nerve.}\quad $\mathrm{N}(\mathcal{C})_n = \mathbf{Cat}([n], \mathcal{C})$,
 the simplicial set of composable chains in $\mathcal{C}$. Fully faithful
-$\mathbf{Cat} \hookrightarrow \mathbf{sSet}$, with left adjoint
-$\tau_1$ (fundamental category).
+$\mathbf{Cat} \hookrightarrow \mathbf{sSet}$, with left adjoint $\tau_1$
+(fundamental category; ``$\tau$'' from \emph{truncation}).
 
 \textbf{Grothendieck's characterization.}\quad A simplicial set is a
 nerve iff every inner horn fills \emph{uniquely}. Relaxing ``uniquely''
 to ``exists'' gives quasi-categories.
 
 \textbf{Kan complexes.}\quad Simplicial sets in which every horn —
-inner or outer — fills. $\mathrm{Sing}(T)$ is always a Kan complex.
-Kan complexes are $\infty$-groupoids: outer-horn filling forces
-invertibility.
+inner or outer — fills. Named for Daniel Kan (1958). $\mathrm{Sing}(T)$
+is always a Kan complex. Kan complexes are $\infty$-groupoids:
+outer-horn filling forces invertibility.
 
-\textbf{The homotopy hypothesis.}\quad The realization–singular
-adjunction will (Chapter~41) restrict to a Quillen equivalence between
-Kan complexes and topological spaces; the two homotopy theories coincide.
+\textbf{The homotopy hypothesis.}\quad Grothendieck's thesis (1983):
+$\infty$-groupoids and homotopy types of spaces are equivalent. Realized
+by the realization–singular Quillen equivalence (Chapter~42).
 \end{summarybox}
 
 
@@ -420,8 +612,8 @@ $\mathrm{Sing}(T)_n = \mathbf{Top}(\lvert\Delta^n\rvert, T)$.
 
 \medskip
 \textbf{Nerve.}\quad $\mathrm{N} : \mathbf{Cat} \to \mathbf{sSet}$,
-$\mathrm{N}(\mathcal{C})_n = \mathbf{Cat}([n], \mathcal{C})$, with left adjoint
-$\tau_1 = \operatorname{Lan}_y [-]$. $\mathrm{N}$ is fully faithful.
+$\mathrm{N}(\mathcal{C})_n = \mathbf{Cat}([n], \mathcal{C})$, with left
+adjoint $\tau_1 = \operatorname{Lan}_y [-]$. $\mathrm{N}$ is fully faithful.
 
 \medskip
 \textbf{Characterization of the nerve's image.}\quad
@@ -448,4 +640,10 @@ $\tau_1 = \operatorname{Lan}_y [-]$. $\mathrm{N}$ is fully faithful.
 $\{\mathrm{N}(\mathbf{Grpd})\} \;=\;
 \{\mathrm{N}(\mathbf{Cat})\} \,\cap\, \{\mathrm{Kan}\} \;\subset\;
 \{\mathrm{Kan}\} \;\subset\; \{\mathrm{quasi}\text{-}\mathrm{cat}\} \;\subset\; \mathbf{sSet}$.
+
+\medskip
+\textbf{The homotopy hypothesis (preview).}\quad $\mathrm{Kan} \simeq_{\mathrm{Q}}
+\mathbf{Top}$: the homotopy theory of Kan complexes coincides with the
+homotopy theory of topological spaces. Made precise by the Quillen
+equivalence of Chapter~42.
 \end{formalrestatement}

@@ -1,29 +1,35 @@
 % ch40_localization.tex — Volume IV Chapter 4
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Localization at Weak Equivalences}
 
 \begin{overviewbox}
-Many constructions of modern category theory are built by first specifying
-a category $\mathcal{C}$ of ``concrete'' objects, then declaring a class
-$\mathcal{W}$ of morphisms to be ``weak equivalences,'' and finally
-constructing a new category $\mathcal{C}[\mathcal{W}^{-1}]$ in which every
-arrow in $\mathcal{W}$ has been turned into an isomorphism. The result is
-the \term{localization} of $\mathcal{C}$ at $\mathcal{W}$.
+Many constructions of modern category theory follow a common recipe: take
+a category $\mathcal{C}$ of ``concrete'' objects, pick out a class
+$\mathcal{W}$ of morphisms that ``ought to be isomorphisms even though
+they aren't,'' and form a new category $\mathcal{C}[\mathcal{W}^{-1}]$
+in which every arrow of $\mathcal{W}$ has been turned into a genuine
+isomorphism. The result is the \term{localization} of $\mathcal{C}$
+at $\mathcal{W}$.
 
-The reader has met three special cases already: the derived category of
-an abelian category (Chapter~54), where $\mathcal{W} =$ quasi-isomorphisms;
-the homotopy category of topological spaces, where $\mathcal{W} =$ weak
-homotopy equivalences; and Gabriel--Zisman's original construction of
-localizations of rings, where $\mathcal{W}$ is closed under multiplication.
+You have met three motivating special cases. The \emph{derived category}
+$\mathcal{D}(\mathcal{A})$ of an abelian category (Chapter~54), where
+$\mathcal{W} = $ quasi-isomorphisms; the \emph{homotopy category}
+$\mathrm{Ho}(\mathbf{Top})$ of topological spaces, where $\mathcal{W} = $
+weak homotopy equivalences; and Gabriel--Zisman's original construction
+of ring localizations, where $\mathcal{W}$ is a multiplicatively-closed
+subset.
 
-This chapter develops the general theory. We define the localization
-$\mathcal{C}[\mathcal{W}^{-1}]$ by its universal property, observe that
-its morphisms are zigzags of arrows in $\mathcal{C}$ with formal inverses
-of $\mathcal{W}$-arrows inserted, and then study the conditions —
-\term{calculus of fractions}, due to Gabriel and Zisman — under which
-each zigzag reduces to a single span or cospan. The chapter closes with
-the three motivating examples, in preparation for the model-categorical
-machinery of the next chapter that makes localizations tractable.
+This chapter develops the general theory in three layers. First, the
+\term{universal property}: $\mathcal{C}[\mathcal{W}^{-1}]$ is universal
+among categories receiving a $\mathcal{W}$-inverting functor from
+$\mathcal{C}$. Second, the \term{Gabriel--Zisman construction}: morphisms
+are \emph{zigzags} of arrows in $\mathcal{C}$ with formal inverses
+inserted. Third, the \term{calculus of fractions}: conditions under
+which every zigzag reduces to a single span or cospan. The chapter
+closes with the three motivating examples, in preparation for the
+model-categorical machinery of Chapter~41 that makes localizations
+tractable.
 \end{overviewbox}
 
 
@@ -35,14 +41,14 @@ machinery of the next chapter that makes localizations tractable.
 \subsection{Informally}
 
 A \emph{weak equivalence} is a morphism that ought to be considered an
-isomorphism, even though it might not be one in $\mathcal{C}$. Common
-patterns:
+isomorphism, even though it isn't one in $\mathcal{C}$. Common patterns:
 \begin{itemize}
-  \item In $\mathbf{Top}$, a continuous map $f : X \to Y$ that induces an
-        isomorphism on $\pi_n$ for all $n$ — without being a homeomorphism.
-  \item In $\mathbf{Ch}(\mathcal{A})$ (chain complexes), a chain map that
-        induces an isomorphism on homology — without being invertible at
-        the chain level.
+  \item In $\mathbf{Top}$, a continuous map $f : X \to Y$ that induces
+        an isomorphism on $\pi_n$ for all $n$ — without being a
+        homeomorphism.
+  \item In $\mathbf{Ch}(\mathcal{A})$ (chain complexes), a chain map
+        that induces an isomorphism on homology — without being
+        invertible at the chain level.
   \item In $\mathbf{sSet}$, a map of simplicial sets that becomes a
         homotopy equivalence after geometric realization — without
         having an inverse in $\mathbf{sSet}$.
@@ -51,42 +57,132 @@ In each case the original category retains too much rigidity. Localizing
 forces the weak equivalences to be invertible, recovering the homotopical
 content of the situation.
 
+\begin{nameorigin}
+The term \term{localization} is borrowed from commutative algebra and
+algebraic geometry. To \emph{localize} a ring $R$ at a multiplicative
+set $S$ is to invert the elements of $S$ — making them units — producing
+$S^{-1} R$. ``Local'' because the result captures the behavior of $R$
+near (= local to) the prime ideal $\{r : r \notin S\}$. The categorical
+\emph{localization} $\mathcal{C}[\mathcal{W}^{-1}]$ is exactly the same
+operation lifted up a level: invert a class of arrows by formally
+adjoining inverses. The terminology was carried into homotopy theory
+by Bousfield, Quillen, and others in the 1960s--70s.
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Weak equivalence} contrasts with the stricter notions of
+\emph{isomorphism} or \emph{equivalence of categories}. ``Weak'' here
+means ``up to homotopy or some other higher equivalence relation,''
+versus ``on the nose.'' The terminology is from algebraic topology:
+a \emph{weak homotopy equivalence} of spaces is one inducing isos on
+all $\pi_n$ — weaker than an honest homotopy equivalence (Whitehead's
+theorem makes the two coincide for CW complexes, but not in general).
+\end{nameorigin}
+
+\subsection{Expanding}
+
+Why bother with weak equivalences at all, when isomorphism already
+captures the strictest sense of ``same''? Two reasons.
+
+\paragraph{Pragmatic.} In many natural categories, isomorphism is too
+strict. Two topological spaces of ``the same homotopy type'' are rarely
+homeomorphic; two chain complexes with ``the same homology'' are
+rarely chain-isomorphic. The natural notion of sameness is
+\emph{homotopy} or \emph{quasi-iso}, not honest isomorphism. Localizing
+puts that natural notion on equal footing with strict isomorphism by
+forcing the formal collapse.
+
+\paragraph{Structural.} The localization functor $Q : \mathcal{C} \to
+\mathcal{C}[\mathcal{W}^{-1}]$ has a universal property:
+$\mathcal{W}$-inverting functors out of $\mathcal{C}$ correspond to
+ordinary functors out of $\mathcal{C}[\mathcal{W}^{-1}]$. This makes
+$\mathcal{C}[\mathcal{W}^{-1}]$ the ``universal home for
+$\mathcal{W}$-invariant functors,'' and the construction itself a left
+adjoint at the $2$-categorical level.
+
+\begin{dialog}
+\textbf{Reader:} Why not just quotient $\mathcal{C}$ by the equivalence
+relation ``connected by a zigzag of weak equivalences''?
+
+\textbf{Author:} You can, and that's exactly what the localization does
+at the level of objects. But the localization also has to manage
+\emph{morphisms}: a morphism $X \to Y$ in $\mathcal{C}[\mathcal{W}^{-1}]$
+should include not only morphisms in $\mathcal{C}$ but also ``formal
+inverses'' of $\mathcal{W}$-arrows. The zigzag description handles
+both layers at once.
+
+\textbf{Reader:} And the universal property pins it down uniquely?
+
+\textbf{Author:} Up to canonical isomorphism, yes. Two categories with
+the same universal property are canonically isomorphic; this is the
+abstract-nonsense way of saying the construction is well-defined.
+\end{dialog}
+
 \subsection{Formalizing}
 
 \begin{definition}[Category with weak equivalences]
 \label{def:cat-with-we}
 A \term{category with weak equivalences} is a pair $(\mathcal{C}, \mathcal{W})$
-where $\mathcal{C}$ is a category and $\mathcal{W} \subseteq \mathrm{Mor}(\mathcal{C})$
-is a subclass closed under composition and containing all identities.
+where $\mathcal{C}$ is a category and $\mathcal{W} \subseteq
+\mathrm{Mor}(\mathcal{C})$ is a subclass closed under composition and
+containing all identities.
 
 We typically also assume the \term{$2$-out-of-$3$ property}: if any two
 of $f, g, gf$ are in $\mathcal{W}$, then so is the third.
 \end{definition}
 
 \begin{howtosay}
-$\mathcal{W}$ \sayit{``the weak equivalences''}; the $2$-out-of-$3$ property
-\sayit{``two-out-of-three''} reflects that knowing two of the three pieces
-of a triangle suffices to deduce the third. Sometimes the stronger
-\term{$2$-out-of-$6$ property} (closure under sub-composition: if $hg, gf$
-are weak equivalences, so are $f, g, h, hgf$) is assumed.
+$\mathcal{W}$ \sayit{``the weak equivalences''}; the $2$-out-of-$3$
+property \sayit{``two-out-of-three''} reflects that knowing two of the
+three pieces of a triangle suffices to deduce the third. Sometimes the
+stronger \term{$2$-out-of-$6$ property} (closure under sub-composition:
+if $hg, gf$ are weak equivalences, so are $f, g, h, hgf$) is assumed.
 \end{howtosay}
+
+\begin{nameorigin}
+The \term{$2$-out-of-$3$ property} is named for the combinatorial fact
+it expresses: among three morphisms in a composable triple $f, g, gf$,
+knowing two of them are in $\mathcal{W}$ forces the third. The
+stronger \term{$2$-out-of-$6$ property} expresses a similar pattern
+about six morphisms (two long composites and four atoms); it is
+necessary for $\mathcal{W}$ to be \emph{saturated} — exactly equal to
+the class of morphisms made invertible by localization.
+\end{nameorigin}
 
 \begin{example_thm}[Three running examples]
 \label{ex:we-examples}
 \textbf{(a) Topological spaces.} $\mathcal{W}_{\mathrm{Top}}$ = weak
 homotopy equivalences: maps inducing isomorphisms on $\pi_n$ for all
-$n \geq 0$. The category $\mathbf{Top}$ together with $\mathcal{W}_{\mathrm{Top}}$
-is a category with weak equivalences satisfying $2$-out-of-$3$.
+$n \geq 0$. The category $\mathbf{Top}$ together with
+$\mathcal{W}_{\mathrm{Top}}$ is a category with weak equivalences
+satisfying $2$-out-of-$3$.
 
 \textbf{(b) Chain complexes.} $\mathcal{W}_{\mathrm{Ch}(\mathcal{A})}$ =
-quasi-isomorphisms: chain maps inducing isomorphisms on all homology
-groups. Forms the entry point to homological algebra.
+\term{quasi-isomorphisms}: chain maps inducing isomorphisms on all
+homology groups. Forms the entry point to homological algebra.
 
 \textbf{(c) Simplicial sets.} $\mathcal{W}_{\mathrm{sSet}}$ = weak
 equivalences: maps whose realization is a weak homotopy equivalence of
 spaces. Chapter~41 will give a combinatorial characterization not
 involving topological spaces.
 \end{example_thm}
+
+\begin{nameorigin}
+A \term{quasi-isomorphism} is, literally, an ``almost-isomorphism'': a
+chain map inducing isomorphisms on homology, but not necessarily
+invertible at the chain level. ``Quasi-'' is from Latin \emph{quasi}
+(``as if, almost''). The term was standardized in the 1950s--60s
+homological algebra literature (Cartan--Eilenberg, Grothendieck).
+\end{nameorigin}
+
+\begin{readernote}
+The three examples are sometimes called the ``trinity'' of homotopical
+algebra: spaces, chain complexes, simplicial sets. Each has its own
+notion of weak equivalence, but all three are connected by adjunctions
+that turn out to be Quillen equivalences (Chapter~42), making their
+homotopy categories ``the same.'' The localization construction below
+handles all three uniformly.
+\end{readernote}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -95,6 +191,17 @@ involving topological spaces.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+The \term{Gabriel--Zisman localization} is named for \emph{Pierre Gabriel}
+(b.~1933, German--French mathematician) and \emph{Michel Zisman}
+(b.~1932, French mathematician), whose 1967 book \emph{Calculus of
+Fractions and Homotopy Theory} systematized the construction below in
+the simplicial setting. The construction itself is older — versions
+appear in ring theory, in Grothendieck's work on derived categories,
+and in much earlier formal-inverse arguments — but Gabriel--Zisman
+gave the definitive abstract treatment.
+\end{nameorigin}
 
 \begin{definition}[Localization]
 \label{def:localization}
@@ -106,34 +213,45 @@ $\mathcal{C}[\mathcal{W}^{-1}]$ together with a functor
 such that:
 \begin{enumerate}
   \item $Q(w)$ is an isomorphism for every $w \in \mathcal{W}$.
-  \item For any functor $F : \mathcal{C} \to \mathcal{D}$ that sends every
-        $w \in \mathcal{W}$ to an isomorphism in $\mathcal{D}$, there is a
-        unique $\bar F : \mathcal{C}[\mathcal{W}^{-1}] \to \mathcal{D}$
-        with $\bar F \circ Q = F$.
+  \item For any functor $F : \mathcal{C} \to \mathcal{D}$ that sends
+        every $w \in \mathcal{W}$ to an isomorphism in $\mathcal{D}$,
+        there is a unique $\bar F : \mathcal{C}[\mathcal{W}^{-1}] \to
+        \mathcal{D}$ with $\bar F \circ Q = F$.
 \end{enumerate}
 The universal property determines $(\mathcal{C}[\mathcal{W}^{-1}], Q)$
 uniquely up to canonical isomorphism.
 \end{definition}
 
 \begin{howtosay}
-$Q$ \sayit{``the localization functor'' or ``the quotient''}; the universal
-property \sayit{``functors out of $\mathcal{C}[\mathcal{W}^{-1}]$
+$Q$ \sayit{``the localization functor'' or ``the quotient''}; the
+universal property \sayit{``functors out of $\mathcal{C}[\mathcal{W}^{-1}]$
 correspond bijectively to functors out of $\mathcal{C}$ that already
-invert $\mathcal{W}$''}.
+invert $\mathcal{W}$''}. Some texts write $L_\mathcal{W}$ or just
+$\gamma$ for the localization functor.
 \end{howtosay}
 
 \begin{theorem}[Gabriel--Zisman construction]
 \label{thm:gz-construction}
-For any $(\mathcal{C}, \mathcal{W})$, the localization $\mathcal{C}[\mathcal{W}^{-1}]$
-exists. It can be constructed as the quotient of the free category on the
-graph $\mathcal{C} \sqcup \mathcal{W}^{-1}$ — where $\mathcal{W}^{-1}$ adds
-a formal inverse edge $w^{-1} : Y \to X$ for each $w : X \to Y$ in
-$\mathcal{W}$ — by the relations:
+For any $(\mathcal{C}, \mathcal{W})$, the localization
+$\mathcal{C}[\mathcal{W}^{-1}]$ exists. It can be constructed as the
+quotient of the free category on the graph $\mathcal{C} \sqcup
+\mathcal{W}^{-1}$ — where $\mathcal{W}^{-1}$ adds a formal inverse edge
+$w^{-1} : Y \to X$ for each $w : X \to Y$ in $\mathcal{W}$ — by the
+relations:
 \begin{itemize}
   \item Composition relations of $\mathcal{C}$;
-  \item $w^{-1} \circ w = \mathrm{id}$ and $w \circ w^{-1} = \mathrm{id}$ for each $w \in \mathcal{W}$.
+  \item $w^{-1} \circ w = \mathrm{id}$ and $w \circ w^{-1} = \mathrm{id}$
+        for each $w \in \mathcal{W}$.
 \end{itemize}
 \end{theorem}
+
+\begin{nameorigin}
+The morphisms of $\mathcal{C}[\mathcal{W}^{-1}]$ are called \term{zigzags}
+because they look like zigzag paths: arrows alternately pointing forward
+(in $\mathcal{C}$) and backward (a formal $w^{-1}$). The geometric
+description is descriptive and goes back to the 1950s combinatorial
+literature on free groups.
+\end{nameorigin}
 
 \begin{proof}[Proof sketch]
 Construct $\mathcal{C}[\mathcal{W}^{-1}]$ as described. Morphisms are
@@ -143,21 +261,32 @@ Construct $\mathcal{C}[\mathcal{W}^{-1}]$ as described. Morphisms are
 \end{equation*}
 with each backward arrow in $\mathcal{W}$, modulo the relations of the
 free quotient. The functor $Q : \mathcal{C} \to \mathcal{C}[\mathcal{W}^{-1}]$
-sends each morphism to itself (a length-one zigzag). The universal property
-holds by direct verification: any $F$ inverting $\mathcal{W}$ extends
-uniquely to zigzags by sending each $w^{-1}$ to $F(w)^{-1}$.
+sends each morphism to itself (a length-one zigzag). The universal
+property holds by direct verification: any $F$ inverting $\mathcal{W}$
+extends uniquely to zigzags by sending each $w^{-1}$ to $F(w)^{-1}$.
 \qed
 \end{proof}
 
 \begin{remark}[Size issues]
 \label{rem:size-issues}
 The free quotient construction is set-theoretically problematic when
-$\mathcal{C}$ is large: hom-classes of $\mathcal{C}[\mathcal{W}^{-1}]$ may
-not be small even when $\mathcal{C}$'s are. The model-categorical
-machinery of Chapter~41 will resolve this for the examples we care about
-by producing \emph{explicit small-hom-set models} for $\mathcal{C}[\mathcal{W}^{-1}]$
-(the homotopy category as morphisms between bifibrant objects).
+$\mathcal{C}$ is large: hom-classes of $\mathcal{C}[\mathcal{W}^{-1}]$
+may not be small even when $\mathcal{C}$'s are. The model-categorical
+machinery of Chapter~41 will resolve this for the examples we care
+about by producing \emph{explicit small-hom-set models} for
+$\mathcal{C}[\mathcal{W}^{-1}]$ (the homotopy category as morphisms
+between bifibrant objects).
 \end{remark}
+
+\begin{readernote}
+The Gabriel--Zisman construction proves existence but is rarely useful
+for \emph{computation}: a zigzag of length 17 may represent the same
+morphism as a zigzag of length 3, but checking equivalence requires
+following a long chain of relations. The calculus of fractions
+(\S\ref{sec:calculus-of-fractions}) is the standard remedy: under
+suitable conditions, every zigzag reduces to length 2, giving a
+concrete description of $\mathcal{C}[\mathcal{W}^{-1}]$'s morphisms.
+\end{readernote}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -165,12 +294,26 @@ by producing \emph{explicit small-hom-set models} for $\mathcal{C}[\mathcal{W}^{
 \label{sec:calculus-of-fractions}
 % ═══════════════════════════════════════════════════════════════════════════
 
-\subsection{Formalizing}
+\subsection{Informally}
 
-The Gabriel--Zisman construction describes a morphism of $\mathcal{C}[\mathcal{W}^{-1}]$
-as a zigzag of arbitrary length. Under additional hypotheses on $\mathcal{W}$
-— the \term{calculus of fractions} — every zigzag reduces to a single
-span (or cospan), yielding a much more manageable description.
+The Gabriel--Zisman construction describes a morphism of
+$\mathcal{C}[\mathcal{W}^{-1}]$ as a zigzag of arbitrary length. Under
+additional hypotheses on $\mathcal{W}$ — the \term{calculus of fractions}
+— every zigzag reduces to a single span (or cospan), yielding a much
+more manageable description.
+
+\begin{nameorigin}
+The \term{calculus of fractions} is named by analogy with the
+calculus of fractions in (non-commutative) ring theory: \emph{Øystein
+Ore} (1899--1968, Norwegian mathematician) gave conditions in 1931
+under which a non-commutative ring $R$ has a ring of fractions
+$S^{-1} R$. The \emph{Ore condition} below is the same combinatorial
+condition lifted to categories. ``Fractions'' because the morphisms of
+the localization look like $w^{-1} f$ (formal ``$f$ over $w$''), like
+ratios in algebra.
+\end{nameorigin}
+
+\subsection{Formalizing}
 
 \begin{definition}[Left calculus of fractions]
 \label{def:left-fractions}
@@ -193,24 +336,32 @@ A class $\mathcal{W}$ admits a \term{left calculus of fractions} if:
 \end{enumerate}
 \end{definition}
 
+\begin{howtosay}
+``Calculus of fractions'' \sayit{``calculus of fractions''}; the
+\emph{Ore condition} \sayit{``the Ore (or ``or-AY'') condition''},
+sometimes \sayit{``the left Ore condition''} to distinguish from its
+dual. Sometimes also called \term{Gabriel's axiom} or
+\term{Hartshorne's localization theorem} depending on context.
+\end{howtosay}
+
 \begin{remark}[Right calculus]
 The dual notion of \term{right calculus of fractions} reverses arrows:
-the Ore condition completes \emph{cospans} $X \xrightarrow{f} B \xleftarrow{w}
-A$ to commutative squares. Each side of the calculus gives a different
-reduction (left fractions are spans $X \xleftarrow{w} \cdot \xrightarrow{f} Y$;
-right fractions are cospans).
+the Ore condition completes \emph{cospans} $X \xrightarrow{f} B
+\xleftarrow{w} A$ to commutative squares. Each side of the calculus
+gives a different reduction (left fractions are spans $X \xleftarrow{w}
+\cdot \xrightarrow{f} Y$; right fractions are cospans).
 \end{remark}
 
 \begin{theorem}[Reduction to fractions]
 \label{thm:fractions-reduction}
 If $\mathcal{W}$ admits a left calculus of fractions, every morphism of
-$\mathcal{C}[\mathcal{W}^{-1}]$ can be represented by a single \term{left
-fraction}
+$\mathcal{C}[\mathcal{W}^{-1}]$ can be represented by a single
+\term{left fraction}
 \begin{equation*}
   X \xleftarrow{w} A \xrightarrow{f} Y, \qquad w \in \mathcal{W},
 \end{equation*}
-and two left fractions $(w, f)$ and $(w', f')$ represent the same morphism
-iff there is a common refinement
+and two left fractions $(w, f)$ and $(w', f')$ represent the same
+morphism iff there is a common refinement
 \begin{equation*}
   \begin{tikzcd}[column sep=small, row sep=small]
     & A \arrow[ldd, "w"', bend right] \arrow[rdd, "f", bend left] & \\
@@ -222,23 +373,33 @@ with $u, v \in \mathcal{W}$ commuting both squares.
 \end{theorem}
 
 \begin{proof}[Proof sketch]
-Every zigzag $f_1, w_1^{-1}, f_2, w_2^{-1}, \ldots$ is reduced by repeatedly
-applying the Ore condition (interchange a backward $w^{-1}$ with the
-following forward $f$ by completing the span). Zigzag length strictly
-decreases at each step; the procedure terminates with a single left
-fraction. Equivalence of two fractions is the equivalence relation
+Every zigzag $f_1, w_1^{-1}, f_2, w_2^{-1}, \ldots$ is reduced by
+repeatedly applying the Ore condition (interchange a backward $w^{-1}$
+with the following forward $f$ by completing the span). Zigzag length
+strictly decreases at each step; the procedure terminates with a single
+left fraction. Equivalence of two fractions is the equivalence relation
 generated by common refinement; the cancellation axiom guarantees that
-the relation is transitive. \qed
+the relation is transitive.
+\qed
 \end{proof}
 
 \begin{remark}[Composition of fractions]
 With the calculus in hand, composition is concrete: given fractions $X
-\xleftarrow{w} A \xrightarrow{f} Y$ and $Y \xleftarrow{v} B \xrightarrow{g}
-Z$, complete the span $A \xrightarrow{f} Y \xleftarrow{v} B$ to a commutative
-square by Ore, obtaining $A \xleftarrow{v'} C \xrightarrow{f'} B$ with
-$v' \in \mathcal{W}$; the composite is then
+\xleftarrow{w} A \xrightarrow{f} Y$ and $Y \xleftarrow{v} B
+\xrightarrow{g} Z$, complete the span $A \xrightarrow{f} Y \xleftarrow{v}
+B$ to a commutative square by Ore, obtaining $A \xleftarrow{v'} C
+\xrightarrow{f'} B$ with $v' \in \mathcal{W}$; the composite is then
 $X \xleftarrow{wv'} C \xrightarrow{gf'} Z$.
 \end{remark}
+
+\begin{readernote}
+The Ore condition is best remembered geometrically: it says \emph{spans
+with one $\mathcal{W}$-leg can be completed to commutative squares with
+$\mathcal{W}$-legs on both top and bottom}. This is exactly the
+``rewriting rule'' used to push backwards arrows to the left of
+forwards arrows, simplifying zigzags. Without the Ore condition, the
+rewriting gets stuck and zigzags remain arbitrarily long.
+\end{readernote}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -250,8 +411,8 @@ $X \xleftarrow{wv'} C \xrightarrow{gf'} Z$.
 
 \begin{example_thm}[Derived category $\mathcal{D}(\mathcal{A})$]
 \label{ex:derived-cat}
-Let $\mathcal{A}$ be an abelian category and $\mathbf{Ch}(\mathcal{A})$ its
-category of chain complexes. The \term{derived category}
+Let $\mathcal{A}$ be an abelian category and $\mathbf{Ch}(\mathcal{A})$
+its category of chain complexes. The \term{derived category}
 \begin{equation*}
   \mathcal{D}(\mathcal{A}) \;=\; \mathbf{Ch}(\mathcal{A})\bigl[\mathcal{W}^{-1}\bigr]
 \end{equation*}
@@ -260,10 +421,21 @@ is the localization at $\mathcal{W} =$ quasi-isomorphisms.
 The intermediate \emph{homotopy category} $\mathbf{K}(\mathcal{A}) =
 \mathbf{Ch}(\mathcal{A})/\sim$ (chain maps modulo chain homotopy) admits
 a calculus of fractions with respect to quasi-isomorphisms — both left
-and right. Therefore $\mathcal{D}(\mathcal{A}) = \mathbf{K}(\mathcal{A})[\mathcal{W}^{-1}]$
-has the concrete description: morphisms are spans (or cospans) of chain
-maps with quasi-isomorphism legs, modulo refinement.
+and right. Therefore $\mathcal{D}(\mathcal{A}) =
+\mathbf{K}(\mathcal{A})[\mathcal{W}^{-1}]$ has the concrete description:
+morphisms are spans (or cospans) of chain maps with quasi-isomorphism
+legs, modulo refinement.
 \end{example_thm}
+
+\begin{nameorigin}
+The \term{derived category} $\mathcal{D}(\mathcal{A})$ was introduced
+by Grothendieck's student \emph{Jean-Louis Verdier} (1935--1989) in his
+1967 thesis. ``Derived'' because morphisms in $\mathcal{D}(\mathcal{A})$
+are equivalent to \emph{derived functor} information (Tor, Ext, etc.):
+in $\mathcal{D}(\mathcal{A})$, the natural map $\mathrm{Hom}(M, N) \to
+\mathrm{Hom}(M^\bullet, N^\bullet)$ encodes Tor/Ext via the chain
+representatives.
+\end{nameorigin}
 
 \subsection{The homotopy category of spaces}
 
@@ -271,25 +443,45 @@ maps with quasi-isomorphism legs, modulo refinement.
 \label{ex:ho-top}
 The homotopy category $\mathrm{Ho}(\mathbf{Top}) = \mathbf{Top}[\mathcal{W}^{-1}]$
 inverts weak homotopy equivalences. The calculus of fractions does
-\emph{not} apply directly in $\mathbf{Top}$; constructing the localization
-requires explicit replacement of spaces by CW complexes (an essentially
-model-categorical operation). After replacement, every morphism of
-$\mathrm{Ho}(\mathbf{Top})$ between CW complexes is a homotopy class of
-continuous maps, by Whitehead's theorem (Chapter~41).
+\emph{not} apply directly in $\mathbf{Top}$; constructing the
+localization requires explicit replacement of spaces by CW complexes
+(an essentially model-categorical operation). After replacement, every
+morphism of $\mathrm{Ho}(\mathbf{Top})$ between CW complexes is a
+homotopy class of continuous maps, by Whitehead's theorem (Chapter~41).
 \end{example_thm}
+
+\begin{nameorigin}
+\term{Whitehead's theorem} is named for \emph{J.H.C.\ Whitehead}
+(1904--1960, British algebraic topologist; not to be confused with
+Alfred North Whitehead). Whitehead's theorem says that a weak homotopy
+equivalence between CW complexes is an honest homotopy equivalence —
+a non-trivial fact tying the weak (homotopy-group-iso) and strong
+(homotopy-inverse) notions together for sufficiently nice spaces.
+\end{nameorigin}
 
 \subsection{Quillen's localization}
 
 \begin{remark}[Model-categorical localization]
-A \term{model category} (Chapter~41) is a category with three classes of
-maps — weak equivalences, cofibrations, fibrations — satisfying axioms
-that together provide an explicit construction of $\mathcal{C}[\mathcal{W}^{-1}]$:
-the homotopy category $\mathrm{Ho}(\mathcal{C})$ has the same objects
-as $\mathcal{C}$, and its morphisms between bifibrant objects $X$ (cofibrant
-and fibrant) are homotopy classes $[X, Y]/\sim$. The model-categorical
-localization is small-hom-class by construction, sidestepping the size
-issue of Remark~\ref{rem:size-issues}.
+A \term{model category} (Chapter~41) is a category with three classes
+of maps — weak equivalences, cofibrations, fibrations — satisfying
+axioms that together provide an explicit construction of
+$\mathcal{C}[\mathcal{W}^{-1}]$: the homotopy category
+$\mathrm{Ho}(\mathcal{C})$ has the same objects as $\mathcal{C}$, and
+its morphisms between bifibrant objects $X$ (cofibrant and fibrant) are
+homotopy classes $[X, Y]/\sim$. The model-categorical localization is
+small-hom-class by construction, sidestepping the size issue of
+Remark~\ref{rem:size-issues}.
 \end{remark}
+
+\begin{readernote}
+The pattern across all three examples — chain complexes, topological
+spaces, simplicial sets — is the same: a raw category with weak
+equivalences is too rigid to localize directly, but admits a
+\emph{replacement} (chain homotopy classes, CW complexes, bifibrant
+simplicial sets) where the calculus of fractions does work, or
+equivalently, where homotopy classes give an honest description of
+localized morphisms. Chapter~41 axiomatizes this pattern.
+\end{readernote}
 
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -301,17 +493,24 @@ issue of Remark~\ref{rem:size-issues}.
 \begin{qa}
 \qaitem{Define a category with weak equivalences.}{A pair $(\mathcal{C}, \mathcal{W})$ where $\mathcal{W} \subseteq \mathrm{Mor}(\mathcal{C})$ contains identities and is closed under composition.}
 \qaitem{What is the $2$-out-of-$3$ property?}{If two of $f, g, gf$ are in $\mathcal{W}$, the third is too.}
+\qaitem{Where does ``localization'' come from?}{Algebra: localizing a ring $R$ at a multiplicative set $S$ inverts the elements of $S$. ``Local'' because the result captures behavior near a prime ideal. Lifted to categories in the 1960s--70s.}
+\qaitem{Where does ``weak equivalence'' come from?}{Contrast with strict isomorphism: a weak equivalence is iso ``up to homotopy or some other higher equivalence,'' not on the nose. Standard in algebraic topology.}
 \qaitem{Define the localization $\mathcal{C}[\mathcal{W}^{-1}]$ by its universal property.}{A category with a functor $Q : \mathcal{C} \to \mathcal{C}[\mathcal{W}^{-1}]$ inverting $\mathcal{W}$, universal: any functor $F$ inverting $\mathcal{W}$ factors uniquely through $Q$.}
 \qaitem{Why does the localization always exist?}{Gabriel--Zisman: build the free category on $\mathcal{C} \sqcup \mathcal{W}^{-1}$ and quotient by the appropriate relations.}
+\qaitem{Who are Gabriel and Zisman?}{Pierre Gabriel (b. 1933) and Michel Zisman (b. 1932), authors of the 1967 book \emph{Calculus of Fractions and Homotopy Theory}, which systematized the localization construction.}
 \qaitem{What is a zigzag in $\mathcal{C}[\mathcal{W}^{-1}]$?}{A sequence of forward arrows in $\mathcal{C}$ and backward arrows in $\mathcal{W}^{-1}$ from $X$ to $Y$ — the generic morphism description from the Gabriel--Zisman construction.}
 \qaitem{Why is the localization set-theoretically subtle?}{Hom-classes in $\mathcal{C}[\mathcal{W}^{-1}]$ may not be small (proper classes of zigzag equivalence classes) even when those of $\mathcal{C}$ are.}
 \qaitem{Define a left calculus of fractions.}{$\mathcal{W}$ contains identities and closes under composition; the Ore condition completes spans with $\mathcal{W}$-leg to commutative squares with $\mathcal{W}$-leg; cancellation: $fw = gw$ implies $w'f = w'g$ for some $w' \in \mathcal{W}$.}
+\qaitem{Who is Ore?}{Øystein Ore (1899--1968), Norwegian mathematician. Gave conditions in 1931 for non-commutative ring localization; the Ore condition above is the categorical version.}
 \qaitem{What does the Ore condition replace zigzags with?}{Single left fractions $X \xleftarrow{w} A \xrightarrow{f} Y$ with $w \in \mathcal{W}$. Every zigzag reduces to a span by repeated application of Ore.}
 \qaitem{When are two left fractions equivalent?}{When they admit a common refinement: a span $A' \to A$ and $A' \to B$ both in $\mathcal{W}$ that fits between the two.}
 \qaitem{How do you compose left fractions?}{Given $X \xleftarrow{w} A \xrightarrow{f} Y$ and $Y \xleftarrow{v} B \xrightarrow{g} Z$, Ore-complete $f, v$ to a square with $v', f'$, obtaining $X \xleftarrow{wv'} C \xrightarrow{gf'} Z$.}
 \qaitem{What is the derived category of an abelian category?}{$\mathcal{D}(\mathcal{A}) = \mathbf{Ch}(\mathcal{A})[\mathcal{W}^{-1}]$ where $\mathcal{W}$ = quasi-isomorphisms (maps inducing isomorphism on homology).}
+\qaitem{Who introduced derived categories?}{Jean-Louis Verdier (Grothendieck's student) in his 1967 thesis. ``Derived'' because morphisms encode derived-functor information (Tor, Ext).}
+\qaitem{What is a quasi-isomorphism?}{A chain map inducing isomorphisms on homology. ``Quasi-'' (Latin \emph{quasi}, ``almost'') because it's almost an isomorphism — invertible at the level of homology, not necessarily at the chain level.}
 \qaitem{Why is the chain-homotopy category $\mathbf{K}(\mathcal{A})$ a useful stepping stone?}{Because quasi-isomorphisms admit a calculus of fractions in $\mathbf{K}(\mathcal{A})$ (but not in $\mathbf{Ch}(\mathcal{A})$). So $\mathcal{D}(\mathcal{A}) = \mathbf{K}(\mathcal{A})[\mathcal{W}^{-1}]$ has the concrete left/right-fractions description.}
 \qaitem{What is $\mathrm{Ho}(\mathbf{Top})$?}{$\mathbf{Top}[\mathcal{W}^{-1}]$ with $\mathcal{W}$ = weak homotopy equivalences. Concretely, the homotopy category of CW complexes (by Whitehead).}
+\qaitem{Who is Whitehead?}{J.H.C.\ Whitehead (1904--1960), British algebraic topologist. His theorem says weak homotopy equivalences between CW complexes are honest homotopy equivalences — tying weak and strong notions.}
 \qaitem{Why isn't the calculus of fractions enough for $\mathbf{Top}$?}{The Ore condition fails: completing a span involving a weak homotopy equivalence may require a CW replacement that lives outside $\mathbf{Top}$ in any natural sense. Model categories handle this systematically.}
 \qaitem{What's the model-category alternative to Gabriel--Zisman?}{Replace objects by bifibrant ones and define $\mathrm{Ho}(\mathcal{C})(X, Y) = [X, Y]/\sim$ (homotopy classes). Gives the same localization but with small hom-classes by construction.}
 \qaitem{State the universal property of $Q$ in equation form.}{$\mathrm{Fun}(\mathcal{C}[\mathcal{W}^{-1}], \mathcal{D}) \xrightarrow{\, -\circ Q\,} \mathrm{Fun}_{\mathcal{W}\text{-inv}}(\mathcal{C}, \mathcal{D})$ is an isomorphism of categories.}
@@ -334,22 +533,24 @@ issue of Remark~\ref{rem:size-issues}.
 \begin{summarybox}
 \textbf{Category with weak equivalences.}\quad $(\mathcal{C}, \mathcal{W})$
 with $\mathcal{W}$ closed under composition and containing identities,
-typically with the $2$-out-of-$3$ property.
+typically with the $2$-out-of-$3$ property. Origin: ``localization''
+from algebra/geometry; ``weak equivalence'' from algebraic topology.
 
-\textbf{Localization.}\quad $\mathcal{C}[\mathcal{W}^{-1}]$ is universal
-among categories receiving a $\mathcal{W}$-inverting functor from
-$\mathcal{C}$. Always exists (Gabriel--Zisman), with morphisms presented
-as zigzags modulo relations.
+\textbf{Localization (Gabriel--Zisman, 1967).}\quad
+$\mathcal{C}[\mathcal{W}^{-1}]$ is universal among categories receiving
+a $\mathcal{W}$-inverting functor from $\mathcal{C}$. Always exists,
+with morphisms presented as zigzags modulo relations.
 
-\textbf{Calculus of fractions.}\quad An Ore-type condition under which
-zigzags reduce to single left (or right) fractions. Composition becomes
-concrete; equivalence becomes common refinement.
+\textbf{Calculus of fractions (Ore, 1931 + Gabriel--Zisman).}\quad
+An Ore-type condition under which zigzags reduce to single left (or
+right) fractions. Composition becomes concrete; equivalence becomes
+common refinement.
 
 \textbf{Three examples.}\quad The derived category $\mathcal{D}(\mathcal{A})$
-of an abelian category; the homotopy category $\mathrm{Ho}(\mathbf{Top})$
-of spaces; Quillen's homotopy categories of model categories. The last
-unifies the previous by giving an explicit small-hom-class construction
-via bifibrant replacement (Chapter~41).
+(Verdier 1967); the homotopy category $\mathrm{Ho}(\mathbf{Top})$
+(Whitehead 1949); Quillen's model categories (1967). The last unifies
+the previous by giving an explicit small-hom-class construction via
+bifibrant replacement (Chapter~41).
 \end{summarybox}
 
 
@@ -368,12 +569,15 @@ localization $(Q, \mathcal{C}[\mathcal{W}^{-1}])$ satisfies:
 \end{equation*}
 
 \medskip
-\textbf{Left calculus of fractions.}\quad $\mathcal{W}$ admits left fractions if:
+\textbf{Left calculus of fractions.}\quad $\mathcal{W}$ admits left
+fractions if:
 \begin{itemize}
   \item $\mathcal{W}$ has identities and closes under composition.
-  \item (Ore) Every span $X \xleftarrow{w} A \xrightarrow{f} B$ with $w \in \mathcal{W}$
-        completes to a commutative square with the right leg in $\mathcal{W}$.
-  \item (Cancellation) $fw = gw$ with $w \in \mathcal{W}$ implies $w'f = w'g$ for some $w' \in \mathcal{W}$.
+  \item (Ore) Every span $X \xleftarrow{w} A \xrightarrow{f} B$ with
+        $w \in \mathcal{W}$ completes to a commutative square with the
+        right leg in $\mathcal{W}$.
+  \item (Cancellation) $fw = gw$ with $w \in \mathcal{W}$ implies
+        $w'f = w'g$ for some $w' \in \mathcal{W}$.
 \end{itemize}
 
 \medskip

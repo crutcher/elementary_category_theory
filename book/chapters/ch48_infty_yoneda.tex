@@ -1,4 +1,5 @@
 % ch48_infty_yoneda.tex — Volume IV Chapter 12
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{The $\infty$-Categorical Yoneda Lemma}
 
@@ -42,6 +43,26 @@ in Chapter~5) and read fluently.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Yoneda lemma} is named for \emph{Nobuo Yoneda} (1930--1996,
+Japanese mathematician). The story goes: Yoneda communicated the
+result to Mac Lane on a train platform during a 1954 Paris conference,
+and Mac Lane brought it back to the West. Yoneda himself may never
+have published the result in this form. The lemma has appeared in five
+guises in this book: Chapter~9 (ordinary, set-valued); Chapter~15
+(representability); Chapter~20 (enriched); Chapter~28 (formal, via
+ends); and now Chapter~48 ($\infty$-categorical). Each layer
+generalizes the previous; the underlying philosophy — \emph{``an object
+is determined by its representable functor''} — remains constant.
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Presheaf} (cross-ref Ch.~38) is from Leray's 1946 \emph{faisceau} /
+\emph{préfaisceau} terminology in sheaf theory. A \emph{presheaf of
+spaces} on $\mathcal{C}$ is a presheaf valued in $\mathcal{S}$ rather
+than $\mathbf{Set}$ — the $\infty$-categorical refinement.
+\end{nameorigin}
 
 \begin{definition}[$\infty$-category of presheaves]
 \label{def:presheaves}
@@ -119,6 +140,23 @@ presheaves.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{readernote}
+The \emph{$\infty$-Yoneda lemma is the central organizing theorem of
+$\infty$-category theory}, just as the ordinary Yoneda lemma is for
+$1$-category theory. After internalizing this section, you should be
+able to:
+\begin{itemize}
+  \item Read mapping spaces as $F(x)$ for the right $F$.
+  \item Construct $\infty$-functors out of $\mathcal{C}$ by specifying
+        their values on representables.
+  \item Recognize representability as a fundamental property of
+        ``natural'' functors.
+\end{itemize}
+The slogans of Vol~II's representability principle (Ch.~15) carry
+across to the $\infty$-setting with mapping spaces in place of hom-sets
+and equivalences in place of bijections.
+\end{readernote}
 
 \begin{definition}[$\infty$-Yoneda embedding]
 \label{def:yoneda-embedding-qcat}
@@ -253,6 +291,16 @@ $\infty$-categorical sense (Theorem~44.\ref{thm:whitehead-qcat}).
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Free cocompletion} terminology: a category $\mathcal{P}(\mathcal{C})$
+``freely adjoins'' all small colimits to $\mathcal{C}$, in the same
+sense as a \emph{free} group adjoins all formal products to a generating
+set. The construction is universal among colimit-preserving extensions
+out of $\mathcal{C}$. The pattern goes back to the universal-property
+constructions of Vol~I; the $\infty$-categorical version was made
+precise by Joyal and Lurie.
+\end{nameorigin}
+
 \begin{theorem}[Universal property of $\mathcal{P}(\mathcal{C})$]
 \label{thm:free-cocompletion}
 For every cocomplete $\infty$-category $\mathcal{D}$, the restriction
@@ -286,6 +334,17 @@ fully-faithfulness and essential surjectivity of $y^*$, both of which
 follow from the density theorem.
 \qed
 \end{proof}
+
+\begin{nameorigin}
+The \term{density theorem} (also: \emph{co-Yoneda}) says representables
+are ``dense'' in $\mathcal{P}(\mathcal{C})$, in the topological sense:
+every object is a (canonical) colimit of representables. The
+terminology is borrowed from topology (a ``dense'' subset is one whose
+closure is the whole space) but the formal meaning is purely
+categorical. Density of representables is what makes Kan extensions
+\emph{computable} (Ch.~51) — extending a functor from representables
+extends it everywhere.
+\end{nameorigin}
 
 \begin{theorem}[Density theorem]
 \label{thm:density}

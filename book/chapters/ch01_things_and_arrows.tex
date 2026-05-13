@@ -170,6 +170,17 @@ shapes every definition we write.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Morphism} is from Greek \emph{morphē} (``form, shape'') plus
+\emph{-ism}. A morphism is a ``form-preserving thing'' — a map between
+mathematical objects that respects the structure they carry. The word
+was standard in 19th-century mathematics (homomorphism, isomorphism);
+Eilenberg and Mac Lane (1945) adopted it as the generic term for an
+arrow in a category. \term{Hom-set} is from algebraic ``set of
+homomorphisms''; the notation $\mathrm{Hom}(A, B)$ predates category
+theory and was kept.
+\end{nameorigin}
+
 \section{Objects and Morphisms}
 \label{sec:objects-morphisms}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -353,6 +364,15 @@ morphism between every pair of objects. The definition requires only that
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Composition} of functions has been central to mathematics since
+the 17th century (Leibniz). The symbol $\circ$ is 19th-century
+standardization. Right-to-left reading order is universal: $g \circ f$
+means ``apply $f$, then $g$,'' preserving the substitution rule
+$(g \circ f)(x) = g(f(x))$. Some CS traditions reverse (write $f \,;\, g$);
+mathematical category theory uses $g \circ f$ throughout.
+\end{nameorigin}
+
 \section{Composition}
 \label{sec:composition}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -424,6 +444,15 @@ $A \to D$. This is not a coincidence --- it is a law called \term{associativity}
 \end{example}
 
 % ─── Formalizing ────────────────────────────────────────────────────────────
+\begin{nameorigin}
+\term{Associative} (Latin \emph{associare}, ``to join with as a
+companion'') describes operations where grouping doesn't matter:
+$(a \cdot b) \cdot c = a \cdot (b \cdot c)$. The term was coined by
+William Rowan Hamilton (1843) in his work on quaternions, where
+associativity holds but commutativity fails. Composition in any
+category is associative by axiom.
+\end{nameorigin}
+
 \subsection{Formalizing: Associativity}
 
 Associativity says that when composing a chain of three morphisms, the
