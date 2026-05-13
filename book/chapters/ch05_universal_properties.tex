@@ -21,6 +21,24 @@ made here in understanding the pattern pays off repeatedly.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Universal property} captures one of the deepest patterns in
+mathematics: characterizing an object not by what it \emph{is} but by
+what it \emph{does} — its universal mapping behavior. The terminology
+is borrowed from physics and analysis (universal cover, universal
+constant, etc.) where ``universal'' means ``applies in every case.''
+In category theory, a universal property is an object that
+``solves a problem uniquely up to unique isomorphism'' — it is the
+universal solution to a mapping question. The pattern was formalized
+by Bourbaki (mid-20th century) and made into the central technique of
+category theory by Mac Lane and Eilenberg.
+
+\term{Initial} and \term{terminal} objects are the universal-property
+basics: initial = unique map \emph{out} to everything; terminal =
+unique map \emph{in} from everything. ``Initial'' and ``terminal'' are
+from the structure of arrows — first/last in any path.
+\end{nameorigin}
+
 \section{Initial Objects}
 \label{sec:initial}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -502,6 +520,18 @@ modification.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Product} and \term{coproduct} take their names from set theory:
+the Cartesian product $A \times B$ in $\mathbf{Set}$ is the prototype.
+The categorical \emph{product} generalizes Cartesian product via the
+universal mapping property (maps into $A \times B$ correspond to pairs
+of maps into $A$ and $B$). The \emph{coproduct} (also called \emph{sum})
+is the dual: in $\mathbf{Set}$ it's the disjoint union; in $\mathbf{Vect}$
+it's the direct sum; in $\mathbf{Top}$ it's the disjoint union with
+topology. The ``co-'' prefix marks duality (cross-ref Vol I Ch.~2's
+opposite categories).
+\end{nameorigin}
+
 \section{Toward Products and Coproducts}
 \label{sec:toward-products}
 % ═══════════════════════════════════════════════════════════════════════════

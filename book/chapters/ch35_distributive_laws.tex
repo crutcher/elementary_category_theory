@@ -22,6 +22,22 @@ and Hopf monads.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Distributive law} was introduced by \emph{Jon Beck} (1969,
+``Distributive Laws'') — the same Beck of Beck's monadicity theorem
+(Vol II Ch.~21). The terminology comes from the analogy with classical
+distributivity in algebra ($a \cdot (b + c) = ab + ac$): just as
+multiplication ``distributes over'' addition in a ring, a monad
+$s$ ``distributes over'' a monad $t$ via the 2-cell $\lambda : ts
+\Rightarrow st$. The four axioms (D1--D4) ensure the distribution
+respects the unit and multiplication of both monads.
+
+Distributive laws are the algebraic vocabulary of \emph{monad
+composition}: $st$ is a monad iff $s$ distributes over $t$. The same
+pattern recurs in $\infty$-category theory (Vol IV Ch.~51) and in
+operad theory.
+\end{nameorigin}
+
 \section{The Distributive Law Axioms}
 \label{sec:dist-axioms}
 % ═══════════════════════════════════════════════════════════════════════════

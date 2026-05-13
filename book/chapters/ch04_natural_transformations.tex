@@ -18,6 +18,23 @@ backbone of every result in the rest of the book.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Natural transformation} was the \emph{original motivation} for
+category theory. Eilenberg and Mac Lane (1945) had a clear sense of
+what ``natural'' meant in algebra — a construction is natural if it
+doesn't depend on arbitrary choices (no coordinates, no basis, etc.) —
+but no formal definition. To make ``natural'' precise, they needed
+``a map between maps that commutes with everything else,'' which led
+to defining functors, which led to defining the things functors go
+between (categories), which led to category theory itself.
+
+The word \emph{natural} echoes the long-standing mathematical usage:
+``a natural transformation'' is one that arises ``in nature'' (= without
+arbitrary choices). The naturality square (commutative square in the
+definition) is the formalization: the transformation commutes with
+\emph{every} morphism in the source category.
+\end{nameorigin}
+
 \section{What a Natural Transformation Is}
 \label{sec:nat-trans}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -321,6 +338,18 @@ should expect to recognize this pattern often.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+The \term{functor category} $[\mathcal{C}, \mathcal{D}]$ (also written
+$\mathcal{D}^\mathcal{C}$ or $\mathrm{Fun}(\mathcal{C}, \mathcal{D})$)
+is a fundamental construction: a category whose objects are functors
+and morphisms are natural transformations. The exponential notation
+$\mathcal{D}^\mathcal{C}$ generalizes set-theoretic exponentiation;
+the bracket $[\mathcal{C}, \mathcal{D}]$ is from enriched-category
+literature. Functor categories are the testbed for many higher-categorical
+constructions (Vol II Ch.~22: 2-category structure; Vol IV Ch.~43:
+quasi-categories).
+\end{nameorigin}
+
 \section{Functor Categories}
 \label{sec:functor-cats}
 % ═══════════════════════════════════════════════════════════════════════════

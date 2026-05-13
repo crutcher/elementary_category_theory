@@ -26,6 +26,23 @@ well-behaved.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+\term{Limit} and \term{colimit} were introduced by \emph{Saunders
+Mac Lane} as the general categorical pattern subsuming products,
+equalizers, pullbacks, and their duals. The word \emph{limit} echoes
+classical analysis (limit of a sequence, limit of a function): a single
+object ``approached'' by the whole diagram. The dual \emph{colimit}
+(``co-limit'') generalizes coproduct, coequalizer, and pushout — the
+``glued-together'' constructions. The pattern is one of the central
+unifications of category theory: dozens of seemingly different constructions
+across mathematics become instances of one universal-property template.
+
+\term{Diagram} as a functor $D : \mathcal{J} \to \mathcal{C}$ formalizes
+``the shape'' of a drawing: $\mathcal{J}$ is the shape-category whose
+objects are ``slots'' and whose morphisms are ``required arrows.''
+The viewpoint is due to Grothendieck and Mac Lane.
+\end{nameorigin}
+
 \section{Diagrams as Functors}
 \label{sec:diagrams-as-functors}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -257,6 +274,24 @@ mediating morphism guaranteed by the limit universal property.
 
 
 % ═══════════════════════════════════════════════════════════════════════════
+\begin{nameorigin}
+The names of the small-limit constructions tell their geometric stories:
+\begin{itemize}
+  \item \term{Equalizer}: where two parallel arrows ``become equal'' —
+        the universal sub-object on which $f = g$.
+  \item \term{Pullback}: from algebraic geometry, where one ``pulls
+        back'' a function along a map of varieties; the fibre product
+        $X \times_Z Y$.
+  \item \term{Pushout} (dual of pullback): from topology / gluing
+        constructions; ``pushes out'' along inclusions.
+  \item \term{Coequalizer}: the dual of equalizer; the universal
+        quotient on which $f = g$.
+\end{itemize}
+The terminology is mostly from algebraic topology (Eilenberg-Steenrod
+1952) and algebraic geometry (Grothendieck school). The category-theoretic
+unification subsumes them all under the limit/colimit umbrella.
+\end{nameorigin}
+
 \section{Equalizers, Pullbacks, and the Zoo of Limits}
 \label{sec:limit-zoo}
 % ═══════════════════════════════════════════════════════════════════════════
