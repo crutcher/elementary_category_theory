@@ -1,4 +1,5 @@
 % ch42_derived_functors.tex — Volume IV Chapter 6
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Derived Functors and Quillen Equivalences}
 
@@ -53,6 +54,19 @@ class of the input, hence descends to $\mathrm{Ho}(\mathcal{C})$.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Derived functor} dates to Cartan and Eilenberg's \emph{Homological
+Algebra} (1956). For an additive functor $F$ between abelian categories,
+the \emph{left/right derived functors} $L_n F$ and $R^n F$ measure $F$'s
+failure to be exact, by computing homology/cohomology of $F$ applied to
+projective/injective resolutions. The term \emph{derived} marks them
+as ``descended from $F$'' via the resolution machinery — they capture
+the deeper, derived information that $F$ alone obscures. The Volume IV
+$\mathbb{L} F, \mathbb{R} F$ are the categorical generalization: derived
+functors as left/right Kan extensions of $F$ along the localization
+$\gamma$.
+\end{nameorigin}
+
 \begin{definition}[Total left and right derived functor]
 \label{def:total-derived}
 Let $\mathcal{C}, \mathcal{D}$ be model categories and $F : \mathcal{C}
@@ -104,6 +118,15 @@ $Q X \xrightarrow{\sim} X$ is initial among weak-equivalences-out-of-cofibrants
 into $X$. \qed
 \end{proof}
 
+\begin{nameorigin}
+\term{Ken Brown's lemma} is named for \emph{Kenneth S.\ Brown}, who
+formulated it in his 1973 paper ``Abstract Homotopy Theory and
+Generalized Sheaf Cohomology.'' The lemma is a small but indispensable
+technical tool in homotopical algebra: it reduces the existence of
+derived functors from a strong invariance condition to a weaker (and
+checkable) one on trivial cofibrations.
+\end{nameorigin}
+
 \begin{lemma}[Ken Brown's lemma]
 \label{lem:ken-brown}
 If $F : \mathcal{C} \to \mathcal{D}$ sends trivial cofibrations between
@@ -126,6 +149,17 @@ satisfy; the next section makes this systematic.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+A \term{Quillen adjunction} is named for \emph{Daniel Quillen}, who
+introduced both the notion and the model-categorical framework in 1967.
+The asymmetry between ``left Quillen'' (preserves cof + trivial cof) and
+``right Quillen'' (preserves fib + trivial fib) reflects the dual roles
+that cofibrations and fibrations play under adjunction. As Quillen put
+it: every adjunction between model categories is either compatible with
+the model structures or it isn't, and ``compatible'' has a small
+precise meaning.
+\end{nameorigin}
 
 \begin{definition}[Quillen adjunction]
 \label{def:quillen-adjunction}
@@ -281,6 +315,17 @@ machinery of Chapter~51 makes this systematic.
 \end{example_thm}
 
 \subsection{Derived tensor and Ext}
+
+\begin{nameorigin}
+\term{Tor} and \term{Ext} are the prototypical derived functors,
+named in Cartan--Eilenberg (1956): \emph{Tor} (from \emph{torsion})
+because it measures the torsion-like obstruction to flatness of
+tensor product, and \emph{Ext} (from \emph{extension}) because
+$\mathrm{Ext}^1(M, N)$ classifies extensions $0 \to N \to E \to M \to 0$.
+The categorical $\mathbb{L} \otimes$ and $\mathbb{R} \mathrm{Hom}$ are
+the modern $\infty$-categorical packaging, with $H_n$ recovering Tor
+and $H^n$ recovering Ext.
+\end{nameorigin}
 
 \begin{example_thm}[Derived tensor product]
 \label{ex:derived-tensor}

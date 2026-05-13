@@ -1,4 +1,5 @@
 % ch41_model_categories.tex — Volume IV Chapter 5
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Model Categories: Axioms and Examples}
 
@@ -38,6 +39,54 @@ preview of Chapter~43.
 \section{Quillen's Axioms}
 \label{sec:quillen-axioms}
 % ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+Before the formal axioms, here is the picture they capture. A
+\emph{model category} is a category $\mathcal{C}$ together with three
+distinguished classes of morphisms — \emph{weak equivalences},
+\emph{cofibrations}, and \emph{fibrations} — that interact in a
+specific way:
+
+\begin{itemize}
+  \item Every morphism factors as \emph{cofibration followed by trivial
+        fibration} (or as \emph{trivial cofibration followed by
+        fibration}). Think: every map can be ``set up'' as a nice
+        cofibration before settling into a homotopy equivalence, or as
+        a homotopy equivalence before a nice fibration.
+  \item Cofibrations \emph{lift} on the left against trivial
+        fibrations: given a commutative square with a cofibration on
+        the left and a trivial fibration on the right, a diagonal lift
+        exists. Symmetrically for trivial cofibrations and fibrations.
+\end{itemize}
+
+Out of this small package of axioms emerges an entire homotopical
+calculus: cofibrant and fibrant replacements, derived functors, the
+homotopy category as morphisms-between-bifibrant-objects-modulo-homotopy,
+and (Chapter~42) Quillen adjunctions and equivalences.
+
+\begin{nameorigin}
+\term{Model category} was introduced by \emph{Daniel Quillen} in his
+1967 monograph \emph{Homotopical Algebra}. Quillen's project was to
+axiomatize the structure that algebraic topology had been using
+implicitly for decades — the interaction of cofibrations, fibrations,
+and weak equivalences in CW complexes, chain complexes, and simplicial
+sets — into a single framework. The name reflects that the axioms
+specify a ``model'' for doing homotopy theory: a working language with
+formal rules for the moves you can make.
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Cofibration} and \term{fibration} are from algebraic topology.
+A \emph{fibration} is the homotopy-theoretic generalization of a
+fibre bundle: a map $p : E \to B$ for which paths in $B$ lift to paths
+in $E$ (the \term{homotopy lifting property}). The term goes back to
+Serre (1951). A \emph{cofibration} is the dual notion: a map $i : A
+\to B$ for which homotopies extending over $A$ extend over $B$
+(\term{homotopy extension property}); the term is due to Hurewicz
+(1955). Quillen's axiomatization promotes the homotopy-lifting and
+homotopy-extension properties from special cases to defining axioms.
+\end{nameorigin}
 
 \subsection{Formalizing}
 
@@ -97,6 +146,20 @@ shorthand: $\xrightarrow{\sim}$ for a weak equivalence, $\hookrightarrow$ for
 a cofibration, $\twoheadrightarrow$ for a fibration.
 \end{howtosay}
 
+\begin{readernote}
+The five axioms M1--M5 are easy to remember once you have a mnemonic:
+\begin{itemize}
+  \item \textbf{M1} 2-out-of-3 (weak equivalences are a 2-out-of-3 class).
+  \item \textbf{M2} Retracts (all three classes are closed under retracts).
+  \item \textbf{M3} Factorizations exist (two of them).
+  \item \textbf{M4} Lifting (cofibrations lift against trivial fibrations).
+  \item \textbf{M5} (Co)completeness.
+\end{itemize}
+M3 and M4 together are the technical heart: factorization plus lifting
+give you the ability to construct homotopies and replacements
+systematically.
+\end{readernote}
+
 \begin{remark}[Determination of two classes by the third]
 \label{rem:two-determine-three}
 The five axioms imply that any two of $\mathcal{W}, \mathcal{C}\mathrm{of},
@@ -155,6 +218,15 @@ square involving the retract is filled in by lifting against the
 retracting square. \qed
 \end{proof}
 
+\begin{nameorigin}
+The \term{lifting property} terminology is broadly used in homotopy
+theory and algebraic topology. The dichotomy ``left lifting property''
+(LLP) vs.\ ``right lifting property'' (RLP) refers to \emph{which side
+of the square} the cofibration / fibration is on. The first systematic
+use as an axiomatic device is in Quillen's 1967 monograph; earlier
+versions appear in the work of Kan and Serre.
+\end{nameorigin}
+
 \begin{theorem}[Small object argument]
 \label{thm:soa}
 Let $\mathcal{I}$ be a set of morphisms in a cocomplete category
@@ -165,6 +237,16 @@ $f = p \circ i$ with $i \in \mathrm{LLP}(\mathrm{RLP}(\mathcal{I}))$
 (i.e., $i$ a cell-complex-like map built from $\mathcal{I}$-cells) and
 $p \in \mathrm{RLP}(\mathcal{I})$.
 \end{theorem}
+
+\begin{nameorigin}
+The \term{small object argument} is named for the size hypothesis on the
+domains: they must be ``small'' relative to the transfinite sequential
+colimit, meaning that maps out of them factor through a stage. The
+argument itself is a transfinite iteration that builds cell-complex-like
+structure. Quillen attributes the technique to John Frank Adams and
+broader homotopy-theoretic folklore; the modern formulation is due to
+Quillen (1967) and Garner (2008, ``algebraic'' small object argument).
+\end{nameorigin}
 
 \begin{remark}[Why the small object argument matters]
 The small object argument is the engine producing factorizations (M3) in
@@ -289,6 +371,15 @@ Every simplicial set is cofibrant (the unique map from $\emptyset$ is a
 monomorphism), so bifibrant simplicial sets are Kan complexes.
 \end{remark}
 
+\begin{nameorigin}
+The \term{Kan complex} terminology was introduced for the Kan--Quillen
+model structure on $\mathbf{sSet}$. Daniel Kan defined the horn-filling
+condition in 1958; Quillen (1967) elevated it to ``the fibrancy
+condition for the model structure on $\mathbf{sSet}$.'' The dual --
+cofibrations as monomorphisms -- is forced by the lifting axiom plus the
+generating cofibrations $\partial\Delta^n \hookrightarrow \Delta^n$.
+\end{nameorigin}
+
 \subsection{$\mathbf{Top}$ with the Quillen model structure}
 
 \begin{theorem}[Quillen model structure on $\mathbf{Top}$]
@@ -305,6 +396,16 @@ structure with:
 \end{itemize}
 Every space is fibrant; cofibrant spaces are (retracts of) CW complexes.
 \end{theorem}
+
+\begin{nameorigin}
+\term{Serre fibration} is named for \emph{Jean-Pierre Serre} (b.~1926,
+French mathematician, Fields Medal 1954). Serre's 1951 thesis
+introduced the notion of fibration with the homotopy lifting property
+restricted to maps from $D^n$ — exactly the class characterizing the
+Quillen fibrations in $\mathbf{Top}$. The corresponding cofibrations
+(retracts of relative cell complexes) trace back to J.H.C.\ Whitehead's
+work on CW complexes (1949).
+\end{nameorigin}
 
 \subsection{The Quillen equivalence}
 
@@ -329,7 +430,24 @@ equivalence throughout Volume~IV to move between topological and
 simplicial language as convenient.
 \end{remark}
 
+\begin{nameorigin}
+\term{Quillen equivalence} is the standard term for an adjoint pair
+that descends to an equivalence on homotopy categories — i.e., the
+strongest possible Quillen adjunction. The terminology dates to
+Quillen's original 1967 monograph and is preserved in the modern
+literature (Hovey 1999, Riehl 2014, etc.).
+\end{nameorigin}
+
 \subsection{Preview: the Joyal model structure}
+
+\begin{nameorigin}
+The \term{Joyal model structure} on $\mathbf{sSet}$ is named for
+\emph{André Joyal} (the same Joyal of Chapter~37's monoid theorem).
+Joyal developed the structure around 2000--2008, building on his
+earlier work on quasi-categories. The fibrant objects are quasi-cats;
+the model structure is the technical home for $\infty$-category theory
+in the simplicial-set framework (HTT Chapter~2; Cisinski 2019).
+\end{nameorigin}
 
 \begin{remark}[Joyal's model structure]
 \label{rem:joyal-preview}
