@@ -1,0 +1,327 @@
+% ch55_infty_operads.tex — Volume IV Chapter 19
+
+\chapter{$\infty$-Operads}
+
+\begin{overviewbox}
+An \term{operad} is a coherent description of ``algebraic operations of
+varying arity'' — a collection of $n$-ary operations $\{\mathcal{O}(n)\}$,
+together with composition rules that say how to plug operations into
+operations. Classical examples: the \term{associative operad} $\mathrm{Assoc}$,
+whose algebras are associative algebras; the \term{commutative operad}
+$\mathrm{Comm}$, whose algebras are commutative algebras; the
+\term{Lie operad} $\mathrm{Lie}$, whose algebras are Lie algebras.
+
+The \term{$\infty$-operad} is the higher-categorical refinement, in
+which all the operad data is coherently homotopical. This chapter
+develops the Lurie definition: an $\infty$-operad is a coCartesian
+fibration $\mathcal{O}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ over
+the nerve of pointed finite sets, satisfying a specific Segal-style
+condition that encodes the operadic structure.
+
+Closely related: \term{symmetric monoidal $\infty$-categories} —
+$\infty$-categories with a coherent commutative tensor product — are
+the same as $\infty$-operads whose fibres are themselves $\infty$-categories.
+
+The chapter introduces:
+\begin{itemize}
+  \item Classical operads as warm-up.
+  \item The category $\mathrm{Fin}_*$ of pointed finite sets.
+  \item Lurie's coCartesian-fibration definition.
+  \item Algebras over an $\infty$-operad, and the principal examples
+        (commutative, associative, Lie).
+\end{itemize}
+
+Chapters~56--57 specialize to the most important operadic structures:
+$\mathbb{E}_n$-algebras (little disks), $A_\infty$-algebras (Stasheff
+associahedra), and $L_\infty$-algebras (the Lie analogue).
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Classical Operads}
+\label{sec:classical-operads}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Operad in a symmetric monoidal category]
+\label{def:operad-classical}
+An \term{operad} in a symmetric monoidal category $(\mathcal{V}, \otimes, I)$
+consists of:
+\begin{itemize}
+  \item For each $n \geq 0$, an object $\mathcal{O}(n) \in \mathcal{V}$
+        of \term{$n$-ary operations}, equipped with a $\Sigma_n$-action.
+  \item A distinguished \term{identity} $\eta : I \to \mathcal{O}(1)$.
+  \item For each $n, k_1, \ldots, k_n$, a \term{composition} map
+        \begin{equation*}
+          \gamma : \mathcal{O}(n) \otimes \mathcal{O}(k_1) \otimes \cdots \otimes \mathcal{O}(k_n) \to \mathcal{O}(k_1 + \cdots + k_n)
+        \end{equation*}
+        that ``plugs $n$ operations of arities $k_1, \ldots, k_n$ into one operation of arity $n$.''
+\end{itemize}
+Subject to associativity (of nested composition), unit (the identity is a
+unit for $\gamma$), and equivariance ($\Sigma_n$-action compatible with
+$\gamma$) axioms.
+\end{definition}
+
+\begin{howtosay}
+$\mathcal{O}(n)$ \sayit{``the operad's $n$-ary operations''}.
+$\gamma$ \sayit{``operadic composition'' or ``substitution''}; pictorially,
+a tree of operations being grafted into one.
+\end{howtosay}
+
+\begin{example_thm}[Associative operad $\mathrm{Assoc}$]
+\label{ex:assoc-operad}
+$\mathrm{Assoc}(n) = $ the set of total orderings on $\{1, \ldots, n\}$
+(or, equivalently, $\Sigma_n$ regarded with regular action).
+Composition: nested orderings via concatenation. Algebras over
+$\mathrm{Assoc}$ in $\mathbf{Set}$: associative monoids.
+\end{example_thm}
+
+\begin{example_thm}[Commutative operad $\mathrm{Comm}$]
+\label{ex:comm-operad}
+$\mathrm{Comm}(n) = $ singleton (one element), for every $n$. Composition
+trivial. Algebras: commutative monoids.
+\end{example_thm}
+
+\begin{example_thm}[Lie operad $\mathrm{Lie}$]
+\label{ex:lie-operad}
+$\mathrm{Lie}(n)$ in $\mathbf{Ch}(k\text{-vec})$: $(n-1)!$-dimensional in
+degree $0$, supported on \term{Lyndon basis} of bracketings. Algebras:
+Lie algebras.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\mathrm{Fin}_*$ and Symmetric Monoidal $\infty$-Categories}
+\label{sec:fin-star}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\mathrm{Fin}_*$]
+\label{def:fin-star}
+$\mathrm{Fin}_*$ is the category of pointed finite sets. Objects are
+$\langle n \rangle = \{*, 1, 2, \ldots, n\}$ with $*$ the basepoint.
+Morphisms are basepoint-preserving functions. We typically write
+$\mathrm{N}(\mathrm{Fin}_*)$ for its nerve in $\mathbf{sSet}$.
+\end{definition}
+
+\begin{definition}[Symmetric monoidal $\infty$-category, à la Lurie]
+\label{def:sym-mon-infty-cat}
+A \term{symmetric monoidal $\infty$-category} is a coCartesian fibration
+$\mathcal{C}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ such that for each
+$\langle n \rangle$, the canonical map
+\begin{equation*}
+  \mathcal{C}^\otimes_{\langle n \rangle} \to \mathcal{C}^\otimes_{\langle 1 \rangle}{}^n
+\end{equation*}
+(induced by the $n$ ``inclusion'' maps $\langle n \rangle \to \langle 1
+\rangle$ collapsing all but one position) is an equivalence.
+\end{definition}
+
+\begin{howtosay}
+A symmetric monoidal $\infty$-category \sayit{``a symmetric monoidal
+$\infty$-category''} is the data of \emph{the entire fibration} —
+``$\mathcal{C}^\otimes$'' with the additional structure encoded as the
+fibration. The underlying $\infty$-category $\mathcal{C} =
+\mathcal{C}^\otimes_{\langle 1 \rangle}$ is just the value at the
+``one-element'' pointed set.
+\end{howtosay}
+
+\begin{theorem}[Equivalence with classical symmetric monoidal $\infty$-categories]
+\label{thm:sym-mon-equiv}
+The Lurie definition agrees with the symmetric monoidal $\infty$-category
+defined via tensor functors $\otimes : \mathcal{C} \times \mathcal{C} \to
+\mathcal{C}$ with all coherences (associator, unitor, symmetry, and all
+higher Mac Lane–Stasheff data). The fibrational form packages all
+coherences into a single combinatorial object.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\infty$-Operads}
+\label{sec:infty-operad-defn}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-operad, Lurie]
+\label{def:infty-operad}
+An \term{$\infty$-operad} is a functor $\mathcal{O}^\otimes \to
+\mathrm{N}(\mathrm{Fin}_*)$ between simplicial sets such that:
+\begin{enumerate}
+  \item It is an inner fibration.
+  \item Certain edges in $\mathrm{Fin}_*$ — the \term{inert} maps
+        (those that are bijective on non-base points after restriction)
+        — admit coCartesian lifts.
+  \item For each $\langle n \rangle$, the Segal-type map
+        \begin{equation*}
+          \mathcal{O}^\otimes_{\langle n \rangle} \to \prod_{i = 1}^n \mathcal{O}^\otimes_{\langle 1 \rangle}
+        \end{equation*}
+        is an equivalence (it factors over inert maps).
+\end{enumerate}
+\end{definition}
+
+\begin{remark}[Why $\mathrm{Fin}_*$ rather than $\mathrm{Fin}$?]
+The basepoint corresponds to ``outputs that disappear''; the
+basepoint-preserving structure captures the operadic distinction between
+inputs (non-basepoint elements) and outputs (the basepoint, in this
+encoding). This is Segal's original idea, generalized to the
+$\infty$-categorical setting.
+\end{remark}
+
+\begin{definition}[Algebra over an $\infty$-operad]
+\label{def:operad-algebra}
+For an $\infty$-operad $\mathcal{O}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$
+and a symmetric monoidal $\infty$-category $\mathcal{C}^\otimes \to
+\mathrm{N}(\mathrm{Fin}_*)$, an \term{$\mathcal{O}$-algebra in $\mathcal{C}$}
+is a $\mathrm{Fin}_*$-functor $\mathcal{O}^\otimes \to \mathcal{C}^\otimes$
+preserving inert coCartesian morphisms.
+
+The $\infty$-category of $\mathcal{O}$-algebras in $\mathcal{C}$ is
+$\mathrm{Alg}_\mathcal{O}(\mathcal{C})$.
+\end{definition}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Foundational $\infty$-Operads}
+\label{sec:fundamental-operads}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally}
+
+\begin{example_thm}[Commutative $\infty$-operad]
+\label{ex:comm-operad-infty}
+$\mathrm{Comm} = \mathrm{N}(\mathrm{Fin}_*)$ itself. Algebras in
+$\mathcal{C}^\otimes$ are \term{$\mathbb{E}_\infty$-algebras} —
+commutative algebras up to coherent homotopy.
+\end{example_thm}
+
+\begin{example_thm}[Associative $\infty$-operad]
+\label{ex:assoc-operad-infty}
+$\mathrm{Assoc}$: the $\infty$-operad of the nerve of the cyclic category
+$\Lambda$ projected onto $\mathrm{Fin}_*$. Algebras: \term{$\mathbb{E}_1$-algebras}
+— associative algebras up to coherent homotopy. Equivalent definition:
+algebras over the operad of trees.
+\end{example_thm}
+
+\begin{example_thm}[$\mathbb{E}_n$-operad (preview to Chapter 56)]
+\label{ex:En-preview}
+For $n \geq 1$, the \term{little $n$-disks operad} $\mathbb{E}_n$ encodes
+operations parametrized by configurations of $n$-disks. Algebras over
+$\mathbb{E}_n$ in $\mathrm{Sp}$ (or any symmetric monoidal $\infty$-category)
+are the \term{$\mathbb{E}_n$-algebras} of higher algebra. Chapter~56
+develops them in detail.
+
+Limiting cases: $\mathbb{E}_1 = \mathrm{Assoc}$ (associative);
+$\mathbb{E}_\infty = \mathrm{Comm}$ (commutative).
+\end{example_thm}
+
+\begin{remark}[Lie $\infty$-operad and $L_\infty$-algebras]
+The Lie $\infty$-operad $\mathrm{Lie}_\infty$ gives \term{$L_\infty$-algebras},
+the strong-homotopy version of Lie algebras. Chapter~57 develops them
+together with $A_\infty$-algebras (the strong-homotopy associative version
+of $\mathbb{E}_1$-algebras).
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:infty-operads-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a classical operad.}{Collection of arity-$n$ operations $\mathcal{O}(n)$ with $\Sigma_n$-actions, identity, and composition maps, satisfying associativity, unit, and equivariance.}
+\qaitem{What is the associative operad?}{$\mathrm{Assoc}(n) = $ set of total orderings on $\{1, \ldots, n\}$. Algebras: associative monoids.}
+\qaitem{What is the commutative operad?}{$\mathrm{Comm}(n) = $ singleton for all $n$. Algebras: commutative monoids.}
+\qaitem{What is the Lie operad?}{$\mathrm{Lie}(n)$ has dimension $(n-1)!$ in degree 0, spanned by the Lyndon basis. Algebras: Lie algebras.}
+\qaitem{Define $\mathrm{Fin}_*$.}{Category of pointed finite sets $\langle n \rangle = \{*, 1, \ldots, n\}$ with basepoint-preserving functions as morphisms.}
+\qaitem{Why pointed finite sets, not finite sets?}{The basepoint encodes ``outputs that disappear'' under the operadic interpretation; it distinguishes inputs from outputs.}
+\qaitem{Define a symmetric monoidal $\infty$-category (Lurie style).}{A coCartesian fibration $\mathcal{C}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ with $\mathcal{C}^\otimes_{\langle n \rangle} \simeq \mathcal{C}^\otimes_{\langle 1 \rangle}{}^n$ via the Segal map.}
+\qaitem{What does the Segal condition do?}{It ensures the fibre over $\langle n \rangle$ is the $n$-fold ``product'' of the fibre over $\langle 1 \rangle$ — encoding the tensor product as a higher-coherence operation.}
+\qaitem{Define an $\infty$-operad.}{Inner fibration $\mathcal{O}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ with inert-edge coCartesian lifts and a Segal-type condition.}
+\qaitem{What's an inert map?}{A map of pointed finite sets that is bijective on non-basepoint elements after restriction. ``Doesn't multiply elements.''}
+\qaitem{Define an algebra over an $\infty$-operad.}{A $\mathrm{Fin}_*$-functor $\mathcal{O}^\otimes \to \mathcal{C}^\otimes$ preserving inert coCartesian morphisms.}
+\qaitem{What's an $\mathbb{E}_\infty$-algebra?}{An algebra over the commutative $\infty$-operad $\mathrm{Comm}$. Coherently commutative algebra in a symmetric monoidal $\infty$-category.}
+\qaitem{What's an $\mathbb{E}_1$-algebra?}{Algebra over $\mathrm{Assoc} = \mathbb{E}_1$. Coherently associative (but not necessarily commutative) algebra.}
+\qaitem{What's an $\mathbb{E}_n$-algebra?}{Algebra over the little $n$-disks operad. Between fully commutative and fully associative; interpolates by the codimension of configuration space.}
+\qaitem{What's the homotopy hypothesis for operads?}{Operads in $\mathcal{S}$ classify ``operadic structures up to homotopy'' — exactly the $\infty$-operads we've defined.}
+\qaitem{Why is the Lurie definition fibrational rather than enriched?}{Because the fibration captures all coherences uniformly, avoiding the need to specify higher associators, symmetries, etc.\ separately. It's a Grothendieck-style packaging.}
+\qaitem{What's a symmetric monoidal functor in this framework?}{A coCartesian-preserving morphism over $\mathrm{N}(\mathrm{Fin}_*)$: a functor $\mathcal{C}^\otimes \to \mathcal{D}^\otimes$ commuting with the projections and preserving coCartesian lifts.}
+\qaitem{How does this generalize Chapter~19 (monoidal categories)?}{Chapter~19 worked in $1$-categories; here in $\infty$-categories. All Mac Lane coherences (pentagon, hexagon, etc.) plus higher coherences are encoded uniformly via $\mathrm{Fin}_*$.}
+\qaitem{What's Lurie's tensor product on $\mathrm{Pr}^L$?}{The closed symmetric monoidal structure on presentable $\infty$-categories. Unit: $\mathcal{S}$. Restricting to $\mathrm{Pr}^L_{\mathrm{St}}$: unit becomes $\mathrm{Sp}$.}
+\qaitem{Where does Chapter~56 take this?}{Detailed analysis of $\mathbb{E}_n$-algebras, the little disks operads, and their algebras. Connects to factorization homology and configuration spaces.}
+\qaitem{Where does Chapter~57?}{$A_\infty$ and $L_\infty$ algebras: strong-homotopy variants, with explicit operadic descriptions via Stasheff associahedra and the Koszul dual of $\mathrm{Lie}$.}
+\qaitem{Why doesn't this chapter prove the equivalence with the Stasheff definition?}{Because the equivalence requires extensive combinatorial work (HA Chapter 2--3). We follow proof-depth policy: state the equivalence, sketch the strategy, point to Lurie's HA for details.}
+\qaitem{What's an ``operadic algebra'' versus an ``operad''?}{An operad is a system of operations (definition); an algebra is an object equipped with a representation of that system. Comm-operad: definition. Comm-algebra: a commutative monoid.}
+\qaitem{What does it mean to talk about $\mathrm{Sp}$-modules or $\mathrm{Mod}_R$?}{$\mathrm{Sp}$ is a symmetric monoidal $\infty$-cat under smash product; modules over an $\mathbb{E}_\infty$-ring $R$ in $\mathrm{Sp}$ are $\mathrm{Mod}_R$-objects, themselves a symmetric monoidal $\infty$-cat.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Classical operads.}\quad $\{\mathcal{O}(n)\}$ with $\Sigma_n$-action,
+identity, and substitution $\gamma$. Examples: $\mathrm{Assoc}$,
+$\mathrm{Comm}$, $\mathrm{Lie}$.
+
+\textbf{$\mathrm{Fin}_*$.}\quad The category of pointed finite sets;
+$\mathrm{N}(\mathrm{Fin}_*)$ as a simplicial set is the indexing simplicial
+set for $\infty$-operads.
+
+\textbf{Symmetric monoidal $\infty$-category.}\quad CoCartesian fibration
+$\mathcal{C}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ satisfying the Segal
+condition. Encodes the symmetric monoidal structure plus all higher
+coherences.
+
+\textbf{$\infty$-operad.}\quad Inner fibration $\mathcal{O}^\otimes \to
+\mathrm{N}(\mathrm{Fin}_*)$ with inert-edge lifts and Segal condition.
+Algebras: $\mathrm{Fin}_*$-functors preserving inert coCartesian.
+
+\textbf{Foundational examples.}\quad $\mathrm{Comm}$ ($\mathbb{E}_\infty$);
+$\mathrm{Assoc} = \mathbb{E}_1$; $\mathbb{E}_n$ for $1 \leq n \leq \infty$;
+$\mathrm{Lie}$ and $\mathrm{Lie}_\infty$.
+
+\textbf{Algebras live everywhere.}\quad Modules, monoids, sheaves of
+rings, ring spectra — all are operadic algebras in various symmetric
+monoidal $\infty$-categories.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Classical operad.}\quad $\{\mathcal{O}(n)\}_{n \geq 0}$ with
+$\Sigma_n$-action, $\eta : I \to \mathcal{O}(1)$, $\gamma$, satisfying
+classical axioms.
+
+\medskip
+\textbf{$\mathrm{Fin}_*$.}\quad Pointed finite sets, basepoint-preserving morphisms.
+
+\medskip
+\textbf{Symmetric monoidal $\infty$-cat.}\quad
+$\mathcal{C}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ coCartesian fibration,
+Segal: $\mathcal{C}^\otimes_{\langle n \rangle} \simeq \mathcal{C}^\otimes_{\langle 1 \rangle}{}^n$.
+
+\medskip
+\textbf{$\infty$-Operad.}\quad
+$\mathcal{O}^\otimes \to \mathrm{N}(\mathrm{Fin}_*)$ inner fibration;
+inert-edge coCartesian lifts; Segal condition over inerts.
+
+\medskip
+\textbf{Algebra over $\mathcal{O}$.}\quad $\mathrm{Fin}_*$-functor
+$\mathcal{O}^\otimes \to \mathcal{C}^\otimes$ preserving inert
+coCartesian morphisms.
+
+\medskip
+\textbf{Foundational.}\quad $\mathrm{Comm} = \mathbb{E}_\infty$;
+$\mathrm{Assoc} = \mathbb{E}_1$; $\mathbb{E}_n$ for general $n$;
+$\mathrm{Lie}, \mathrm{Lie}_\infty$.
+\end{formalrestatement}

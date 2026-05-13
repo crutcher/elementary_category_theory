@@ -1,0 +1,362 @@
+% ch52_presentable.tex — Volume IV Chapter 16
+
+\chapter{Presentable $\infty$-Categories}
+
+\begin{overviewbox}
+\term{Presentable $\infty$-categories} are the working class of
+``manageable'' $\infty$-categories: those that are cocomplete and
+generated under small colimits by a small ``presentation.'' Examples:
+$\mathcal{S}$ (spaces), $\mathcal{P}(\mathcal{C})$ (presheaves on a
+small $\mathcal{C}$), and most $\infty$-categories arising in derived
+algebraic geometry, homotopy theory, and topos theory.
+
+This chapter develops the theory:
+\begin{itemize}
+  \item \term{$\kappa$-filtered colimits} for a regular cardinal
+        $\kappa$ — the building blocks of accessibility.
+  \item \term{Accessible $\infty$-categories} — those generated under
+        $\kappa$-filtered colimits by a small set of $\kappa$-compact
+        objects.
+  \item \term{Presentable $\infty$-categories} — accessible $+$
+        cocomplete. Equivalently, accessible localizations of $\mathcal{P}(\mathcal{C})$.
+\end{itemize}
+
+The capstone is the \term{$\infty$-Adjoint Functor Theorem} for
+presentable $\infty$-categories: a functor $R : \mathcal{D} \to
+\mathcal{C}$ admits a left adjoint iff $R$ preserves all small
+$\infty$-limits and is \emph{accessible}. This is the practical engine
+for proving existence of $\infty$-categorical free constructions, base
+changes, sheafifications, and the like.
+
+A reader who completes this chapter has acquired the standard ``working
+infrastructure'' assumed throughout Lurie's \emph{Higher Topos Theory}
+(Chapters 5–6).
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Accessibility}
+\label{sec:accessibility}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\kappa$-filtered]
+\label{def:kappa-filtered}
+For a regular cardinal $\kappa$, a quasi-category $\mathcal{K}$ is
+\term{$\kappa$-filtered} if every diagram $K \to \mathcal{K}$ of size
+$< \kappa$ admits a cocone in $\mathcal{K}$.
+
+A $\omega$-filtered ($\kappa = \aleph_0$) quasi-category is just a
+filtered quasi-category in the sense of Chapter~49.
+\end{definition}
+
+\begin{definition}[$\kappa$-compact object]
+\label{def:kappa-compact}
+An object $x$ of a cocomplete $\infty$-category $\mathcal{C}$ is
+\term{$\kappa$-compact} (or \term{$\kappa$-presentable}) if
+$\mathrm{Map}_\mathcal{C}(x, -) : \mathcal{C} \to \mathcal{S}$ preserves
+$\kappa$-filtered colimits.
+
+The full subcategory of $\kappa$-compact objects is $\mathcal{C}^\kappa
+\subseteq \mathcal{C}$.
+\end{definition}
+
+\begin{example_thm}[Compactness in $\mathcal{S}$]
+\label{ex:compact-in-S}
+An object of $\mathcal{S}$ is $\omega$-compact iff it is equivalent to a
+finite CW complex (a finitely-presented Kan complex). For larger
+$\kappa$, $\kappa$-compact spaces are exactly Kan complexes with
+$\kappa$-bounded simplices.
+\end{example_thm}
+
+\begin{definition}[Accessible $\infty$-category]
+\label{def:accessible}
+A quasi-category $\mathcal{C}$ is \term{accessible} if there is a regular
+cardinal $\kappa$ and a small set $\{x_i\}_{i \in I}$ of $\kappa$-compact
+objects such that every object of $\mathcal{C}$ is a $\kappa$-filtered
+colimit of the $x_i$.
+
+Equivalently: $\mathcal{C}$ has $\kappa$-filtered colimits and the
+inclusion $\mathcal{C}^\kappa \hookrightarrow \mathcal{C}$ extends along
+$\kappa$-filtered colimits to an equivalence
+$\mathrm{Ind}^\kappa(\mathcal{C}^\kappa) \simeq \mathcal{C}$.
+\end{definition}
+
+\begin{howtosay}
+$\mathrm{Ind}^\kappa(\mathcal{D})$ \sayit{``the $\kappa$-Ind completion of
+$\mathcal{D}$''}: freely add $\kappa$-filtered colimits to $\mathcal{D}$.
+\end{howtosay}
+
+\begin{theorem}[Accessibility-via-Ind]
+\label{thm:ind-accessibility}
+For a small $\infty$-category $\mathcal{D}$, the universal $\kappa$-filtered
+colimit completion $\mathrm{Ind}^\kappa(\mathcal{D})$ exists, is the
+$\kappa$-filtered-colimit closure of $\mathcal{D}$ in $\mathcal{P}(\mathcal{D})$,
+and is universal among accessible $\infty$-categories admitting $\mathcal{D}$
+as their $\kappa$-compact subcategory.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Presentable $\infty$-Categories}
+\label{sec:presentable}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Presentable $\infty$-category]
+\label{def:presentable}
+A quasi-category $\mathcal{C}$ is \term{presentable} (or \term{locally
+presentable}) if it is:
+\begin{enumerate}
+  \item Cocomplete (admits all small $\infty$-colimits).
+  \item Accessible (a $\kappa$-Ind completion of a small $\infty$-category, for some $\kappa$).
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Characterizations of presentability]
+\label{thm:presentable-characterizations}
+A quasi-category $\mathcal{C}$ is presentable iff any (equivalently, all) of:
+\begin{enumerate}
+  \item It is an \term{accessible localization} of some
+        $\mathcal{P}(\mathcal{D})$ — i.e., a reflective subcategory
+        whose reflector preserves $\kappa$-filtered colimits for some
+        $\kappa$.
+  \item It is cocomplete and there is a small set of objects
+        $\{x_i\}$ that generates $\mathcal{C}$ under small colimits.
+  \item There exists a small $\mathcal{D}$ and a small set of morphisms
+        $W$ in $\mathcal{P}(\mathcal{D})$ such that $\mathcal{C} \simeq
+        \mathcal{P}(\mathcal{D})[W^{-1}]$ — a Bousfield-localization
+        presentation.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[The class $\mathrm{Pr}^L$]
+The category $\mathrm{Pr}^L$ has presentable $\infty$-categories as
+objects and \emph{colimit-preserving} (left adjoint) functors as
+morphisms. Lurie's HTT establishes that $\mathrm{Pr}^L$ is itself an
+$\infty$-category, in fact a closed symmetric monoidal $\infty$-category
+under the \emph{Lurie tensor product}. This last is the working substrate
+of $\infty$-operads (Chapter~55) and stable homotopy theory.
+\end{remark}
+
+\subsection{Reorganizing: foundational examples}
+
+\begin{example_thm}[$\mathcal{S}$ is presentable]
+\label{ex:S-presentable}
+$\mathcal{S}$ is presentable: $\omega$-compact objects are finite CW
+complexes, and every space is an $\omega$-filtered colimit of finite ones.
+In fact, $\mathcal{S} \simeq \mathrm{Ind}^\omega(\mathcal{S}^\omega)$.
+\end{example_thm}
+
+\begin{example_thm}[$\mathcal{P}(\mathcal{C})$ is presentable]
+\label{ex:PC-presentable}
+For any small $\mathcal{C}$, $\mathcal{P}(\mathcal{C})$ is presentable.
+$\omega$-compact objects: presheaves with finite support (representable
+or finite colimits of representables). Generation: representables.
+\end{example_thm}
+
+\begin{example_thm}[Modules over a ring]
+\label{ex:modules}
+$\mathrm{Mod}_R$ for a connective $\mathbb{E}_\infty$-ring spectrum $R$
+is presentable. $\omega$-compact: finitely generated projective
+$R$-modules. Generation: $R$ itself. This is the principal example of
+practical higher algebra.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The $\infty$-Adjoint Functor Theorem}
+\label{sec:aft}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[$\infty$-AFT, presentable case]
+\label{thm:aft-full}
+Let $\mathcal{C}, \mathcal{D}$ be presentable $\infty$-categories. A
+functor $R : \mathcal{D} \to \mathcal{C}$ admits a left adjoint iff:
+\begin{enumerate}
+  \item $R$ preserves all small $\infty$-limits.
+  \item $R$ is accessible: preserves $\kappa$-filtered colimits for some
+        regular cardinal $\kappa$.
+\end{enumerate}
+Dually, $L : \mathcal{C} \to \mathcal{D}$ admits a right adjoint iff $L$
+preserves all small $\infty$-colimits.
+\end{theorem}
+
+\begin{proof}[Proof strategy]
+The proof is HTT §5.5.2 (Theorem 5.5.2.9). The strategy:
+
+\emph{Existence of left adjoint.} For each $y \in \mathcal{D}$, the
+functor $\mathrm{Map}_\mathcal{C}(-, R y) \circ R : \mathcal{D} \to \mathcal{S}$
+preserves limits and is accessible. By the \term{Adjoint Functor Theorem
+for $\mathcal{S}$-valued functors}, it is representable; the representing
+object is the value of $L$ at the corresponding object of $\mathcal{C}$.
+
+\emph{Uniqueness} follows from $\infty$-Yoneda.
+
+\emph{Necessity of conditions} is Theorem~50.\ref{thm:rapl-lapc-infty}
+(RAPL) plus the observation that left adjoints to accessible functors
+are accessible.
+
+The dual statement uses the symmetric structure: right adjoints exist
+iff left adjoints to opposite functors do. \qed
+\end{proof}
+
+\begin{example_thm}[Building free objects]
+\label{ex:free-construction}
+$\mathrm{Mod}_R \to \mathcal{S}$, sending a module to its underlying space,
+preserves all limits and is accessible. The adjoint functor theorem
+produces a left adjoint $\mathcal{S} \to \mathrm{Mod}_R$: the \emph{free
+$R$-module} functor, $S \mapsto R \otimes \Sigma^\infty_+ S$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bousfield Localization and Reflective Subcategories}
+\label{sec:bousfield}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Reflective subcategory]
+\label{def:reflective}
+A full subcategory $\mathcal{D} \hookrightarrow \mathcal{C}$ is
+\term{reflective} if the inclusion has a left adjoint $L : \mathcal{C}
+\to \mathcal{D}$. The composition $\mathcal{C} \xrightarrow{L} \mathcal{D}
+\hookrightarrow \mathcal{C}$ is then an idempotent monad (a \term{localization}).
+\end{definition}
+
+\begin{theorem}[Bousfield localization]
+\label{thm:bousfield}
+For any presentable $\mathcal{C}$ and small set $W$ of morphisms of
+$\mathcal{C}$, there is a reflective subcategory $L_W \mathcal{C}
+\hookrightarrow \mathcal{C}$ whose objects are the \term{$W$-local} ones:
+$x$ such that $\mathrm{Map}_\mathcal{C}(w, x)$ is an equivalence for
+every $w \in W$.
+
+The reflection $L_W : \mathcal{C} \to L_W \mathcal{C}$ inverts every
+morphism in $W$ and is universal among colimit-preserving functors out
+of $\mathcal{C}$ that do.
+\end{theorem}
+
+\begin{remark}[Bousfield localization and presentability]
+Every presentable $\infty$-category arises (up to equivalence) as a
+Bousfield localization of some $\mathcal{P}(\mathcal{C})$: this is
+Theorem~\ref{thm:presentable-characterizations}'s characterization (3).
+In particular, the $\infty$-category of sheaves on a Grothendieck site is
+the Bousfield localization of presheaves of spaces at the covers.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:presentable-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define $\kappa$-filtered.}{A quasi-category $\mathcal{K}$ is $\kappa$-filtered if every diagram of size $< \kappa$ has a cocone.}
+\qaitem{What's a $\kappa$-compact object?}{$x \in \mathcal{C}$ is $\kappa$-compact if $\mathrm{Map}_\mathcal{C}(x, -)$ preserves $\kappa$-filtered colimits.}
+\qaitem{Define accessible.}{$\mathcal{C}$ is accessible if it equals $\mathrm{Ind}^\kappa(\mathcal{C}^\kappa)$ for some $\kappa$ and the small subcategory $\mathcal{C}^\kappa$.}
+\qaitem{Define presentable.}{Cocomplete and accessible. Equivalent: accessible localization of $\mathcal{P}(\mathcal{C})$ for some small $\mathcal{C}$.}
+\qaitem{What are $\omega$-compact objects in $\mathcal{S}$?}{Finite CW complexes (equivalently, finitely generated Kan complexes).}
+\qaitem{Why is $\mathcal{P}(\mathcal{C})$ presentable?}{Cocomplete by construction (limits and colimits computed pointwise); accessible because representables are compact and generate under colimits.}
+\qaitem{What is $\mathrm{Pr}^L$?}{The $\infty$-category of presentable $\infty$-categories with colimit-preserving (left adjoint) functors as morphisms. Closed symmetric monoidal under Lurie tensor product.}
+\qaitem{State the $\infty$-adjoint functor theorem.}{For presentable $\mathcal{C}, \mathcal{D}$: $R : \mathcal{D} \to \mathcal{C}$ has a left adjoint iff $R$ preserves $\infty$-limits and is accessible. Dually for left adjoints.}
+\qaitem{Why does the AFT work?}{Map-Yoneda: limit-preserving accessible $\mathcal{D} \to \mathcal{S}$ is representable; this gives the adjoint value-by-value.}
+\qaitem{What is Bousfield localization?}{For presentable $\mathcal{C}$ and small $W \subseteq \mathrm{Mor}(\mathcal{C})$, the reflective subcategory $L_W \mathcal{C} \subseteq \mathcal{C}$ on $W$-local objects.}
+\qaitem{Define $W$-local.}{$x$ is $W$-local iff $\mathrm{Map}(w, x)$ is an equivalence of spaces for every $w \in W$.}
+\qaitem{Why is every sheaf $\infty$-category a Bousfield localization?}{Sheaves are presheaves local with respect to covers: $\mathrm{Sh}(X) = L_{\mathrm{covers}} \mathcal{P}(\mathrm{Open}(X))$.}
+\qaitem{What is $\mathrm{Ind}^\kappa(\mathcal{D})$?}{The free $\kappa$-filtered colimit completion of $\mathcal{D}$: representables plus all $\kappa$-filtered colimits of them.}
+\qaitem{Why do compactness and accessibility differ from $1$-categories?}{They don't, conceptually — the definitions are direct analogues — but in the $\infty$-setting ``size'' and ``finite generation'' are subtler because of the higher-dimensional structure of mapping spaces.}
+\qaitem{What's a reflective subcategory?}{Full subcategory $\mathcal{D} \hookrightarrow \mathcal{C}$ with a left adjoint $L : \mathcal{C} \to \mathcal{D}$. The composition $\mathcal{C} \to \mathcal{D} \to \mathcal{C}$ is an idempotent endofunctor.}
+\qaitem{Foundational example of localization?}{The localization of $\mathbf{sSet}$ at weak equivalences gives $\mathcal{S}$. The localization of $\mathcal{P}(\mathbf{Aff})$ at étale covers gives the $\infty$-topos of étale stacks.}
+\qaitem{How does presentability help with adjoint existence?}{Presentability ensures that AFT-style ``representability'' arguments terminate (the small-presentation provides a stopping point for transfinite induction).}
+\qaitem{Are all left adjoints in $\mathrm{Pr}^L$ accessible?}{Yes — accessibility of a functor reflects in/out of accessible $\infty$-cats, so left adjoints between presentables are automatically accessible.}
+\qaitem{What's the difference between presentable and locally presentable?}{The terms are interchangeable in most modern literature; ``locally presentable'' emphasizes the underlying $1$-categorical analogue (Adámek–Rosický).}
+\qaitem{What's a generator?}{A small set $\{x_i\}$ of objects such that every object of $\mathcal{C}$ is a colimit of $x_i$'s. Compact objects of an accessible $\infty$-cat form a generator.}
+\qaitem{Why is the Lurie tensor product important?}{It makes $\mathrm{Pr}^L$ symmetric monoidal, allowing tensor products of presentable $\infty$-categories — central to symmetric monoidal $\infty$-categories (Ch 55) and ring spectra.}
+\qaitem{What's the next chapter?}{Ch 53: Stable $\infty$-Categories. Presentability + stability gives ``presentable stable $\infty$-categories'' = $\mathrm{Pr}^L_{\mathrm{Stab}}$ — the working category for stable homotopy theory and derived algebraic geometry.}
+\qaitem{Why does presentability matter in practice?}{Because nearly every $\infty$-category arising in modern mathematics — sheaves, modules, schemes, types — is presentable. The AFT is then a free tool.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{$\kappa$-filtered and $\kappa$-compact.}\quad $\kappa$-filtered:
+diagrams of size $< \kappa$ have cocones. $\kappa$-compact: $\mathrm{Map}(x, -)$
+preserves $\kappa$-filtered colimits.
+
+\textbf{Accessible.}\quad $\mathcal{C} \simeq \mathrm{Ind}^\kappa(\mathcal{C}^\kappa)$
+for some $\kappa$ and small $\mathcal{C}^\kappa$. Generated under
+$\kappa$-filtered colimits by a small set.
+
+\textbf{Presentable.}\quad Cocomplete + accessible. Equivalent
+characterizations: accessible localization of $\mathcal{P}(\mathcal{C})$;
+small generator under colimits; Bousfield localization $\mathcal{P}(\mathcal{C})[W^{-1}]$.
+
+\textbf{$\infty$-AFT.}\quad For presentable $\mathcal{C}, \mathcal{D}$:
+$R$ has a left adjoint iff $R$ preserves $\infty$-limits and is accessible.
+Engine of free constructions throughout higher algebra.
+
+\textbf{Bousfield localization.}\quad For any small $W \subseteq
+\mathrm{Mor}(\mathcal{C})$ in a presentable $\mathcal{C}$, the
+$W$-local subcategory $L_W \mathcal{C}$ is reflective with reflector
+inverting $W$. Every presentable $\infty$-cat is a Bousfield localization
+of some $\mathcal{P}(\mathcal{C})$.
+
+\textbf{$\mathrm{Pr}^L$.}\quad The $\infty$-category of presentable
+$\infty$-categories with colimit-preserving functors. Closed symmetric
+monoidal under Lurie tensor product.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Accessibility.}\quad $\mathcal{C}$ accessible $\iff
+\mathcal{C} \simeq \mathrm{Ind}^\kappa(\mathcal{D})$ for some small
+$\mathcal{D}$ and regular $\kappa$.
+
+\medskip
+\textbf{Presentability.}\quad
+$\mathcal{C}$ presentable $\iff$ cocomplete and accessible.
+
+\medskip
+\textbf{Characterizations (equivalent).}\quad
+\begin{itemize}
+  \item Accessible localization of $\mathcal{P}(\mathcal{D})$.
+  \item Cocomplete with a small generating set.
+  \item $\mathcal{P}(\mathcal{D})[W^{-1}]$ for small $\mathcal{D}, W$.
+\end{itemize}
+
+\medskip
+\textbf{$\infty$-AFT.}\quad For presentable $\mathcal{C}, \mathcal{D}$:
+\begin{equation*}
+  R : \mathcal{D} \to \mathcal{C} \text{ has left adjoint} \iff
+  R \text{ preserves } \infty\text{-limits and is accessible}.
+\end{equation*}
+Dually, $L$ has right adjoint $\iff$ $L$ preserves $\infty$-colimits.
+
+\medskip
+\textbf{Bousfield localization.}\quad $\mathcal{C}$ presentable,
+$W$ small $\Rightarrow L_W \mathcal{C} \hookrightarrow \mathcal{C}$
+reflective; $L_W$ universal among $W$-inverting colimit-preserving
+functors out of $\mathcal{C}$.
+
+\medskip
+\textbf{$\mathrm{Pr}^L$.}\quad The $\infty$-category of presentable
+$\infty$-cats with colimit-preserving functors. Closed symmetric monoidal
+under Lurie tensor.
+\end{formalrestatement}

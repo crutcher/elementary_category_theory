@@ -1,0 +1,293 @@
+% ch56_en_algebras.tex — Volume IV Chapter 20
+
+\chapter{$\mathbb{E}_n$-Algebras and the Little Disks Operads}
+
+\begin{overviewbox}
+The \term{little $n$-disks operad} $\mathbb{E}_n$ is the most important
+family of operads in higher algebra. Its $n$-th component
+$\mathbb{E}_n(k)$ is the space of configurations of $k$ disjoint
+$n$-disks inside the unit $n$-disk. Algebras over $\mathbb{E}_n$ in a
+symmetric monoidal $\infty$-category — \term{$\mathbb{E}_n$-algebras} —
+interpolate between fully associative ($\mathbb{E}_1$) and fully
+commutative ($\mathbb{E}_\infty$) structures, indexed by codimension.
+
+This chapter introduces:
+\begin{itemize}
+  \item Configuration spaces $\mathrm{Conf}_k(\mathbb{R}^n)$ and the
+        action of $\Sigma_k$.
+  \item The little disks operad $\mathbb{E}_n$ in $\mathrm{Top}$ (or
+        $\mathcal{S}$ after fibrant replacement).
+  \item $\mathbb{E}_n$-algebras in symmetric monoidal $\infty$-categories.
+  \item The endpoints: $\mathbb{E}_1 = \mathrm{Assoc}$, $\mathbb{E}_\infty = \mathrm{Comm}$.
+  \item \term{Dunn additivity}: $\mathbb{E}_m \otimes \mathbb{E}_n \simeq
+        \mathbb{E}_{m+n}$ — the operadic tensor product of little disks
+        interpolates dimensions additively.
+\end{itemize}
+
+The applications cited (not developed in detail): factorization homology,
+commutative ring spectra, structured ring spectra, the cohomology of
+loop spaces (May's recognition theorem). The reader who has completed
+this chapter can open Lurie's \emph{Higher Algebra} Chapter~5 directly.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Configuration Spaces}
+\label{sec:configurations}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Configuration space]
+\label{def:configuration}
+For $n \geq 0$ and $k \geq 0$, the \term{configuration space} is
+\begin{equation*}
+  \mathrm{Conf}_k(\mathbb{R}^n) \;=\; \bigl\{(x_1, \ldots, x_k) \in (\mathbb{R}^n)^k : x_i \neq x_j \text{ for } i \neq j\bigr\}.
+\end{equation*}
+The symmetric group $\Sigma_k$ acts on $\mathrm{Conf}_k(\mathbb{R}^n)$ by
+permuting coordinates.
+\end{definition}
+
+\begin{example_thm}[Low-dimensional examples]
+\label{ex:conf-low}
+$\mathrm{Conf}_2(\mathbb{R}) = \{(x, y) \in \mathbb{R}^2 : x \neq y\}$ has
+two connected components (separated by $x = y$). Modulo $\Sigma_2$, one
+component.
+
+$\mathrm{Conf}_2(\mathbb{R}^2) \simeq \mathbb{R}^4 \setminus \mathrm{diag}$
+has homotopy type of $S^1$ (the angle between two points). Quotient by
+$\Sigma_2$: real projective line, $\mathbb{RP}^1 \simeq S^1$.
+
+$\mathrm{Conf}_k(\mathbb{R}^\infty)$ is contractible for every $k$ —
+the infinite-dimensional configuration space ``has room for everything.''
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Little $n$-Disks Operad $\mathbb{E}_n$}
+\label{sec:little-disks}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Little disks $\mathbb{E}_n$]
+\label{def:little-disks}
+For $1 \leq n \leq \infty$, the \term{little $n$-disks operad}
+$\mathbb{E}_n$ has:
+\begin{itemize}
+  \item $\mathbb{E}_n(k) = $ the space of \term{rectilinear embeddings}
+        of $k$ disjoint $n$-disks into the unit $n$-disk. (A rectilinear
+        embedding scales and translates.)
+  \item $\Sigma_k$-action by permuting the disks.
+  \item Composition: nesting embeddings.
+\end{itemize}
+We have $\mathbb{E}_n(k) \simeq \mathrm{Conf}_k(\mathbb{R}^n)$ (the
+configuration of disk centers, weakly equivalently).
+\end{definition}
+
+\begin{howtosay}
+$\mathbb{E}_n$ \sayit{``E-sub-n'' or ``the little $n$-disks operad''};
+also written $\mathbb{E}_n$ or $E_n$ depending on the typographic
+convention. $\mathbb{E}_\infty$ is the colimit as $n \to \infty$.
+\end{howtosay}
+
+\begin{theorem}[$\mathbb{E}_n$ as an $\infty$-operad]
+\label{thm:en-infty-operad}
+$\mathbb{E}_n$ has a canonical structure of an $\infty$-operad in
+$\mathcal{S}$ (the $\infty$-category of spaces), with its $k$-th
+component being the (weak homotopy type of the) configuration space.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\mathbb{E}_n$-Algebras and the Endpoints}
+\label{sec:en-algebras}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\mathbb{E}_n$-algebra]
+\label{def:en-algebra}
+For a symmetric monoidal $\infty$-category $\mathcal{C}^\otimes$, an
+\term{$\mathbb{E}_n$-algebra in $\mathcal{C}$} is an algebra over the
+$\infty$-operad $\mathbb{E}_n$:
+\begin{equation*}
+  \mathrm{Alg}_{\mathbb{E}_n}(\mathcal{C}) \;=\; \mathrm{Fun}_{\mathrm{Fin}_*}^{\mathrm{inert}}(\mathbb{E}_n^\otimes, \mathcal{C}^\otimes).
+\end{equation*}
+\end{definition}
+
+\begin{theorem}[Endpoints of the $\mathbb{E}_n$-tower]
+\label{thm:en-endpoints}
+\begin{itemize}
+  \item $\mathbb{E}_1$-algebras in $\mathcal{C}^\otimes$ are
+        \term{associative monoids in $\mathcal{C}^\otimes$} (the
+        coherent version of associative algebras).
+  \item $\mathbb{E}_\infty$-algebras in $\mathcal{C}^\otimes$ are
+        \term{commutative algebras in $\mathcal{C}^\otimes$} (coherent
+        commutative algebras).
+\end{itemize}
+For each $1 \leq n \leq \infty$, $\mathbb{E}_n$ interpolates:
+$\mathbb{E}_n$-algebras have $n$-disk-parametrized commutativity, weaker
+than full commutativity for $n < \infty$ and weaker than associativity
+for $n = 0$ (which trivializes).
+\end{theorem}
+
+\begin{example_thm}[Ring spectra]
+\label{ex:ring-spectra}
+$\mathbb{E}_n$-algebras in $\mathrm{Sp}$ are \term{$\mathbb{E}_n$-ring
+spectra}. Most prominent cases:
+\begin{itemize}
+  \item $\mathbb{E}_1$-ring spectrum $=$ associative ring spectrum
+        (Lurie's ``$\mathbb{A}_\infty$-ring spectrum'').
+  \item $\mathbb{E}_\infty$-ring spectrum $=$ commutative ring spectrum.
+        Underlies most modern stable homotopy theory: $\mathbb{S}$ (the
+        sphere spectrum), $H\mathbb{Z}$, $K$-theory $KU$, complex
+        cobordism $MU$, all are $\mathbb{E}_\infty$.
+\end{itemize}
+\end{example_thm}
+
+\begin{example_thm}[$\mathbb{E}_2$ in topology: braided monoids]
+\label{ex:e2-braided}
+$\mathbb{E}_2$-algebras in $\mathbf{Set}$ (or $\mathcal{S}$): braided
+monoidal structures. The $\mathbb{E}_2$-operad's configuration spaces
+have non-trivial $\pi_1$ (braids), encoding the data of \emph{half-twists}
+between commuting elements.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Dunn Additivity}
+\label{sec:dunn-additivity}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Dunn additivity]
+\label{thm:dunn}
+For any $m, n \geq 1$, there is an equivalence of $\infty$-operads
+\begin{equation*}
+  \mathbb{E}_m \otimes \mathbb{E}_n \;\simeq\; \mathbb{E}_{m+n},
+\end{equation*}
+where $\otimes$ is the Boardman--Vogt tensor product of $\infty$-operads.
+
+Equivalently: $\mathbb{E}_{m+n}$-algebras are the same as
+$\mathbb{E}_m$-algebras whose underlying multiplication is itself
+$\mathbb{E}_n$-coherent — codimensions add.
+\end{theorem}
+
+\begin{example_thm}[$\mathbb{E}_2 = \mathbb{E}_1 \otimes \mathbb{E}_1$]
+\label{ex:e2-e1-tensor}
+A doubly-monoidal structure (an $\mathbb{E}_1$-algebra in
+$\mathbb{E}_1$-algebras) is exactly an $\mathbb{E}_2$-algebra. This is the
+$\infty$-categorical version of the Eckmann--Hilton argument (Chapter~19):
+two compatible monoid structures form a braided monoid.
+\end{example_thm}
+
+\begin{example_thm}[Limit case]
+\label{ex:e-infty-limit}
+$\mathbb{E}_\infty = \mathrm{colim}_n \mathbb{E}_n$, achieved by stabilizing
+the configuration spaces. Dunn additivity gives $\mathbb{E}_\infty \otimes
+\mathbb{E}_n \simeq \mathbb{E}_\infty$ — adding any finite $n$ to infinity
+remains infinity.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:en-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define $\mathrm{Conf}_k(\mathbb{R}^n)$.}{$k$-tuples of distinct points in $\mathbb{R}^n$. $\Sigma_k$ acts by permutation.}
+\qaitem{What is $\mathrm{Conf}_2(\mathbb{R}^2)$ homotopy-equivalent to?}{$S^1$ (the angle between the two points, modulo translations and scalings).}
+\qaitem{What is $\mathrm{Conf}_k(\mathbb{R}^\infty)$?}{Contractible — every configuration can be ``spread out'' in the infinite-dimensional space.}
+\qaitem{Define the little $n$-disks operad $\mathbb{E}_n$.}{$\mathbb{E}_n(k) = $ rectilinear embeddings of $k$ disjoint $n$-disks into the unit $n$-disk. Equivalently (up to weak equivalence), $\mathrm{Conf}_k(\mathbb{R}^n)$ with $\Sigma_k$-action.}
+\qaitem{What's $\mathbb{E}_\infty$?}{$\mathrm{colim}_n \mathbb{E}_n$: the limit as $n \to \infty$. All configurations become equivalent because $\mathrm{Conf}_k(\mathbb{R}^\infty)$ is contractible.}
+\qaitem{Define an $\mathbb{E}_n$-algebra.}{Algebra over the $\mathbb{E}_n$-operad in a symmetric monoidal $\infty$-category. Concretely: an object with $n$-disk-parametrized multiplication.}
+\qaitem{What's an $\mathbb{E}_1$-algebra?}{Associative monoid (up to coherent homotopy). The most familiar coherent algebra structure.}
+\qaitem{What's an $\mathbb{E}_\infty$-algebra?}{Commutative monoid (coherently). All higher coherences for commutativity are explicit data.}
+\qaitem{Why do $\mathbb{E}_n$-structures interpolate between associativity and commutativity?}{Because configuration spaces $\mathrm{Conf}_k(\mathbb{R}^n)$ have increasingly trivial fundamental groups as $n$ grows: $\pi_1 = $ braid group for $n=2$, becomes simpler for $n \geq 3$.}
+\qaitem{Give the principal example in $\mathrm{Sp}$.}{$\mathbb{E}_\infty$-ring spectra: $\mathbb{S}$ (sphere), $H\mathbb{Z}$, $KU$, $MU$. All foundational ring spectra of stable homotopy theory.}
+\qaitem{What's an $\mathbb{E}_2$-algebra in $\mathbf{Set}$?}{A braided monoidal set: commutative-up-to-braid-twist; rare in concrete sets, common in higher categorical settings.}
+\qaitem{State Dunn additivity.}{$\mathbb{E}_m \otimes \mathbb{E}_n \simeq \mathbb{E}_{m+n}$. Tensor product of little-disks operads adds dimensions.}
+\qaitem{Why is Dunn additivity natural?}{Because configurations in $\mathbb{R}^{m+n}$ ``decompose'' as configurations in $\mathbb{R}^m$ times configurations in $\mathbb{R}^n$ (in the limit of nested compatibility).}
+\qaitem{What does ``$\mathbb{E}_m$-algebra in $\mathbb{E}_n$-algebras'' produce?}{By Dunn: an $\mathbb{E}_{m+n}$-algebra. Eckmann--Hilton in disguise: doubly-monoidal $=$ braided $=$ $\mathbb{E}_2$.}
+\qaitem{Give a non-trivial example of Dunn at work.}{$\mathbb{E}_3$ as $\mathbb{E}_1 \otimes \mathbb{E}_2$: three commuting monoid structures, with the inner two compatible via a braid. Higher coherence between three operations.}
+\qaitem{Are all $\mathbb{E}_\infty$-rings (in $\mathrm{Sp}$) commutative?}{Coherently commutative, yes. Strict commutativity is rare and typically forced by being concentrated in degree 0; coherent commutativity allows higher data without being strict.}
+\qaitem{What's factorization homology?}{An $\mathbb{E}_n$-algebra invariant for $n$-manifolds: $\int_M A$ for $M$ an $n$-manifold and $A$ an $\mathbb{E}_n$-algebra. Generalizes Hochschild homology ($n=1$, $S^1$).}
+\qaitem{What's May's recognition theorem?}{An $\mathbb{E}_n$-algebra in $\mathcal{S}_*$ is equivalent to an $n$-fold loop space $\Omega^n X$ for some $X$. The classical recognition theorem, generalized to all $n$ and to all symmetric monoidal $\infty$-cats.}
+\qaitem{What's the $\mathbb{E}_n$-center?}{For an $\mathbb{E}_n$-algebra $A$, the center $Z_{\mathbb{E}_n}(A)$ is the largest $\mathbb{E}_{n+1}$-algebra mapping to $A$. Generalizes the classical center of an associative algebra.}
+\qaitem{Where does this chapter take us?}{Foundations of higher algebra à la Lurie's HA Chapter 5. Reader is prepared to encounter $\mathbb{E}_n$-algebras in actual contexts: ring spectra, derived geometry, factorization homology.}
+\qaitem{What's the next chapter?}{Ch~57: $A_\infty$ and $L_\infty$ algebras. Strong-homotopy associative ($A_\infty$, equivalent to $\mathbb{E}_1$) and Lie ($L_\infty$, Koszul dual of $A_\infty$) algebras, with explicit operadic presentations.}
+\qaitem{Are $\mathbb{E}_n$-operads the only operads in higher algebra?}{No — $\mathrm{Lie}_\infty$, $A_\infty$, $C_\infty$, and many bespoke operads play key roles. The $\mathbb{E}_n$-family is foundational because of Dunn additivity.}
+\qaitem{What's the symmetric counterpart of $\mathbb{E}_n$?}{$\mathbb{E}_\infty$ for fully symmetric (commutative). The $\Sigma_k$-action on $\mathbb{E}_n(k)$ becomes increasingly homotopy-trivial as $n$ grows.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Configuration spaces.}\quad $\mathrm{Conf}_k(\mathbb{R}^n)$:
+$k$-tuples of distinct points in $\mathbb{R}^n$. Foundational object;
+$\mathbb{E}_n(k) \simeq \mathrm{Conf}_k(\mathbb{R}^n)$ as $\Sigma_k$-spaces.
+
+\textbf{Little disks $\mathbb{E}_n$.}\quad $\infty$-operad whose
+$k$-th component is the configuration of $k$ disjoint $n$-disks in
+the unit $n$-disk.
+
+\textbf{$\mathbb{E}_n$-algebra.}\quad An algebra over $\mathbb{E}_n$ in
+a symmetric monoidal $\infty$-category. $\mathbb{E}_1 = $ associative;
+$\mathbb{E}_\infty = $ commutative; intermediate $n$ interpolate.
+
+\textbf{Foundational examples.}\quad In $\mathrm{Sp}$: $\mathbb{S}, H\mathbb{Z},
+KU, MU$ are all $\mathbb{E}_\infty$-ring spectra. $\mathbb{E}_2$ in
+$\mathcal{S}$: braided monoidal spaces (e.g., $2$-fold loop spaces).
+
+\textbf{Dunn additivity.}\quad $\mathbb{E}_m \otimes \mathbb{E}_n \simeq
+\mathbb{E}_{m+n}$. Codimensions add under operadic tensor product.
+Eckmann--Hilton as a special case.
+
+\textbf{Bridge to applications.}\quad Factorization homology, ring
+spectra, May's recognition theorem, $\mathbb{E}_n$-center,
+$\mathbb{E}_n$-Hochschild homology.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Configuration space.}\quad
+$\mathrm{Conf}_k(\mathbb{R}^n) = \{(x_1, \ldots, x_k) \in (\mathbb{R}^n)^k : x_i \neq x_j\}$.
+
+\medskip
+\textbf{$\mathbb{E}_n$-operad.}\quad
+$\mathbb{E}_n(k) \simeq \mathrm{Conf}_k(\mathbb{R}^n)$ as $\Sigma_k$-space;
+composition by nesting.
+
+\medskip
+\textbf{$\mathbb{E}_n$-algebra.}\quad
+$\mathrm{Alg}_{\mathbb{E}_n}(\mathcal{C})$: $\infty$-functor
+$\mathbb{E}_n^\otimes \to \mathcal{C}^\otimes$ preserving inert coCartesian.
+
+\medskip
+\textbf{Endpoints.}\quad
+$\mathbb{E}_1 = \mathrm{Assoc}$; $\mathbb{E}_\infty = \mathrm{Comm}$.
+
+\medskip
+\textbf{Dunn additivity.}\quad
+$\mathbb{E}_m \otimes \mathbb{E}_n \simeq \mathbb{E}_{m+n}$ for $m, n \geq 0$.
+
+\medskip
+\textbf{Examples.}\quad
+$\mathbb{E}_\infty$-ring spectra: $\mathbb{S}, H\mathbb{Z}, KU, MU$;
+$\mathbb{E}_2$ in $\mathcal{S}$: braided $\infty$-monoids;
+$\mathbb{E}_n$-algebras in $\mathrm{Sp}$ for general $n$.
+\end{formalrestatement}

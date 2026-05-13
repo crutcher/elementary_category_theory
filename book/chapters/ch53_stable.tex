@@ -1,0 +1,342 @@
+% ch53_stable.tex — Volume IV Chapter 17
+
+\chapter{Stable $\infty$-Categories}
+
+\begin{overviewbox}
+A \term{stable $\infty$-category} is the $\infty$-categorical analogue of
+an abelian category (Chapter~13/20) and, more directly, of a triangulated
+category (Chapter~54). The defining property — every fibre sequence is a
+cofibre sequence and vice versa — captures the duality between left and
+right exactness that characterizes additive categories.
+
+Equivalently, a stable $\infty$-category is a pointed $\infty$-category
+in which the suspension functor $\Sigma : \mathcal{C} \to \mathcal{C}$ is
+an equivalence. This makes the homotopy category $\mathrm{ho}(\mathcal{C})$
+triangulated (Chapter~54).
+
+The motivating examples are:
+\begin{itemize}
+  \item \term{Spectra} $\mathrm{Sp}$: the stabilization of $\mathcal{S}$,
+        the universal stable $\infty$-category receiving a colimit-preserving
+        functor from $\mathcal{S}_*$ (pointed spaces).
+  \item \term{Derived categories} $\mathcal{D}(\mathcal{A})$ of an abelian
+        category, lifted to stable $\infty$-categories via the dg-nerve.
+  \item \term{Module categories} $\mathrm{Mod}_R$ for an
+        $\mathbb{E}_\infty$-ring spectrum $R$.
+\end{itemize}
+
+Stable $\infty$-categories are the working substrate of stable homotopy
+theory, derived algebraic geometry, and the modern picture of homological
+algebra. The class $\mathrm{Pr}^L_{\mathrm{St}}$ of presentable stable
+$\infty$-categories is closed symmetric monoidal under Lurie's tensor
+product, and serves as the universal home for stable phenomena.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Pointed $\infty$-Categories}
+\label{sec:pointed}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Pointed $\infty$-category]
+\label{def:pointed-qcat}
+An $\infty$-category $\mathcal{C}$ is \term{pointed} if it admits a
+\term{zero object}: an object $0 \in \mathcal{C}$ that is both initial
+and terminal. Equivalently, the unique map $\emptyset \to \mathrm{terminal}$
+in $\mathcal{C}$ is an equivalence.
+\end{definition}
+
+\begin{example_thm}[Pointed examples]
+\label{ex:pointed-examples}
+\textbf{Pointed spaces $\mathcal{S}_*$:} the slice $\mathcal{S}_{*/}$
+under a chosen point. Zero object: the point.
+
+\textbf{Chain complexes $\mathbf{Ch}(\mathcal{A})$:} the zero complex
+is initial and terminal.
+
+\textbf{Stable $\infty$-categories:} every stable $\infty$-cat is
+pointed (a defining feature).
+
+\textbf{Not pointed:} $\mathcal{S}$ itself. The empty space (initial)
+and the point (terminal) differ.
+\end{example_thm}
+
+\begin{remark}[Stabilization and pointed]
+Pointed-ness is a prerequisite for stability: without a zero object, the
+fibre/cofibre constructions are undefined. The functor $\mathcal{S} \to
+\mathcal{S}_*$ adjoining a disjoint basepoint is the universal way to
+pointify, and is left adjoint to the forgetful $\mathcal{S}_* \to \mathcal{S}$.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Fibre and Cofibre Sequences}
+\label{sec:fibre-cofibre}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Fibre and cofibre]
+\label{def:fibre-cofibre}
+Let $\mathcal{C}$ be a pointed $\infty$-category with a zero object $0$.
+For a morphism $f : x \to y$:
+\begin{itemize}
+  \item The \term{fibre} $\mathrm{fib}(f)$ is the $\infty$-pullback of
+        $f$ along $0 \to y$ (when it exists).
+  \item The \term{cofibre} $\mathrm{cofib}(f)$ is the $\infty$-pushout of
+        $f$ along $x \to 0$ (when it exists).
+\end{itemize}
+
+A \term{fibre sequence} is a sequence $a \to b \to c$ where $a = \mathrm{fib}(b \to c)$.
+
+A \term{cofibre sequence} is a sequence $a \to b \to c$ where $c = \mathrm{cofib}(a \to b)$.
+\end{definition}
+
+\begin{theorem}[Loop and suspension]
+\label{thm:loop-suspension}
+The fibre and cofibre constructions define endofunctors
+$\Omega = \mathrm{fib}(0 \to -) : \mathcal{C} \to \mathcal{C}$ and
+$\Sigma = \mathrm{cofib}(- \to 0) : \mathcal{C} \to \mathcal{C}$ on a
+pointed cocomplete $\mathcal{C}$, with $\Sigma \dashv \Omega$. Called the
+\term{suspension} and \term{loop} functors.
+\end{theorem}
+
+\begin{example_thm}[Loop and suspension in $\mathcal{S}_*$]
+\label{ex:loop-sus-spaces}
+For pointed spaces $\mathcal{S}_*$:
+\begin{itemize}
+  \item $\Sigma X = X \wedge S^1$ (reduced suspension).
+  \item $\Omega X = \mathrm{Map}_*(S^1, X)$ (based loop space).
+\end{itemize}
+The adjunction $\Sigma \dashv \Omega$ is the classical loop-suspension
+adjunction.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Stable $\infty$-Categories}
+\label{sec:stable-qcat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Stable $\infty$-category]
+\label{def:stable-qcat}
+An $\infty$-category $\mathcal{C}$ is \term{stable} if it is pointed,
+admits all finite limits and colimits, and satisfies:
+\begin{itemize}
+  \item A square is a pullback iff it is a pushout. Equivalently:
+        every fibre sequence is a cofibre sequence and vice versa.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Equivalent characterizations of stability]
+\label{thm:stable-equiv}
+For a pointed cocomplete $\mathcal{C}$, the following are equivalent:
+\begin{enumerate}
+  \item $\mathcal{C}$ is stable.
+  \item The suspension functor $\Sigma : \mathcal{C} \to \mathcal{C}$ is
+        an equivalence (with inverse $\Omega$).
+  \item Every fibre sequence in $\mathcal{C}$ extends to a long fibre
+        sequence
+        $\cdots \to \Omega c \to a \to b \to c \to \Sigma a \to \cdots$
+        which is also a long cofibre sequence.
+\end{enumerate}
+\end{theorem}
+
+\begin{example_thm}[Spectra]
+\label{ex:spectra}
+The $\infty$-category $\mathrm{Sp}$ of \term{spectra} is the universal
+stable $\infty$-category receiving a colimit-preserving functor from
+$\mathcal{S}_*$:
+\begin{equation*}
+  \Sigma^\infty : \mathcal{S}_* \to \mathrm{Sp}, \qquad \Omega^\infty : \mathrm{Sp} \to \mathcal{S}_*.
+\end{equation*}
+Equivalently, $\mathrm{Sp}$ is the inverse limit of the sequence
+\begin{equation*}
+  \cdots \to \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_*.
+\end{equation*}
+Spectra make $\Sigma$ invertible by construction.
+\end{example_thm}
+
+\begin{example_thm}[Derived $\infty$-categories]
+\label{ex:derived-stable}
+For an abelian category $\mathcal{A}$ with enough projectives, the
+derived $\infty$-category $\mathcal{D}(\mathcal{A})$ (a refinement of
+Chapter~40's homotopy-category derived category) is stable. Objects
+are chain complexes; the suspension is shift by one.
+\end{example_thm}
+
+\begin{example_thm}[Modules over an $\mathbb{E}_\infty$-ring]
+\label{ex:modules-stable}
+For an $\mathbb{E}_\infty$-ring spectrum $R$, the $\infty$-category
+$\mathrm{Mod}_R$ of $R$-modules is stable. This is the natural home of
+higher algebra: ring spectra, structured ring spectra, Hochschild
+homology, K-theory, all live in stable $\infty$-categories.
+\end{example_thm}
+
+\subsection{Reorganizing: stability and presentability}
+
+\begin{theorem}[$\mathrm{Pr}^L_{\mathrm{St}}$]
+\label{thm:prl-st}
+The class $\mathrm{Pr}^L_{\mathrm{St}}$ of presentable stable
+$\infty$-categories with colimit-preserving functors is closed symmetric
+monoidal under Lurie's tensor product. The unit is $\mathrm{Sp}$:
+\begin{equation*}
+  \mathrm{Sp} \otimes \mathcal{C} \simeq \mathcal{C}
+\end{equation*}
+for any $\mathcal{C} \in \mathrm{Pr}^L_{\mathrm{St}}$.
+\end{theorem}
+
+\begin{remark}[Lurie tensor product]
+The Lurie tensor product on $\mathrm{Pr}^L$ is the universal way to
+combine two presentable $\infty$-categories: $\mathcal{C} \otimes \mathcal{D}$
+classifies functors bilinear in $\mathcal{C}, \mathcal{D}$ that preserve
+colimits in each variable. Restricting to $\mathrm{Pr}^L_{\mathrm{St}}$
+preserves all the structure plus stability; spectra act as the unit
+because $\Sigma^\infty \dashv \Omega^\infty$ exhibits stabilization
+as tensoring with $\mathrm{Sp}$.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exact Functors}
+\label{sec:exact-functors}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Exact functor]
+\label{def:exact-functor}
+A functor $F : \mathcal{C} \to \mathcal{D}$ between stable $\infty$-categories
+is \term{exact} if it preserves all finite limits (equivalently, finite
+colimits — they coincide in stable $\infty$-categories).
+\end{definition}
+
+\begin{theorem}[Exact = colimit-preserving on finite limits]
+\label{thm:exact-equivalent}
+For stable $\infty$-categories $\mathcal{C}, \mathcal{D}$, the following are equivalent:
+\begin{enumerate}
+  \item $F$ preserves finite limits.
+  \item $F$ preserves finite colimits.
+  \item $F$ preserves fibre sequences.
+  \item $F$ preserves cofibre sequences.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Exactness in derived $\infty$-cats]
+For $\mathcal{D}(\mathcal{A}) \to \mathcal{D}(\mathcal{B})$ exact functors,
+exactness coincides with the classical notion of \term{exact functors
+between abelian categories} extended to derived categories. Derived
+tensor and derived hom (Chapter~42) are exact in this sense.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:stable-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a pointed $\infty$-category.}{One with a zero object: both initial and terminal.}
+\qaitem{Define fibre and cofibre.}{$\mathrm{fib}(f) = $ pullback of $f : x \to y$ along $0 \to y$. $\mathrm{cofib}(f) = $ pushout of $f$ along $x \to 0$.}
+\qaitem{Define suspension and loop.}{$\Sigma x = \mathrm{cofib}(x \to 0)$; $\Omega x = \mathrm{fib}(0 \to x)$. Adjoint: $\Sigma \dashv \Omega$.}
+\qaitem{Define a stable $\infty$-category.}{Pointed, with finite (co)limits, where pullback squares $=$ pushout squares. Equivalently: $\Sigma$ is an equivalence.}
+\qaitem{Why are stable $\infty$-cats called ``stable''?}{Because $\Sigma$ is invertible: ``susupension is no longer adding information.'' The homotopy theory has reached an equilibrium between past and future.}
+\qaitem{What is $\mathrm{Sp}$?}{The universal stable $\infty$-cat receiving a colimit-preserving functor from $\mathcal{S}_*$. Equivalently, $\lim(\cdots \to \mathcal{S}_* \xrightarrow{\Omega} \mathcal{S}_*)$.}
+\qaitem{Why is $\mathcal{S}$ not stable?}{$\Sigma S^0 = S^1$, but $\Omega S^0$ is the point — not an inverse. The suspension is not invertible on spaces.}
+\qaitem{Is $\mathcal{D}(\mathcal{A})$ stable?}{Yes, for any abelian $\mathcal{A}$. Suspension is shift by one: $\Sigma C = C[1]$.}
+\qaitem{What is $\mathrm{Mod}_R$ for $R$ an $\mathbb{E}_\infty$-ring spectrum?}{The stable $\infty$-cat of $R$-module spectra. Foundational example of higher algebra; presentable and stable.}
+\qaitem{What is $\mathrm{Pr}^L_{\mathrm{St}}$?}{Presentable stable $\infty$-cats with colimit-preserving functors. Closed symmetric monoidal under Lurie tensor; unit is $\mathrm{Sp}$.}
+\qaitem{Why is $\mathrm{Sp}$ the unit?}{Because $\mathcal{S}_* \otimes \mathcal{C} \simeq \mathcal{C}$ when $\mathcal{C}$ is pointed (since pointed-ness is the unit on $\mathcal{S}_*$-side), and stabilizing $\mathcal{S}_*$ gives $\mathrm{Sp}$. Tensoring with $\mathrm{Sp}$ becomes the identity on stable categories.}
+\qaitem{Define an exact functor.}{Preserves finite limits (equivalently, finite colimits) between stable $\infty$-categories.}
+\qaitem{Why do limits and colimits coincide in stable cats?}{Because pullbacks $=$ pushouts: finite limits and colimits are built from the same data.}
+\qaitem{What's a long fibre sequence?}{$\cdots \to \Omega^2 c \to \Omega b \to \Omega a \to a \to b \to c \to \Sigma a \to \Sigma b \to \cdots$. Extends a single fibre sequence by iterated $\Omega$ and $\Sigma$.}
+\qaitem{Equivalent: long cofibre sequence?}{Yes, the same data — in a stable $\infty$-category, fibre and cofibre sequences are interchangeable.}
+\qaitem{Why are stable $\infty$-cats the home of homological algebra?}{Because the fibre/cofibre interchangeability captures additivity: $\mathrm{ho}$ of a stable $\infty$-cat is automatically triangulated (Chapter~54).}
+\qaitem{What's the relation to chain complexes?}{$\mathcal{D}(\mathcal{A})$ is the principal example. Chain complexes of $R$-modules underly $\mathrm{Mod}_R$ for $R$ a discrete ring.}
+\qaitem{Where does stable homotopy theory live?}{In $\mathrm{Sp}$, the $\infty$-category of spectra. Spectra are the generalized cohomology theories, ring spectra, and stable analogues of spaces.}
+\qaitem{Why $\mathbb{E}_\infty$-ring spectrum?}{Because commutativity in $\mathrm{Sp}$ is coherence-up-to-everything; an $\mathbb{E}_\infty$-structure (Ch 56) provides the full coherent commutativity.}
+\qaitem{Does stability respect equivalences?}{Yes — it's an invariant of the $\infty$-categorical equivalence class.}
+\qaitem{Can a $1$-category be a stable $\infty$-category?}{Only trivially: the zero category, or any pointed groupoid. A non-trivial stable $\infty$-cat necessarily has higher coherence.}
+\qaitem{What's a t-structure (preview)?}{Chapter~54: a way to extract an abelian \emph{heart} from a stable $\infty$-cat. Generalizes $H_0$ for chain complexes.}
+\qaitem{What's the homotopy hypothesis's avatar here?}{The stabilization $\mathcal{S}_* \to \mathrm{Sp}$ extends the homotopy hypothesis to its stable analogue: spectra are the universal stable home for pointed homotopy types.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Pointed.}\quad $\mathcal{C}$ pointed iff has a zero object
+(initial $=$ terminal). Prerequisite for fibre/cofibre.
+
+\textbf{Fibre/cofibre.}\quad $\mathrm{fib}(f) = $ pullback of $f$ along
+$0 \to y$; $\mathrm{cofib}(f) = $ pushout along $x \to 0$. $\Sigma$ and
+$\Omega$: $\Sigma x = \mathrm{cofib}(x \to 0)$, $\Omega x = \mathrm{fib}(0 \to x)$.
+
+\textbf{Stable.}\quad Pointed with finite (co)limits, pullback squares
+$=$ pushout squares. Equivalent: $\Sigma : \mathcal{C} \to \mathcal{C}$
+an equivalence.
+
+\textbf{Examples.}\quad $\mathrm{Sp}$ (universal stable receiving
+$\mathcal{S}_*$); $\mathcal{D}(\mathcal{A})$ (derived $\infty$-cat);
+$\mathrm{Mod}_R$ for $R \in \mathrm{CAlg}^\infty(\mathrm{Sp})$.
+
+\textbf{$\mathrm{Pr}^L_{\mathrm{St}}$.}\quad Presentable stable
+$\infty$-cats with colimit-preserving functors; closed symmetric
+monoidal under Lurie tensor; unit $\mathrm{Sp}$.
+
+\textbf{Exact functors.}\quad Between stable $\infty$-cats, preserve
+finite limits $\iff$ preserve finite colimits $\iff$ preserve
+fibre/cofibre sequences.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Pointed.}\quad $\mathcal{C}$ pointed: $\exists\, 0 \in \mathcal{C}$
+with $0$ initial and terminal.
+
+\medskip
+\textbf{Fibre/cofibre.}\quad
+$\mathrm{fib}(f) = 0 \times_y x$;
+$\mathrm{cofib}(f) = 0 \sqcup_x y$.
+$\Omega = \mathrm{fib}(0 \to -)$, $\Sigma = \mathrm{cofib}(- \to 0)$,
+$\Sigma \dashv \Omega$.
+
+\medskip
+\textbf{Stable.}\quad $\mathcal{C}$ stable $\iff$ pointed, finite (co)complete,
+and: square is pullback $\iff$ pushout.
+
+\medskip
+\textbf{Equivalent characterizations.}\quad
+\begin{itemize}
+  \item $\Sigma$ is an equivalence.
+  \item Every fibre sequence is a cofibre sequence.
+  \item $\mathcal{C}$ has a triangulated homotopy category (Chapter~54).
+\end{itemize}
+
+\medskip
+\textbf{Foundational examples.}\quad
+$\mathrm{Sp}$; $\mathcal{D}(\mathcal{A})$; $\mathrm{Mod}_R$.
+
+\medskip
+\textbf{$\mathrm{Pr}^L_{\mathrm{St}}$.}\quad
+Closed symmetric monoidal under Lurie tensor; $\mathrm{Sp}$ unit;
+$\mathrm{Sp} \otimes \mathcal{C} \simeq \mathcal{C}$.
+
+\medskip
+\textbf{Exact.}\quad $F$ between stable $\infty$-cats exact $\iff$
+preserves finite limits $\iff$ preserves finite colimits.
+\end{formalrestatement}
