@@ -1,0 +1,332 @@
+% ch57_ainf_linf.tex — Volume IV Chapter 21
+
+\chapter{$A_\infty$- and $L_\infty$-Algebras}
+
+\begin{overviewbox}
+$A_\infty$- and $L_\infty$-algebras are the strong-homotopy variants of
+associative and Lie algebras. Where an associative algebra has a single
+multiplication $m_2 : V \otimes V \to V$ satisfying $m_2(m_2 \otimes 1) =
+m_2(1 \otimes m_2)$ exactly, an $A_\infty$-algebra has higher operations
+$m_n : V^{\otimes n} \to V$ for every $n \geq 2$, with associativity
+witnessed by an infinite tower of constraints involving the $m_n$'s.
+
+The chapter develops:
+\begin{itemize}
+  \item $A_\infty$-algebras as graded vector spaces with operations
+        $m_n$ of degree $2-n$, satisfying Stasheff's relations.
+  \item \term{Stasheff associahedra} $K_n$: polytopes encoding the
+        higher associativity.
+  \item Equivalence with $\mathbb{E}_1$-algebras in chain complexes /
+        spectra.
+  \item $L_\infty$-algebras as the Lie analogue: symmetric brackets
+        $l_n : V^{\wedge n} \to V$ with Jacobi-up-to-higher-coherence.
+  \item \term{Bar/cobar duality} and the Koszul-dual relationship
+        $A_\infty \leftrightarrow L_\infty^{\mathrm{cog}}$.
+\end{itemize}
+
+These algebras are the workhorses of homotopical and deformation theory:
+deformation theory of associative algebras via $A_\infty$; Maurer-Cartan
+theory and BV formalism via $L_\infty$; rational homotopy theory; the
+modern picture of derived categories.
+
+Chapter~57 closes Cluster~G (higher algebra). Phase~5 (Ch~58--60) opens
+to derived algebraic geometry, homotopy type theory, and the synthesis
+of Volume~IV.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$A_\infty$-Algebras}
+\label{sec:Ainf}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$A_\infty$-algebra]
+\label{def:Ainf-algebra}
+An \term{$A_\infty$-algebra} over a field $k$ is a $\mathbb{Z}$-graded
+$k$-vector space $V = \bigoplus_n V^n$ equipped with multilinear
+operations
+\begin{equation*}
+  m_n : V^{\otimes n} \to V, \quad n \geq 1,
+\end{equation*}
+each of degree $2 - n$, satisfying the \term{Stasheff identities}:
+for each $n \geq 1$,
+\begin{equation*}
+  \sum_{r + s + t = n,\; s \geq 1} (-1)^{r + st}\, m_{r + 1 + t}(\mathbf{1}^{\otimes r} \otimes m_s \otimes \mathbf{1}^{\otimes t}) \;=\; 0.
+\end{equation*}
+\end{definition}
+
+\begin{howtosay}
+$A_\infty$-algebra \sayit{``A-infinity algebra'' or ``strong-homotopy
+associative algebra''}; $m_n$ \sayit{``the $n$-th $A_\infty$-operation''}.
+The notation $A_\infty$ comes from ``associative up to homotopy of all
+orders.''
+\end{howtosay}
+
+\begin{example_thm}[Low-order Stasheff identities]
+\label{ex:stasheff-low}
+\textbf{$n = 1$:} $m_1 m_1 = 0$. So $m_1$ is a degree-$1$ differential.
+
+\textbf{$n = 2$:} $m_1 m_2 + m_2(m_1 \otimes 1) + m_2(1 \otimes m_1) = 0$.
+Leibniz: $m_1$ is a derivation for $m_2$.
+
+\textbf{$n = 3$:} $m_2(m_2 \otimes 1) - m_2(1 \otimes m_2) = m_1 m_3 + m_3(m_1 \otimes 1 \otimes 1) + m_3(1 \otimes m_1 \otimes 1) + m_3(1 \otimes 1 \otimes m_1)$.
+Associativity of $m_2$ holds modulo $m_3$-corrections — the higher
+operation $m_3$ witnesses non-associativity.
+\end{example_thm}
+
+\begin{theorem}[$A_\infty = \mathbb{E}_1$ in chain complexes]
+\label{thm:Ainf-E1}
+The category of $A_\infty$-algebras over $k$ is equivalent (as an
+$\infty$-category) to the category of $\mathbb{E}_1$-algebras in
+$\mathbf{Ch}(k)$ (chain complexes of $k$-vector spaces with their
+natural symmetric monoidal structure). Equivalently: an $A_\infty$-algebra
+is exactly a homotopy associative algebra in $\mathbf{Ch}(k)$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Stasheff Associahedra}
+\label{sec:associahedra}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Associahedron $K_n$]
+\label{def:associahedron}
+The \term{$n$-th Stasheff associahedron} $K_n$ ($n \geq 2$) is a convex
+polytope of dimension $n - 2$ whose vertices are in bijection with the
+ways to fully parenthesize a product of $n$ symbols. Edges correspond to
+single re-bracketings; higher-dimensional faces encode higher-order
+associativities.
+\end{definition}
+
+\begin{example_thm}[Small associahedra]
+\label{ex:associahedra-low}
+\begin{itemize}
+  \item $K_2 = $ point: one way to parenthesize $ab$.
+  \item $K_3 = $ interval: two parenthesizations $(ab)c$ and $a(bc)$,
+        with an edge between them.
+  \item $K_4 = $ pentagon: five parenthesizations of $abcd$
+        (the Mac Lane pentagon, Chapter~19), with edges along
+        $5$ re-bracketings.
+  \item $K_5 = $ a $3$-dimensional polytope with $14$ vertices.
+\end{itemize}
+\end{example_thm}
+
+\begin{theorem}[$A_\infty$-operad via associahedra]
+\label{thm:Ainf-operad-K}
+The chain operad whose $n$-th component is the cellular chain complex
+of $K_n$ is exactly the $A_\infty$-operad. Algebras over this operad
+in $\mathbf{Ch}(k)$ are $A_\infty$-algebras.
+
+The topological operad whose $n$-th component is $K_n$ (with appropriate
+gluing) is weakly equivalent to $\mathbb{E}_1$.
+\end{theorem}
+
+\begin{remark}[Mac Lane pentagon revisited]
+\label{rem:mac-lane-pentagon}
+The pentagon of Mac Lane coherence (Chapter~19) is exactly the
+boundary of $K_4$. Mac Lane's theorem says the pentagon commutes; the
+Stasheff picture says the pentagon is the natural witness for higher
+associativity. In an $A_\infty$-algebra, the pentagon is replaced by
+$3$-dimensional $K_5$, then $K_6$, and so on — the higher associahedra
+encode all higher coherences.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$L_\infty$-Algebras}
+\label{sec:Linf}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$L_\infty$-algebra]
+\label{def:Linf-algebra}
+An \term{$L_\infty$-algebra} over $k$ is a $\mathbb{Z}$-graded vector
+space $V$ with symmetric (in a graded sense) operations
+\begin{equation*}
+  l_n : V^{\wedge n} \to V, \quad n \geq 1,
+\end{equation*}
+each of degree $2 - n$, satisfying the \term{generalized Jacobi
+identities}:
+\begin{equation*}
+  \sum_{i + j = n + 1} \sum_{\sigma \in \mathrm{Sh}(i, n - i)} (-1)^\sigma \chi(\sigma) \, l_j(l_i(x_{\sigma(1)}, \ldots, x_{\sigma(i)}), x_{\sigma(i + 1)}, \ldots, x_{\sigma(n)}) \;=\; 0,
+\end{equation*}
+where $\mathrm{Sh}(i, n - i)$ are unshuffles and $\chi(\sigma)$ is the
+Koszul sign.
+\end{definition}
+
+\begin{howtosay}
+$L_\infty$-algebra \sayit{``L-infinity algebra'' or ``strong-homotopy
+Lie algebra''}; $l_n$ \sayit{``the $n$-th $L_\infty$-bracket''}.
+\end{howtosay}
+
+\begin{example_thm}[Low-order $L_\infty$-identities]
+\label{ex:linf-low}
+\textbf{$n = 1$:} $l_1 l_1 = 0$. Differential.
+
+\textbf{$n = 2$:} $l_1 l_2 + l_2(l_1 \otimes 1) + l_2(1 \otimes l_1) = 0$ (with appropriate Koszul signs).
+Leibniz.
+
+\textbf{$n = 3$:} The graded Jacobi identity holds up to a $l_1$-coboundary
+involving $l_3$. The bracket $l_2$ is Jacobi-up-to-homotopy.
+\end{example_thm}
+
+\begin{theorem}[$L_\infty$ and rational homotopy]
+\label{thm:Linf-rht}
+Rational homotopy types of simply connected spaces are equivalent to
+$L_\infty$-algebras over $\mathbb{Q}$ (Sullivan, Quillen). The
+$L_\infty$-structure on $\pi_*(X) \otimes \mathbb{Q}$ encodes the
+rational homotopy type completely.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bar/Cobar Duality and Koszul Duality}
+\label{sec:bar-cobar-koszul}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Bar and cobar]
+\label{def:bar-cobar}
+For an $A_\infty$-algebra $A$, the \term{bar construction} $B A$ is the
+free coassociative coalgebra $T(s A)$ on the suspension $s A$, with
+differential $b$ obtained from the operations $m_n$ via a specific
+formula. Dually, for a coassociative coalgebra $C$ (with differential),
+the \term{cobar construction} $\Omega C$ is the free associative algebra
+on the desuspension $s^{-1} C$, with differential from the coproduct.
+
+$B \dashv \Omega$ is an adjunction; for connected $A_\infty$-algebras,
+$\Omega B A \xrightarrow{\sim} A$ is a quasi-isomorphism.
+\end{definition}
+
+\begin{theorem}[Koszul duality, $A_\infty \leftrightarrow L_\infty^{\mathrm{coalg}}$]
+\label{thm:koszul-duality-Ainf-Linf}
+There is a Quillen-equivalent pair of adjoint functors connecting
+$A_\infty$-algebras and $L_\infty$-coalgebras, induced by the
+bar/cobar adjunction. This is the \term{Koszul duality} for the
+associative and Lie operads:
+\begin{equation*}
+  \mathrm{Assoc}^! \simeq \mathrm{Lie}, \quad \mathrm{Lie}^! \simeq \mathrm{Assoc}.
+\end{equation*}
+\end{theorem}
+
+\begin{remark}[Maurer–Cartan in deformation theory]
+$L_\infty$-algebras govern derived deformation theory: a deformation
+problem over $k$ corresponds to a $\mathrm{Spec}$-formal moduli problem,
+which by Lurie's theorem (HA 1.3) is equivalent to an $L_\infty$-algebra.
+Solutions to the deformation problem are \term{Maurer–Cartan elements}
+$x \in V^1$ satisfying $l_1 x + \frac{1}{2} l_2(x, x) + \frac{1}{6}
+l_3(x, x, x) + \cdots = 0$.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:ainf-linf-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define an $A_\infty$-algebra.}{Graded vector space $V$ with operations $m_n : V^{\otimes n} \to V$ of degree $2-n$ satisfying the Stasheff identities.}
+\qaitem{What does the $n=1$ Stasheff identity say?}{$m_1^2 = 0$. $m_1$ is a differential.}
+\qaitem{What does the $n=3$ Stasheff identity say?}{$m_2$ is associative up to a coboundary involving $m_3$. The $m_3$-term is the explicit non-associativity correction.}
+\qaitem{What's the operadic statement?}{$A_\infty$-algebras $=$ algebras over an operadic resolution of $\mathrm{Assoc}$ via Stasheff associahedra $K_n$. Equivalently, $\mathbb{E}_1$-algebras in $\mathbf{Ch}(k)$.}
+\qaitem{Define the $n$-th associahedron $K_n$.}{A convex polytope of dimension $n-2$ whose vertices are full parenthesizations of $n$ symbols. Edges = single re-bracketings; faces = higher coherences.}
+\qaitem{What is $K_4$?}{The Mac Lane pentagon: $5$ parenthesizations of $abcd$, with $5$ edges (re-bracketings).}
+\qaitem{Define an $L_\infty$-algebra.}{Graded vector space $V$ with symmetric brackets $l_n : V^{\wedge n} \to V$ of degree $2-n$, satisfying generalized Jacobi identities.}
+\qaitem{What does the $n=3$ $L_\infty$-identity say?}{Jacobi for $l_2$ holds up to a coboundary involving $l_3$. Strong-homotopy Jacobi.}
+\qaitem{State Koszul duality.}{$\mathrm{Assoc}^! \simeq \mathrm{Lie}$ and $\mathrm{Lie}^! \simeq \mathrm{Assoc}$. Bar/cobar adjunction is the implementation.}
+\qaitem{What's a Maurer–Cartan element?}{$x \in V^1$ with $\sum_n \tfrac{1}{n!} l_n(x, \ldots, x) = 0$. Solutions to deformation problems in the $L_\infty$-formalism.}
+\qaitem{Where does $L_\infty$ appear in deformation theory?}{Every formal moduli problem over $k$ is equivalent to an $L_\infty$-algebra; solutions to the moduli problem correspond to Maurer–Cartan elements modulo gauge.}
+\qaitem{Why use $A_\infty$ rather than just associative?}{Because in derived/homotopical settings, exact associativity is too restrictive; $A_\infty$ relaxes to associativity-up-to-coherent-homotopy, capturing the natural categories of dg-categories and ring spectra.}
+\qaitem{Equivalence with $\mathbb{E}_1$?}{Yes: $A_\infty$-algebras $=$ $\mathbb{E}_1$-algebras in $\mathbf{Ch}(k)$. The two definitions encode the same structure: coherently associative algebra.}
+\qaitem{What's the bar construction for an $A_\infty$-algebra?}{$BA = T(sA)$ with differential $b$ from the $m_n$. A free coassociative coalgebra realization.}
+\qaitem{What's the cobar?}{Right adjoint $\Omega$ to $B$: for a coalgebra $C$, $\Omega C = T(s^{-1} C)$ with differential from the coproduct. $\Omega B A \to A$ is a quasi-isomorphism.}
+\qaitem{Why are $A_\infty$ and $L_\infty$ Koszul dual?}{Because the operads $\mathrm{Assoc}$ and $\mathrm{Lie}$ are Koszul dual as quadratic operads. The bar construction implements the duality at the algebra level.}
+\qaitem{What's the homotopy hypothesis here?}{$L_\infty$ (over $\mathbb{Q}$) classifies rational homotopy types of simply connected spaces: $\pi_* X \otimes \mathbb{Q}$ is an $L_\infty$-algebra completely determining $X_\mathbb{Q}$.}
+\qaitem{What's an $A_\infty$-category?}{Same as an $A_\infty$-algebra but multi-object: a graded set of objects, hom-complexes with $A_\infty$-composition. Foundational in Fukaya theory (symplectic topology).}
+\qaitem{Why do dg-categories sometimes suffice?}{Because every $A_\infty$-category has a quasi-equivalent dg-category model — but the $A_\infty$-form is more natural for many constructions (mapping cones, twisted complexes).}
+\qaitem{What's a strict $A_\infty$-algebra?}{One with $m_n = 0$ for $n \geq 3$: an honest associative dg-algebra with differential $m_1$ and product $m_2$.}
+\qaitem{Where does this chapter close?}{Cluster G (higher algebra) ends. Cluster H (Ch 58–60): derived algebraic geometry, homotopy type theory, and the higher landscape.}
+\qaitem{What does a reader of this chapter know?}{Both $\mathbb{E}_n$-algebras (Ch 56) and their concrete realizations ($A_\infty$, $L_\infty$). Foundation of higher algebra is laid; Lurie's HA Chapter 5 onward is now accessible.}
+\qaitem{What's the next phase?}{Phase 5: Ch 58 (derived alg geom preview), Ch 59 (HoTT preview), Ch 60 (the higher landscape synthesis).}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{$A_\infty$-algebra.}\quad Graded $V$ with $m_n : V^{\otimes n} \to V$
+of degree $2-n$ satisfying Stasheff identities. Equivalent to
+$\mathbb{E}_1$-algebra in $\mathbf{Ch}(k)$.
+
+\textbf{Stasheff associahedra $K_n$.}\quad Polytopes of dim $n-2$
+encoding higher associativity. $K_4 = $ Mac Lane pentagon. $K_n$'s
+chain complex is the $A_\infty$-operad.
+
+\textbf{$L_\infty$-algebra.}\quad Graded $V$ with symmetric brackets
+$l_n : V^{\wedge n} \to V$ of degree $2-n$ satisfying generalized
+Jacobi. Equivalent to $\mathrm{Lie}_\infty$-algebras in $\mathbf{Ch}(k)$.
+
+\textbf{Bar/cobar duality.}\quad $B \dashv \Omega$ between
+$A_\infty$-algebras and connected coassociative dg-coalgebras.
+Recovers Koszul duality $\mathrm{Assoc}^! = \mathrm{Lie}$.
+
+\textbf{Deformation theory.}\quad Maurer-Cartan elements of an
+$L_\infty$-algebra $\mathfrak{g}$ classify deformations of the
+corresponding formal moduli problem.
+
+\textbf{Phase 4 closes.}\quad Higher algebra foundations complete:
+$\mathbb{E}_n$, $A_\infty$, $L_\infty$, presentable, stable. Phase 5
+synthesizes and previews $\infty$-categorical applications.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{$A_\infty$-algebra.}\quad $(V, \{m_n\}_{n \geq 1})$:
+$m_n : V^{\otimes n} \to V$, $|m_n| = 2-n$; Stasheff identities for
+all $n$.
+
+\medskip
+\textbf{Associahedra.}\quad $K_n$ convex polytope, $\dim K_n = n-2$;
+$K_4 = $ Mac Lane pentagon.
+
+\medskip
+\textbf{$L_\infty$-algebra.}\quad $(V, \{l_n\}_{n \geq 1})$:
+$l_n : V^{\wedge n} \to V$ (graded symmetric), $|l_n| = 2-n$;
+generalized Jacobi.
+
+\medskip
+\textbf{Equivalence with $\mathbb{E}_n$.}\quad
+$A_\infty \simeq \mathbb{E}_1$ in $\mathbf{Ch}(k)$;
+$L_\infty \simeq \mathrm{Lie}_\infty$.
+
+\medskip
+\textbf{Koszul duality.}\quad
+$\mathrm{Assoc}^! = \mathrm{Lie}$;
+$\mathrm{Lie}^! = \mathrm{Assoc}$;
+bar/cobar adjunction implements at the algebra level.
+
+\medskip
+\textbf{Maurer–Cartan.}\quad $x \in V^1$ with
+$\sum_n \tfrac{1}{n!} l_n(x^{\otimes n}) = 0$; classifies formal moduli
+problems over $\mathfrak{g}$.
+
+\medskip
+\textbf{Cluster G complete.}\quad Higher algebra foundations laid;
+HA Chapter 5+ now accessible.
+\end{formalrestatement}

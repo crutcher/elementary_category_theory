@@ -7,14 +7,13 @@ feedback as the project evolves. See `history/` for the immutable record._
 
 ## Current state
 
-- **Integration branch:** `main` (at `25620d1`)
-- **Feature branch in progress:** none — v0.13 landed on main 2026-05-12
-- **Last merged round:** v0.13 (Vol I Ch 11-12; full Vol II Ch 13-24; three-volume `\part{}` structure; `prooflog` env; exercise spacing)
-- **Chapters written:** Preface, Ch 1–24 (Vol I + Vol II complete)
-- **Unwritten:** Ch 25–36 (Vol III); `\part` and chapter inputs are commented out in `main.tex` (lines 48–62) until drafting begins.
-- **Build:** `cd book && make` is green; 193pp PDF, no undefined refs.
-- **Note (2026-05-12):** repo was recovered from two branches that couldn't land via the remote runner. A build-blocker in `preamble.tex` (malformed `tabularx` column specs in `qa` / `prooflog` envs) was fixed in the recovery; the working fix matches what's now on `origin/main`.
-- **Vol III preparation:** see `notes/vol3_planning.md` — per-chapter overlap/contribution analysis, drafting order, and open decisions to confirm before Ch 25 starts.
+- **Integration branch:** `main` (at `38fdb84`)
+- **Feature branch in progress:** `feature/volume4-v0.15` (Vol IV drafting; Phase 1 = Ch 37–42 starting 2026-05-12)
+- **Last merged round:** v0.14 (Vol III Ch 25–36 complete + TOC trim); landed on main 2026-05-12
+- **Chapters written:** Preface, Ch 1–36 (Vols I, II, III complete)
+- **Unwritten:** Ch 37–60 (Vol IV: 24 chapters in 8 clusters, see `notes/vol4_planning.md`)
+- **Build:** `cd book && make` is green from main.
+- **Vol IV preparation:** see `notes/vol4_planning.md` — bridge to higher-CT literature; 24-chapter map; 5-phase drafting cadence; decisions D1–D12 recorded.
 - **Merged PRs**: #1 (v0.7), #2 (v0.10 typography), #3 (undefined ref fix),
   #4 (v0.10 → main), #5 (Ch 2+3), #7 (v0.11 Ch 4-5), #8 (v0.12)
 
@@ -236,3 +235,11 @@ Minimal prose expansion. Maximum proof density. Advanced CT constructions.
 | 2026-05-12 | Vol II uses prooflog (2-col step/justification) format | Written proof + parallel annotation |
 | 2026-05-12 | Exercise spacing: 3× vertical gap + thin horizontal rule between Q/A pairs | User directive v0.13 |
 | 2026-05-12 | Connections to other math fields deferred beyond Vol III | Build CT foundations first |
+| 2026-05-12 | Vol IV scope = ∞-categories + higher algebra (Ch 37–60, 24 chapters in 8 clusters) | Per Ch 36 §"What Remains" framing; applications to other branches deferred to potential Vol V |
+| 2026-05-12 | Vol IV is a bridge to existing higher-CT introductions (Lurie/Riehl–Verity/Cisinski/Land/Kerodon), not a self-contained complete treatment | User directive — reader should be ready to step into the literature with a strong foundation |
+| 2026-05-12 | Vol IV uses 1–3 chapter clusters per topic; volume length is significantly larger than I–III | User directive — single-chapter constraint was too restrictive |
+| 2026-05-12 | Vol IV ∞-cat model: quasi-categories (Joyal/Lurie) as primary | Standard in the literature; matches HTT and Riehl–Verity convention |
+| 2026-05-12 | Vol IV proof depth: sketched + selective full proofs (one or two per chapter) | Bridge function over completeness; full proofs available in the named literature |
+| 2026-05-12 | Vol IV chapter length: 400–500 lines, ~20 Q/A pairs | Higher density per topic; smaller exercise count keeps total length manageable |
+| 2026-05-12 | Vol IV borrowed math: Gated — only math that itself uses CT essentially (algebraic topology, homological algebra, type theory, derived categories OK) | Middle ground between v0.5 strict restriction and full openness |
+| 2026-05-12 | Vol IV cadence: phase-by-phase pushes on `feature/volume4-v0.15` (Phase 1 = Ch 37–42, Phase 2 = 43–48, Phase 3 = 49–51, Phase 4 = 52–57, Phase 5 = 58–60) | Mirrors Vol III's two-batch split, scaled to 24 chapters |

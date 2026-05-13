@@ -1,0 +1,327 @@
+% ch59_toward_hott.tex — Volume IV Chapter 23
+
+\chapter{Toward Homotopy Type Theory}
+
+\begin{overviewbox}
+\term{Homotopy Type Theory} (HoTT) is the intersection of $\infty$-category
+theory and dependent type theory. Its central insight is the
+\term{univalence axiom}: equivalent types are equal — formally,
+$(A \simeq B) \simeq (A = B)$ as types. Univalence is the type-theoretic
+avatar of the Yoneda philosophy, and the resulting framework supplies a
+foundational language for mathematics in which:
+\begin{itemize}
+  \item Spaces (more accurately: $\infty$-groupoids) are primitive
+        rather than derived from sets.
+  \item Identity is structural: two structures with all the same
+        properties are formally equal.
+  \item Constructive proofs and computer-checkable verification become
+        natural.
+\end{itemize}
+
+This chapter is a preview, parallel to Chapter~58 on DAG. We introduce
+the basics — dependent types, identity types, the univalence axiom,
+$\infty$-topos models — and gesture at where HoTT is heading: the
+\term{univalent foundations} program (Voevodsky), modal type theories
+(synthetic homotopy theory), and applications in algebraic topology and
+constructive mathematics.
+
+Full development would require a dedicated volume; the canonical
+references are \emph{The HoTT Book} (Univalent Foundations Project,
+2013) and Riehl–Shulman, \emph{Synthetic theory of $\infty$-categories
+inside Homotopy Type Theory}. After this chapter, the reader can engage
+those works.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Dependent Type Theory: A Refresher}
+\label{sec:dtt-refresher}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+A type theory has \emph{types} $A, B, \ldots$ and \emph{terms} (also
+called \emph{elements}) of those types, written $a : A$ to mean ``$a$
+is a term of type $A$.'' Function types $A \to B$ have terms that are
+functions; the \term{lambda calculus} provides the syntax.
+
+\term{Dependent type theory} allows types to depend on terms: $B(x)$
+might be a type whose definition depends on $x : A$. Two key constructions:
+\begin{itemize}
+  \item \term{Dependent function type} $\prod_{x : A} B(x)$: functions
+        taking $x : A$ and producing a term of $B(x)$.
+  \item \term{Dependent pair type} $\sum_{x : A} B(x)$: pairs $(x, y)$
+        with $x : A$ and $y : B(x)$.
+\end{itemize}
+These generalize $A \to B$ (when $B$ is constant) and $A \times B$
+(when $B$ is constant).
+
+\subsection{Formalizing}
+
+\begin{definition}[Dependent type theory, informally]
+\label{def:dtt}
+A \term{dependent type theory} consists of:
+\begin{itemize}
+  \item A judgment of typing: $x : A \vdash B \, \mathrm{type}$.
+  \item Function types $\prod_{x : A} B(x)$ with lambda-abstraction
+        and application.
+  \item Sigma types $\sum_{x : A} B(x)$ with pairing and projections.
+  \item Universe types $\mathcal{U}, \mathcal{U}_1, \mathcal{U}_2, \ldots$
+        with $\mathcal{U}_i : \mathcal{U}_{i+1}$ (avoiding Russell's
+        paradox).
+  \item Various other type formers: inductive types, $\mathbb{N}, \mathbb{B}$,
+        etc.
+\end{itemize}
+\end{definition}
+
+\begin{remark}[Curry–Howard–Lambek]
+The classical \term{Curry–Howard–Lambek correspondence} (Chapter~46 / FP
+volume) identifies:
+\begin{itemize}
+  \item Types $\leftrightarrow$ propositions $\leftrightarrow$ objects
+        in a CCC.
+  \item Terms $\leftrightarrow$ proofs $\leftrightarrow$ morphisms.
+  \item $A \to B$ $\leftrightarrow$ implication $\leftrightarrow$ exponential.
+  \item $A \times B$ $\leftrightarrow$ conjunction $\leftrightarrow$ product.
+  \item $A + B$ $\leftrightarrow$ disjunction $\leftrightarrow$ coproduct.
+\end{itemize}
+Dependent type theory extends this to higher-categorical settings:
+$\prod, \sum$ correspond to indexed product/coproduct $=$ dependent
+adjoints.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Identity Types and Path Types}
+\label{sec:identity-types}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Identity type]
+\label{def:identity-type}
+For terms $a, b : A$, the \term{identity type} $a =_A b$ (or simply
+$a = b$) is a type whose terms witness $a$ and $b$ being identical.
+\begin{itemize}
+  \item Introduction: $\mathrm{refl}_a : a = a$ for every $a : A$.
+  \item Induction (J-rule): properties holding on $\mathrm{refl}$ extend
+        to all of $a = b$.
+\end{itemize}
+\end{definition}
+
+\begin{remark}[Path interpretation]
+In the homotopy-theoretic interpretation, $A$ is an $\infty$-groupoid
+(Kan complex), terms $a, b : A$ are vertices, and $a = b$ is the
+\emph{mapping space} $\mathrm{Path}_A(a, b)$. $\mathrm{refl}_a$ is the
+constant path at $a$.
+
+Iterating: $\mathrm{refl}_a = \mathrm{refl}_a$ is the type of $2$-paths
+(homotopies between paths); and so on. The infinite tower of identity
+types is exactly the infinite tower of higher cells in an
+$\infty$-groupoid.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Univalence Axiom}
+\label{sec:univalence}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Equivalence of types]
+\label{def:equiv-types}
+For types $A, B$, the type $A \simeq B$ of \term{equivalences} from $A$
+to $B$ consists of functions $f : A \to B$ together with proofs that $f$
+has both a left and a right homotopy inverse.
+
+(The technical detail: equivalences are functions whose fibres are
+contractible, equivalent to ``invertible up to coherent homotopy.'')
+\end{definition}
+
+\begin{theorem}[Univalence axiom, Voevodsky]
+\label{thm:univalence}
+For all types $A, B : \mathcal{U}$, the canonical map
+\begin{equation*}
+  \mathrm{idtoeq} : (A = B) \to (A \simeq B)
+\end{equation*}
+is itself an equivalence. In particular, \term{equivalent types are
+equal}.
+\end{theorem}
+
+\begin{remark}[Univalence as Yoneda]
+\label{rem:univalence-yoneda}
+Univalence is the type-theoretic analogue of the $\infty$-categorical
+Yoneda philosophy: ``an object is determined by what maps in.'' In HoTT:
+``a type is determined by what is equivalent to it.''
+
+At the model level: HoTT is interpreted in $\infty$-toposes, where the
+universe $\mathcal{U}$ classifies $\infty$-groupoids; univalence
+corresponds to the (small-object) representability of the universe
+fibration.
+\end{remark}
+
+\begin{example_thm}[Function extensionality from univalence]
+\label{ex:funext}
+A consequence of univalence: \term{function extensionality}. If $f, g :
+A \to B$ have $(x : A) \vdash f(x) = g(x)$, then $f = g$.
+
+Function extensionality is not provable in vanilla dependent type theory
+but follows from univalence. This is one of the deep payoffs.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\infty$-Topos Models}
+\label{sec:infty-topos}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-topos]
+\label{def:infty-topos}
+An \term{$\infty$-topos} is an accessible left-exact localization of a
+presheaf $\infty$-category $\mathcal{P}(\mathcal{C})$. Equivalently:
+an $\infty$-category $\mathcal{X}$ satisfying Giraud's axioms in the
+$\infty$-categorical setting (colimit-presentable plus universality
+properties).
+\end{definition}
+
+\begin{theorem}[Infty-topos models of HoTT]
+\label{thm:infty-topos-hott}
+Every $\infty$-topos $\mathcal{X}$ provides a model for HoTT: types
+are objects of $\mathcal{X}$; dependent types are morphisms; identity
+types are diagonals; univalence holds because $\mathcal{X}$'s universe
+classifies $\infty$-groupoid-valued sheaves.
+
+The principal example is $\mathcal{S}$ itself, which models HoTT
+trivially (types $=$ $\infty$-groupoids).
+\end{theorem}
+
+\begin{remark}[Lurie's HTT and HoTT]
+The model-theoretic foundations of $\infty$-toposes (Lurie, HTT §6) and
+the type-theoretic foundations of HoTT (Univalent Foundations) are
+remarkably compatible: $\infty$-toposes give the semantics that HoTT
+specifies syntactically. The synthetic and analytic pictures meet here.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Reading Recommendations}
+\label{sec:hott-reading}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{remark}[Where to go]
+Foundational references for HoTT:
+\begin{itemize}
+  \item \emph{The HoTT Book} (\textbf{Univalent Foundations Project}, 2013):
+        the canonical introduction. Available at \texttt{homotopytypetheory.org}.
+  \item Riehl–Shulman, \emph{A type theory for synthetic $\infty$-categories}:
+        $\infty$-category theory \emph{within} HoTT — a more advanced
+        treatment.
+  \item Voevodsky's \emph{Univalent Foundations Project} writings.
+  \item Awodey–Warren, \emph{Homotopy theoretic models of identity types}:
+        the original semantic insight.
+\end{itemize}
+
+For HoTT applied to algebraic topology:
+\begin{itemize}
+  \item Brunerie's PhD thesis on $\pi_4(S^3)$.
+  \item Buchholtz–van Doorn–Rijke, \emph{Higher groups in homotopy type theory}.
+  \item Various papers on synthetic homotopy theory.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:hott-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is dependent type theory?}{A type theory where types can depend on terms: $x : A \vdash B(x) \, \mathrm{type}$. Includes dependent function types $\prod_{x : A} B(x)$ and dependent pair types $\sum_{x : A} B(x)$.}
+\qaitem{What is the Curry-Howard-Lambek correspondence?}{Types $\leftrightarrow$ propositions $\leftrightarrow$ objects in a CCC. Terms $\leftrightarrow$ proofs $\leftrightarrow$ morphisms. Function types $\leftrightarrow$ exponentials. Connects logic, type theory, and category theory.}
+\qaitem{Define the identity type.}{For $a, b : A$, $a =_A b$ is a type with $\mathrm{refl}_a : a = a$ as canonical inhabitant. Induction principle: properties on $\mathrm{refl}$ extend.}
+\qaitem{What's the path interpretation?}{$A$ is an $\infty$-groupoid; $a = b$ is the mapping space $\mathrm{Path}_A(a, b)$. Iterating gives the full tower of higher cells.}
+\qaitem{Define equivalence of types.}{$A \simeq B$ is the type of equivalences: functions with contractible homotopy fibres. Equivalent to ``invertible up to coherent homotopy.''}
+\qaitem{State the univalence axiom.}{$\mathrm{idtoeq} : (A = B) \to (A \simeq B)$ is itself an equivalence. Equivalent types are equal.}
+\qaitem{What does univalence ``do''?}{It identifies type-level equivalence with type-level equality, so reasoning about equivalent structures is the same as reasoning about equal ones. Reverses the classical ``identity'' problem of foundations.}
+\qaitem{What's function extensionality?}{$(\forall x, f(x) = g(x)) \Rightarrow f = g$. Provable from univalence; independent of vanilla dependent type theory.}
+\qaitem{How does univalence relate to Yoneda?}{Both say: objects determined by relationships. Yoneda: object $=$ representable functor. Univalence: type $=$ equivalence class under $\simeq$. Same philosophical content, different formal setup.}
+\qaitem{Define an $\infty$-topos.}{An accessible left-exact localization of $\mathcal{P}(\mathcal{C})$ for small $\mathcal{C}$. Equivalent: $\infty$-cat satisfying $\infty$-Giraud's axioms.}
+\qaitem{What's the principal $\infty$-topos model of HoTT?}{$\mathcal{S}$ itself: types $=$ $\infty$-groupoids, types-of-types $=$ universe in $\mathcal{S}$, identity types $=$ path spaces.}
+\qaitem{Why is $\mathcal{S}$ an $\infty$-topos?}{$\mathcal{S} = \mathcal{P}(\mathrm{pt}) = \mathrm{Fun}(\mathrm{pt}^{\mathrm{op}}, \mathcal{S}) = \mathcal{S}$ trivially; it satisfies the $\infty$-Giraud axioms.}
+\qaitem{What's an $\infty$-topos's universe?}{A subobject classifier in the $\infty$-categorical sense: an object $\mathcal{U}$ such that morphisms $X \to \mathcal{U}$ classify (small) subobjects of $X$. Generalizes Set's universe to $\infty$-groupoids.}
+\qaitem{Why does univalence hold in $\infty$-topos models?}{Because the universe's classifying property includes equivalences: a small subobject up to equivalence is the same as a small subobject up to equality.}
+\qaitem{What is synthetic homotopy theory?}{Doing homotopy theory inside HoTT, without recourse to topological spaces or simplicial sets. Computations of $\pi_n(S^k)$ can be done synthetically.}
+\qaitem{Has $\pi_4(S^3)$ been computed in HoTT?}{Yes — Guillaume Brunerie's PhD thesis (2016) gives a constructive proof that $\pi_4(S^3) = \mathbb{Z}/2$. Verified by computer.}
+\qaitem{What's higher inductive types (HITs)?}{Type formers that introduce both points and higher-dimensional paths. Examples: $\mathbb{S}^1$ as a HIT with one point and one path-loop; sphere $S^n$ via iterated HITs.}
+\qaitem{Why is HoTT a candidate foundation?}{Because it captures higher-categorical phenomena natively, supports computer verification, and makes structural identity ($\simeq$ $=$ $=$) a primitive. Voevodsky's Univalent Foundations project.}
+\qaitem{Is HoTT consistent?}{Yes, in the sense that it has set-theoretic models ($\infty$-toposes). Like ZFC, consistency requires a meta-theory.}
+\qaitem{Where does HoTT meet $\infty$-category theory?}{They're two sides of the same coin: HoTT is the internal language of $\infty$-toposes; $\infty$-category theory is the external/semantic theory of HoTT.}
+\qaitem{What about modal HoTT?}{Adds modal operators (necessity, possibility) to type theory, used to model synthetic differential geometry, cohesion, and physical theories.}
+\qaitem{What's the next (final) chapter?}{Ch~60: The Higher Landscape — synthesizing Vol~IV, mapping its chapters to standard literature, and previewing a potential Vol~V on applications.}
+\qaitem{What's Vol~V (if written) supposed to be?}{The fulfillment of the original v0.5 promise: connections to other branches of mathematics. Algebra (derived/triangulated), topology (spectra), logic (toposes), CS (type theory). All deferred to ``after Vol~IV.''}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Dependent type theory.}\quad Types depending on terms;
+$\prod_{x:A} B(x)$ and $\sum_{x:A} B(x)$ as dependent function and pair
+types. Curry-Howard-Lambek extended to higher categories.
+
+\textbf{Identity types.}\quad $a =_A b$ as the type of identifications.
+Path interpretation: $a = b$ is the mapping space in the $\infty$-groupoid $A$.
+
+\textbf{Univalence.}\quad $(A = B) \simeq (A \simeq B)$. Equivalent types
+are equal. The structural identity principle made formal. Function
+extensionality follows.
+
+\textbf{$\infty$-topos models.}\quad Every $\infty$-topos models HoTT;
+$\mathcal{S}$ is the principal example. Synthetic and semantic
+foundations agree.
+
+\textbf{Reading.}\quad The HoTT Book; Riehl-Shulman; Voevodsky's
+Univalent Foundations; Brunerie on $\pi_4(S^3)$.
+
+\textbf{Vol IV synthesis closes Chapter~60.}\quad The original v0.5
+promise (connections to other math fields) becomes potential Vol~V.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Dependent type theory.}\quad Types $A : \mathcal{U}$;
+dependent types $x : A \vdash B(x) : \mathcal{U}$;
+$\prod_{x : A} B(x)$ and $\sum_{x : A} B(x)$.
+
+\medskip
+\textbf{Identity type.}\quad $a, b : A \Rightarrow (a = b) : \mathcal{U}$;
+$\mathrm{refl}_a : a = a$; J-rule eliminator.
+
+\medskip
+\textbf{Equivalence.}\quad $A \simeq B = \sum_{f : A \to B} \mathrm{isEquiv}(f)$.
+
+\medskip
+\textbf{Univalence axiom.}\quad
+$\mathrm{idtoeq}_{A, B} : (A = B) \to (A \simeq B)$ is an equivalence.
+
+\medskip
+\textbf{$\infty$-topos.}\quad Accessible left-exact localization of
+$\mathcal{P}(\mathcal{C})$; equivalent: $\infty$-Giraud's axioms.
+
+\medskip
+\textbf{Model theorem.}\quad Every $\infty$-topos models univalent
+dependent type theory. $\mathcal{S}$ is the principal example.
+\end{formalrestatement}

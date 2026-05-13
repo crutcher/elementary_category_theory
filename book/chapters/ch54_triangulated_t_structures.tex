@@ -1,0 +1,334 @@
+% ch54_triangulated_t_structures.tex — Volume IV Chapter 18
+
+\chapter{Triangulated Categories and t-Structures}
+
+\begin{overviewbox}
+The homotopy category $\mathrm{ho}(\mathcal{C})$ of a stable
+$\infty$-category $\mathcal{C}$ comes equipped with an extra layer of
+structure: it is a \term{triangulated category}, in the sense of Verdier.
+The triangulated structure remembers what the $\infty$-categorical fibre/cofibre
+sequences look like at the $1$-categorical level: distinguished triangles
+$a \to b \to c \to \Sigma a$ replace the original homotopical data.
+
+This chapter has two main themes.
+
+First, the construction $\mathrm{ho}(\mathrm{stable}) \to \mathrm{triangulated}$.
+We define triangulated categories axiomatically (Verdier's axioms TR1–TR4),
+verify that $\mathrm{ho}(\mathcal{C})$ satisfies them, and explore the
+classical example: the homotopy category of chain complexes
+$\mathbf{K}(\mathcal{A})$ together with its triangulated structure.
+
+Second, \term{t-structures}: a pair of full subcategories $(\mathcal{C}_{\geq 0},
+\mathcal{C}_{\leq 0})$ of a stable $\infty$-category (or its triangulated
+homotopy category) satisfying conditions that ensure
+\begin{itemize}
+  \item Each object decomposes into ``connective and coconnective parts.''
+  \item The \term{heart} $\mathcal{C}^\heartsuit := \mathcal{C}_{\geq 0}
+        \cap \mathcal{C}_{\leq 0}$ is an abelian category.
+\end{itemize}
+
+The motivating example: the standard t-structure on
+$\mathcal{D}(\mathcal{A})$ has heart $\mathcal{A}$ itself, and the
+truncation functors recover the standard cohomology
+$H^n : \mathcal{D}(\mathcal{A}) \to \mathcal{A}$. Other t-structures
+(perverse, étale, motivic) produce different ``hearts'' suitable for
+specific applications.
+
+Together, stable $\infty$-categories and t-structures supply the
+$\infty$-categorical home for homological algebra and its applications.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Triangulated Categories}
+\label{sec:triangulated}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Triangulated category]
+\label{def:triangulated}
+A \term{triangulated category} is an additive category $\mathcal{T}$
+equipped with:
+\begin{itemize}
+  \item A \term{shift} or \term{suspension} autoequivalence $\Sigma :
+        \mathcal{T} \xrightarrow{\sim} \mathcal{T}$.
+  \item A class of \term{distinguished triangles} of the form
+        $a \to b \to c \to \Sigma a$,
+\end{itemize}
+satisfying Verdier's axioms \term{TR1}--\term{TR4}:
+\begin{itemize}
+  \item[\textbf{TR1}] (Identity) For every $a$, the triangle $a \xrightarrow{\mathrm{id}}
+        a \to 0 \to \Sigma a$ is distinguished. Distinguished triangles
+        are closed under isomorphism.
+  \item[\textbf{TR2}] (Rotation) $a \to b \to c \to \Sigma a$ is distinguished
+        iff $b \to c \to \Sigma a \xrightarrow{-\Sigma f} \Sigma b$ is.
+  \item[\textbf{TR3}] (Morphisms of triangles) Given two distinguished
+        triangles and a morphism between their first two terms, there
+        is a (not necessarily unique) extension to a morphism between
+        the full triangles.
+  \item[\textbf{TR4}] (Octahedron axiom) Given two composable morphisms
+        $a \to b \to c$, the resulting distinguished triangles fit into
+        an ``octahedron'' of compatible distinguished triangles.
+\end{itemize}
+\end{definition}
+
+\begin{howtosay}
+Distinguished triangle \sayit{``distinguished triangle'' or ``exact triangle''}.
+The notation $a \to b \to c \to \Sigma a$ implicitly carries the data of
+all three connecting morphisms.
+\end{howtosay}
+
+\subsection{Reorganizing: where triangulated comes from}
+
+\begin{theorem}[$\mathrm{ho}$ of stable is triangulated]
+\label{thm:ho-stable-triangulated}
+For any stable $\infty$-category $\mathcal{C}$, the homotopy $1$-category
+$\mathrm{ho}(\mathcal{C})$ is naturally triangulated. The shift is induced
+by $\Sigma$; the distinguished triangles are the images in $\mathrm{ho}$
+of the (co)fibre sequences in $\mathcal{C}$.
+\end{theorem}
+
+\begin{proof}[Proof strategy]
+Verifying TR1–TR4 amounts to constructing simplices in $\mathcal{C}$:
+\begin{itemize}
+  \item TR1: the trivial fibre sequence $a \xrightarrow{\mathrm{id}} a \to 0$ provides the
+        identity triangle.
+  \item TR2 (rotation) is the iterated cofibre construction.
+  \item TR3 comes from inner-horn filling in $\mathcal{C}$.
+  \item TR4 (octahedron) corresponds to a specific $3$-simplex construction
+        in $\mathcal{C}$ encoding compatibility of two cofibres.
+\end{itemize}
+All steps use the stability axiom (pullbacks $=$ pushouts) at the
+$\infty$-categorical level.
+\qed
+\end{proof}
+
+\begin{example_thm}[$\mathbf{K}(\mathcal{A})$ and $\mathcal{D}(\mathcal{A})$]
+\label{ex:K-D-triangulated}
+For an abelian category $\mathcal{A}$:
+\begin{itemize}
+  \item $\mathbf{K}(\mathcal{A})$ (chain complexes modulo chain homotopy)
+        is triangulated: shift by one, mapping cone gives distinguished
+        triangles.
+  \item $\mathcal{D}(\mathcal{A})$ (the derived category) is triangulated:
+        the same structure, descending through localization at
+        quasi-isomorphisms.
+\end{itemize}
+$\mathcal{D}(\mathcal{A}) = \mathrm{ho}$ of the stable $\infty$-category
+$\mathcal{D}^\infty(\mathcal{A})$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{t-Structures}
+\label{sec:t-structures}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[t-structure]
+\label{def:t-structure}
+A \term{t-structure} on a stable $\infty$-category $\mathcal{C}$ is a
+pair of full subcategories $(\mathcal{C}_{\geq 0}, \mathcal{C}_{\leq 0})$
+of $\mathcal{C}$ satisfying:
+\begin{enumerate}
+  \item $\Sigma \mathcal{C}_{\geq 0} \subseteq \mathcal{C}_{\geq 0}$ and
+        $\Omega \mathcal{C}_{\leq 0} \subseteq \mathcal{C}_{\leq 0}$.
+  \item For $x \in \mathcal{C}_{\geq 0}$ and $y \in \Sigma^{-1} \mathcal{C}_{\leq 0}$:
+        $\mathrm{Map}_\mathcal{C}(x, y) \simeq 0$ (mapping space is contractible).
+  \item Every $z \in \mathcal{C}$ fits into a fibre sequence
+        $\tau_{\geq 0} z \to z \to \tau_{\leq -1} z$
+        with $\tau_{\geq 0} z \in \mathcal{C}_{\geq 0}$ and $\tau_{\leq -1} z
+        \in \mathcal{C}_{\leq -1} = \Sigma^{-1} \mathcal{C}_{\leq 0}$.
+\end{enumerate}
+We define $\mathcal{C}_{\geq n} = \Sigma^n \mathcal{C}_{\geq 0}$ and
+$\mathcal{C}_{\leq n} = \Sigma^n \mathcal{C}_{\leq 0}$.
+\end{definition}
+
+\begin{howtosay}
+$\mathcal{C}_{\geq 0}$ \sayit{``the connective part of $\mathcal{C}$''} or
+\sayit{``the $\geq 0$-truncated part''}. $\mathcal{C}_{\leq 0}$:
+\sayit{``coconnective''}. $\tau_{\geq 0}, \tau_{\leq 0}$ are
+\term{truncation functors}.
+\end{howtosay}
+
+\begin{theorem}[Heart of a t-structure]
+\label{thm:heart}
+The intersection $\mathcal{C}^\heartsuit := \mathcal{C}_{\geq 0} \cap
+\mathcal{C}_{\leq 0}$ is an \emph{abelian category}. It is closed under
+finite limits and finite colimits in $\mathcal{C}$, but not closed under
+suspension (which takes $\mathcal{C}^\heartsuit$ outside itself).
+\end{theorem}
+
+\begin{example_thm}[Standard t-structure on $\mathcal{D}(\mathcal{A})$]
+\label{ex:standard-t-D}
+For an abelian category $\mathcal{A}$, the derived $\infty$-category
+$\mathcal{D}(\mathcal{A})$ has a canonical t-structure:
+\begin{itemize}
+  \item $\mathcal{D}(\mathcal{A})_{\geq 0}$: chain complexes whose
+        $H^n = 0$ for $n < 0$.
+  \item $\mathcal{D}(\mathcal{A})_{\leq 0}$: chain complexes whose
+        $H^n = 0$ for $n > 0$.
+  \item Heart: $\mathcal{D}(\mathcal{A})^\heartsuit \simeq \mathcal{A}$ via
+        the cohomology functor $H^0$.
+\end{itemize}
+\end{example_thm}
+
+\subsection{Reorganizing: cohomology functors}
+
+\begin{definition}[Cohomology functor]
+\label{def:cohomology}
+The \term{$n$-th cohomology functor} of a t-structure is
+\begin{equation*}
+  H^n : \mathcal{C} \to \mathcal{C}^\heartsuit, \quad
+  H^n(x) = \tau_{\leq 0} \tau_{\geq 0} (\Omega^n x).
+\end{equation*}
+$H^n$ is exact in the sense that it sends fibre/cofibre sequences in
+$\mathcal{C}$ to long exact sequences in $\mathcal{C}^\heartsuit$.
+\end{definition}
+
+\begin{theorem}[Long exact sequence in cohomology]
+\label{thm:LES-cohomology}
+A fibre sequence $a \to b \to c$ in $\mathcal{C}$ induces a long exact
+sequence in the heart $\mathcal{C}^\heartsuit$:
+\begin{equation*}
+  \cdots \to H^{n-1}(c) \to H^n(a) \to H^n(b) \to H^n(c) \to H^{n+1}(a) \to \cdots.
+\end{equation*}
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Other t-Structures}
+\label{sec:other-t}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally: variants}
+
+\begin{example_thm}[Perverse t-structure]
+\label{ex:perverse}
+On the derived category of constructible sheaves on a topological space,
+the \term{perverse t-structure} (Beilinson–Bernstein–Deligne) has
+distinct connective and coconnective parts from the standard one. Its
+heart consists of \term{perverse sheaves}, an abelian category
+playing a central role in geometric representation theory and the
+geometric Langlands program.
+\end{example_thm}
+
+\begin{example_thm}[Étale t-structure]
+\label{ex:etale}
+On the derived $\infty$-category of étale sheaves on a scheme, a different
+t-structure (the standard one for étale cohomology) has heart the
+category of étale sheaves of abelian groups.
+\end{example_thm}
+
+\begin{example_thm}[Postnikov t-structure on spectra]
+\label{ex:postnikov-spectra}
+On $\mathrm{Sp}$, the \term{Postnikov t-structure} has connective spectra
+($\pi_n = 0$ for $n < 0$) and coconnective spectra ($\pi_n = 0$ for $n > 0$).
+Heart: $\mathbf{Ab}$, the category of abelian groups, via Eilenberg–MacLane
+spectra.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:triangulated-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a triangulated category.}{An additive category with a shift autoequivalence $\Sigma$ and a class of distinguished triangles, satisfying Verdier's TR1--TR4.}
+\qaitem{State TR2 (rotation).}{$a \to b \to c \to \Sigma a$ distinguished iff $b \to c \to \Sigma a \xrightarrow{-\Sigma f} \Sigma b$ distinguished — rotating triangles preserves the distinguished property up to a sign.}
+\qaitem{State TR4 (octahedron).}{Given $a \to b \to c$ as composable morphisms, the resulting four distinguished triangles fit into an octahedron of compatible morphisms.}
+\qaitem{State the theorem connecting stable $\infty$-cats and triangulated categories.}{For any stable $\infty$-cat $\mathcal{C}$, $\mathrm{ho}(\mathcal{C})$ is canonically triangulated. Distinguished triangles are images of fibre/cofibre sequences in $\mathcal{C}$.}
+\qaitem{Why does $\mathrm{ho}(\mathcal{C})$ acquire triangulated structure?}{Because stability of $\mathcal{C}$ provides the symmetry between fibre and cofibre sequences (TR2); inner-horn filling provides morphism extensions (TR3); and a specific $3$-simplex realizes octahedron (TR4).}
+\qaitem{What's $\mathbf{K}(\mathcal{A})$?}{The category of chain complexes modulo chain homotopy — the most classical example of a triangulated category. Distinguished triangles arise from mapping cones.}
+\qaitem{Define a t-structure.}{A pair $(\mathcal{C}_{\geq 0}, \mathcal{C}_{\leq 0})$ of subcategories satisfying closure under suspension/loop, mapping-space orthogonality, and a truncation triangle for every object.}
+\qaitem{Define the heart.}{$\mathcal{C}^\heartsuit = \mathcal{C}_{\geq 0} \cap \mathcal{C}_{\leq 0}$ — an abelian category.}
+\qaitem{What's the standard t-structure on $\mathcal{D}(\mathcal{A})$?}{$\mathcal{D}(\mathcal{A})_{\geq 0}$ = complexes with $H^n = 0$ for $n < 0$; $\mathcal{D}(\mathcal{A})_{\leq 0}$ = complexes with $H^n = 0$ for $n > 0$. Heart: $\mathcal{A}$.}
+\qaitem{What's the cohomology functor?}{$H^n(x) = \tau_{\leq 0} \tau_{\geq 0} (\Omega^n x)$. Takes a stable object to its $n$-th cohomology in the heart.}
+\qaitem{State the long exact sequence in cohomology.}{For a fibre sequence $a \to b \to c$: a LES $\cdots \to H^{n-1}(c) \to H^n(a) \to H^n(b) \to H^n(c) \to \cdots$ in the heart.}
+\qaitem{What's the Postnikov t-structure on $\mathrm{Sp}$?}{Connective spectra (positive $\pi_n$ only) vs coconnective (negative $\pi_n$ only). Heart: $\mathbf{Ab}$ via Eilenberg–MacLane spectra.}
+\qaitem{What's a perverse t-structure?}{A non-standard t-structure on derived categories of constructible sheaves whose heart is perverse sheaves. Central to geometric representation theory.}
+\qaitem{Why don't all stable $\infty$-categories have natural t-structures?}{Because t-structures encode a specific choice of ``positive/negative'' decomposition that not every stable category admits canonically. Spectra have one; abstract triangulated categories may not.}
+\qaitem{Is the heart of a t-structure abelian?}{Yes (Theorem~\ref{thm:heart}). The conditions on the t-structure guarantee exactness of finite limits and colimits within the heart.}
+\qaitem{Are stable $\infty$-categories ``more structured'' than triangulated ones?}{Yes — stable $\infty$-cats retain higher-coherence data lost in passing to $\mathrm{ho}$. Triangulated categories are the $1$-truncation; some constructions (e.g., octahedron) become non-canonical at the $1$-level.}
+\qaitem{Why is the octahedron axiom delicate?}{Because the choice of morphisms in TR4 is non-unique at the triangulated level; only the $\infty$-categorical lift makes it functorial. This is a source of incompleteness in classical triangulated theory.}
+\qaitem{What's the relation to derived functors of Chapter~42?}{Derived functors are exact functors between stable $\infty$-cats (or triangulated cats). Tor and Ext (Ch~42) compute cohomology in standard t-structures.}
+\qaitem{What does Riehl--Verity / Lurie use stable $\infty$-cats for primarily?}{Stable homotopy theory, derived algebraic geometry, modular representation theory, and the modern theory of categorified algebra (e.g., 2-categorical structures arising from stable diagram homotopy).}
+\qaitem{What's Verdier's theorem on triangulated functors?}{Functors between triangulated categories preserving shifts and distinguished triangles correspond, $\infty$-categorically, to exact functors. So $\mathrm{ho}$ of an exact functor of stable $\infty$-cats is a triangulated functor.}
+\qaitem{Is every triangulated category $\mathrm{ho}$ of a stable $\infty$-cat?}{Not obviously: there exist triangulated categories with no known stable $\infty$-categorical lift (``ghost-classified'' triangulated categories). It's a famous open problem in higher algebra.}
+\qaitem{What's a t-exact functor?}{A functor between stable $\infty$-cats with t-structures that preserves the connective and coconnective parts: $F(\mathcal{C}_{\geq 0}) \subseteq \mathcal{D}_{\geq 0}$ and similarly for $\leq 0$.}
+\qaitem{What's the next chapter?}{Ch~55: $\infty$-Operads. Moving from stable to higher-algebraic structures: the operadic language for organizing multilinear and commutative-up-to-coherent operations.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Triangulated category.}\quad Additive category with shift
+$\Sigma$ and distinguished triangles, satisfying Verdier's TR1--TR4
+(identity, rotation, morphisms-extend, octahedron).
+
+\textbf{$\mathrm{ho}(\mathrm{stable})$ is triangulated.}\quad Every
+stable $\infty$-cat's homotopy category is triangulated, with
+distinguished triangles from fibre/cofibre sequences.
+
+\textbf{Classical examples.}\quad $\mathbf{K}(\mathcal{A})$, $\mathcal{D}(\mathcal{A})$:
+chain complexes modulo chain homotopy, and the derived category.
+
+\textbf{t-structure.}\quad Pair $(\mathcal{C}_{\geq 0}, \mathcal{C}_{\leq 0})$
+with closure, orthogonality, truncation. Encodes a ``positive/negative''
+decomposition. Heart $\mathcal{C}^\heartsuit$ is abelian.
+
+\textbf{Cohomology.}\quad $H^n : \mathcal{C} \to \mathcal{C}^\heartsuit$
+takes stable objects to abelian cohomology. Sends fibre sequences to
+long exact sequences.
+
+\textbf{Variants.}\quad Standard t-structure on $\mathcal{D}(\mathcal{A})$
+with heart $\mathcal{A}$; Postnikov on $\mathrm{Sp}$ with heart $\mathbf{Ab}$;
+perverse for constructible sheaves; étale for étale sheaves.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Triangulated category.}\quad $(\mathcal{T}, \Sigma, \text{distinguished triangles})$
+satisfying TR1--TR4.
+
+\medskip
+\textbf{$\mathrm{ho}$-stable.}\quad $\mathcal{C}$ stable $\Rightarrow
+\mathrm{ho}(\mathcal{C})$ canonically triangulated.
+
+\medskip
+\textbf{t-structure.}\quad $(\mathcal{C}_{\geq 0}, \mathcal{C}_{\leq 0})$ on a stable
+$\mathcal{C}$:
+\begin{itemize}
+  \item $\Sigma \mathcal{C}_{\geq 0} \subseteq \mathcal{C}_{\geq 0}$, $\Omega \mathcal{C}_{\leq 0} \subseteq \mathcal{C}_{\leq 0}$.
+  \item $x \in \mathcal{C}_{\geq 0}, y \in \mathcal{C}_{\leq -1} \Rightarrow \mathrm{Map}(x, y) = 0$.
+  \item $\forall z, \exists$ fibre seq $\tau_{\geq 0} z \to z \to \tau_{\leq -1} z$ with $\tau_{\geq 0} z \in \mathcal{C}_{\geq 0}$, $\tau_{\leq -1} z \in \mathcal{C}_{\leq -1}$.
+\end{itemize}
+
+\medskip
+\textbf{Heart.}\quad $\mathcal{C}^\heartsuit = \mathcal{C}_{\geq 0} \cap \mathcal{C}_{\leq 0}$:
+abelian.
+
+\medskip
+\textbf{Cohomology.}\quad $H^n = \tau_{\leq 0} \tau_{\geq 0} \Omega^n :
+\mathcal{C} \to \mathcal{C}^\heartsuit$. LES from fibre sequences.
+
+\medskip
+\textbf{Examples.}\quad
+$\mathcal{D}(\mathcal{A})^\heartsuit = \mathcal{A}$;
+$\mathrm{Sp}^\heartsuit = \mathbf{Ab}$ (Postnikov);
+perverse and étale variants.
+\end{formalrestatement}

@@ -1,0 +1,441 @@
+% ch60_higher_landscape.tex — Volume IV Chapter 24
+
+\chapter{The Higher Landscape}
+
+\begin{overviewbox}
+We have arrived. Volume~I built category theory from objects and arrows
+through the six-stage cycle. Volume~II reorganized that material around
+representability and adjointness. Volume~III completed the formal spine
+with ends, weighted limits, the formal Yoneda lemma, and the
+$2$-categorical theories of monads and adjunctions. Volume~IV took the
+final step into higher category theory: simplicial foundations,
+quasi-categories, the $\infty$-Yoneda lemma, $\infty$-categorical
+universal constructions, presentable and stable $\infty$-categories,
+$\infty$-operads, $\mathbb{E}_n$-algebras, $A_\infty$- and
+$L_\infty$-algebras, and previews of derived algebraic geometry and
+homotopy type theory.
+
+This final chapter synthesizes Volume~IV's twenty-three preceding chapters,
+maps them to the standard higher-CT literature, and points forward to a
+potential Volume~V — the fulfillment of the original v0.5 promise:
+connections of category theory to other branches of mathematics.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Volume IV in One Picture}
+\label{sec:vol4-picture}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The Phases}
+
+Volume~IV's twenty-three preceding chapters arranged themselves in
+five phases.
+
+\paragraph{Phase 1: Simplicial and Homotopical Foundations (Ch~37--42).}
+The simplex category $\Delta$, simplicial sets $\mathbf{sSet}$, geometric
+realization and the nerve, Kan complexes; localization at weak
+equivalences, Quillen's model categories, derived functors, the
+realization–singular Quillen equivalence (the \emph{homotopy hypothesis}
+at the level of model categories).
+
+\paragraph{Phase 2: Quasi-Categories and $\infty$-Yoneda (Ch~43--48).}
+Quasi-categories as simplicial sets with inner-horn filling, mapping
+spaces and equivalences, the Joyal model structure on $\mathbf{sSet}$
+that makes quasi-categories the fibrant objects, joins/slices/limits,
+Cartesian fibrations and straightening, and the \emph{$\infty$-Yoneda
+lemma} — the milestone delivering the working foundation of
+$\infty$-category theory.
+
+\paragraph{Phase 3: Universal Constructions, Revisited (Ch~49--51).}
+$\infty$-limits and $\infty$-colimits as adjoints to constant-diagram
+functors, $\infty$-adjunctions with their three equivalent characterizations,
+$\infty$-monads (Beck's monadicity in $\infty$-form) and $\infty$-Kan
+extensions. Volume~III's spine is fully lifted.
+
+\paragraph{Phase 4: Presentable Stability and Higher Algebra (Ch~52--57).}
+Presentable $\infty$-categories with the $\infty$-AFT, stable
+$\infty$-categories, triangulated categories and t-structures,
+$\infty$-operads, $\mathbb{E}_n$-algebras and Dunn additivity,
+$A_\infty$- and $L_\infty$-algebras with bar/cobar Koszul duality.
+The practical apparatus of higher algebra.
+
+\paragraph{Phase 5: Doorways (Ch~58--60).}
+Derived algebraic geometry (preview), homotopy type theory (preview),
+and this synthesis.
+
+\subsection{The Picture}
+
+\begin{remark}
+Imagine the four-floor tower of Volume~III, now with a fifth floor.
+
+Floor 1 is Volume~I: objects, morphisms, basic universal properties.
+Floor 2 is Volume~II: the same concepts reorganized around representability
+and adjointness. Floor 3 is Volume~III: the formal spine — ends,
+weighted limits, 2-categorical theory.
+
+Floor 4 — Volume~IV — has five rooms:
+\begin{itemize}
+  \item A simplicial room (Phase 1): $\Delta$, $\mathbf{sSet}$,
+        homotopical algebra.
+  \item A quasi-categorical room (Phase 2): the working model.
+  \item A universal-construction room (Phase 3): limits, adjunctions,
+        monads, Kan extensions, all $\infty$-categorical.
+  \item A higher-algebra room (Phase 4): presentable, stable, operadic.
+  \item A doorway hall (Phase 5): pointers to DAG, HoTT, and beyond.
+\end{itemize}
+
+From the doorway hall, the corridor opens to a fifth floor that is
+\emph{not built here}: the applications floor. Algebra (derived
+categories, triangulated categories in practice), topology (spectra,
+stable homotopy theory in detail), logic (toposes, classifying spaces),
+computer science (categorical semantics, models of dependent type theory,
+functional programming). These rooms — the entire fifth floor — are
+Volume~V, never written here.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Four Pillars}
+\label{sec:four-pillars}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Reorganizing}
+
+Volume~IV's central content can be summarized as four theorems, each the
+$\infty$-categorical extension of a Volume~III theorem:
+
+\paragraph{Pillar 1: The $\infty$-Yoneda Lemma (Chapter~48).}
+\begin{equation*}
+  \mathcal{C} \;\hookrightarrow\; \mathcal{P}(\mathcal{C}) = \mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S}), \quad
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \;\simeq\; F(x).
+\end{equation*}
+Every $\infty$-category embeds fully faithfully in its presheaf
+$\infty$-category, which is the universal cocomplete extension.
+
+\paragraph{Pillar 2: $\infty$-Limits and Colimits (Chapter~49).}
+$\mathrm{const} \dashv \lim$; $\mathrm{colim} \dashv \mathrm{const}$.
+Completeness is captured by products and equalizers, cocompleteness by
+coproducts and coequalizers. Filtered colimits commute with finite
+limits. Right adjoints preserve $\infty$-limits.
+
+\paragraph{Pillar 3: $\infty$-Adjunctions (Chapter~50).}
+$L \dashv R$ presented as hom-equivalence, unit/counit, or fibration over
+$\Delta^1$. Uniqueness up to contractible space. The $\infty$-AFT
+(Chapter~52): in the presentable case, ``right adjoint $=$ preserves
+limits and is accessible.''
+
+\paragraph{Pillar 4: $\infty$-Monads and $\infty$-Kan Extensions (Chapter~51).}
+Every $\infty$-adjunction gives an $\infty$-monad; $\infty$-monadicity
+(Lurie) characterizes when an adjunction recovers from its monad. The
+adjoint triple $\mathrm{Lan}_p \dashv p^* \dashv \mathrm{Ran}_p$;
+pointwise formula; density theorem as $\mathrm{Lan}_y \mathrm{id} = \mathrm{id}$;
+codensity monads.
+
+\subsection{The unifying view}
+
+\begin{remark}[A theme]
+At each level of the book, the same universal property recurs in a more
+abstract form:
+\begin{itemize}
+  \item Vol I: hom-set bijection (Chapter~7 adjunctions).
+  \item Vol II: representability (Chapter~17 adjunctions deeper).
+  \item Vol III: $2$-categorical universal arrow (Chapter~33 formal adjunctions).
+  \item Vol IV: mapping-space equivalence (Chapter~50 $\infty$-adjunctions).
+\end{itemize}
+At each level, the data is the same; only the dimensional precision changes.
+The same is true for every Yoneda incarnation, every monad incarnation,
+every Kan-extension incarnation. The progression is the project: a
+single concept articulated with finer and finer coherence requirements.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Reading-List Map}
+\label{sec:reading-map}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Volume IV $\to$ The Higher-CT Canon}
+
+A reader who completes Volume~IV can open the standard references for
+higher category theory. The map below shows where this volume's chapters
+correspond to specific sections in those references.
+
+\paragraph{Lurie, \emph{Higher Topos Theory} (HTT).}
+\begin{itemize}
+  \item Ch~38--39 $\to$ HTT §1.1 (simplicial preliminaries).
+  \item Ch~43--45 $\to$ HTT §1.2 (quasi-categories, slices, mapping spaces).
+  \item Ch~46--47 $\to$ HTT §2.2--2.4 (fibrations, straightening).
+  \item Ch~48 $\to$ HTT §5.1.3 (Yoneda).
+  \item Ch~49 $\to$ HTT §4.4 (limits and colimits).
+  \item Ch~50 $\to$ HTT §5.2 (adjunctions).
+  \item Ch~52 $\to$ HTT §5.5 (presentable $\infty$-categories).
+\end{itemize}
+
+\paragraph{Lurie, \emph{Higher Algebra} (HA).}
+\begin{itemize}
+  \item Ch~51 (monads) $\to$ HA §4.7.
+  \item Ch~53 (stable $\infty$-cats) $\to$ HA §1.1--1.4.
+  \item Ch~54 (t-structures) $\to$ HA §1.2.
+  \item Ch~55 ($\infty$-operads) $\to$ HA §2.1--2.3.
+  \item Ch~56 ($\mathbb{E}_n$-algebras) $\to$ HA §5.1--5.5.
+  \item Ch~57 ($A_\infty$, $L_\infty$) $\to$ HA §4.1--4.5.
+\end{itemize}
+
+\paragraph{Riehl–Verity, \emph{Elements of $\infty$-Category Theory}.}
+A model-independent treatment. After Ch~48, this can be read essentially
+linearly. Chapters of RV cover Vol~IV Ch~43--51 from a different angle
+(using $2$-categorical comma constructions). Especially valuable for the
+analytic style; complements Lurie's combinatorial approach.
+
+\paragraph{Cisinski, \emph{Higher Categories and Homotopical Algebra}.}
+The third major treatment, emphasizing the model-categorical
+underpinnings. Especially valuable for understanding the relationship
+between $\mathbf{sSet}_{\mathrm{Joyal}}$ and the homotopy theory of
+$\infty$-categories.
+
+\paragraph{Kerodon} (Lurie's online textbook).
+The current most accessible exposition. Frequently updated; topics
+arranged for individual study. Covers most of Vol~IV's material with
+many more examples.
+
+\paragraph{Land, \emph{Introduction to Infinity-Categories}.}
+A shorter, more accessible introduction. Vol~IV Ch~43--51 plus Ch~52
+correspond to most of Land's chapters; Land is particularly suitable for
+a reader who finds Lurie's style daunting.
+
+\subsection{Specialized references}
+
+\begin{remark}
+For specific topics in Volume~IV:
+\begin{itemize}
+  \item Stable $\infty$-cats / triangulated (Ch~53--54): Lurie HA §1;
+        Krause, \emph{Homological theory of representations}; also
+        Neeman's classical \emph{Triangulated categories}.
+  \item $\infty$-operads (Ch~55--56): Lurie HA §2--5; Heuts–Moerdijk,
+        \emph{Simplicial and Dendroidal Homotopy Theory}.
+  \item $A_\infty$, $L_\infty$ algebras (Ch~57): Keller, \emph{Introduction
+        to $A_\infty$-algebras and modules}; Loday–Vallette,
+        \emph{Algebraic Operads}.
+  \item Derived algebraic geometry (Ch~58): Toën–Vezzosi, HAG I/II;
+        Lurie SAG.
+  \item Homotopy type theory (Ch~59): The HoTT Book; Riehl–Shulman.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{What Remains: Toward Volume V}
+\label{sec:toward-vol5}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally}
+
+The original v0.5 directive read:
+
+\begin{quote}
+``Full formal understanding of category theory, its complete suite of
+theorems, and then its connections to other branches of mathematics —
+in that order.''
+\end{quote}
+
+Volumes I--III delivered category theory; Volume~IV delivered higher
+category theory. The \emph{connections} promise — the original ``then''
+— remains as a potential Volume~V.
+
+\subsection{Volume V outline (hypothetical)}
+
+\paragraph{Algebra.}
+\begin{itemize}
+  \item Derived categories of modules: $\mathcal{D}(R\text{-Mod})$,
+        triangulated functors, derived tensor and Hom.
+  \item Group cohomology via classifying $\infty$-stacks.
+  \item Representation theory in stable $\infty$-categories; geometric
+        Langlands.
+\end{itemize}
+
+\paragraph{Topology.}
+\begin{itemize}
+  \item Spectra in detail: ring spectra, structured ring spectra,
+        $\mathrm{TMF}$, $\mathrm{tmf}$.
+  \item Stable homotopy groups of spheres: Adams spectral sequence in
+        $\infty$-categorical form.
+  \item Cohomology theories: $K$-theory, cobordism, motivic cohomology.
+\end{itemize}
+
+\paragraph{Logic.}
+\begin{itemize}
+  \item Classifying topoi and geometric morphisms.
+  \item Internal language of $\infty$-toposes (using Ch~59).
+  \item Categorical model theory; categorical semantics for first-order
+        logic.
+\end{itemize}
+
+\paragraph{Computer Science.}
+\begin{itemize}
+  \item Categorical semantics of programming languages.
+  \item Functional programming via monads and applicative functors.
+  \item Dependent type systems in proof assistants (Agda, Lean, Coq).
+  \item Profunctor optics and lens theory.
+\end{itemize}
+
+\subsection{Reorganizing: the project's arc}
+
+\begin{remark}[The four-volume arc]
+The book has progressed through four definite stages:
+\begin{itemize}
+  \item Vol~I: \emph{learn} category theory.
+  \item Vol~II: \emph{reorganize} it around its principles.
+  \item Vol~III: \emph{formalize} it via the formal spine.
+  \item Vol~IV: \emph{ascend} to higher category theory.
+\end{itemize}
+The fifth stage (\emph{apply} to other domains) would complete the
+classical four-element pedagogy: from the abstract heart outward to
+the world.
+
+But that is for another time, another writer, another volume. The
+elementary category theory promised at the start of Volume~I is now
+fully delivered, in its higher-categorical form. The book closes here.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Last Theorem}
+\label{sec:last-theorem}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally}
+
+\begin{remark}[Vol IV's central thesis]
+The universal constructions of category theory — limits, colimits,
+adjunctions, monads, Kan extensions, Yoneda — all generalize to
+$\infty$-categories in a coherent way. The technical content of
+Volume~IV is the verification that each classical theorem has a
+unique-up-to-contractible-homotopy $\infty$-categorical analogue.
+The philosophical content is that this is unavoidable: as soon as one
+admits coherent homotopical structure, the entire apparatus of higher
+category theory follows.
+
+The reader is now equipped to:
+\begin{itemize}
+  \item Open Lurie's \emph{Higher Topos Theory} at any chapter and follow.
+  \item Read modern algebraic and arithmetic geometry written in derived
+        / spectral language.
+  \item Engage with homotopy type theory and its applications.
+  \item Pursue research in any field touching $\infty$-category theory.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:landscape-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What are Vol IV's five phases?}{(1) Simplicial/homotopical foundations (Ch 37--42); (2) quasi-categories and $\infty$-Yoneda (Ch 43--48); (3) universal constructions (Ch 49--51); (4) presentable, stable, higher algebra (Ch 52--57); (5) DAG, HoTT, synthesis (Ch 58--60).}
+\qaitem{What are the four pillars?}{$\infty$-Yoneda (Ch 48); $\infty$-(co)limits (Ch 49); $\infty$-adjunctions (Ch 50); $\infty$-monads and $\infty$-Kan (Ch 51).}
+\qaitem{Where in HTT does Vol IV Ch 48 map?}{HTT §5.1.3 (Yoneda lemma for quasi-categories).}
+\qaitem{Where in HA does Vol IV Ch 56 map?}{HA §5.1--5.5 ($\mathbb{E}_n$-algebras and the little disks operads).}
+\qaitem{What complementary perspective does Riehl-Verity provide?}{Model-independent $\infty$-category theory via 2-categorical comma constructions. An analytic alternative to Lurie's combinatorial approach.}
+\qaitem{What does Land's book offer?}{A shorter, more accessible introduction to $\infty$-categories. Suitable as an alternative-pace entry point after Vol IV.}
+\qaitem{What's the original goal of the book?}{``Full formal understanding of category theory, its complete suite of theorems, and connections to other branches of mathematics — in that order.''}
+\qaitem{What remains for a hypothetical Vol V?}{The ``connections to other branches'' promise: algebra (derived/triangulated), topology (spectra), logic (toposes), computer science (categorical semantics).}
+\qaitem{What's the unifying view across volumes?}{Each universal construction appears at increasing levels of abstraction. The data is invariant; the dimensional precision changes.}
+\qaitem{Why is the $\infty$-Yoneda lemma the central theorem?}{Because it organizes the entire apparatus: limits, colimits, adjunctions, monads, Kan extensions all derive from representability via Yoneda.}
+\qaitem{What's the relationship between Lurie HTT and Riehl-Verity?}{They model $\infty$-categories differently — Lurie via simplicial sets, Riehl-Verity via $2$-categorical structures — but prove the same theorems. Volume IV uses Lurie's quasi-category model.}
+\qaitem{Why don't we develop straightening in detail?}{Because the proof spans about 100 pages of dense combinatorics (HTT §2.2). Our chapter sketches the strategy and works low-dimensional examples; readers who need the full proof can consult HTT directly.}
+\qaitem{Why don't we prove $\infty$-AFT in detail?}{Same reason: the proof requires the full machinery of accessible $\infty$-categories developed in HTT §5.5. We state the theorem cleanly and forward-point.}
+\qaitem{What does a Vol IV reader know that a Vol III reader doesn't?}{$\infty$-categorical analogues of every Vol III theorem; the simplicial-set framework; the higher algebra of operads; the bridge to Lurie's HTT and HA.}
+\qaitem{What does a Vol IV reader still not know?}{Detailed model-categorical homotopy theory (Hovey); operadic combinatorics (Loday-Vallette); applications to specific fields (Vol V territory).}
+\qaitem{Is Vol IV self-contained?}{Mostly. Some proofs (straightening, AFT, monadicity) are sketched rather than completed; the reader is directed to Lurie for the technical apparatus.}
+\qaitem{Why use quasi-categories rather than another model?}{Combinatorial directness (single condition: inner horns fill), match with Lurie/Riehl-Verity/Kerodon literature, and accessibility from the simplicial-set foundation built in Phase 1.}
+\qaitem{What's the connection to homotopy type theory?}{The two are dual: $\infty$-category theory provides semantics for HoTT (every $\infty$-topos models HoTT), while HoTT provides a synthetic language for $\infty$-toposes.}
+\qaitem{What's the homotopy hypothesis?}{$\infty$-groupoids $\simeq$ homotopy types of spaces. Established by the realization-singular Quillen equivalence (Ch 42). Foundational throughout Vol IV.}
+\qaitem{What's the most important $\infty$-category in Vol IV?}{$\mathcal{S}$, the $\infty$-category of spaces. The universal example, used in nearly every theorem. Its homotopy 1-category is $\mathrm{Ho}(\mathbf{Top})$.}
+\qaitem{What field is most transformed by $\infty$-categories?}{Algebraic geometry — DAG has reorganized large portions of the field. Also stable homotopy theory (Lurie's HA), representation theory (geometric Langlands), and homotopy type theory (foundations).}
+\qaitem{What does the reader who finishes Vol IV do next?}{Open Lurie HTT, Riehl-Verity, Cisinski, or Land — any of the standard $\infty$-category references — with a strong foundation. Or open Toën-Vezzosi for DAG, or the HoTT Book for type theory.}
+\qaitem{Where does the book end?}{Here, with a doorway to a fifth floor that was not built. Volume V, if written, would deliver the original v0.5 ``connections to other branches'' promise. Until then: the elementary category theory promised at the start is now fully delivered.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Vol IV's five phases.}\quad Simplicial foundations; quasi-categories
+and $\infty$-Yoneda; universal constructions; presentable / stable /
+higher algebra; doorways.
+
+\textbf{The four pillars.}\quad $\infty$-Yoneda (Ch 48), $\infty$-(co)limits
+(Ch 49), $\infty$-adjunctions (Ch 50), $\infty$-monads and Kan (Ch 51).
+Each is the higher-categorical version of a Vol III theorem.
+
+\textbf{Reading-list map.}\quad Vol IV chapters map to specific sections
+of Lurie's HTT, HA, SAG; Riehl-Verity; Cisinski; Kerodon; Land. The
+reader is equipped to engage any of these directly.
+
+\textbf{What's not here.}\quad Detailed proofs of straightening, $\infty$-AFT,
+$\infty$-monadicity — sketched, with forward pointers. Full DAG, full HoTT
+— previewed, but require dedicated volumes.
+
+\textbf{Toward Vol V.}\quad The original v0.5 promise — connections to
+other branches of mathematics — is preserved as a potential Vol V.
+Algebra, topology, logic, computer science. Not written here.
+
+\textbf{The arc.}\quad Vol I: learn. Vol II: reorganize. Vol III: formalize.
+Vol IV: ascend. Vol V (potential): apply. Elementary category theory in
+its higher-categorical form is now fully delivered.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Volume IV's central content.}\quad The universal constructions
+of $\infty$-category theory:
+\begin{itemize}
+  \item $\mathcal{C} \hookrightarrow \mathcal{P}(\mathcal{C}) =
+        \mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$; full
+        faithfulness; $\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F)
+        \simeq F(x)$ (Yoneda).
+  \item $\mathrm{const} \dashv \lim$; $\mathrm{colim} \dashv \mathrm{const}$.
+        $\infty$-bicompleteness of $\mathcal{S}$, $\mathcal{P}(\mathcal{C})$,
+        $\mathcal{C}\mathrm{at}_\infty$.
+  \item $L \dashv R$: $\mathrm{Map}$-equivalence form, unit/counit
+        with coherences, fibration over $\Delta^1$. Uniqueness, RAPL/LAPC.
+  \item Monad from adjunction: $T = RL$, $\eta_{\mathrm{ad}}$, $\mu = R\epsilon L$.
+        Monadicity = conservative + $R$-split preservation.
+  \item Adjoint triple $\mathrm{Lan}_p \dashv p^* \dashv \mathrm{Ran}_p$;
+        pointwise formula $\mathrm{Lan}_p F (e) = \mathrm{colim}_{p \downarrow e} F$.
+  \item Density: $\mathrm{Lan}_y \mathrm{id}_\mathcal{C} \simeq
+        \mathrm{id}_{\mathcal{P}(\mathcal{C})}$. Free cocompletion via Kan.
+\end{itemize}
+
+\medskip
+\textbf{Higher algebra.}\quad $\mathbb{E}_n$ interpolating $\mathbb{E}_1
+= \mathrm{Assoc}$ and $\mathbb{E}_\infty = \mathrm{Comm}$; Dunn
+additivity. $A_\infty$, $L_\infty$ as strong-homotopy variants;
+Koszul duality $\mathrm{Assoc}^! = \mathrm{Lie}$.
+
+\medskip
+\textbf{Presentable + stable.}\quad $\mathrm{Pr}^L$ closed symmetric
+monoidal (Lurie tensor); unit $\mathcal{S}$. $\mathrm{Pr}^L_{\mathrm{St}}$:
+unit $\mathrm{Sp}$. $\infty$-AFT: right adjoint $\iff$ limit-preserving
+$+$ accessible.
+
+\medskip
+\textbf{Connections (Vol V).}\quad Algebra, topology, logic, computer
+science — deferred to a potential fifth volume, not written here.
+
+\medskip
+\textbf{The book closes.}\quad Elementary category theory, in its
+higher-categorical form, is now fully delivered.
+\end{formalrestatement}

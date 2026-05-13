@@ -1,0 +1,392 @@
+% ch50_infty_adjunctions.tex — Volume IV Chapter 14
+
+\chapter{$\infty$-Adjunctions}
+
+\begin{overviewbox}
+Adjunctions have appeared in three earlier guises:
+\begin{itemize}
+  \item Chapter~7 — hom-set bijection $\mathcal{D}(LX, Y) \cong \mathcal{C}(X, RY)$.
+  \item Chapter~17 — triangle identities; uniqueness via Yoneda; adjoint triples.
+  \item Chapter~33 — formal account in 2-categories.
+\end{itemize}
+This chapter develops the fourth incarnation: the $\infty$-categorical
+version, where the hom-bijection is replaced by an equivalence of
+mapping spaces.
+
+A pair of $\infty$-functors $L : \mathcal{C} \to \mathcal{D}$ and
+$R : \mathcal{D} \to \mathcal{C}$ form an \term{$\infty$-adjunction}
+$L \dashv R$ if there is a natural equivalence
+\begin{equation*}
+  \mathrm{Map}_\mathcal{D}(L X, Y) \;\simeq\; \mathrm{Map}_\mathcal{C}(X, R Y),
+  \quad X \in \mathcal{C}, \, Y \in \mathcal{D}.
+\end{equation*}
+The naturality is in the $\infty$-categorical sense: the equivalences fit
+together into a coherent system, witnessing arbitrarily high-dimensional
+compatibilities.
+
+This chapter develops three equivalent characterizations: hom-equivalence,
+unit/counit data, and ``relative adjunctions'' via Cartesian fibrations.
+The latter is the model-independent definition (Riehl–Verity) and the
+most flexible for proofs.
+
+Theorems: right adjoints preserve $\infty$-limits, left adjoints preserve
+$\infty$-colimits (Chapter~49's RAPL/LAPC). Uniqueness up to contractible
+choice: any two adjoints to $L$ are equivalent via a unique-up-to-coherent-homotopy
+$\infty$-natural isomorphism. The $\infty$-adjoint functor theorem
+(presentable case) is stated in §50.4, with proof deferred to Chapter~52.
+
+Adjunctions are the backbone of practical $\infty$-categorical
+constructions: free/forgetful adjunctions, localizations, fibre/cofibre
+functors, base-change pairs in derived algebraic geometry. By Chapter~52
+(presentable case), the adjoint functor theorem will become as central in
+the $\infty$-setting as in the $1$-setting.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Defining $\infty$-Adjunctions}
+\label{sec:defining-adjunctions}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-Adjunction: hom-equivalence form]
+\label{def:adjunction-hom}
+A pair of $\infty$-functors $L : \mathcal{C} \to \mathcal{D}$ and
+$R : \mathcal{D} \to \mathcal{C}$ form an \term{$\infty$-adjunction}
+$L \dashv R$ if there is a natural equivalence of mapping spaces
+\begin{equation*}
+  \mathrm{Map}_\mathcal{D}(L X, Y) \;\simeq\; \mathrm{Map}_\mathcal{C}(X, R Y)
+\end{equation*}
+in the variables $X \in \mathcal{C}$ and $Y \in \mathcal{D}$.
+
+Precisely: the two functors $\mathrm{Map}_\mathcal{D}(L (-), -)$ and
+$\mathrm{Map}_\mathcal{C}(-, R(-))$ from $\mathcal{C}^{\mathrm{op}} \times
+\mathcal{D}$ to $\mathcal{S}$ are equivalent in
+$\mathrm{Fun}(\mathcal{C}^{\mathrm{op}} \times \mathcal{D}, \mathcal{S})$.
+\end{definition}
+
+\begin{howtosay}
+$L \dashv R$ \sayit{``$L$ is left adjoint to $R$''} or \sayit{``$L$
+adjoint $R$''}; $L$ called the \term{left adjoint}, $R$ the
+\term{right adjoint}.
+\end{howtosay}
+
+\begin{definition}[$\infty$-Adjunction: unit/counit form]
+\label{def:adjunction-unit-counit}
+Equivalently, an $\infty$-adjunction is a pair $L \dashv R$ together with:
+\begin{itemize}
+  \item A \term{unit} natural transformation $\eta : \mathrm{id}_\mathcal{C}
+        \Rightarrow R L$.
+  \item A \term{counit} natural transformation $\epsilon : L R \Rightarrow
+        \mathrm{id}_\mathcal{D}$.
+\end{itemize}
+satisfying the \term{triangle identities up to coherent homotopy}:
+$\epsilon L \circ L \eta \simeq \mathrm{id}_L$ and $R \epsilon \circ
+\eta R \simeq \mathrm{id}_R$, with all higher coherences supplied as
+data.
+\end{definition}
+
+\begin{theorem}[Equivalence of the two forms]
+\label{thm:adjunction-equiv}
+The hom-equivalence form (Definition~\ref{def:adjunction-hom}) and the
+unit/counit form (Definition~\ref{def:adjunction-unit-counit}) are
+equivalent: there is an equivalence of $\infty$-categories of
+``$\infty$-adjunctions presented in form $A$'' and ``form $B$.''
+\end{theorem}
+
+\begin{remark}[The triangle identities require coherence data]
+In a $1$-category, the triangle identities are equations between
+natural transformations. In an $\infty$-category, they are weak
+equivalences of $1$-simplices, requiring $2$-simplex witnesses; the
+$2$-simplex compatibilities require $3$-simplex witnesses; and so on.
+The infinite tower of coherences is exactly what distinguishes
+$\infty$-adjunctions from naive ``pseudo-adjunctions.''
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Relative Adjunctions via Fibrations}
+\label{sec:relative-adjunctions}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+Riehl–Verity propose a model-independent definition of $\infty$-adjunctions
+using only the language of $\infty$-categorical mapping spaces and
+fibrations.
+
+\begin{definition}[Adjunction via fibrations]
+\label{def:adjunction-fibration}
+An $\infty$-adjunction $L \dashv R$ is the data of:
+\begin{itemize}
+  \item A coCartesian fibration $\mathcal{E} \to \Delta^1$ with fibres
+        $\mathcal{E}_0 = \mathcal{C}$ over $0$ and $\mathcal{E}_1 = \mathcal{D}$
+        over $1$.
+  \item The transport functor $\mathcal{C} \to \mathcal{D}$ is $L$.
+\end{itemize}
+The fibration is simultaneously a Cartesian fibration iff $L$ has a
+right adjoint $R$. The Cartesian transport (in the reverse direction)
+recovers $R$, and the bi-fibration structure encodes the entire
+adjunction data (including coherences).
+\end{definition}
+
+\begin{remark}[Why fibrations are model-independent]
+The fibration definition uses only $\infty$-categorical features:
+existence of (co)Cartesian morphisms, fibres, transport. It works in any
+model of $\infty$-categories (quasi-cats, simplicial cats, complete Segal
+spaces). The hom-equivalence and unit/counit forms are quasi-categorical
+specializations.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Preservation Properties}
+\label{sec:adjunction-preservation}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[$\infty$-RAPL and $\infty$-LAPC]
+\label{thm:rapl-lapc-infty}
+Let $L \dashv R : \mathcal{D} \to \mathcal{C}$ be an $\infty$-adjunction.
+\begin{itemize}
+  \item $R$ preserves all $\infty$-limits that exist in $\mathcal{D}$.
+  \item $L$ preserves all $\infty$-colimits that exist in $\mathcal{C}$.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Proven already in Theorem~49.\ref{thm:RAPL-infty} as Chapter~49's
+$\mathrm{Map}$-Yoneda calculation. \qed
+\end{proof}
+
+\begin{remark}[The converse is not automatic]
+Preservation of $\infty$-limits does \emph{not} imply being a right adjoint
+without further hypotheses (e.g., presentability of $\mathcal{D}$). The
+adjoint functor theorem, generalized to the $\infty$-setting, gives a
+clean criterion in the presentable case (\S\ref{sec:aft-presentable}).
+\end{remark}
+
+\subsection{Reorganizing: uniqueness of adjoints}
+
+\begin{theorem}[Uniqueness of adjoints]
+\label{thm:uniqueness-adjoints}
+If $L_1 \dashv R$ and $L_2 \dashv R$ are two $\infty$-adjunctions sharing
+the same right adjoint, then there is an equivalence $L_1 \simeq L_2$
+unique up to a contractible space of equivalences.
+
+Dually: given $L \dashv R_1$ and $L \dashv R_2$, $R_1 \simeq R_2$
+uniquely up to contractible choice.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Both $L_1, L_2$ co-represent the functor $Y \mapsto \mathrm{Map}_\mathcal{C}(-, RY)$.
+By $\infty$-Yoneda, the corepresenting object is unique up to contractible
+space of equivalences. \qed
+\end{proof}
+
+\begin{remark}[Adjoint triples]
+A right adjoint $R$ may itself have a further right adjoint $R'$, giving
+an adjoint triple $L \dashv R \dashv R'$. This phenomenon is essentially
+the same as in $1$-categories (Chapter~17), but generalizes: in
+$\mathcal{C}\mathrm{at}_\infty$ one finds chains of arbitrary length
+(``adjoint chains''), e.g., in the context of $6$-functor formalisms or
+derived algebraic geometry.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Adjoint Functor Theorem (Preview)}
+\label{sec:aft-presentable}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[$\infty$-Adjoint Functor Theorem: presentable case]
+\label{thm:aft-presentable}
+Let $\mathcal{C}$ and $\mathcal{D}$ be presentable $\infty$-categories
+(Chapter~52). A functor $R : \mathcal{D} \to \mathcal{C}$ admits a left
+adjoint iff $R$ preserves all small $\infty$-limits and is
+\term{accessible}: there exists a regular cardinal $\kappa$ such that
+$R$ preserves $\kappa$-filtered colimits.
+
+Dually, $L : \mathcal{C} \to \mathcal{D}$ admits a right adjoint iff $L$
+preserves all small $\infty$-colimits.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The proof is the central content of HTT §5.5; we defer the full apparatus
+to Chapter~52. Key ingredients:
+\begin{itemize}
+  \item Presentable $\infty$-categories admit accessible localizations.
+  \item Accessibility plus colimit preservation gives the construction
+        of the adjoint via Kan extension along a presentation.
+  \item Uniqueness up to contractible choice follows from $\infty$-Yoneda.
+\end{itemize}
+\qed
+\end{proof}
+
+\begin{remark}[Working horse of higher algebra]
+Theorem~\ref{thm:aft-presentable} is the engine of much of higher
+algebra: existence of left adjoints to forgetful functors (giving free
+constructions), right adjoints to restriction functors (giving induction),
+all derive from this single theorem applied to presentable categories.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Examples}
+\label{sec:adjunction-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Foundational adjunctions in Volume~IV}
+
+\begin{example_thm}[$\mathrm{ho} \dashv \mathrm{N}$]
+\label{ex:ho-N-adj}
+The homotopy category functor $\mathrm{ho} : \mathbf{QCat} \to \mathbf{Cat}$
+is left adjoint to the nerve $\mathrm{N} : \mathbf{Cat} \to \mathbf{QCat}$
+(Theorem~43.\ref{cor:ho-functor}).
+\end{example_thm}
+
+\begin{example_thm}[$\lvert{-}\rvert \dashv \mathrm{Sing}$]
+\label{ex:realization-sing-adj}
+Geometric realization is left adjoint to the singular complex functor
+(Theorem~39.\ref{thm:realization-sing-adj}). The adjunction is a
+Quillen equivalence (Theorem~42.\ref{thm:real-sing-qeq}); on
+$\infty$-category level, it becomes an equivalence
+$\mathcal{S} \simeq \mathcal{S}_{\mathrm{Top}}$.
+\end{example_thm}
+
+\begin{example_thm}[Yoneda and free cocompletion]
+\label{ex:yoneda-adj}
+For any cocomplete $\infty$-category $\mathcal{D}$ and small $\mathcal{C}$,
+the restriction $y^* : \mathrm{Fun}^{\mathrm{cc}}(\mathcal{P}(\mathcal{C}),
+\mathcal{D}) \to \mathrm{Fun}(\mathcal{C}, \mathcal{D})$ is an equivalence
+(Theorem~48.\ref{thm:free-cocompletion}); in particular, it has both
+adjoints. The unique colimit-preserving extension $\bar F : \mathcal{P}(\mathcal{C})
+\to \mathcal{D}$ is the left adjoint of $y^*$.
+\end{example_thm}
+
+\subsection{Reorganizing: where this goes}
+
+\begin{remark}[Adjunctions throughout Volume~IV]
+$\infty$-adjunctions appear in nearly every remaining chapter:
+\begin{itemize}
+  \item Chapter~51: every $\infty$-monad arises from an $\infty$-adjunction;
+        $\infty$-Kan extensions are universal adjunctions.
+  \item Chapter~52: presentable $\infty$-categories are characterized by
+        ``accessibility plus AFT-style adjoint existence.''
+  \item Chapter~53: stable $\infty$-cats use adjoints to define
+        suspension/loop functors.
+  \item Chapter~55: $\infty$-operads are themselves built using
+        adjunctions between operadic and ordinary $\infty$-categories.
+\end{itemize}
+The $\infty$-adjunction is the second pillar of $\infty$-category
+theory, after the $\infty$-Yoneda lemma.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:adjunctions-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define an $\infty$-adjunction via hom-equivalence.}{$L \dashv R$ iff there's a natural equivalence $\mathrm{Map}_\mathcal{D}(LX, Y) \simeq \mathrm{Map}_\mathcal{C}(X, RY)$ as functors $\mathcal{C}^{\mathrm{op}} \times \mathcal{D} \to \mathcal{S}$.}
+\qaitem{What's the unit/counit form?}{$\eta : \mathrm{id} \Rightarrow RL$, $\epsilon : LR \Rightarrow \mathrm{id}$, satisfying triangle identities up to coherent homotopy with infinitely many higher coherences.}
+\qaitem{What's the fibrational form?}{A coCartesian fibration $\mathcal{E} \to \Delta^1$ with fibres $\mathcal{C}, \mathcal{D}$ that is also a Cartesian fibration. The transport in two directions gives $L$ and $R$.}
+\qaitem{Why is the fibrational form model-independent?}{Because it uses only fibration data, available in any model of $\infty$-categories.}
+\qaitem{State $\infty$-RAPL/LAPC.}{$L \dashv R \Rightarrow R$ preserves $\infty$-limits and $L$ preserves $\infty$-colimits. Theorem~49.\ref{thm:RAPL-infty}.}
+\qaitem{Why is the proof of RAPL one short calculation?}{$\mathrm{Map}_\mathcal{C}(c, R(\lim p)) \simeq \mathrm{Map}_\mathcal{D}(Lc, \lim p) \simeq \lim \mathrm{Map}_\mathcal{D}(Lc, p) \simeq \lim \mathrm{Map}_\mathcal{C}(c, Rp) \simeq \mathrm{Map}_\mathcal{C}(c, \lim Rp)$. Yoneda concludes.}
+\qaitem{Does preserving limits imply being a right adjoint?}{Only in special cases (presentability). The full $\infty$-AFT theorem (\S\ref{sec:aft-presentable}) says: right adjoints among accessible functors between presentable $\infty$-cats = limit-preserving functors.}
+\qaitem{State uniqueness of adjoints.}{Two left adjoints to the same $R$ are equivalent up to a contractible space of equivalences. Same for right adjoints.}
+\qaitem{Why uniqueness?}{Both adjoints corepresent the same functor $\mathrm{Map}_\mathcal{C}(-, RY)$; $\infty$-Yoneda gives the corepresenting object up to contractible choice.}
+\qaitem{What's an adjoint triple?}{$L \dashv R \dashv R'$: $R$ has both a left adjoint $L$ and a further right adjoint $R'$.}
+\qaitem{Give a foundational $\infty$-adjunction.}{$\mathrm{ho} \dashv \mathrm{N}$: $\mathbf{QCat} \rightleftarrows \mathbf{Cat}$. Going up: $\mathrm{N}$ embeds $1$-cats into $\infty$-cats; going down: $\mathrm{ho}$ truncates to a $1$-cat.}
+\qaitem{Another?}{$\lvert{-}\rvert \dashv \mathrm{Sing}$: realization and singular complex. A Quillen equivalence; on $\infty$-cat level an equivalence $\mathcal{S} \simeq \mathcal{S}_{\mathrm{Top}}$.}
+\qaitem{And another?}{$y^* \dashv \bar{(-)}$ via Yoneda: restriction is left adjoint to free-cocompletion extension; gives the universal property of $\mathcal{P}(\mathcal{C})$.}
+\qaitem{State the $\infty$-AFT in the presentable case.}{For presentable $\mathcal{C}, \mathcal{D}$: a functor admits a left adjoint iff it preserves all $\infty$-limits and is accessible. Dually for right adjoints.}
+\qaitem{What does ``accessible'' mean?}{Preserves $\kappa$-filtered colimits for some regular cardinal $\kappa$. Together with limit preservation, characterizes right adjoints among presentable-target functors.}
+\qaitem{Where is $\infty$-AFT proven?}{Chapter~52 (presentability) develops the necessary machinery. Lurie HTT §5.5 has the full account.}
+\qaitem{Can $L$ be a right adjoint too?}{Yes — this is called \term{ambidexterity}. Examples: limits and colimits commute in $\mathcal{S}$ (filtered + finite), giving the bifibrational structure.}
+\qaitem{How does this generalize Vol I Ch 7 hom-set bijection?}{The hom-set bijection $\mathcal{C}(X, RY) \cong \mathcal{D}(LX, Y)$ becomes a weak equivalence of $\infty$-groupoids (Kan complexes) $\mathrm{Map}$. Naturality is coherent.}
+\qaitem{How does it generalize Vol II Ch 17 triangle identities?}{Triangle identities $(\epsilon L)(L\eta) = \mathrm{id}_L$ become weak equivalences with infinitely many higher coherences as data.}
+\qaitem{How does it generalize Vol III Ch 33 formal version?}{The $2$-categorical Vol III account becomes the $\infty$-categorical one: $\mathcal{C}\mathrm{at}_\infty$ replaces $\mathbf{Cat}$ as the ambient structure.}
+\qaitem{Are $\infty$-adjunctions composable?}{Yes — composition of left adjoints is a left adjoint to the composition of right adjoints. The corresponding fibrations compose via Cartesian product over $\Delta^1$.}
+\qaitem{When is an adjunction an equivalence?}{When unit and counit are weak equivalences. Equivalent to: both $L$ and $R$ are fully faithful and essentially surjective.}
+\qaitem{What's the next chapter?}{Ch 51: $\infty$-Monads and $\infty$-Kan Extensions. Monads are precisely the algebras associated to $\infty$-adjunctions; Kan extensions are universal adjoints. Together they complete the higher-categorical spine.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{$\infty$-Adjunction.}\quad $L \dashv R$ iff there's a natural
+equivalence $\mathrm{Map}_\mathcal{D}(LX, Y) \simeq \mathrm{Map}_\mathcal{C}(X, RY)$.
+Three forms: hom-equivalence, unit/counit-with-coherences, fibration over
+$\Delta^1$.
+
+\textbf{$\infty$-RAPL/LAPC.}\quad Right adjoints preserve $\infty$-limits;
+left adjoints preserve $\infty$-colimits. One-line Yoneda proof.
+
+\textbf{Uniqueness.}\quad Any two left adjoints to the same $R$ are
+equivalent up to a contractible space of equivalences ($\infty$-Yoneda).
+
+\textbf{$\infty$-AFT (presentable case).}\quad Among accessible functors
+between presentable $\infty$-categories, ``right adjoint = preserves
+$\infty$-limits.'' Engine of higher-algebra constructions.
+
+\textbf{Foundational examples.}\quad $\mathrm{ho} \dashv \mathrm{N}$;
+$\lvert{-}\rvert \dashv \mathrm{Sing}$; Yoneda's $y^* \dashv \bar{(-)}$.
+
+\textbf{Role in Volume~IV.}\quad Used in Chapters~51 (monads), 52
+(presentability), 53 (stability), 55 (operads). The second pillar of
+$\infty$-CT after Yoneda.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{$\infty$-Adjunction.}\quad $L \dashv R$:
+\begin{equation*}
+  \mathrm{Map}_\mathcal{D}(LX, Y) \;\simeq\; \mathrm{Map}_\mathcal{C}(X, RY),
+  \quad \text{natural in } X, Y.
+\end{equation*}
+
+\medskip
+\textbf{Unit and counit.}\quad $\eta : \mathrm{id}_\mathcal{C} \Rightarrow RL$,
+$\epsilon : LR \Rightarrow \mathrm{id}_\mathcal{D}$. Triangle equivalences:
+$\epsilon L \circ L\eta \simeq \mathrm{id}_L$, $R\epsilon \circ \eta R \simeq \mathrm{id}_R$,
+plus all higher coherences.
+
+\medskip
+\textbf{Fibration form.}\quad $\mathcal{E} \to \Delta^1$ co- and Cartesian
+fibration; fibres $\mathcal{C}, \mathcal{D}$; transport in two directions
+gives $L, R$.
+
+\medskip
+\textbf{Preservation.}\quad $L \dashv R \Rightarrow$ $R$ preserves
+$\infty$-limits, $L$ preserves $\infty$-colimits.
+
+\medskip
+\textbf{Uniqueness.}\quad The space of adjoints to a given functor is
+either empty or contractible.
+
+\medskip
+\textbf{$\infty$-AFT (presentable).}\quad For $\mathcal{C}, \mathcal{D}$
+presentable and $R : \mathcal{D} \to \mathcal{C}$:
+\begin{equation*}
+  R \text{ has a left adjoint} \iff R \text{ preserves } \infty\text{-limits and is accessible}.
+\end{equation*}
+Dually, $L$ has a right adjoint $\iff$ $L$ preserves $\infty$-colimits.
+\end{formalrestatement}

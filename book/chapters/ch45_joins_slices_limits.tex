@@ -1,0 +1,401 @@
+% ch45_joins_slices_limits.tex — Volume IV Chapter 9
+
+\chapter{Joins, Slices, and Limits in a Quasi-Category}
+
+\begin{overviewbox}
+$\infty$-limits and $\infty$-colimits are the central universal
+constructions of $\infty$-category theory. Chapter~49 will develop them
+in earnest; this chapter assembles the combinatorial machinery they
+require: the \term{join} $X \star Y$ of simplicial sets, and the
+\term{slice} quasi-categories $\mathcal{C}_{/p}$ and $\mathcal{C}_{p/}$
+that the join produces.
+
+The join is a binary operation on $\mathbf{sSet}$ with $\Delta^a \star
+\Delta^b = \Delta^{a + b + 1}$. Geometrically, it juxtaposes two
+simplicial sets and adds simplices for ``all the new connecting
+edges'' from one to the other. The slice $\mathcal{C}_{/p}$ over a
+diagram $p : K \to \mathcal{C}$ is the right adjoint of $- \star K$ at
+$p$: its $n$-simplices are extensions of $p$ along $\Delta^n \star K
+\to \mathcal{C}$.
+
+With slices in hand, $\infty$-limits and $\infty$-colimits admit a
+striking definition: $\lim p$ is the \term{terminal object} of
+$\mathcal{C}_{/p}$, and $\mathrm{colim}\, p$ is the \term{initial object}
+of $\mathcal{C}_{p/}$. The shift to slice quasi-categories converts
+universal property into ``existence of a terminal/initial object,'' which
+turns out to be the cleanest formulation in the $\infty$-categorical
+setting.
+
+The chapter closes with cofinal maps — diagrams sharing the same
+colimit. Joyal–Lurie's criterion is the practical workhorse:
+$i : K' \to K$ is cofinal iff for every object $x$ of the target
+$\infty$-category, the fibre of $i$ over $\mathcal{C}_{/x}$ has a
+contractible slice. This will be used repeatedly in Chapters~48--51.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Join of Simplicial Sets}
+\label{sec:join}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Join of simplicial sets]
+\label{def:join}
+For $X, Y \in \mathbf{sSet}$, the \term{join} $X \star Y$ is the
+simplicial set with
+\begin{equation*}
+  (X \star Y)_n \;=\; X_n \;\sqcup\; Y_n \;\sqcup\; \coprod_{i + j = n - 1} X_i \times Y_j.
+\end{equation*}
+The face and degeneracy operators are the natural ones from $X$ on the
+first piece, from $Y$ on the second piece, and on the mixed piece $X_i
+\times Y_j$ by applying $X$-operators when the indexed face/degeneracy
+stays in the $X$-part and $Y$-operators when it stays in the $Y$-part,
+with appropriate ``connecting'' behavior at the boundary.
+\end{definition}
+
+\begin{howtosay}
+$X \star Y$ \sayit{``$X$ join $Y$''}. The star is the standard
+typographic convention; sometimes $X * Y$ is written instead.
+\end{howtosay}
+
+\begin{theorem}[Join on standard simplices]
+\label{thm:join-delta}
+$\Delta^a \star \Delta^b \;\cong\; \Delta^{a + b + 1}$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+$\Delta^{a+b+1}$ has $a + b + 2$ vertices. Label the first $a+1$ as
+those of $\Delta^a$ and the last $b+1$ as those of $\Delta^b$. An
+$n$-simplex of $\Delta^{a+b+1}$ is a monotone map $[n] \to [a+b+1]$,
+which can be split into the $X$-part (image in $[a]$), the $Y$-part
+(image in $[b]$, shifted), and the mixed part (one vertex in each). The
+three pieces match the three summands in
+Definition~\ref{def:join}. \qed
+\end{proof}
+
+\begin{example_thm}[Cones]
+\label{ex:cones}
+For any $X \in \mathbf{sSet}$:
+\begin{itemize}
+  \item $X \star \Delta^0$ is the \term{right cone} on $X$, denoted
+        $X^\rhd$. It adjoins a single ``cone point'' to which every
+        vertex of $X$ is connected.
+  \item $\Delta^0 \star X$ is the \term{left cone} on $X$, denoted
+        $X^\lhd$. The cone point is the source instead of the target.
+\end{itemize}
+\end{example_thm}
+
+\begin{theorem}[Functoriality of the join]
+\label{thm:join-functor}
+The join $\star : \mathbf{sSet} \times \mathbf{sSet} \to \mathbf{sSet}$
+is a functor in each variable separately. It does \emph{not} preserve
+colimits in either variable, however, so does not extend to an
+$\infty$-categorical tensor product without modification.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Slice Quasi-Categories}
+\label{sec:slices}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Slice quasi-category over a diagram]
+\label{def:slice-over}
+Let $\mathcal{C}$ be a simplicial set and $p : K \to \mathcal{C}$ a map
+(thought of as a \term{diagram} of shape $K$ in $\mathcal{C}$). The
+\term{slice} $\mathcal{C}_{/p}$ is the simplicial set with
+\begin{equation*}
+  (\mathcal{C}_{/p})_n \;=\; \{\,\sigma : \Delta^n \star K \to \mathcal{C} : \sigma|_K = p\,\}.
+\end{equation*}
+That is, an $n$-simplex of $\mathcal{C}_{/p}$ is an extension of $p$
+along $K \hookrightarrow \Delta^n \star K$.
+\end{definition}
+
+\begin{definition}[Slice quasi-category under a diagram]
+\label{def:slice-under}
+Dually, $\mathcal{C}_{p/}$ has $n$-simplices $\sigma : K \star \Delta^n \to
+\mathcal{C}$ with $\sigma|_K = p$.
+\end{definition}
+
+\begin{howtosay}
+$\mathcal{C}_{/p}$ \sayit{``$\mathcal{C}$ over $p$''}; $\mathcal{C}_{p/}$
+\sayit{``$\mathcal{C}$ under $p$''}. For the special case $K = \Delta^0$
+with $p$ picking out an object $x$, we write $\mathcal{C}_{/x}$ and
+$\mathcal{C}_{x/}$.
+\end{howtosay}
+
+\begin{theorem}[Slice quasi-categories are quasi-categories]
+\label{thm:slice-is-qcat}
+If $\mathcal{C}$ is a quasi-category, then for any diagram $p : K \to
+\mathcal{C}$, the slices $\mathcal{C}_{/p}$ and $\mathcal{C}_{p/}$ are
+quasi-categories.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+An inner horn $\Lambda^n_k \to \mathcal{C}_{/p}$ corresponds to a partial
+extension of $p$ from $K$ to $(\Lambda^n_k) \star K \to \mathcal{C}$.
+By the inner-horn-filling property of $\mathcal{C}$ (the relevant horn
+in $\mathcal{C}$ being still inner), the extension exists, giving
+$\Delta^n \to \mathcal{C}_{/p}$. \qed
+\end{proof}
+
+\begin{theorem}[Join-slice adjunction]
+\label{thm:join-slice-adj}
+For each simplicial set $K$, the functor $- \star K : \mathbf{sSet} \to
+\mathbf{sSet}_{K/}$ (sending $X$ to $X \star K$ with its canonical
+inclusion of $K$) has a right adjoint $\mathcal{C} \mapsto \mathcal{C}_{/p}$
+where $p : K \to \mathcal{C}$ is the structure map of an object of
+$\mathbf{sSet}_{K/}$:
+\begin{equation*}
+  \mathbf{sSet}(X \star K, \mathcal{C}) \cong \mathbf{sSet}(X, \mathcal{C}_{/p}) \quad
+  \text{(over } K \text{)}.
+\end{equation*}
+Dually for $- \star K$ on the left and $\mathcal{C}_{p/}$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Limits and Colimits}
+\label{sec:limits-colimits-qcat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+In an ordinary category, the limit of a diagram is the universal cone
+over it. In a quasi-category, the analogous data is: an object
+$\lim p \in \mathcal{C}$, plus a cone (a map $\Delta^0 \star K \to
+\mathcal{C}$ extending $p$), plus an entire tower of higher-dimensional
+witnesses that ``no better cone exists.'' The shift to slices packages
+all this data as: an object of $\mathcal{C}_{/p}$ — namely the limit cone
+— that is \emph{terminal} in $\mathcal{C}_{/p}$.
+
+\subsection{Formalizing}
+
+\begin{definition}[Initial and terminal objects]
+\label{def:initial-terminal-qcat}
+An object $x$ of a quasi-category $\mathcal{D}$ is:
+\begin{itemize}
+  \item \term{Initial} if $\mathrm{Map}_\mathcal{D}(x, y)$ is contractible
+        for every $y \in \mathcal{D}_0$.
+  \item \term{Terminal} if $\mathrm{Map}_\mathcal{D}(y, x)$ is contractible
+        for every $y \in \mathcal{D}_0$.
+\end{itemize}
+\end{definition}
+
+\begin{remark}[Why ``contractible''?]
+``Unique up to coherent homotopy'' is the same as ``contractible.'' In
+$\mathbf{Set}$, a one-point set is the unique set such that all
+$\mathrm{Hom}(x, y)$ are singletons. In quasi-categories, ``singleton''
+is replaced by ``contractible Kan complex'' — its weak-equivalent counterpart.
+\end{remark}
+
+\begin{definition}[$\infty$-limit and $\infty$-colimit]
+\label{def:limit-colimit-qcat}
+Let $\mathcal{C}$ be a quasi-category and $p : K \to \mathcal{C}$ a
+diagram.
+
+A \term{limit} of $p$, denoted $\lim p$, is a \emph{terminal} object of
+the slice $\mathcal{C}_{/p}$ — when it exists.
+
+A \term{colimit} of $p$, denoted $\mathrm{colim}\, p$, is an
+\emph{initial} object of $\mathcal{C}_{p/}$.
+\end{definition}
+
+\begin{howtosay}
+$\lim p$ \sayit{``the limit of $p$''} or \sayit{``the $\infty$-limit''}.
+For emphasis we sometimes write $\lim^\infty p$ to distinguish from the
+$1$-categorical limit, but typically context makes this clear.
+\end{howtosay}
+
+\begin{example_thm}[$\infty$-products and $\infty$-equalizers]
+\label{ex:products-equalizers-qcat}
+For $K$ a finite discrete set, an $\infty$-limit of $p : K \to \mathcal{C}$
+is the \term{$\infty$-product} of the objects $p(k)$. For $K = \Delta^1
+\rightrightarrows \Delta^0$ (the walking parallel pair), it is the
+\term{$\infty$-equalizer}.
+
+These $\infty$-versions reduce to ordinary $1$-categorical products and
+equalizers in $\mathrm{ho}(\mathcal{C})$, but the $\infty$-data retains
+all higher coherences.
+\end{example_thm}
+
+\begin{theorem}[Uniqueness of $\infty$-(co)limits]
+\label{thm:uniqueness}
+When $\lim p$ exists, the space of limit cones — the space of terminal
+objects of $\mathcal{C}_{/p}$ — is either empty or contractible.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+By definition, a terminal object $x$ of a quasi-category $\mathcal{D}$ has
+$\mathrm{Map}_\mathcal{D}(y, x)$ contractible for all $y$. In particular,
+the space of terminal objects of $\mathcal{D}$ is the limit of
+contractible spaces over a contractible diagram, hence contractible (or
+empty). \qed
+\end{proof}
+
+\begin{remark}[Limits in $\mathcal{S}$]
+For the $\infty$-category of spaces, $\infty$-limits computed in
+$\mathcal{S}$ are homotopy limits of spaces. Standard homotopy fibre and
+homotopy pullback constructions in $\mathbf{Top}$ are recovered as
+particular cases.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cofinality}
+\label{sec:cofinality}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Cofinal map]
+\label{def:cofinal}
+A map $i : K' \to K$ between simplicial sets is \term{cofinal} (also
+called \term{final}) if for every quasi-category $\mathcal{C}$ and every
+diagram $p : K \to \mathcal{C}$ such that $\mathrm{colim}\, p$ exists,
+the map $\mathrm{colim}\, p \to \mathrm{colim}(p \circ i)$ is an
+equivalence in $\mathcal{C}$. Dually, $i$ is \term{coinitial} (or
+\term{initial}) if it preserves $\infty$-limits.
+\end{definition}
+
+\begin{theorem}[Joyal--Lurie criterion]
+\label{thm:joyal-lurie-cofinal}
+A map $i : K' \to K$ is cofinal iff for every vertex $k \in K_0$, the
+slice $K'_{k/} := K' \times_K K_{k/}$ is weakly contractible (i.e., its
+realization is a contractible topological space).
+\end{theorem}
+
+\begin{example_thm}[Inclusion of an initial object]
+\label{ex:initial-inclusion}
+If $K$ has an initial object $k_0$, then the inclusion $\{k_0\}
+\hookrightarrow K$ is cofinal. Hence
+\begin{equation*}
+  \mathrm{colim}_K p \;\simeq\; p(k_0).
+\end{equation*}
+Diagrams with initial objects collapse on colimits. This generalizes the
+fact that the colimit of a diagram with an initial vertex in $\mathbf{Set}$
+is the image of that initial vertex.
+\end{example_thm}
+
+\begin{example_thm}[Filtered cofinality]
+\label{ex:filtered-cofinal}
+If $K, K'$ are both $\infty$-filtered (their nerves are filtered as
+quasi-categories), and $i : K' \to K$ is essentially surjective, then $i$
+is cofinal. Filtered colimits depend only on the asymptotic shape.
+\end{example_thm}
+
+\begin{remark}[Cofinality in practice]
+Cofinality is the central tool for \emph{computing} $\infty$-(co)limits:
+replacing a complicated diagram by a cofinal subdiagram, the latter being
+easier to handle. In Chapter~49 we will see how cofinality computes
+$\infty$-(co)limits via cone-cone arguments, generalizing Chapter~6's
+ordinary-category cone-and-limit reductions.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:joins-slices-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define the join $X \star Y$.}{$(X \star Y)_n = X_n \sqcup Y_n \sqcup \coprod_{i+j=n-1} X_i \times Y_j$, with face and degeneracy operators piecing together the three components.}
+\qaitem{What is $\Delta^a \star \Delta^b$?}{$\Delta^{a+b+1}$ — the standard simplex on the disjoint union of vertex sets.}
+\qaitem{What is the right cone $X^\rhd$?}{$X^\rhd = X \star \Delta^0$: $X$ with a single ``cone-point'' vertex added, connected to every vertex of $X$.}
+\qaitem{What is the left cone $X^\lhd$?}{$X^\lhd = \Delta^0 \star X$: dually, with the cone point as source.}
+\qaitem{Is $\star$ associative? Symmetric?}{Associative (up to natural isomorphism); not symmetric — $X \star Y \neq Y \star X$ in general (cones are directional).}
+\qaitem{Define the slice $\mathcal{C}_{/p}$.}{$(\mathcal{C}_{/p})_n = \{\sigma : \Delta^n \star K \to \mathcal{C} : \sigma|_K = p\}$; $n$-simplices are extensions of $p$ from $K$ along $K \hookrightarrow \Delta^n \star K$.}
+\qaitem{What is $\mathcal{C}_{/x}$ for $x$ a single object?}{The case $K = \Delta^0$: $n$-simplices are $\Delta^n \star \Delta^0 = \Delta^{n+1} \to \mathcal{C}$ with last vertex $x$. The slice $\mathcal{C}_{/x}$ has objects ``arrows into $x$.''}
+\qaitem{Is $\mathcal{C}_{/p}$ a quasi-category when $\mathcal{C}$ is?}{Yes — inner-horn filling for the slice reduces to inner-horn filling for $\mathcal{C}$.}
+\qaitem{State the join-slice adjunction.}{$\mathbf{sSet}(X \star K, \mathcal{C}) \cong \mathbf{sSet}(X, \mathcal{C}_{/p})$ over $K$. So $- \star K \dashv (-)_{/K}$.}
+\qaitem{Define initial and terminal objects in a quasi-category.}{$x$ is initial if $\mathrm{Map}_\mathcal{D}(x, y)$ is contractible for all $y$; terminal if $\mathrm{Map}_\mathcal{D}(y, x)$ is contractible for all $y$.}
+\qaitem{Why ``contractible'' rather than ``one element''?}{Because the $\infty$-categorical hom is a space, not a set. ``Unique up to coherent homotopy'' is the same as ``contractible space of choices.''}
+\qaitem{Define the $\infty$-limit of $p : K \to \mathcal{C}$.}{A terminal object of the slice $\mathcal{C}_{/p}$.}
+\qaitem{Define the $\infty$-colimit.}{An initial object of $\mathcal{C}_{p/}$.}
+\qaitem{Why is the limit object well-defined?}{When it exists, the space of terminal objects of $\mathcal{C}_{/p}$ is contractible (or empty). So $\lim p$ is unique up to a contractible space of equivalences.}
+\qaitem{Recover $\infty$-products and $\infty$-equalizers from the definition.}{$\infty$-product $=$ $\infty$-limit over a finite discrete $K$. $\infty$-equalizer $=$ $\infty$-limit over $K = (\Delta^1 \rightrightarrows \Delta^0)$.}
+\qaitem{Define a cofinal map.}{$i : K' \to K$ such that for every $p : K \to \mathcal{C}$, $\mathrm{colim}\,(p \circ i) \simeq \mathrm{colim}\, p$.}
+\qaitem{State the Joyal--Lurie cofinality criterion.}{$i$ is cofinal iff for every vertex $k \in K_0$, the fibre $K' \times_K K_{k/}$ is weakly contractible.}
+\qaitem{Show that the inclusion of an initial object is cofinal.}{If $k_0$ is initial in $K$, every slice $K_{k/}$ for $k = k_0$ is $K$ itself (contractible); the criterion holds trivially for $k_0$, and by initiality for other $k$.}
+\qaitem{Cofinality and filtered colimits?}{Essentially-surjective maps between filtered quasi-categories are cofinal. Filtered colimits depend on the asymptotic shape, not specific diagram structure.}
+\qaitem{Why are cofinal maps the workhorse?}{They reduce computation of complicated colimits to simpler subdiagrams. In Chapter~49 we use this to characterize all $\infty$-(co)limits.}
+\qaitem{What is $\mathrm{Map}_{\mathcal{C}_{/p}}(\alpha, \beta)$ for cones $\alpha, \beta$?}{The space of ``arrows of cones from $\alpha$ to $\beta$'' — combinatorially, the relevant Kan complex of extensions in $\mathcal{C}_{/p}$.}
+\qaitem{When is $\mathrm{Map}_\mathcal{D}(y, x)$ contractible for all $y$ but $x$ not the terminal object?}{Never, by definition. ``Terminal'' just is ``all $\mathrm{Map}$s into $x$ contractible.''}
+\qaitem{What is the homotopy hypothesis's reflection in this chapter?}{Limits in $\mathcal{S}$ (the $\infty$-category of spaces) recover homotopy limits in $\mathbf{Top}$. Colimits in $\mathcal{S}$ recover homotopy colimits. The two pictures agree via the Quillen equivalence.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Join.}\quad $X \star Y$ has $n$-simplices the disjoint union of
+$X_n$, $Y_n$, and ``connector'' simplices $X_i \times Y_j$ with $i+j = n-1$.
+$\Delta^a \star \Delta^b = \Delta^{a+b+1}$. Cones:
+$X^\rhd = X \star \Delta^0$, $X^\lhd = \Delta^0 \star X$.
+
+\textbf{Slice.}\quad $\mathcal{C}_{/p}$ has $n$-simplices given by
+extensions $\Delta^n \star K \to \mathcal{C}$ of $p : K \to \mathcal{C}$.
+Adjoint to join: $- \star K \dashv (-)_{/K}$. Slices of quasi-categories
+are quasi-categories.
+
+\textbf{Limits and colimits.}\quad $\lim p$ is a terminal object of
+$\mathcal{C}_{/p}$; $\mathrm{colim}\, p$ is an initial object of
+$\mathcal{C}_{p/}$. When they exist, they are unique up to contractible
+space of equivalences. Recovers ordinary products, equalizers, and
+their homotopical analogues.
+
+\textbf{Cofinality.}\quad $i : K' \to K$ is cofinal iff
+$K' \times_K K_{k/}$ is contractible for every $k$ (Joyal–Lurie).
+Reduces computation of $\mathrm{colim}_K p$ to that of
+$\mathrm{colim}_{K'}(p \circ i)$ for a simpler $K'$.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Join.}\quad
+$(X \star Y)_n = X_n \sqcup Y_n \sqcup \coprod_{i+j=n-1} X_i \times Y_j$.
+$\Delta^a \star \Delta^b = \Delta^{a+b+1}$.
+
+\medskip
+\textbf{Cones.}\quad $X^\rhd = X \star \Delta^0$;
+$X^\lhd = \Delta^0 \star X$.
+
+\medskip
+\textbf{Slice.}\quad
+$(\mathcal{C}_{/p})_n = \{\sigma : \Delta^n \star K \to \mathcal{C} :
+\sigma|_K = p\}$.
+$(\mathcal{C}_{p/})_n = \{\sigma : K \star \Delta^n \to \mathcal{C} :
+\sigma|_K = p\}$.
+
+\medskip
+\textbf{Join-slice adjunction.}\quad $- \star K : \mathbf{sSet} \rightleftarrows
+\mathbf{sSet}_{K/} : (-)_{/K}$.
+
+\medskip
+\textbf{Initial and terminal.}\quad $x$ initial $\iff \mathrm{Map}_\mathcal{D}(x, -)
+\equiv *$; $x$ terminal $\iff \mathrm{Map}_\mathcal{D}(-, x) \equiv *$.
+
+\medskip
+\textbf{$\infty$-limit and $\infty$-colimit.}\quad
+$\lim p \;=\; \text{terminal object of } \mathcal{C}_{/p}$;
+$\mathrm{colim}\, p \;=\; \text{initial object of } \mathcal{C}_{p/}$.
+
+\medskip
+\textbf{Cofinality (Joyal–Lurie).}\quad $i : K' \to K$ cofinal $\iff
+\forall k \in K_0,\, K' \times_K K_{k/} \text{ is weakly contractible}$.
+Cofinal maps preserve $\mathrm{colim}$.
+\end{formalrestatement}

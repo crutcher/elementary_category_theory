@@ -1,0 +1,386 @@
+% ch49_infty_limits.tex — Volume IV Chapter 13
+
+\chapter{$\infty$-Limits and $\infty$-Colimits}
+
+\begin{overviewbox}
+Chapter~45 introduced $\infty$-limits and $\infty$-colimits as terminal
+and initial objects of slice quasi-categories. With the $\infty$-Yoneda
+lemma (Chapter~48) now in hand, this chapter develops the theory in
+earnest: $\infty$-(co)limits as adjoints to constant-diagram functors,
+their representability via Yoneda, the computation rules via cofinality
+and via products $+$ equalizers, and the foundational examples in
+$\mathcal{S}$, $\mathcal{P}(\mathcal{C})$, and $\mathcal{C}\mathrm{at}_\infty$.
+
+Three thematic shifts from the $1$-categorical version distinguish the
+$\infty$-treatment:
+\begin{itemize}
+  \item Uniqueness becomes \emph{contractibility}: the space of limit
+        cones is contractible, not merely singleton.
+  \item Universality is \emph{coherent}: limits represent functors of
+        spaces, not just sets.
+  \item Existence comes via \emph{homotopy} products and equalizers,
+        which differ from their $1$-categorical analogues in critical
+        ways even when the $\infty$-category at hand is a nerve.
+\end{itemize}
+
+This chapter prepares all of Volume~IV's remaining material: Chapter~50's
+adjunctions are characterized by limit preservation; Chapter~51's
+$\infty$-Kan extensions are pointwise limits over slices; Chapter~52's
+presentable $\infty$-categories require $\kappa$-filtered colimits as
+their defining feature; Chapter~53's stable $\infty$-categories use
+finite limits and colimits intertwined via the fibre/cofibre construction.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Limits as Adjoints}
+\label{sec:limits-adjoints}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Constant-diagram functor]
+\label{def:constant-diagram}
+For a quasi-category $\mathcal{C}$ and a simplicial set $K$, the
+\term{constant-diagram functor}
+\begin{equation*}
+  \mathrm{const} : \mathcal{C} \;\longrightarrow\; \mathcal{C}^K
+\end{equation*}
+sends $x \in \mathcal{C}$ to the constant functor $\Delta x : K \to
+\mathcal{C}$, $\Delta x(k) = x$ for all $k$.
+\end{definition}
+
+\begin{theorem}[Limits and colimits as adjoints]
+\label{thm:limits-as-adjoints}
+If every $\infty$-limit (resp.\ $\infty$-colimit) over $K$ exists in
+$\mathcal{C}$, the assignment $p \mapsto \lim p$ (resp.\ $\mathrm{colim}\, p$)
+extends to a functor $\mathcal{C}^K \to \mathcal{C}$, and we have the
+adjunctions
+\begin{equation*}
+  \mathrm{colim} : \mathcal{C}^K \rightleftarrows \mathcal{C} : \mathrm{const}, \quad
+  \mathrm{const} : \mathcal{C} \rightleftarrows \mathcal{C}^K : \lim.
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+A natural transformation $\Delta x \to p$ (where $\Delta x \in \mathcal{C}^K$
+is the constant diagram on $x$) is exactly the data of a cone over $p$
+with apex $x$. By definition of the slice $\mathcal{C}_{/p}$, this
+corresponds to a $0$-simplex of $\mathcal{C}_{/p}$ — a cone-with-apex-$x$.
+The terminal cone is the limit, so $\mathrm{Map}_{\mathcal{C}^K}(\Delta x, p)
+\simeq \mathrm{Map}_\mathcal{C}(x, \lim p)$, giving the adjunction
+$\mathrm{const} \dashv \lim$. Dually for $\mathrm{colim} \dashv \mathrm{const}$. \qed
+\end{proof}
+
+\begin{remark}[Limits via Yoneda]
+The adjunction characterization combined with $\infty$-Yoneda
+(Chapter~48) gives the \term{representability characterization of limits}:
+$\lim p$ exists iff the functor $\mathrm{Map}_{\mathcal{C}^K}(\Delta -, p)$
+is representable, in which case the representing object is $\lim p$.
+This is the $\infty$-categorical version of the Chapter~6
+representability proof of limits.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Existence: Products and Equalizers}
+\label{sec:limits-existence}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Complete and cocomplete $\infty$-category]
+\label{def:complete-qcat}
+A quasi-category $\mathcal{C}$ is \term{complete} if it admits all
+$\infty$-limits over small simplicial sets $K$. \term{Cocomplete}: dually
+admits all $\infty$-colimits. \term{Bicomplete}: both.
+\end{definition}
+
+\begin{theorem}[Limit existence via products and equalizers]
+\label{thm:limit-products-equalizers}
+A quasi-category $\mathcal{C}$ is complete iff it admits:
+\begin{enumerate}
+  \item All small \term{$\infty$-products}: limits over discrete
+        simplicial sets.
+  \item All \term{$\infty$-equalizers}: limits over the walking parallel
+        pair $\Delta^1 \rightrightarrows \Delta^0$.
+\end{enumerate}
+Dually for cocompleteness: coproducts and coequalizers suffice.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The strategy mirrors Chapter~6's $1$-categorical proof: an arbitrary
+limit over $K$ is computed as the equalizer of two maps between products
+indexed by simplices of $K$. The $\infty$-categorical version replaces
+ordinary products and equalizers by their $\infty$-versions; the
+combinatorial verification of the universal property uses inner-horn
+filling.
+\qed
+\end{proof}
+
+\begin{remark}[Homotopy products differ from set-theoretic products]
+For $\mathcal{C}$ a quasi-category and $\{x_i\}$ a family of objects,
+the $\infty$-product $\prod_i x_i$ is the limit over the discrete
+diagram. When $\mathcal{C} = \mathcal{S}$, this is the homotopy product
+$\prod^h_i x_i$ — the categorical product, which for fibrant Kan
+complexes is the set-theoretic product. For non-fibrant input, fibrant
+replacement is required.
+\end{remark}
+
+\subsection{Reorganizing: completeness of key examples}
+
+\begin{example_thm}[$\mathcal{S}$ is bicomplete]
+\label{ex:S-bicomplete}
+The $\infty$-category of spaces $\mathcal{S}$ is bicomplete; (co)limits
+are the standard homotopy (co)limits of $\mathbf{Top}$ (or $\mathbf{sSet}_{\mathrm{Q}}$
+under the Quillen equivalence). Specifically:
+\begin{itemize}
+  \item Products: $X \times Y$ — Cartesian product of Kan complexes.
+  \item Equalizers: homotopy equalizer (or path object), giving the
+        homotopy fibre when one map is trivial.
+  \item Coproducts: $X \sqcup Y$ — disjoint union.
+  \item Coequalizers: homotopy coequalizer; pushout when the parallel
+        pair shares an endpoint.
+\end{itemize}
+\end{example_thm}
+
+\begin{example_thm}[$\mathcal{P}(\mathcal{C})$ is bicomplete]
+\label{ex:PC-bicomplete}
+For any small $\mathcal{C}$, $\mathcal{P}(\mathcal{C}) = \mathrm{Fun}(\mathcal{C}^{\mathrm{op}},
+\mathcal{S})$ is bicomplete. $\infty$-(co)limits are computed pointwise:
+$(\lim_K F)(c) = \lim_K F(c)$ in $\mathcal{S}$, and dually for colimits.
+
+Every $P \in \mathcal{P}(\mathcal{C})$ is the colimit of representables
+(density theorem, Theorem~48.\ref{thm:density}). The cocompleteness of
+$\mathcal{P}(\mathcal{C})$ together with the Yoneda embedding is the
+\emph{free cocompletion} statement of Theorem~48.\ref{thm:free-cocompletion}.
+\end{example_thm}
+
+\begin{example_thm}[$\mathcal{C}\mathrm{at}_\infty$ is bicomplete]
+\label{ex:Cat-infty-bicomplete}
+The $\infty$-category of $\infty$-categories is bicomplete: products are
+Cartesian product of quasi-categories; equalizers and coequalizers via
+homotopy pullback/pushout; arbitrary limits and colimits computed via
+Theorem~\ref{thm:limit-products-equalizers}.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Computing Limits via Cofinality}
+\label{sec:limits-cofinality}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Cofinality and colimits]
+\label{thm:cofinality-colim}
+Let $i : K' \to K$ be a cofinal map (Definition~45.\ref{def:cofinal}),
+let $p : K \to \mathcal{C}$ be a diagram. If $\mathrm{colim}\,(p \circ i)$
+exists in $\mathcal{C}$, so does $\mathrm{colim}\, p$, and the canonical
+comparison $\mathrm{colim}\, (p \circ i) \to \mathrm{colim}\, p$ is an
+equivalence.
+\end{theorem}
+
+\begin{example_thm}[Filtered colimits in $\mathcal{S}$]
+\label{ex:filtered-colim-S}
+A filtered $\infty$-colimit in $\mathcal{S}$ is computed by taking the
+underlying $1$-categorical filtered colimit (in $\mathbf{Set}$, of $\pi_0$)
+together with the $\infty$-groupoid filtered colimit of the
+$\pi_n$-systems. This recovers the classical fact that filtered colimits
+commute with finite limits in spaces.
+\end{example_thm}
+
+\begin{example_thm}[Pushouts and pullbacks]
+\label{ex:pushouts-pullbacks}
+$\infty$-pullbacks and $\infty$-pushouts are computed via the diagonal
+of the square diagram. In $\mathcal{S}$: pullback is the homotopy
+pullback (Mayer–Vietoris fits); pushout is the homotopy pushout (cofibre
+sequences fit). Both are recovered as limits/colimits of the standard
+$\Lambda^2_0$ / $\Lambda^2_2$-shaped diagrams.
+\end{example_thm}
+
+\subsection{Reorganizing: preservation and reflection}
+
+\begin{definition}[Limit preservation and reflection]
+\label{def:limit-preservation}
+A functor $F : \mathcal{C} \to \mathcal{D}$ \term{preserves} $\infty$-limits
+of shape $K$ if for every $p : K \to \mathcal{C}$ with limit
+$\lim p \in \mathcal{C}$, the image $F(\lim p)$ is the $\infty$-limit of
+$F \circ p$ in $\mathcal{D}$. $F$ \term{reflects} $\infty$-limits if
+$F(\lim p) \simeq \lim F \circ p$ implies $\lim p$ exists in $\mathcal{C}$.
+\end{definition}
+
+\begin{theorem}[Right adjoints preserve $\infty$-limits]
+\label{thm:RAPL-infty}
+If $L \dashv R : \mathcal{D} \to \mathcal{C}$ is an $\infty$-adjunction
+(Chapter~50), then $R$ preserves all $\infty$-limits that exist in
+$\mathcal{D}$. Dually, $L$ preserves all $\infty$-colimits in $\mathcal{C}$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+For a diagram $p : K \to \mathcal{D}$ with limit $\lim p$ and any $c \in
+\mathcal{C}$:
+\begin{align*}
+  \mathrm{Map}_\mathcal{C}(c, R(\lim p)) &\simeq \mathrm{Map}_\mathcal{D}(L c, \lim p) && (\text{adjunction}) \\
+  &\simeq \lim_k \mathrm{Map}_\mathcal{D}(L c, p(k)) && (\text{definition of } \lim) \\
+  &\simeq \lim_k \mathrm{Map}_\mathcal{C}(c, R p(k)) && (\text{adjunction}) \\
+  &\simeq \mathrm{Map}_\mathcal{C}(c, \lim_k R p(k)).
+\end{align*}
+By $\infty$-Yoneda, $R(\lim p) \simeq \lim R \circ p$. \qed
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Filtered and Sifted Colimits}
+\label{sec:filtered-sifted}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Filtered $\infty$-category]
+\label{def:filtered-qcat}
+A quasi-category $\mathcal{K}$ is \term{filtered} (also called
+\term{$\infty$-filtered}) if for every finite simplicial set $K$ and
+diagram $p : K \to \mathcal{K}$, the slice $\mathcal{K}_{p/}$ is
+contractible (Kan complex with trivial homotopy groups).
+
+Equivalent characterizations:
+\begin{itemize}
+  \item Every finite diagram in $\mathcal{K}$ extends to a cocone.
+  \item The functor $\mathrm{colim}_\mathcal{K} : \mathcal{S}^\mathcal{K}
+        \to \mathcal{S}$ preserves finite limits.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Filtered colimits commute with finite limits]
+\label{thm:filtered-finite}
+For a small filtered quasi-category $\mathcal{K}$ and a small finite
+quasi-category $\mathcal{J}$, the canonical comparison
+\begin{equation*}
+  \mathrm{colim}_\mathcal{K} \lim_\mathcal{J} F \;\simeq\;
+  \lim_\mathcal{J} \mathrm{colim}_\mathcal{K} F
+\end{equation*}
+is an equivalence, for any $F : \mathcal{K} \times \mathcal{J} \to
+\mathcal{S}$.
+\end{theorem}
+
+\begin{remark}[Sifted colimits]
+A more general class than filtered is \term{sifted}: $\mathcal{K}$ is
+sifted if $\mathrm{colim}_\mathcal{K}$ preserves \emph{finite products}
+(rather than finite limits). Examples: filtered $\mathcal{K}$ is sifted;
+reflexive coequalizers (which are not filtered) are sifted. Sifted
+colimits play a central role in defining algebraic theories
+$\infty$-categorically; see Chapter~52 and the literature on
+algebraic theories in Lurie's HA.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:limits-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define an $\infty$-limit.}{$\lim p$ for $p : K \to \mathcal{C}$ is a terminal object of the slice $\mathcal{C}_{/p}$ — equivalently, an object $\ell \in \mathcal{C}$ together with a cone $p \to \mathrm{const}\,\ell$ that is universal.}
+\qaitem{State the limit-as-adjoint characterization.}{$\mathrm{const} \dashv \lim$ as functors $\mathcal{C} \to \mathcal{C}^K \to \mathcal{C}$. When $\mathcal{C}$ has $K$-shaped limits.}
+\qaitem{State the representability characterization of limits.}{$\lim p$ exists iff $\mathrm{Map}_{\mathcal{C}^K}(\Delta -, p)$ is representable. The representing object is $\lim p$.}
+\qaitem{When is $\mathcal{C}$ complete?}{When all small $\infty$-limits exist, equivalently when small products and equalizers exist (Theorem~\ref{thm:limit-products-equalizers}).}
+\qaitem{Is $\mathcal{S}$ complete?}{Yes — bicomplete. Limits are homotopy limits in $\mathbf{Top}/\mathbf{sSet}_{\mathrm{Q}}$.}
+\qaitem{Is $\mathcal{P}(\mathcal{C})$ complete?}{Yes — bicomplete. Limits are computed pointwise. Cocompleteness combined with Yoneda gives the free cocompletion property.}
+\qaitem{Is $\mathcal{C}\mathrm{at}_\infty$ complete?}{Yes — bicomplete. (Co)limits via Cartesian product, homotopy pullback/pushout, etc.}
+\qaitem{Why does ``RAPL'' generalize?}{Right adjoints preserve $\infty$-limits. Same proof: hom-Map-bijection + commutation through $\mathrm{Map}$ + Yoneda recovers the right adjoint as ``limits commute with $\mathrm{Map}(-, x)$.''}
+\qaitem{What does ``cofinal'' give in computation?}{Cofinal map $i : K' \to K$ allows replacing $\mathrm{colim}_K p$ with $\mathrm{colim}_{K'}(p \circ i)$ — usually a simpler diagram.}
+\qaitem{When is $\mathcal{K}$ filtered?}{When every finite diagram in $\mathcal{K}$ extends to a cocone. Equivalent: $\mathrm{colim}_\mathcal{K}$ preserves finite limits.}
+\qaitem{Why filtered colimits commute with finite limits?}{Theorem~\ref{thm:filtered-finite}. The combinatorial reason: filtered shapes can be ``thinned'' to a cofinal piece that avoids the finite limit's interaction with the colimit indexing.}
+\qaitem{Sifted vs filtered?}{Sifted: $\mathrm{colim}$ preserves finite products. Filtered: preserves finite limits. Filtered implies sifted; reflexive coequalizers are sifted but not filtered.}
+\qaitem{How is an $\infty$-pushout computed in $\mathcal{S}$?}{As the homotopy pushout: the geometric realization of the bar-like construction $A \sqcup_C B \to $ mapping cylinder.}
+\qaitem{How are $\infty$-limits in functor categories computed?}{Pointwise. $(\lim F)(c) = \lim F(c)$ — using completeness of the target $\infty$-category.}
+\qaitem{What is the diagonal/comparison map for filtered + finite?}{$\mathrm{colim}_\mathcal{K} \lim_\mathcal{J} F \to \lim_\mathcal{J} \mathrm{colim}_\mathcal{K} F$. Always exists; is an equivalence when $\mathcal{K}$ is filtered and $\mathcal{J}$ is finite.}
+\qaitem{Why is the space of limit cones contractible?}{Because terminal objects form a contractible space (or empty space): the data of a terminal object is unique up to a contractible space of equivalences.}
+\qaitem{What happens to limits when the diagram has an initial object?}{They collapse: the limit equals the value at the initial object (by cofinality of $\{k_0\} \hookrightarrow K$).}
+\qaitem{Are filtered colimits filtered in $\mathcal{S}$ ``built from sequences''?}{Roughly yes: a sequential colimit $\mathrm{colim}\,(X_0 \to X_1 \to \cdots)$ is filtered. More generally, any cofinal sequential map into a filtered $\mathcal{K}$ realizes the colimit.}
+\qaitem{What's the relationship to fibrant replacement?}{In $\mathcal{S}$ presented as $\mathbf{sSet}$, $\infty$-(co)limits require fibrant inputs. Replacing inputs by Kan complexes (fibrant replacement) is essential before computing.}
+\qaitem{What's an $\infty$-equalizer?}{The $\infty$-limit of the parallel-pair diagram $K = \Delta^1 \rightrightarrows \Delta^0$ — generalizes ordinary equalizer to allow ``coherent agreement'' rather than strict equality.}
+\qaitem{When does $\mathcal{C}^K$ have all limits?}{Whenever $\mathcal{C}$ does, computed pointwise. The same statement for colimits.}
+\qaitem{What's the next chapter?}{Ch 50: $\infty$-Adjunctions — the $\infty$-categorical analogue of Chapter~7/17/33 adjunctions, with $\infty$-Yoneda and limit preservation as central tools.}
+\qaitem{Why is this chapter compact compared to Vol I Ch 6?}{Vol I Ch 6 introduced limits from scratch; this chapter assumes the framework (slices, Yoneda, adjunctions) and develops only what's $\infty$-categorically new. The bridge to literature is the goal.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{$\infty$-limits as adjoints.}\quad $\mathrm{const} \dashv \lim$
+(and $\mathrm{colim} \dashv \mathrm{const}$) when $\infty$-(co)limits
+exist. Representability: $\lim p$ represents
+$\mathrm{Map}_{\mathcal{C}^K}(\Delta -, p)$.
+
+\textbf{Existence via products + equalizers.}\quad $\mathcal{C}$ is
+complete iff $\infty$-products and $\infty$-equalizers exist. Standard
+construction transfers from Chapter~6 with $\infty$-versions throughout.
+
+\textbf{Foundational bicomplete examples.}\quad $\mathcal{S}$ (limits $=$
+homotopy limits); $\mathcal{P}(\mathcal{C})$ (pointwise); $\mathcal{C}\mathrm{at}_\infty$
+(Cartesian + pullback/pushout).
+
+\textbf{Cofinality.}\quad Cofinal maps preserve $\infty$-colimits, giving
+a powerful computation technique. Pushouts, pullbacks, sequential
+colimits all admit cofinality-based simplifications.
+
+\textbf{Adjoint preservation.}\quad Right adjoints preserve $\infty$-limits;
+left adjoints preserve $\infty$-colimits. The proof is one calculation in
+$\mathrm{Map}$ via Yoneda.
+
+\textbf{Filtered colimits commute with finite limits.}\quad The cornerstone
+identity. Filtered colimits are the bread-and-butter limit-related
+construction in presentable $\infty$-categories (Chapter~52).
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{$\infty$-limit.}\quad $\lim p =$ terminal of $\mathcal{C}_{/p}$;
+$\mathrm{colim}\, p =$ initial of $\mathcal{C}_{p/}$.
+
+\medskip
+\textbf{Adjunction.}\quad $\mathrm{const} \dashv \lim$;
+$\mathrm{colim} \dashv \mathrm{const}$. Both natural in $K$.
+
+\medskip
+\textbf{Representability.}\quad $\lim p \in \mathcal{C}$ iff
+$\mathrm{Map}_{\mathcal{C}^K}(\Delta -, p)$ is representable.
+
+\medskip
+\textbf{Existence.}\quad $\mathcal{C}$ complete $\iff$ has products and
+equalizers; cocomplete $\iff$ has coproducts and coequalizers.
+
+\medskip
+\textbf{RAPL/LAPC.}\quad $L \dashv R \Rightarrow R$ preserves $\infty$-limits,
+$L$ preserves $\infty$-colimits.
+
+\medskip
+\textbf{Cofinality.}\quad $i : K' \to K$ cofinal $\Rightarrow
+\mathrm{colim}\,(p \circ i) \simeq \mathrm{colim}\, p$ for all $p$.
+
+\medskip
+\textbf{Filtered.}\quad $\mathcal{K}$ filtered $\iff$ every finite diagram
+extends to a cocone $\iff \mathrm{colim}_\mathcal{K}$ preserves finite
+$\infty$-limits.
+
+\medskip
+\textbf{Filtered $\times$ Finite (Theorem~\ref{thm:filtered-finite}).}\quad
+\begin{equation*}
+  \mathrm{colim}_\mathcal{K} \lim_\mathcal{J} F \;\simeq\;
+  \lim_\mathcal{J} \mathrm{colim}_\mathcal{K} F,
+  \quad \mathcal{K} \text{ filtered}, \mathcal{J} \text{ finite}.
+\end{equation*}
+\end{formalrestatement}

@@ -1,0 +1,414 @@
+% ch44_mapping_spaces_joyal.tex — Volume IV Chapter 8
+
+\chapter{Mapping Spaces, Equivalences, and the Joyal Model Structure}
+
+\begin{overviewbox}
+A quasi-category $\mathcal{C}$ has, for each pair of objects $x, y \in
+\mathcal{C}_0$, a \term{mapping space} $\mathrm{Map}_\mathcal{C}(x, y)$ —
+a Kan complex (not merely a set) whose vertices are the $1$-simplices
+from $x$ to $y$, whose $1$-simplices are homotopies between them, and
+whose higher simplices are higher homotopies. This is the
+$\infty$-categorical analogue of a hom-set, with the entire tower of
+coherences explicitly present.
+
+The chapter develops three threads.
+
+First, the construction of $\mathrm{Map}_\mathcal{C}(x, y)$ via slice
+simplicial sets, and its core property: it is always a Kan complex
+(every horn fills), regardless of whether $\mathcal{C}$ is.
+
+Second, the definition of \term{equivalences in a quasi-category} —
+$1$-simplices $f : x \to y$ such that $[f]$ is an isomorphism in
+$\mathrm{ho}(\mathcal{C})$ — and of \term{equivalences of quasi-categories}
+$F : \mathcal{C} \to \mathcal{D}$ — functors inducing an equivalence on
+homotopy categories \emph{and} a weak equivalence on every mapping space.
+
+Third, the \term{Joyal model structure} on $\mathbf{sSet}$ (already
+previewed in Chapter~41). We state Joyal's theorem characterizing it:
+weak equivalences are exactly the maps that become equivalences after
+fibrant replacement; fibrant objects are exactly the quasi-categories;
+cofibrations are monomorphisms. The Joyal weak equivalences differ
+sharply from Kan–Quillen weak equivalences — the same simplicial set
+supports two distinct homotopy theories. This is the source of the
+oft-repeated fact that ``$\infty$-groupoids and $\infty$-categories are
+different things, even though both live in $\mathbf{sSet}$.''
+
+The chapter closes with the homotopy $n$-category construction, which
+forms a $1$-category from a quasi-category by truncating away all
+$k$-cells for $k > n$.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Mapping Spaces}
+\label{sec:mapping-spaces}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+In an ordinary category, the data $\mathrm{Hom}(x, y)$ is a set: a
+discrete collection of morphisms with no further structure. In a
+quasi-category, the data $\mathrm{Map}_\mathcal{C}(x, y)$ is itself a
+space (Kan complex): a $0$-simplex is a morphism $f : x \to y$; a
+$1$-simplex is a homotopy $f \sim g$; a $2$-simplex is a homotopy between
+homotopies; and so on. The mapping ``set'' has become a mapping
+``space.'' This is exactly the data lost when one passes to the
+homotopy category — which takes $\pi_0$ of each mapping space — but
+visible at the $\infty$-categorical level.
+
+\subsection{Formalizing}
+
+There are several models for the mapping space, all weakly equivalent
+as Kan complexes. We give the simplest definition (the \term{slice
+model}) and refer to alternatives in the Formal Restatement.
+
+\begin{definition}[Slice mapping space]
+\label{def:slice-mapping}
+For a quasi-category $\mathcal{C}$ and $x, y \in \mathcal{C}_0$, define
+the \term{slice mapping space} $\mathrm{Map}_\mathcal{C}(x, y)$ to be
+the simplicial set whose $n$-simplices are maps $\Delta^{n+1} \to
+\mathcal{C}$ sending the initial vertex $0 \in \Delta^{n+1}$ to $x$ and
+the final vertex $n+1 \in \Delta^{n+1}$ to $y$.
+\end{definition}
+
+\begin{howtosay}
+$\mathrm{Map}_\mathcal{C}(x, y)$ \sayit{``the mapping space from $x$ to
+$y$ in $\mathcal{C}$''}. Other notations: $\mathcal{C}(x, y)$ (Lurie),
+$\mathrm{Hom}_\mathcal{C}(x, y)$, or just $\mathrm{Map}(x, y)$ when
+$\mathcal{C}$ is understood.
+\end{howtosay}
+
+\begin{theorem}[Mapping spaces are Kan complexes]
+\label{thm:map-is-kan}
+For every quasi-category $\mathcal{C}$ and every pair $x, y \in
+\mathcal{C}_0$, the simplicial set $\mathrm{Map}_\mathcal{C}(x, y)$ is a
+Kan complex.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+A horn $\Lambda^n_k \to \mathrm{Map}_\mathcal{C}(x, y)$ corresponds, by
+the slice description, to a partial map $\Lambda^{n+1}_{k'} \to \mathcal{C}$
+in which two faces are degenerate-on-$x$ and -on-$y$. By the
+inner-horn-filling property of $\mathcal{C}$ (plus a separate combinatorial
+argument for outer horns of $\mathrm{Map}$ — which correspond to inner
+horns of $\mathcal{C}$ after the slice shift), the partial map extends.
+\qed
+\end{proof}
+
+\begin{remark}[Connected components of $\mathrm{Map}$ recover hom-sets]
+\label{rem:pi0-map}
+$\pi_0 \mathrm{Map}_\mathcal{C}(x, y) = \mathrm{ho}(\mathcal{C})(x, y)$:
+connected components of the mapping space are equivalence classes of
+$1$-simplices, i.e., morphisms in the homotopy category. Higher
+$\pi_n \mathrm{Map}_\mathcal{C}(x, y)$ encode higher homotopical
+information lost to $\mathrm{ho}$.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Equivalences}
+\label{sec:equivalences}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Equivalence in a quasi-category]
+\label{def:equivalence-1simplex}
+A $1$-simplex $f : x \to y$ in a quasi-category $\mathcal{C}$ is an
+\term{equivalence} if any (equivalently, all) of the following hold:
+\begin{enumerate}
+  \item $[f]$ is an isomorphism in $\mathrm{ho}(\mathcal{C})$.
+  \item There exist $g : y \to x$ and $2$-simplices witnessing
+        $g \circ f \sim \mathrm{id}_x$ and $f \circ g \sim \mathrm{id}_y$.
+  \item There exists a homotopy-coherent inverse: $g$ as above, together
+        with $3$-simplices (and higher) extending the homotopies to a
+        coherent pseudo-inverse.
+\end{enumerate}
+\end{definition}
+
+\begin{howtosay}
+Equivalence $f : x \xrightarrow{\sim} y$ \sayit{``$f$ is an equivalence''
+or ``$f$ is invertible up to coherent homotopy''}. The wedge $\sim$ over
+the arrow signals an equivalence; sometimes $\simeq$ is used instead.
+\end{howtosay}
+
+\begin{theorem}[Characterization via inner $\Delta^3$-extension]
+\label{thm:equiv-delta3}
+A $1$-simplex $f$ in a quasi-category $\mathcal{C}$ is an equivalence
+iff every $\Delta^1 \to \mathcal{C}$ landing on $f$ extends to a
+$\Delta^0 \star \Delta^1 = \Delta^2 \to \mathcal{C}$ with all $1$-edges
+mapping to equivalences. Equivalently, $f$ is an equivalence iff the
+slice quasi-category $\mathcal{C}_{f/}$ (Chapter~45) is a Kan complex.
+\end{theorem}
+
+\begin{example_thm}[Identity is an equivalence]
+\label{ex:id-equiv}
+Every identity $\mathrm{id}_x = s_0 x$ is an equivalence: take $g =
+s_0 x$ and the constant $2$-simplices $s_1 s_0 x$ as witnesses.
+\end{example_thm}
+
+\begin{definition}[Equivalence of quasi-categories]
+\label{def:equiv-qcat}
+A simplicial-set map $F : \mathcal{C} \to \mathcal{D}$ between
+quasi-categories is an \term{equivalence} (also called a \term{categorical
+equivalence}) if any (equivalently, all) of:
+\begin{enumerate}
+  \item The induced functor $\mathrm{ho}(F) : \mathrm{ho}(\mathcal{C}) \to
+        \mathrm{ho}(\mathcal{D})$ is an equivalence of $1$-categories, and
+        for each $x, y \in \mathcal{C}_0$, the induced map
+        $\mathrm{Map}_\mathcal{C}(x, y) \to \mathrm{Map}_\mathcal{D}(Fx, Fy)$
+        is a weak homotopy equivalence of Kan complexes.
+  \item $F$ has a pseudo-inverse $G$ with natural equivalences
+        $GF \simeq \mathrm{id}_\mathcal{C}$ and $FG \simeq \mathrm{id}_\mathcal{D}$.
+  \item $F$ is a weak equivalence in the Joyal model structure
+        (Theorem~\ref{thm:joyal-model}).
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Whitehead's theorem for quasi-categories]
+\label{thm:whitehead-qcat}
+$F : \mathcal{C} \to \mathcal{D}$ is an equivalence iff:
+\begin{itemize}
+  \item $F$ is \term{essentially surjective}: every object of $\mathcal{D}$
+        is equivalent to one in the image of $F$.
+  \item $F$ is \term{fully faithful}: each
+        $\mathrm{Map}_\mathcal{C}(x, y) \to \mathrm{Map}_\mathcal{D}(Fx, Fy)$
+        is a weak homotopy equivalence.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\emph{$\Rightarrow$.} Essential surjectivity follows from
+$\mathrm{ho}(F)$ being essentially surjective; full faithfulness follows
+from the second hypothesis of (1).
+
+\emph{$\Leftarrow$.} Construct $G$ object-by-object using essential
+surjectivity (pick an equivalent inverse image for each $y \in
+\mathcal{D}$), then on morphisms using full faithfulness (lift mapping
+spaces). Coherence of $G$ as a quasi-functor follows from the Kan-complex
+structure on each $\mathrm{Map}$. \qed
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Joyal Model Structure}
+\label{sec:joyal-model}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Joyal's model structure on $\mathbf{sSet}$]
+\label{thm:joyal-model}
+The category $\mathbf{sSet}$ admits a model structure — the \term{Joyal
+model structure}, denoted $\mathbf{sSet}_{\mathrm{Joyal}}$ — characterized
+by:
+\begin{itemize}
+  \item Cofibrations: monomorphisms (same as Kan–Quillen).
+  \item Fibrant objects: quasi-categories.
+  \item Weak equivalences: maps $F : X \to Y$ such that for every
+        quasi-category $\mathcal{C}$, the induced
+        $\mathrm{Map}_{\mathbf{sSet}}(Y, \mathcal{C}) \to
+        \mathrm{Map}_{\mathbf{sSet}}(X, \mathcal{C})$ is a weak
+        equivalence of Kan complexes.
+\end{itemize}
+The fibrations are characterized by RLP against inner-anodyne maps,
+where \term{inner-anodyne} maps are generated under saturation by the
+inner horn inclusions $\Lambda^n_k \hookrightarrow \Delta^n$ ($0 < k < n$).
+\end{theorem}
+
+\begin{remark}[Joyal fibrations vs.\ Kan fibrations]
+\label{rem:joyal-vs-kan-fib}
+A Joyal fibration (between quasi-categories) is sometimes called an
+\term{isofibration}. The condition is: RLP against inner horn inclusions
+and against the inclusion $\{0\} \hookrightarrow J$, where $J$ is the
+walking equivalence (the nerve of the contractible groupoid on two
+objects). The latter condition lifts equivalences. By contrast, a Kan
+fibration is RLP against \emph{all} horn inclusions, which is a stronger
+condition.
+\end{remark}
+
+\begin{theorem}[Joyal weak equivalences vs.\ Kan–Quillen weak equivalences]
+\label{thm:joyal-vs-kan-we}
+Let $W_{\mathrm{Joyal}}$ and $W_{\mathrm{KQ}}$ denote the classes of
+weak equivalences in the Joyal and Kan–Quillen model structures
+respectively. Then $W_{\mathrm{Joyal}} \subsetneq W_{\mathrm{KQ}}$:
+every Joyal weak equivalence is a Kan–Quillen weak equivalence, but not
+conversely.
+
+The discrepancy is concrete: the inclusion $\Delta^0 \hookrightarrow
+\Delta^1$ is a Joyal cofibration (a monomorphism) but not a Joyal weak
+equivalence — it cannot be inverted while keeping all higher-categorical
+structure — whereas the same inclusion is a Kan–Quillen trivial cofibration
+(both $\Delta^0$ and $\Delta^1$ are contractible).
+\end{theorem}
+
+\begin{remark}[The two homotopy theories cohabit $\mathbf{sSet}$]
+The Joyal–Kan–Quillen discrepancy is the most important fact about
+$\mathbf{sSet}$ in $\infty$-category theory. The same underlying category
+supports two distinct homotopy theories:
+\begin{itemize}
+  \item Kan–Quillen: weak equivalences $=$ realization-weak-homotopy-equivalences;
+        fibrant objects $=$ Kan complexes $=$ $\infty$-groupoids;
+        $\mathrm{Ho} \simeq \mathrm{Ho}(\mathbf{Top})$.
+  \item Joyal: weak equivalences $=$ categorical equivalences;
+        fibrant objects $=$ quasi-categories $=$ $\infty$-categories;
+        $\mathrm{Ho}_\mathrm{Joyal}$ is the homotopy category of $\infty$-categories.
+\end{itemize}
+The forgetful inclusion ``every $\infty$-groupoid is an $\infty$-category''
+becomes the left Quillen functor $\mathbf{sSet}_{\mathrm{KQ}}
+\hookrightarrow \mathbf{sSet}_{\mathrm{Joyal}}$ (identity on underlying
+$\mathbf{sSet}$).
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Homotopy $n$-Category}
+\label{sec:homotopy-n-category}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Homotopy $n$-category]
+\label{def:homotopy-n-cat}
+For $n \geq 0$ and a quasi-category $\mathcal{C}$, the \term{homotopy
+$n$-category} $\mathrm{h}_n \mathcal{C}$ is obtained by quotienting
+$\mathcal{C}$ at the level of $n$-simplices: two $n$-simplices are
+identified if they agree on all boundary $(n-1)$-faces and are connected
+by an $(n+1)$-simplex with degenerate top face.
+\end{definition}
+
+\begin{example_thm}[$n = 0$: homotopy set of equivalence classes]
+\label{ex:h0}
+$\mathrm{h}_0 \mathcal{C} = \pi_0(\mathcal{C}^{\mathrm{core}})$, where
+$\mathcal{C}^{\mathrm{core}} \subset \mathcal{C}$ is the \term{core} —
+the maximal Kan subcomplex (objects $=$ $\mathcal{C}_0$, $k$-simplices
+all of whose edges are equivalences).
+\end{example_thm}
+
+\begin{example_thm}[$n = 1$: ordinary homotopy category]
+\label{ex:h1}
+$\mathrm{h}_1 \mathcal{C} = \mathrm{ho}(\mathcal{C})$ — the ordinary
+$1$-category construction of Chapter~43.
+\end{example_thm}
+
+\begin{example_thm}[$n = \infty$: identity]
+\label{ex:hinf}
+$\mathrm{h}_\infty \mathcal{C} = \mathcal{C}$ — no truncation.
+\end{example_thm}
+
+\begin{remark}[Truncation as left adjoint]
+$\mathrm{h}_n$ is left adjoint to the inclusion of $n$-truncated
+quasi-categories (those equivalent to nerves of $n$-categories) into
+$\mathbf{QCat}$. Volume~V (if written) would treat $n$-categorical
+truncations in detail; here we record only the existence and the first
+three cases.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:mapping-equiv-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define the slice mapping space $\mathrm{Map}_\mathcal{C}(x, y)$.}{$n$-simplices are $\Delta^{n+1} \to \mathcal{C}$ sending $0 \mapsto x$ and $n+1 \mapsto y$.}
+\qaitem{Is $\mathrm{Map}_\mathcal{C}(x, y)$ always a Kan complex?}{Yes — even when $\mathcal{C}$ is merely a quasi-category. Horn-filling for $\mathrm{Map}$ reduces to inner-horn filling for $\mathcal{C}$ via the slice shift.}
+\qaitem{What is $\pi_0 \mathrm{Map}_\mathcal{C}(x, y)$?}{$\mathrm{ho}(\mathcal{C})(x, y)$ — the hom-set in the homotopy category.}
+\qaitem{What's the higher-dimensional data of the mapping space?}{$1$-simplices: homotopies between $1$-simplices in $\mathcal{C}$; $2$-simplices: homotopies between those; etc. The full tower of coherences.}
+\qaitem{Define an equivalence in $\mathcal{C}$.}{A $1$-simplex $f$ such that $[f]$ is an isomorphism in $\mathrm{ho}(\mathcal{C})$. Equivalently: there's a $g$ with $g \circ f \sim \mathrm{id}$ and $f \circ g \sim \mathrm{id}$.}
+\qaitem{Are identities equivalences?}{Yes — $[s_0 x]$ is the identity of $x$ in $\mathrm{ho}(\mathcal{C})$, which is an isomorphism.}
+\qaitem{Why is the equivalence condition really an $\infty$-condition?}{Because invertibility up to a $2$-simplex requires coherence with all higher simplices to be a genuine pseudo-inverse; the data of an equivalence is a contractible space, not just a pair $(g, h_1, h_2)$.}
+\qaitem{Define a categorical equivalence $F : \mathcal{C} \to \mathcal{D}$.}{$F$ induces (a) an equivalence on homotopy $1$-categories and (b) a weak equivalence on every mapping space.}
+\qaitem{State Whitehead's theorem for quasi-categories.}{$F$ is a categorical equivalence iff essentially surjective and fully faithful (mapping spaces send to weak equivalences).}
+\qaitem{What's the Joyal model structure?}{A model structure on $\mathbf{sSet}$ with cofibrations $=$ monomorphisms; fibrant objects $=$ quasi-categories; weak equivalences $=$ categorical equivalences after fibrant replacement.}
+\qaitem{What is a Joyal fibration (isofibration)?}{A map of quasi-categories with RLP against inner horn inclusions and against $\{0\} \hookrightarrow J$, where $J$ is the walking equivalence.}
+\qaitem{How does a Joyal fibration differ from a Kan fibration?}{Kan: RLP against all horn inclusions. Joyal: only inner horns, plus equivalence-lifting. Every Kan fibration of quasi-categories is a Joyal fibration; not conversely.}
+\qaitem{Why are Joyal and Kan–Quillen weak equivalences different?}{Joyal sees the $\infty$-categorical structure (must respect non-invertible morphisms); Kan–Quillen sees only the $\infty$-groupoidal structure (inverts everything).}
+\qaitem{Give a concrete distinguishing example.}{$\Delta^0 \hookrightarrow \Delta^1$: Kan–Quillen weak equivalence (both contractible), but \emph{not} a Joyal weak equivalence (cannot invert the morphism $0 \to 1$ while preserving categorical structure).}
+\qaitem{What does ``the same simplicial set carries two model structures'' mean philosophically?}{The choice of which morphisms to invert is independent of the underlying combinatorics: Kan–Quillen inverts everything, Joyal only invertibles. The two homotopy theories are different in essence.}
+\qaitem{Define the core $\mathcal{C}^{\mathrm{core}}$.}{The maximal Kan subcomplex of $\mathcal{C}$: objects $=$ $\mathcal{C}_0$; $k$-simplices have all $1$-edges equivalences.}
+\qaitem{What does the core compute?}{$\mathcal{C}^{\mathrm{core}}$ is the $\infty$-groupoid of equivalences in $\mathcal{C}$: invertible morphisms, invertible $2$-cells between them, etc.}
+\qaitem{What is $\mathrm{h}_n \mathcal{C}$?}{The homotopy $n$-category — truncates higher simplices by identifying $(n+1)$-simplices with degenerate top face.}
+\qaitem{$\mathrm{h}_0 \mathcal{C} = ?$}{$\pi_0 \mathcal{C}^{\mathrm{core}}$: equivalence classes of objects.}
+\qaitem{$\mathrm{h}_1 \mathcal{C} = ?$}{$\mathrm{ho}(\mathcal{C})$: the ordinary homotopy $1$-category.}
+\qaitem{Why does Lurie write $\mathrm{Map}_\mathcal{C}(x, y)$ rather than $\mathcal{C}(x, y)$?}{To emphasize that the mapping is a \emph{space} (Kan complex), not a set. The set $\pi_0 \mathrm{Map}_\mathcal{C}(x, y)$ is the morphism set of $\mathrm{ho}(\mathcal{C})$.}
+\qaitem{Are there other models for mapping spaces?}{Yes: pinched (left, right, two-sided) and tensored models, all weakly equivalent. The slice model is the simplest; the right-pinched model $\mathcal{C}^{\Delta^1} \times_\mathcal{C} \Delta^0$ at $(x, y)$ is computationally convenient.}
+\qaitem{When does Joyal coincide with Kan–Quillen?}{Restricted to the full subcategory of Kan complexes ($\infty$-groupoids), the two model structures agree.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Mapping spaces.}\quad $\mathrm{Map}_\mathcal{C}(x, y) \in
+\mathbf{sSet}$ is a Kan complex whose $n$-simplices are
+$\Delta^{n+1} \to \mathcal{C}$ with prescribed initial/final vertices.
+$\pi_0 \mathrm{Map}_\mathcal{C}(x, y) = \mathrm{ho}(\mathcal{C})(x, y)$.
+
+\textbf{Equivalences.}\quad A $1$-simplex $f$ is an equivalence iff $[f]$
+is iso in $\mathrm{ho}$. A functor $F : \mathcal{C} \to \mathcal{D}$ is a
+categorical equivalence iff $\mathrm{ho}(F)$ is an equivalence and each
+mapping space map is a weak equivalence. Whitehead: equivalent to
+essential surjectivity plus full faithfulness on mapping spaces.
+
+\textbf{Joyal model structure.}\quad Cofibrations $=$ monos; fibrant $=$
+quasi-categories; weak equivalences $=$ categorical equivalences (after
+fibrant replacement); fibrations $=$ inner fibrations $+$ equivalence-lifting
+(isofibrations). $W_{\mathrm{Joyal}} \subsetneq W_{\mathrm{KQ}}$: Joyal
+respects directionality, Kan–Quillen inverts everything.
+
+\textbf{Homotopy $n$-category.}\quad $\mathrm{h}_n \mathcal{C}$
+truncates higher coherences: $\mathrm{h}_0 = \pi_0$ of the core,
+$\mathrm{h}_1 = \mathrm{ho}$, $\mathrm{h}_\infty = $ identity.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Mapping space (slice model).}\quad
+$\mathrm{Map}_\mathcal{C}(x, y)_n = \{\,\sigma : \Delta^{n+1} \to \mathcal{C}
+: \sigma(0) = x, \sigma(n+1) = y\,\}$.
+
+\medskip
+\textbf{Kan-complex theorem.}\quad For any quasi-category $\mathcal{C}$
+and $x, y \in \mathcal{C}_0$, $\mathrm{Map}_\mathcal{C}(x, y)$ is a Kan
+complex; $\pi_0 \mathrm{Map}_\mathcal{C}(x, y) = \mathrm{ho}(\mathcal{C})(x, y)$.
+
+\medskip
+\textbf{Equivalence (object).}\quad $f \in \mathcal{C}_1$ is an equivalence
+$\iff$ $[f] \in \mathrm{ho}(\mathcal{C})$ is an isomorphism.
+
+\medskip
+\textbf{Categorical equivalence (functor).}\quad
+$F : \mathcal{C} \to \mathcal{D}$ is a categorical equivalence
+$\iff$
+\begin{itemize}
+  \item $\mathrm{ho}(F) : \mathrm{ho}(\mathcal{C}) \to \mathrm{ho}(\mathcal{D})$ is essentially surjective,
+  \item $\mathrm{Map}_\mathcal{C}(x, y) \to \mathrm{Map}_\mathcal{D}(Fx, Fy)$ is a weak homotopy equivalence for all $x, y$.
+\end{itemize}
+
+\medskip
+\textbf{Joyal model structure.}\quad
+\begin{itemize}
+  \item $\mathcal{C}\mathrm{of}$: monomorphisms.
+  \item $\mathcal{F}\mathrm{ib}$: isofibrations (RLP against inner horns and against $\{0\} \hookrightarrow J$).
+  \item $\mathcal{W}$: categorical equivalences after fibrant replacement.
+\end{itemize}
+Fibrant objects: quasi-categories.
+
+\medskip
+\textbf{Homotopy $n$-category.}\quad $\mathrm{h}_n : \mathbf{QCat} \to
+\mathbf{nCat}$, left adjoint to inclusion.
+$\mathrm{h}_0 \mathcal{C} = \pi_0(\mathcal{C}^{\mathrm{core}})$,
+$\mathrm{h}_1 \mathcal{C} = \mathrm{ho}(\mathcal{C})$,
+$\mathrm{h}_\infty \mathcal{C} = \mathcal{C}$.
+\end{formalrestatement}

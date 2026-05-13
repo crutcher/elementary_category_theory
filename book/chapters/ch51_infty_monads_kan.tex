@@ -1,0 +1,404 @@
+% ch51_infty_monads_kan.tex — Volume IV Chapter 15
+
+\chapter{$\infty$-Monads and $\infty$-Kan Extensions}
+
+\begin{overviewbox}
+The two remaining pillars of Vol III's spine — monads and Kan extensions
+— complete their $\infty$-categorical lifts here. The chapter closes
+Phase~3 of Volume~IV (Cluster~E: the higher-categorification of Vol~III).
+
+\textbf{$\infty$-Monads.} Every $\infty$-adjunction $L \dashv R$ produces
+a monad $RL$ on the source $\mathcal{C}$. Conversely, the
+\term{$\infty$-monadicity} theorem characterizes when a right adjoint
+$R : \mathcal{D} \to \mathcal{C}$ exhibits $\mathcal{D}$ as the
+$\infty$-category of algebras over the monad $RL$. Beck's theorem of
+Chapter~21 generalizes to the $\infty$-setting, with the technical
+content concentrated in the existence of $RL$-split simplicial objects.
+
+\textbf{$\infty$-Kan extensions.} The functors $\mathrm{Lan}_p \dashv p^*
+\dashv \mathrm{Ran}_p$ of Chapter~11/18/31 lift directly. The pointwise
+formula reads
+\begin{equation*}
+  (\mathrm{Lan}_p F)(d) \;\simeq\; \mathrm{colim}_{(c, \alpha) \in \mathcal{C}_{/d}^p} F(c),
+\end{equation*}
+where the indexing $\infty$-category is the comma $p \downarrow d$.
+
+The \term{density theorem} of Chapter~48 (every presheaf is a colimit
+of representables) reappears as a Kan extension identity:
+$\mathrm{Lan}_y \mathrm{id}_\mathcal{C} \simeq \mathrm{id}_{\mathcal{P}(\mathcal{C})}$.
+\term{Codensity}: every functor $F : \mathcal{C} \to \mathcal{D}$ induces
+its codensity monad $\mathrm{Ran}_F F$, the universal monad whose
+algebras model $F$ as a forgetful functor.
+
+The Phase 3 milestone — all of Vol~III's spine generalizes to $\infty$ —
+is delivered. Phase 4 (presentable, stable, higher algebra) builds the
+practical apparatus on this foundation.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\infty$-Monads}
+\label{sec:infty-monads}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-monad]
+\label{def:infty-monad}
+Let $\mathcal{C}$ be a quasi-category. An \term{$\infty$-monad on
+$\mathcal{C}$} is a monoid object in the $\infty$-category
+$\mathrm{End}(\mathcal{C}) = \mathrm{Fun}(\mathcal{C}, \mathcal{C})$
+with composition as monoidal structure: an endofunctor $T : \mathcal{C}
+\to \mathcal{C}$, a unit $\eta : \mathrm{id} \Rightarrow T$, a
+multiplication $\mu : TT \Rightarrow T$, satisfying associativity and
+unit laws up to coherent homotopy (with infinitely many higher coherences).
+\end{definition}
+
+\begin{theorem}[Monad from $\infty$-adjunction]
+\label{thm:monad-from-adj}
+Every $\infty$-adjunction $L : \mathcal{C} \rightleftarrows \mathcal{D} : R$
+gives rise to an $\infty$-monad $RL$ on $\mathcal{C}$, with:
+\begin{itemize}
+  \item Unit $\eta_{\mathrm{ad}} : \mathrm{id}_\mathcal{C} \Rightarrow RL$ (the adjunction unit).
+  \item Multiplication $\mu : RLRL \Rightarrow RL$ given by $R \epsilon L$,
+        where $\epsilon : LR \Rightarrow \mathrm{id}_\mathcal{D}$ is the
+        adjunction counit.
+\end{itemize}
+The monad laws hold by the triangle identities of the adjunction (and
+all higher coherences).
+\end{theorem}
+
+\begin{example_thm}[Free-forgetful monads]
+\label{ex:free-forgetful}
+For the free-forgetful adjunction $L \dashv U$ between $\mathbf{Set}$
+and groups, the monad $UL$ on $\mathbf{Set}$ assigns $X \mapsto |F(X)|$,
+the underlying set of the free group on $X$. This is the \emph{group
+monad}; algebras for it are groups.
+
+In Chapter~52's presentable $\infty$-setting, the same construction
+classifies $\infty$-categories of algebraic structures up to coherent
+homotopy.
+\end{example_thm}
+
+\subsection{Reorganizing: algebras and the Eilenberg–Moore $\infty$-category}
+
+\begin{definition}[$T$-algebra in a quasi-category]
+\label{def:T-algebra}
+For an $\infty$-monad $T$ on $\mathcal{C}$, a \term{$T$-algebra} is an
+object $x \in \mathcal{C}$ together with a structure map $a : Tx \to x$
+satisfying unit ($a \circ \eta_x \simeq \mathrm{id}_x$) and multiplicativity
+($a \circ \mu_x \simeq a \circ Ta$), plus all higher coherences. The
+$\infty$-category of $T$-algebras is denoted $\mathrm{Alg}_T(\mathcal{C})$.
+\end{definition}
+
+\begin{theorem}[Free $T$-algebras]
+\label{thm:free-algebras}
+The forgetful functor $\mathrm{Alg}_T(\mathcal{C}) \to \mathcal{C}$ admits
+a left adjoint sending $x \in \mathcal{C}$ to the free $T$-algebra
+$(Tx, \mu_x)$. The resulting adjunction
+\begin{equation*}
+  F_T : \mathcal{C} \rightleftarrows \mathrm{Alg}_T(\mathcal{C}) : U_T
+\end{equation*}
+recovers $T$ as $U_T F_T$.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bar Resolutions and $\infty$-Monadicity}
+\label{sec:monadicity}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Bar simplicial object]
+\label{def:bar-simplicial}
+For an $\infty$-adjunction $L \dashv R$ and an object $x \in \mathcal{C}$,
+the \term{bar resolution} of $x$ is the simplicial object
+\begin{equation*}
+  \mathrm{Bar}_\bullet(L, T, x) : \Delta^{\mathrm{op}} \to \mathcal{C}, \quad
+  n \mapsto T^{n+1} x,
+\end{equation*}
+where $T = RL$. Face maps come from $\mu$ (applied in different positions);
+degeneracies from $\eta$. This is Chapter~37's bar construction
+(Corollary~\ref{cor:bar-construction}) applied to the monoid $T$ in
+$\mathrm{End}(\mathcal{C})$.
+\end{definition}
+
+\begin{theorem}[$\infty$-monadicity, Lurie]
+\label{thm:infty-monadicity}
+An $\infty$-adjunction $L \dashv R : \mathcal{D} \to \mathcal{C}$ is
+\term{monadic} — i.e., the comparison functor $\mathcal{D} \to
+\mathrm{Alg}_T(\mathcal{C})$ is an equivalence — iff:
+\begin{enumerate}
+  \item $R$ is conservative (reflects equivalences).
+  \item $R$ preserves \term{$U_T$-split} simplicial objects: simplicial
+        objects whose image under $R$ admits a split (i.e., extends to
+        $\Delta_+^{\mathrm{op}}$).
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof strategy]
+This is the $\infty$-categorical Beck monadicity theorem, generalizing
+Chapter~21's Vol~III result. The key step is constructing the inverse
+to the comparison functor via geometric realization of the bar resolution:
+\begin{equation*}
+  \mathrm{Alg}_T(\mathcal{C}) \to \mathcal{D}, \quad (x, a) \mapsto
+  |\mathrm{Bar}_\bullet(L, T, x)|.
+\end{equation*}
+$R$-split simplicial objects give the necessary ``effective epimorphism''
+property to recognize colimits over $\Delta^{\mathrm{op}}$.
+
+The proof is HTT §6.2 / HA §4.7. Forwards: Lurie's HA Theorem 4.7.3.5
+gives the precise formulation.
+\qed
+\end{proof}
+
+\begin{remark}[Applications of $\infty$-monadicity]
+$\infty$-monadicity is the central tool for recognizing $\infty$-categories
+of algebras. Lurie uses it to identify, e.g., the $\infty$-category of
+modules over a ring spectrum, the $\infty$-category of comodules over a
+coalgebra, sheaves on a stack, and many other ``categories of
+structured objects.''
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{$\infty$-Kan Extensions}
+\label{sec:infty-kan}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-Kan extensions]
+\label{def:infty-kan}
+For an $\infty$-functor $p : \mathcal{C} \to \mathcal{E}$ and an
+$\infty$-category $\mathcal{D}$, the \term{left $\infty$-Kan extension}
+of $F : \mathcal{C} \to \mathcal{D}$ along $p$ is a functor
+$\mathrm{Lan}_p F : \mathcal{E} \to \mathcal{D}$ together with a
+universal natural transformation $F \to \mathrm{Lan}_p F \circ p$.
+
+When $\mathcal{D}$ is cocomplete, $\mathrm{Lan}_p F$ always exists and is
+the left adjoint to precomposition with $p$:
+\begin{equation*}
+  \mathrm{Lan}_p : \mathrm{Fun}(\mathcal{C}, \mathcal{D}) \rightleftarrows
+  \mathrm{Fun}(\mathcal{E}, \mathcal{D}) : p^*.
+\end{equation*}
+Dually, $p^* \dashv \mathrm{Ran}_p$ gives the right Kan extension.
+\end{definition}
+
+\begin{theorem}[Pointwise formula]
+\label{thm:pointwise-kan}
+When $\mathcal{D}$ is cocomplete and the indexing $\infty$-categories
+are appropriately small,
+\begin{equation*}
+  (\mathrm{Lan}_p F)(e) \;\simeq\; \mathrm{colim}_{(c, \alpha) \in p \downarrow e} F(c),
+\end{equation*}
+where $p \downarrow e$ is the comma $\infty$-category whose objects are
+pairs $(c \in \mathcal{C}, \alpha : p(c) \to e \in \mathcal{E})$.
+
+Dually, $(\mathrm{Ran}_p F)(e) \simeq \lim_{(c, \alpha) \in e \downarrow p} F(c)$.
+\end{theorem}
+
+\begin{theorem}[Adjoint triple]
+\label{thm:kan-triple}
+For any $p : \mathcal{C} \to \mathcal{E}$ and cocomplete $\mathcal{D}$,
+\begin{equation*}
+  \mathrm{Lan}_p \;\dashv\; p^* \;\dashv\; \mathrm{Ran}_p.
+\end{equation*}
+This is the $\infty$-categorical version of Chapter~18's adjoint-triple
+theorem.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Density, Codensity, and Free Cocompletion}
+\label{sec:density-codensity}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Density via Kan}
+
+\begin{theorem}[Density as Kan extension]
+\label{thm:density-via-kan}
+For the Yoneda embedding $y : \mathcal{C} \hookrightarrow \mathcal{P}(\mathcal{C})$:
+\begin{equation*}
+  \mathrm{Lan}_y \mathrm{id}_\mathcal{C} \;\simeq\; \mathrm{id}_{\mathcal{P}(\mathcal{C})}.
+\end{equation*}
+That is, every presheaf is the left Kan extension of the identity on
+$\mathcal{C}$ along Yoneda. Equivalently, every $P \in \mathcal{P}(\mathcal{C})$
+is the colimit of representables (the density theorem,
+Theorem~48.\ref{thm:density}).
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Apply the pointwise formula to $\mathrm{Lan}_y \mathrm{id}_\mathcal{C}$
+at $P \in \mathcal{P}(\mathcal{C})$:
+\begin{equation*}
+  (\mathrm{Lan}_y \mathrm{id}_\mathcal{C})(P) \simeq
+  \mathrm{colim}_{(c, \xi) \in y \downarrow P} y(c) = \mathrm{colim}_{\mathcal{C}_{/P}} y(c) \simeq P.
+\end{equation*}
+The last equivalence is the density theorem. \qed
+\end{proof}
+
+\subsection{Codensity monads}
+
+\begin{definition}[Codensity monad]
+\label{def:codensity}
+For an $\infty$-functor $F : \mathcal{C} \to \mathcal{D}$, the
+\term{codensity monad} is the right Kan extension
+\begin{equation*}
+  T_F \;:=\; \mathrm{Ran}_F F : \mathcal{D} \to \mathcal{D}.
+\end{equation*}
+$T_F$ is an $\infty$-monad on $\mathcal{D}$ (the unit and multiplication
+arise from the universal property of $\mathrm{Ran}_F$).
+\end{definition}
+
+\begin{example_thm}[Codensity for ultrafilters]
+\label{ex:ultrafilters}
+For the inclusion $F : \mathbf{FinSet} \hookrightarrow \mathbf{Set}$,
+the codensity monad on $\mathbf{Set}$ is the \term{ultrafilter monad}:
+$T_F(X)$ is the set of ultrafilters on $X$. This is the classical Manes
+theorem, generalized to the $\infty$-setting in Chapter~32 (formal theory
+of monads) and applicable here directly.
+\end{example_thm}
+
+\subsection{Free cocompletion}
+
+\begin{theorem}[Free cocompletion via Kan]
+\label{thm:free-cocomp-kan}
+For a small $\infty$-category $\mathcal{C}$ and cocomplete $\mathcal{D}$,
+the unique colimit-preserving extension $\bar F : \mathcal{P}(\mathcal{C})
+\to \mathcal{D}$ of $F : \mathcal{C} \to \mathcal{D}$
+(Theorem~48.\ref{thm:free-cocompletion}) is the left Kan extension
+\begin{equation*}
+  \bar F \;=\; \mathrm{Lan}_y F.
+\end{equation*}
+\end{theorem}
+
+\begin{remark}[The Volume~IV spine complete]
+With $\infty$-Kan extensions in place, every theorem of Vol~III's spine
+has been lifted to the $\infty$-setting:
+\begin{itemize}
+  \item Vol~III Ch~28 (formal Yoneda) $\rightsquigarrow$ Ch~48 ($\infty$-Yoneda).
+  \item Vol~III Ch~32 (formal monads) $\rightsquigarrow$ this chapter, §1.
+  \item Vol~III Ch~31 (general Kan extensions) $\rightsquigarrow$ this chapter, §3.
+  \item Vol~III Ch~33 (formal adjunctions) $\rightsquigarrow$ Ch~50.
+\end{itemize}
+The remaining Phase~4 chapters (52--57) build the practical apparatus
+that makes these tools usable in derived algebraic geometry, stable
+homotopy theory, and higher algebra.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:monads-kan-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define an $\infty$-monad.}{A monoid object in $\mathrm{End}(\mathcal{C}) = \mathrm{Fun}(\mathcal{C}, \mathcal{C})$ under composition: an endofunctor $T$, unit $\eta : \mathrm{id} \Rightarrow T$, multiplication $\mu : T^2 \Rightarrow T$, with associativity and unit laws up to coherent homotopy.}
+\qaitem{How does an $\infty$-adjunction give a monad?}{$L \dashv R$ gives $T = RL$ with $\eta_{\mathrm{ad}}$ as unit and $R\epsilon L$ as multiplication. The adjunction triangle identities (with coherences) give the monad laws.}
+\qaitem{What's the bar resolution?}{$\mathrm{Bar}_n(L, T, x) = T^{n+1} x$, a simplicial object. Face $d_i$ from $\mu$ at position $i$; degeneracies from $\eta$.}
+\qaitem{State $\infty$-monadicity.}{$L \dashv R$ is monadic iff $R$ is conservative and preserves $U_T$-split simplicial objects.}
+\qaitem{What does ``conservative'' mean?}{$R$ reflects equivalences: $Rf$ an equivalence implies $f$ an equivalence.}
+\qaitem{What's a $U_T$-split simplicial object?}{One whose image under the forgetful $U_T$ extends to the augmented category $\Delta_+^{\mathrm{op}}$ — i.e., admits a coaugmentation, plus splittings, making the colimit computable termwise.}
+\qaitem{What's the comparison functor?}{$\mathcal{D} \to \mathrm{Alg}_T(\mathcal{C})$, sending $d$ to $(Rd, R\epsilon_d : RLRd \to Rd)$, the $T$-algebra structure inherited.}
+\qaitem{When is the comparison an equivalence?}{Precisely the monadicity condition above.}
+\qaitem{Define $\mathrm{Lan}_p F$.}{Left $\infty$-Kan extension of $F : \mathcal{C} \to \mathcal{D}$ along $p : \mathcal{C} \to \mathcal{E}$: the left adjoint to $p^* : \mathrm{Fun}(\mathcal{E}, \mathcal{D}) \to \mathrm{Fun}(\mathcal{C}, \mathcal{D})$.}
+\qaitem{Pointwise formula?}{$(\mathrm{Lan}_p F)(e) \simeq \mathrm{colim}_{(c, \alpha) \in p \downarrow e} F(c)$, where $p \downarrow e$ is the comma $\infty$-category.}
+\qaitem{State the adjoint triple.}{$\mathrm{Lan}_p \dashv p^* \dashv \mathrm{Ran}_p$, the $\infty$-version of Chapter~18's Vol~II theorem.}
+\qaitem{What's the Volume~IV density theorem in Kan form?}{$\mathrm{Lan}_y \mathrm{id}_\mathcal{C} \simeq \mathrm{id}_{\mathcal{P}(\mathcal{C})}$: every presheaf is the canonical left Kan extension of the identity on $\mathcal{C}$ along Yoneda.}
+\qaitem{Define a codensity monad.}{For $F : \mathcal{C} \to \mathcal{D}$, the right Kan extension $T_F = \mathrm{Ran}_F F$. An $\infty$-monad on $\mathcal{D}$.}
+\qaitem{What is the codensity monad of $\mathbf{FinSet} \hookrightarrow \mathbf{Set}$?}{The ultrafilter monad: $T_F(X) = $ set of ultrafilters on $X$ (Manes's theorem, generalizing to $\infty$).}
+\qaitem{Why does codensity often matter?}{Because it captures the ``inverse limit of finite approximations'': $\mathrm{Ran}_F F (x) = \lim_{(c, \alpha) \in F \downarrow x} F(c)$ recovers $x$ as a limit over its $F$-approximations.}
+\qaitem{State the free-cocompletion via Kan formula.}{$\bar F = \mathrm{Lan}_y F$ for the unique colimit-preserving extension of $F : \mathcal{C} \to \mathcal{D}$ (cocomplete $\mathcal{D}$).}
+\qaitem{Why is the bar construction central?}{It computes free $T$-algebra resolutions; geometric realization recovers the $\infty$-categorical version. Generalizes simplicial resolutions in homological algebra.}
+\qaitem{What's the relationship between $\infty$-monads and operads (Ch 55)?}{Every $\infty$-monad arises from an operad with one color. More general operads give multi-categorical generalizations.}
+\qaitem{Where does monadicity get used?}{Recognizing $\infty$-categories of structured objects: modules over a ring spectrum, comodules over a coalgebra, sheaves on a stack, etc.}
+\qaitem{How does Ch 51 generalize Chapter~32 (formal monads in 2-cats)?}{Chapter~32 worked in $2$-categories; this chapter works in $\infty$-categories. The data is the same (monoid in End); the difference is that ``equalities'' become coherent homotopies.}
+\qaitem{What does ``$\mathcal{D}$ is cocomplete'' buy?}{Existence of $\mathrm{Lan}_p$ for all small $p$. Without cocompleteness, Kan extensions may not exist.}
+\qaitem{How are Kan extensions used in derived algebraic geometry?}{Pull-back / push-forward of sheaves between spaces involves $\infty$-Kan extensions along the structure maps. Six-functor formalisms organize the multitude of Kan-extension-based functors.}
+\qaitem{What's the next phase?}{Phase~4: Ch~52--57. Presentable $\infty$-cats (52); stable $\infty$-cats (53); triangulated and t-structures (54); $\infty$-operads (55); $\mathbb{E}_n$-algebras (56); $A_\infty/L_\infty$ algebras (57). The practical apparatus.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{$\infty$-Monad.}\quad Monoid in $\mathrm{End}(\mathcal{C})$ under
+composition. Every $\infty$-adjunction $L \dashv R$ produces an
+$\infty$-monad $RL$.
+
+\textbf{Bar resolution.}\quad $\mathrm{Bar}_n(L, T, x) = T^{n+1} x$,
+a simplicial object. Geometric realization computes the free $T$-algebra
+construction.
+
+\textbf{$\infty$-monadicity.}\quad $L \dashv R$ is monadic iff $R$ is
+conservative and preserves $U_T$-split simplicial objects.
+
+\textbf{$\infty$-Kan extensions.}\quad $\mathrm{Lan}_p \dashv p^* \dashv
+\mathrm{Ran}_p$. Pointwise: $(\mathrm{Lan}_p F)(e) = \mathrm{colim}_{p \downarrow e} F$.
+
+\textbf{Density and Kan.}\quad $\mathrm{Lan}_y \mathrm{id}_\mathcal{C}
+\simeq \mathrm{id}_{\mathcal{P}(\mathcal{C})}$ — every presheaf is a
+canonical left Kan extension along Yoneda.
+
+\textbf{Codensity monads.}\quad $T_F = \mathrm{Ran}_F F$, the canonical
+monad associated to a functor. Classical example: ultrafilter monad
+$=$ codensity of $\mathbf{FinSet} \hookrightarrow \mathbf{Set}$.
+
+\textbf{Phase 3 milestone.}\quad All of Vol~III's spine
+(Yoneda, monads, adjunctions, Kan) lifts to $\infty$. Phase 4 builds the
+applied apparatus.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{$\infty$-Monad.}\quad $(T, \eta, \mu) \in \mathrm{Mon}(\mathrm{End}(\mathcal{C}))$.
+
+\medskip
+\textbf{Monad from adjunction.}\quad $L \dashv R \Rightarrow RL$ a monad,
+$\eta = \eta_{\mathrm{ad}}$, $\mu = R\epsilon L$.
+
+\medskip
+\textbf{Bar.}\quad $\mathrm{Bar}_\bullet(L, T, x) : \Delta^{\mathrm{op}} \to \mathcal{C}$,
+$\mathrm{Bar}_n = T^{n+1} x$; $d_i = \mu \text{ at position } i$; $s_i = \eta$.
+
+\medskip
+\textbf{$\infty$-monadicity (Lurie).}\quad $L \dashv R$ monadic
+$\iff R$ conservative and preserves $U_T$-split simplicial objects.
+
+\medskip
+\textbf{$\infty$-Kan adjoint triple.}\quad $\mathrm{Lan}_p \dashv p^* \dashv \mathrm{Ran}_p$.
+
+\medskip
+\textbf{Pointwise formula.}\quad
+$(\mathrm{Lan}_p F)(e) \simeq \mathrm{colim}_{p \downarrow e} F$;
+$(\mathrm{Ran}_p F)(e) \simeq \lim_{e \downarrow p} F$.
+
+\medskip
+\textbf{Density via Kan.}\quad
+$\mathrm{Lan}_y \mathrm{id}_\mathcal{C} \simeq \mathrm{id}_{\mathcal{P}(\mathcal{C})}$.
+
+\medskip
+\textbf{Codensity monad.}\quad $T_F = \mathrm{Ran}_F F : \mathcal{D} \to \mathcal{D}$
+an $\infty$-monad.
+
+\medskip
+\textbf{Free cocompletion.}\quad $\bar F = \mathrm{Lan}_y F$ for the
+unique colimit-preserving extension.
+
+\medskip
+\textbf{Phase~3 closed.}\quad Vol~III spine (Yoneda, monads, adjunctions,
+Kan) fully lifted to $\infty$. Phase~4 develops the applied higher
+algebra.
+\end{formalrestatement}
