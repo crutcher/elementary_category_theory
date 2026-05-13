@@ -199,25 +199,25 @@
 % ── Exercises (Little-Schemer Q/A style) ────────────────────────────────────
 \usepackage{tabularx}
 \usepackage{array}
+\usepackage{longtable}
+\usepackage{xltabular}
 
-\newtcolorbox{exercisesbox}{
-  enhanced,
-  breakable,
-  colback=DialogBg!50,
-  colframe=DialogBorder,
-  fonttitle=\bfseries,
-  title={Exercises},
-  left=8pt, right=8pt, top=6pt, bottom=6pt,
-}
+% `exercisesbox` is now a passthrough: the chapter \section{Exercises} already
+% provides the heading, and a tcolorbox container prevented the inner Q/A
+% table from breaking across pages. Kept as an environment so existing
+% chapters compile unchanged.
+\newenvironment{exercisesbox}{}{}
 
+% xltabular = tabularx + longtable: page-breakable two-column Q/A layout,
+% with a colored vertical rule between columns and a thin colored horizontal
+% rule between Q/A pairs.
 \NewEnviron{qa}{%
   \setlength{\extrarowheight}{2pt}%
-  \begin{tabularx}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{\raggedright\arraybackslash}X@{}}
+  \begin{xltabular}{\linewidth}{@{}>{\raggedright\arraybackslash}X@{\hspace{0.6em}}!{\color{DialogBorder!50}\vrule}@{\hspace{0.6em}}>{\raggedright\arraybackslash}X@{}}
     \BODY
-  \end{tabularx}%
+  \end{xltabular}%
 }
-% \qa is taken by a tabularx/array internal; use \qaitem instead.
-% Spacing: ~3x original (0.3em) + thin rule between pairs.
+% \qa is taken by an internal command; use \qaitem instead.
 \newcommand{\qaitem}[2]{%
   #1 & #2 \\[0.3em]%
   \noalign{{\color{DialogBorder!50}\hrule height 0.3pt}\vspace{0.6em}}%

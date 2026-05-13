@@ -1,0 +1,428 @@
+% ch42_derived_functors.tex — Volume IV Chapter 6
+
+\chapter{Derived Functors and Quillen Equivalences}
+
+\begin{overviewbox}
+A functor between model categories rarely descends to homotopy categories
+directly: a typical $F : \mathcal{C} \to \mathcal{D}$ fails to preserve
+weak equivalences. The standard fix — \term{derive} $F$ — is to precompose
+with cofibrant or fibrant replacement before evaluating. The resulting
+\term{total left} or \term{total right derived functor} $\mathbb{L}F,
+\mathbb{R}F : \mathrm{Ho}(\mathcal{C}) \to \mathrm{Ho}(\mathcal{D})$ is
+the homotopy-coherent extension.
+
+A \term{Quillen adjunction} $F \dashv G$ is a pair compatible with the
+model structures: $F$ preserves cofibrations and trivial cofibrations,
+$G$ preserves fibrations and trivial fibrations. Such adjunctions induce
+\term{derived adjunctions} $\mathbb{L}F \dashv \mathbb{R}G$ on homotopy
+categories. A Quillen adjunction is a \term{Quillen equivalence} when the
+derived adjunction is an equivalence — the strongest comparison between
+two model categories.
+
+This chapter develops the derived-functor machinery and applies it to
+prove the realization–singular Quillen equivalence (Theorem~41.\ref{thm:realization-sing-quillen}).
+The chapter closes with two previews of Volume~IV's later applications:
+the bar construction as a derived left Kan extension along $\Delta_+
+\to \mathcal{V}$ (foreshadowing $\infty$-monad bar resolutions of
+Chapter~51), and derived tensor / derived hom as the entry points to
+homological algebra (Chapter~54). The phase-one foundational machinery
+ends here; Chapter~43 turns to quasi-categories as the unifying
+$\infty$-categorical model.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Total Derived Functors}
+\label{sec:total-derived}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+Most functors do not respect weak equivalences. Tensoring a chain complex
+with a non-flat module, for instance, does not preserve quasi-isomorphisms:
+if $C \xrightarrow{\sim} C'$ is a quasi-isomorphism and $M$ is not flat,
+$C \otimes M$ and $C' \otimes M$ may have different homology. The
+\term{derived tensor product} $- \otimes^{\mathbb{L}} M$ fixes this by
+first replacing the input chain complex by a quasi-isomorphic flat
+complex (a \emph{cofibrant replacement}) and then tensoring.
+
+The pattern is universal: to derive a functor that fails to respect
+weak equivalences, replace inputs by cofibrant (or outputs by fibrant)
+objects before evaluating. The result depends only on the weak-equivalence
+class of the input, hence descends to $\mathrm{Ho}(\mathcal{C})$.
+
+\subsection{Formalizing}
+
+\begin{definition}[Total left and right derived functor]
+\label{def:total-derived}
+Let $\mathcal{C}, \mathcal{D}$ be model categories and $F : \mathcal{C}
+\to \mathcal{D}$ a functor.
+
+The \term{total left derived functor} of $F$, when it exists, is the
+left Kan extension of the composite $\mathcal{C} \xrightarrow{F}
+\mathcal{D} \xrightarrow{\gamma_{\mathcal{D}}} \mathrm{Ho}(\mathcal{D})$
+along the localization $\gamma_{\mathcal{C}} : \mathcal{C} \to
+\mathrm{Ho}(\mathcal{C})$:
+\begin{equation*}
+  \mathbb{L} F \;=\; \mathrm{Lan}_{\gamma_{\mathcal{C}}} (\gamma_{\mathcal{D}} F).
+\end{equation*}
+
+The \term{total right derived functor} $\mathbb{R} F$ is dually the right
+Kan extension.
+\end{definition}
+
+\begin{howtosay}
+$\mathbb{L} F$ \sayit{``the total left derived functor of $F$''};
+$\mathbb{R} F$ \sayit{``the total right derived functor of $F$''}. The
+blackboard-bold notation distinguishes the homotopical version from $F$
+itself. Some texts write $LF$ and $RF$, or $F^{\mathbb{L}}$ and $F^{\mathbb{R}}$.
+\end{howtosay}
+
+\begin{theorem}[Pointwise formulas via replacement]
+\label{thm:derived-pointwise}
+If $F$ sends weak equivalences between cofibrant objects to weak
+equivalences in $\mathcal{D}$, then $\mathbb{L} F$ exists and
+\begin{equation*}
+  \mathbb{L} F (X) \;\cong\; F(Q X) \quad \text{in } \mathrm{Ho}(\mathcal{D}),
+\end{equation*}
+where $Q X$ is a cofibrant replacement (Theorem~41.\ref{thm:replacement}).
+Dually, if $F$ sends weak equivalences between fibrant objects to weak
+equivalences,
+\begin{equation*}
+  \mathbb{R} F (X) \;\cong\; F(R X).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+For $\mathbb{L}F$: define $\mathbb{L}F (X) = F(Q X)$ on objects.
+Well-definedness on $\mathrm{Ho}(\mathcal{C})$: if $X \xrightarrow{\sim} X'$
+is a weak equivalence, the induced $Q X \xrightarrow{\sim} Q X'$ between
+cofibrants becomes a weak equivalence under $F$ by hypothesis, hence is
+an isomorphism in $\mathrm{Ho}(\mathcal{D})$. The left-Kan-extension
+universality follows from the universal property of cofibrant replacement:
+$Q X \xrightarrow{\sim} X$ is initial among weak-equivalences-out-of-cofibrants
+into $X$. \qed
+\end{proof}
+
+\begin{lemma}[Ken Brown's lemma]
+\label{lem:ken-brown}
+If $F : \mathcal{C} \to \mathcal{D}$ sends trivial cofibrations between
+cofibrant objects to weak equivalences, then $F$ sends \emph{all} weak
+equivalences between cofibrant objects to weak equivalences — so
+$\mathbb{L} F$ exists.
+\end{lemma}
+
+\begin{remark}[Ken Brown in practice]
+Ken Brown's lemma reduces the hypothesis ``preserves weak equivalences
+between cofibrants'' to ``preserves trivial cofibrations.'' That is exactly
+the half of the Quillen-functor condition that left adjoints often
+satisfy; the next section makes this systematic.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Quillen Adjunctions}
+\label{sec:quillen-adjunctions}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Quillen adjunction]
+\label{def:quillen-adjunction}
+A \term{Quillen adjunction} between model categories $\mathcal{C}$ and
+$\mathcal{D}$ is an adjoint pair $F : \mathcal{C} \rightleftarrows
+\mathcal{D} : G$, $F \dashv G$, such that any (equivalently, all) of the
+following hold:
+\begin{enumerate}
+  \item $F$ preserves cofibrations and trivial cofibrations.
+  \item $G$ preserves fibrations and trivial fibrations.
+  \item $F$ preserves cofibrations and $G$ preserves fibrations.
+\end{enumerate}
+We call $F$ \term{left Quillen} and $G$ \term{right Quillen}.
+\end{definition}
+
+\begin{theorem}[Equivalence of Quillen-adjunction conditions]
+\label{thm:quillen-adj-equiv}
+For an adjunction $F \dashv G$, the three conditions in
+Definition~\ref{def:quillen-adjunction} are equivalent.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+(1) $\Leftrightarrow$ (2): cofibrations are exactly $\mathrm{LLP}$ against
+trivial fibrations; by the adjunction $F \dashv G$, a square involving
+$F(i)$ and $p$ has a lift iff the adjoint square involving $i$ and $G(p)$
+does. So $F$ preserves cofibrations iff $G$ preserves trivial fibrations.
+Dually for trivial cofibrations and fibrations.
+
+(1) $\Rightarrow$ (3) is trivial. (3) $\Rightarrow$ (1): if $F$
+preserves cofibrations, then $F$ preserves LLP-against-trivial-fibrations;
+combined with $G$ preserving fibrations, $F$ also preserves trivial
+cofibrations (via $\mathrm{LLP}$-against-fibrations). \qed
+\end{proof}
+
+\begin{theorem}[Derived adjunction]
+\label{thm:derived-adjunction}
+A Quillen adjunction $F \dashv G$ induces an adjunction of total derived
+functors
+\begin{equation*}
+  \mathbb{L} F \;\dashv\; \mathbb{R} G \quad : \quad \mathrm{Ho}(\mathcal{C}) \rightleftarrows \mathrm{Ho}(\mathcal{D}).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+By Ken Brown's lemma, $F$ preserving trivial cofibrations between
+cofibrants implies $\mathbb{L}F$ exists; dually for $\mathbb{R}G$. The
+adjunction descends because the hom-set bijection $\mathcal{D}(FX, Y)
+\cong \mathcal{C}(X, GY)$ is compatible with the equivalence relation
+defining $\mathrm{Ho}$: replacing $X$ by $QX$ on the left and $Y$ by $RY$
+on the right gives
+\begin{equation*}
+  \mathrm{Ho}(\mathcal{D})(\mathbb{L} F (X), Y) \;\cong\; \mathrm{Ho}(\mathcal{C})(X, \mathbb{R} G (Y)). \qed
+\end{equation*}
+\end{proof}
+
+\begin{example_thm}[Realization–singular is Quillen]
+\label{ex:realization-quillen}
+The adjunction $\lvert{-}\rvert \dashv \mathrm{Sing}$ between
+$\mathbf{sSet}_{\mathrm{Q}}$ and $\mathbf{Top}_{\mathrm{Q}}$ is a
+Quillen adjunction. Verification: $\lvert{-}\rvert$ preserves
+monomorphisms (cofibrations of $\mathbf{sSet}$) since it preserves
+colimits and monos in $\mathbf{Top}$ are pullback-stable. It also
+preserves horn inclusions $\Lambda^n_k \hookrightarrow \Delta^n$
+(trivial cofibrations of $\mathbf{sSet}$), since their realizations are
+deformation retracts — hence trivial cofibrations in $\mathbf{Top}$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Quillen Equivalences}
+\label{sec:quillen-equivalences}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Quillen equivalence]
+\label{def:quillen-eqv}
+A Quillen adjunction $F \dashv G$ is a \term{Quillen equivalence} if any
+(equivalently, all) of the following hold:
+\begin{enumerate}
+  \item The derived adjunction $\mathbb{L} F \dashv \mathbb{R} G$ is an
+        equivalence of categories on $\mathrm{Ho}(\mathcal{C}) \simeq
+        \mathrm{Ho}(\mathcal{D})$.
+  \item For every cofibrant $X \in \mathcal{C}$ and fibrant $Y \in
+        \mathcal{D}$, a map $F X \to Y$ is a weak equivalence in
+        $\mathcal{D}$ iff its adjunct $X \to G Y$ is a weak equivalence
+        in $\mathcal{C}$.
+  \item For every cofibrant $X \in \mathcal{C}$, the composite
+        $X \to G F X \xrightarrow{G(\text{fib repl})} G R F X$
+        is a weak equivalence in $\mathcal{C}$; and dually for $Y$ fibrant.
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Realization–singular Quillen equivalence]
+\label{thm:real-sing-qeq}
+The adjunction $\lvert{-}\rvert \dashv \mathrm{Sing}$ between
+$\mathbf{sSet}_{\mathrm{Q}}$ and $\mathbf{Top}_{\mathrm{Q}}$ is a Quillen
+equivalence.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+Use condition (2). For $X \in \mathbf{sSet}$ cofibrant (every simplicial
+set is) and $Y \in \mathbf{Top}$ fibrant (every space is), the question
+is whether $\lvert X\rvert \to Y$ is a weak homotopy equivalence iff
+$X \to \mathrm{Sing}\, Y$ is.
+
+Both directions reduce to the unit and counit:
+\begin{itemize}
+  \item Unit $\eta_X : X \to \mathrm{Sing}\,\lvert X\rvert$. By a theorem of
+        Milnor, this is a weak equivalence in $\mathbf{sSet}$ for every $X$:
+        $\mathrm{Sing}\,\lvert X\rvert$ and $X$ have the same simplicial
+        homotopy groups (Chapter~38's $\pi_n$ definition, via inner-horn
+        filling).
+  \item Counit $\epsilon_Y : \lvert\mathrm{Sing}\, Y\rvert \to Y$. This is
+        a weak homotopy equivalence for every space $Y$ (Quillen's
+        theorem), classically equivalent to $Y$ admitting a CW
+        approximation.
+\end{itemize}
+Both unit and counit being weak equivalences is condition (3); hence the
+adjunction is a Quillen equivalence. \qed
+\end{proof}
+
+\begin{remark}[The homotopy hypothesis, formalized]
+Theorem~\ref{thm:real-sing-qeq} is the precise statement of the
+\emph{homotopy hypothesis} we previewed in Chapter~39: simplicial sets
+and topological spaces present equivalent homotopy theories. From this
+point onward in Volume~IV, we may freely move between $\mathbf{sSet}$
+and $\mathbf{Top}$ at the level of homotopy categories.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Examples and Bridges}
+\label{sec:bridges}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The bar construction as a derived left Kan extension}
+
+\begin{example_thm}[Derived bar]
+\label{ex:derived-bar}
+For a monoid $M$ in a strict monoidal model category $(\mathcal{V},
+\otimes, I)$, the bar construction $B_\bullet M : \Delta^{\mathrm{op}}
+\to \mathcal{V}$ (Chapter~37 Corollary~\ref{cor:bar-construction})
+gives a simplicial object. Its \term{geometric realization}
+$\lvert B_\bullet M\rvert$ — the coend $\int^{[n]} M^{\otimes(n+1)} \otimes
+\lvert\Delta^n\rvert$ — computes the derived colimit
+\begin{equation*}
+  \mathbb{L}\mathrm{colim}_{\Delta^{\mathrm{op}}} B_\bullet M \;\simeq\; \lvert B_\bullet M\rvert.
+\end{equation*}
+This is the model-categorical incarnation of ``the universal property of
+$\Delta_+$ derived to its homotopical version.'' The $\infty$-monad
+machinery of Chapter~51 makes this systematic.
+\end{example_thm}
+
+\subsection{Derived tensor and Ext}
+
+\begin{example_thm}[Derived tensor product]
+\label{ex:derived-tensor}
+Let $R$ be a ring, $M$ a right $R$-module, $N$ a left $R$-module.
+Cofibrantly resolve $M$ in the projective model structure on
+$\mathbf{Ch}(\mathrm{Mod}\text{-}R)$ to obtain a chain complex
+$P_\bullet \xrightarrow{\sim} M$ of projective modules. Then
+\begin{equation*}
+  M \otimes^{\mathbb{L}}_R N \;=\; P_\bullet \otimes_R N,
+\end{equation*}
+the \term{derived tensor product}, computes the Tor groups $\mathrm{Tor}_n^R(M, N)$
+as $H_n(P_\bullet \otimes_R N)$.
+\end{example_thm}
+
+\begin{example_thm}[Derived hom]
+\label{ex:derived-hom}
+Dually, $\mathbb{R}\mathrm{Hom}_R(M, N) = \mathrm{Hom}_R(P_\bullet, N)$
+where $P_\bullet \xrightarrow{\sim} M$ is a projective resolution
+(or $N \xrightarrow{\sim} I^\bullet$ an injective resolution), with
+homology computing $\mathrm{Ext}^n_R(M, N) = H^n \mathbb{R}\mathrm{Hom}_R(M, N)$.
+\end{example_thm}
+
+\begin{remark}[Phase 1 closes here]
+With derived functors and Quillen equivalences in place, the
+simplicial / model-categorical foundations of Volume~IV are complete.
+The next phase (Chapters~43--48) builds the theory of quasi-categories
+on this foundation. The key takeaway: $\infty$-category theory will
+generalize \emph{both} ordinary categories (via the nerve) \emph{and}
+simplicial homotopy types (via Kan complexes), unifying the two pictures
+under a single combinatorial framework.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:derived-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define the total left derived functor $\mathbb{L}F$.}{The left Kan extension of $\gamma_{\mathcal{D}} \circ F$ along the localization $\gamma_{\mathcal{C}}$; pointwise $\mathbb{L}F(X) \simeq F(QX)$ when $F$ preserves weak equivalences between cofibrants.}
+\qaitem{What does $\mathbb{R}F$ compute?}{Total right derived functor: $\mathbb{R}F(X) \simeq F(RX)$ via fibrant replacement, when $F$ preserves weak equivalences between fibrants.}
+\qaitem{State Ken Brown's lemma.}{If $F$ preserves trivial cofibrations between cofibrant objects, it preserves all weak equivalences between cofibrant objects.}
+\qaitem{Why is Ken Brown's lemma useful?}{It reduces the existence of $\mathbb{L}F$ to checking $F$ preserves trivial cofibrations — a much simpler condition than ``preserves all weak equivalences.''}
+\qaitem{Define a Quillen adjunction.}{An adjunction $F \dashv G$ with $F$ left Quillen (preserves cof and trivial cof) and $G$ right Quillen (preserves fib and trivial fib).}
+\qaitem{Why are the three conditions in Definition~\ref{def:quillen-adjunction} equivalent?}{Cofibrations are LLP against trivial fibrations, and LLP/RLP are exchanged by the adjunction. So $F$ preserves cof iff $G$ preserves trivial fib, etc.}
+\qaitem{State the derived adjunction theorem.}{A Quillen adjunction $F \dashv G$ induces $\mathbb{L}F \dashv \mathbb{R}G : \mathrm{Ho}(\mathcal{C}) \rightleftarrows \mathrm{Ho}(\mathcal{D})$.}
+\qaitem{Define a Quillen equivalence.}{A Quillen adjunction whose derived adjunction is an equivalence of homotopy categories.}
+\qaitem{Equivalent characterization in terms of unit/counit?}{$X \xrightarrow{\eta} GFX \xrightarrow{G(\sim)} GRFX$ is a weak equivalence for every cofibrant $X$, and the dual for fibrant $Y$.}
+\qaitem{Why is $\lvert{-}\rvert \dashv \mathrm{Sing}$ a Quillen equivalence?}{Unit $X \to \mathrm{Sing}\,\lvert X\rvert$ is a weak equivalence (Milnor); counit $\lvert\mathrm{Sing}\, Y\rvert \to Y$ is a weak equivalence (Quillen / CW approximation).}
+\qaitem{Why is $\lvert{-}\rvert$ left Quillen?}{It preserves monomorphisms (so cofibrations of $\mathbf{sSet}$) and sends horn inclusions to deformation retracts (so trivial cofibrations).}
+\qaitem{Why is $\mathrm{Sing}$ right Quillen?}{By adjunction with $\lvert{-}\rvert$ being left Quillen — or directly: $\mathrm{Sing}(p)$ is a Kan fibration iff $p$ is a Serre fibration.}
+\qaitem{What does $\mathbb{L}F$ compute when $F$ already preserves weak equivalences?}{Just $F$ itself, descended to $\mathrm{Ho}(\mathcal{C})$. The derivation is trivial.}
+\qaitem{When is $F : \mathcal{C} \to \mathcal{D}$ \emph{homotopical}?}{When $F$ preserves \emph{all} weak equivalences. Such $F$ has $\mathbb{L}F = \mathbb{R}F = F_{\mathrm{Ho}}$.}
+\qaitem{What is the derived tensor product?}{$M \otimes_R^{\mathbb{L}} N = P_\bullet \otimes_R N$, where $P_\bullet \xrightarrow{\sim} M$ is a projective resolution. $H_n$ recovers $\mathrm{Tor}^R_n(M, N)$.}
+\qaitem{What is derived hom?}{$\mathbb{R}\mathrm{Hom}_R(M, N) = \mathrm{Hom}_R(P_\bullet, N)$ for $P_\bullet$ projective resolution of $M$; cohomology recovers $\mathrm{Ext}^n_R(M, N)$.}
+\qaitem{Why does Tor not just equal tensor at the chain level?}{Because tensoring with a non-flat module doesn't preserve quasi-isomorphisms; deriving via cofibrant replacement (projective resolution) corrects this.}
+\qaitem{What is the homotopy colimit?}{$\mathrm{hocolim} = \mathbb{L}\mathrm{colim}$. For a simplicial diagram, $\mathrm{hocolim}_\Delta = \lvert{-}\rvert$ (geometric realization of the simplicial replacement).}
+\qaitem{The bar construction as a derived colimit?}{$\lvert B_\bullet M\rvert \simeq \mathbb{L}\mathrm{colim}_{\Delta^{\mathrm{op}}} B_\bullet M$ — the realization of the bar simplicial object is the derived colimit.}
+\qaitem{What's a Bousfield localization?}{A new model structure on the same underlying category and cofibrations, with a strictly larger class of weak equivalences. Not developed here, but central in advanced applications.}
+\qaitem{Does every Quillen adjunction yield a Quillen equivalence?}{No — only those that, in addition, witness that no homotopy-theoretic information is lost. The realization–singular adjunction does; many others don't.}
+\qaitem{What is a homotopy hypothesis?}{The claim that $\infty$-groupoids and homotopy types coincide. Theorem~\ref{thm:real-sing-qeq} is its model-categorical version: $\mathbf{sSet}_{\mathrm{Q}} \simeq_{\mathrm{Q}} \mathbf{Top}_{\mathrm{Q}}$.}
+\qaitem{What's the next phase of Volume~IV?}{Quasi-categories (Chapter~43) — combining the nerve perspective (Chapter~39) with the Joyal model structure (Chapter~41 preview) to give a single combinatorial model of $\infty$-categories.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Total derived functor.}\quad $\mathbb{L}F = \mathrm{Lan}_\gamma
+(\gamma_{\mathcal{D}} F)$ — pointwise $\mathbb{L}F(X) \simeq F(QX)$ via
+cofibrant replacement. Dually $\mathbb{R}F(X) \simeq F(RX)$.
+
+\textbf{Ken Brown.}\quad Preserving trivial cofibrations between
+cofibrants suffices for $\mathbb{L}F$ to exist. The right-handed dual
+gives $\mathbb{R}F$.
+
+\textbf{Quillen adjunction.}\quad $F \dashv G$ with $F$ left Quillen
+(preserves cof and trivial cof) and $G$ right Quillen (dually). The
+conditions are exchanged by adjunction. Induces derived adjunction
+$\mathbb{L}F \dashv \mathbb{R}G$ on homotopy categories.
+
+\textbf{Quillen equivalence.}\quad Derived adjunction is an equivalence.
+Realization–singular $\lvert{-}\rvert \dashv \mathrm{Sing}$ is the
+canonical example: simplicial sets and topological spaces are
+Quillen-equivalent. This is the homotopy hypothesis formalized.
+
+\textbf{Bridges.}\quad The bar construction realizes as a derived
+colimit; derived tensor computes Tor; derived hom computes Ext. Phase~1
+foundations close here; Phase~2 (Chapter~43+) builds quasi-categories
+on top.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Total derived functors.}\quad
+\begin{equation*}
+  \mathbb{L} F \;=\; \mathrm{Lan}_{\gamma_{\mathcal{C}}} (\gamma_{\mathcal{D}} F), \qquad
+  \mathbb{R} F \;=\; \mathrm{Ran}_{\gamma_{\mathcal{C}}} (\gamma_{\mathcal{D}} F).
+\end{equation*}
+Pointwise:
+$\mathbb{L} F (X) \simeq F(QX)$, $\mathbb{R} F(X) \simeq F(RX)$.
+
+\medskip
+\textbf{Ken Brown's lemma.}\quad If $F$ sends trivial cofibrations between
+cofibrants to weak equivalences, $F$ sends all weak equivalences between
+cofibrants to weak equivalences.
+
+\medskip
+\textbf{Quillen adjunction.}\quad $F : \mathcal{C} \rightleftarrows
+\mathcal{D} : G$ with $F$ preserving $\mathcal{C}\mathrm{of}$ and
+$\mathcal{W} \cap \mathcal{C}\mathrm{of}$ (equivalently $G$ preserving
+$\mathcal{F}\mathrm{ib}$ and $\mathcal{W} \cap \mathcal{F}\mathrm{ib}$).
+
+\medskip
+\textbf{Derived adjunction.}\quad $\mathbb{L} F \dashv \mathbb{R} G :
+\mathrm{Ho}(\mathcal{C}) \rightleftarrows \mathrm{Ho}(\mathcal{D})$.
+
+\medskip
+\textbf{Quillen equivalence.}\quad Quillen adjunction whose derived
+adjunction is an equivalence. Equivalently: for $X$ cofibrant, $Y$
+fibrant, $FX \to Y$ is a w.e.\ in $\mathcal{D}$ iff $X \to GY$ is a w.e.\
+in $\mathcal{C}$.
+
+\medskip
+\textbf{Homotopy hypothesis (Theorem).}\quad $\lvert{-}\rvert :
+\mathbf{sSet}_{\mathrm{Q}} \rightleftarrows \mathbf{Top}_{\mathrm{Q}} :
+\mathrm{Sing}$ is a Quillen equivalence; $\mathrm{Ho}(\mathbf{sSet})
+\simeq \mathrm{Ho}(\mathbf{Top})$.
+
+\medskip
+\textbf{Derived algebra.}\quad $\mathrm{Tor}_n^R(M, N) = H_n(M \otimes_R^{\mathbb{L}} N)$;
+$\mathrm{Ext}_R^n(M, N) = H^n \mathbb{R}\mathrm{Hom}_R(M, N)$. Cofibrant
+replacement $=$ projective resolution; fibrant replacement on opposite
+side $=$ injective resolution.
+\end{formalrestatement}
