@@ -1,0 +1,469 @@
+% ch48_infty_yoneda.tex — Volume IV Chapter 12
+
+\chapter{The $\infty$-Categorical Yoneda Lemma}
+
+\begin{overviewbox}
+The Yoneda lemma is the most read theorem of category theory. It has
+appeared four times in this book: in Chapter~9 as a hom-set bijection;
+in Chapter~15 as the representability principle; in Chapter~20 in
+enriched form; in Chapter~28 unified via ends in the formal Yoneda
+statement. This chapter delivers the fifth incarnation — the
+$\infty$-categorical Yoneda lemma — which subsumes all of the above as
+special cases.
+
+The statement: for any (small) $\infty$-category $\mathcal{C}$, there is
+a \term{Yoneda embedding}
+\begin{equation*}
+  y : \mathcal{C} \;\hookrightarrow\; \mathcal{P}(\mathcal{C}) := \mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S}),
+\end{equation*}
+where $\mathcal{S}$ is the $\infty$-category of spaces (anima). The
+embedding is \emph{fully faithful}: it induces equivalences on mapping
+spaces. The \term{$\infty$-Yoneda lemma} computes mapping spaces in
+$\mathcal{P}(\mathcal{C})$ out of representables:
+\begin{equation*}
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \;\simeq\; F(x), \quad \text{naturally in } x \in \mathcal{C} \text{ and } F \in \mathcal{P}(\mathcal{C}).
+\end{equation*}
+The structural consequence is that $\mathcal{P}(\mathcal{C})$ is the
+\term{free cocompletion} of $\mathcal{C}$ — the universal $\infty$-category
+containing $\mathcal{C}$ in which all small colimits exist.
+
+This chapter is the milestone of Phase~2: the foundation is laid for
+the rest of $\infty$-category theory. A reader who has completed
+Chapter~48 can open Lurie's \emph{Higher Topos Theory} (especially HTT
+§5.1, on presentable $\infty$-categories) or Riehl–Verity's
+\emph{Elements of $\infty$-Category Theory} (their development of Yoneda
+in Chapter~5) and read fluently.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Presheaves of Spaces}
+\label{sec:presheaves-of-spaces}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-category of presheaves]
+\label{def:presheaves}
+For a small $\infty$-category $\mathcal{C}$, the
+\term{$\infty$-category of presheaves of spaces} on $\mathcal{C}$ is
+\begin{equation*}
+  \mathcal{P}(\mathcal{C}) \;:=\; \mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S}),
+\end{equation*}
+the $\infty$-category of functors from $\mathcal{C}^{\mathrm{op}}$ to the
+$\infty$-category of spaces $\mathcal{S}$.
+
+Concretely, an object of $\mathcal{P}(\mathcal{C})$ is a functor of
+quasi-categories $F : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$. A
+morphism is a natural transformation, presented as a $1$-simplex of
+$\mathcal{P}(\mathcal{C})$.
+\end{definition}
+
+\begin{howtosay}
+$\mathcal{P}(\mathcal{C})$ \sayit{``the presheaves of spaces on
+$\mathcal{C}$''}; sometimes $\widehat{\mathcal{C}}$ or $\mathrm{PSh}(\mathcal{C})$.
+The dimensional shift is significant: presheaves of \emph{sets} (Chapter~9)
+become presheaves of \emph{spaces} (Kan complexes / $\infty$-groupoids)
+in the $\infty$-setting.
+\end{howtosay}
+
+\begin{remark}[Why presheaves of spaces, not of categories?]
+\label{rem:why-spaces}
+The natural choice for ``the values of a Yoneda embedding'' is the
+$\infty$-category of \emph{$\infty$-groupoids} ($=$ spaces, $=
+\mathcal{S}$), not the larger $\mathcal{C}\mathrm{at}_\infty$. Reason:
+the representable functor $\mathrm{Map}_\mathcal{C}(-, x) :
+\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ takes values in Kan complexes
+— $\mathrm{Map}$ is always $\infty$-groupoidal (Theorem~44.\ref{thm:map-is-kan}).
+We embed into $\mathcal{P}(\mathcal{C})$, not into a larger functor
+category.
+\end{remark}
+
+\begin{theorem}[Properties of $\mathcal{P}(\mathcal{C})$]
+\label{thm:presheaves-properties}
+$\mathcal{P}(\mathcal{C})$ is:
+\begin{enumerate}
+  \item A presentable $\infty$-category (Chapter~52): cocomplete,
+        accessible, and generated under small colimits by representables.
+  \item Equipped with a Cartesian fibration to $\mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$
+        (the universal fibration of Chapter~46), pulled back along the
+        inclusion $\mathcal{S} \hookrightarrow \mathcal{C}\mathrm{at}_\infty$.
+  \item Complete and cocomplete: $\infty$-(co)limits computed pointwise
+        from $\mathcal{S}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{example_thm}[Presheaves on a $1$-category]
+\label{ex:presheaves-1cat}
+For $\mathcal{C} = \mathrm{N}(\mathcal{D})$ the nerve of an ordinary
+category, $\mathcal{P}(\mathrm{N}(\mathcal{D}))$ is the
+$\infty$-categorical refinement of the ordinary presheaf category
+$\widehat{\mathcal{D}} = \mathbf{Set}^{\mathcal{D}^{\mathrm{op}}}$.
+Specifically:
+\begin{itemize}
+  \item Objects of $\mathcal{P}(\mathrm{N}(\mathcal{D}))$ are functors
+        $\mathcal{D}^{\mathrm{op}} \to \mathcal{S}$ — i.e., simplicial
+        presheaves (presheaves of Kan complexes).
+  \item Morphisms are natural transformations, $\infty$-categorically
+        (homotopy-coherent).
+\end{itemize}
+$\mathrm{ho}(\mathcal{P}(\mathrm{N}(\mathcal{D})))$ recovers
+$\mathrm{Ho}(\widehat{\mathcal{D}})$, the homotopy category of simplicial
+presheaves.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The $\infty$-Yoneda Embedding}
+\label{sec:yoneda-embedding}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-Yoneda embedding]
+\label{def:yoneda-embedding-qcat}
+For a small $\infty$-category $\mathcal{C}$, the \term{$\infty$-Yoneda
+embedding} is the functor
+\begin{equation*}
+  y : \mathcal{C} \;\longrightarrow\; \mathcal{P}(\mathcal{C})
+\end{equation*}
+characterized by: $y(x) = \mathrm{Map}_\mathcal{C}(-, x)$, the
+representable presheaf at $x$.
+\end{definition}
+
+\begin{theorem}[Three constructions of $y$]
+\label{thm:three-yoneda}
+The Yoneda functor $y$ can be constructed in three equivalent ways:
+\begin{enumerate}
+  \item \textbf{Via straightening (Chapter~47).} The Cartesian fibration
+        $\mathrm{ev}_1 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$
+        (Example~46.\ref{ex:target-eval}) restricts over each $x \in \mathcal{C}_0$
+        to the slice $\mathcal{C}_{/x} \to *$. Straightening this fibration
+        gives the functor $y : \mathcal{C} \to \mathcal{P}(\mathcal{C})$,
+        $y(x) = \mathrm{Map}_\mathcal{C}(-, x)$.
+  \item \textbf{Via the universal property.} $y$ is the unique
+        colimit-preserving functor $\mathcal{P}(\mathcal{C}) \to
+        \mathcal{P}(\mathcal{C})$ restricting to the identity on $\mathcal{C}$
+        — i.e., $y$ sits inside the universal property of $\mathcal{P}(\mathcal{C})$
+        as a free cocompletion (\S\ref{sec:free-cocompletion}).
+  \item \textbf{Via cosimplicial spaces.} The cosimplicial space
+        $\Delta^n \mapsto N(\mathcal{C}^{\mathrm{op}}_{/\bullet, [n]})$ — a
+        specific cosimplicial simplicial set — Kan-extends along Yoneda
+        to give $y$.
+\end{enumerate}
+All three are weakly equivalent in $\mathrm{Fun}(\mathcal{C}, \mathcal{P}(\mathcal{C}))$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\emph{Construction (1).} The slice $\mathcal{C}_{/x}$ is a right fibration
+(Example~46.\ref{ex:free-fib}). Its associated functor $\mathcal{C}^{\mathrm{op}}
+\to \mathcal{S}$ under straightening (Chapter~47) is $\mathrm{Map}_\mathcal{C}(-, x)$.
+Varying $x$ gives the functor $y : \mathcal{C} \to \mathcal{P}(\mathcal{C})$.
+
+\emph{Construction (2)} is more conceptual: $\mathcal{P}(\mathcal{C})$
+has a universal property as the free cocompletion (Theorem~\ref{thm:free-cocompletion}
+below). The Yoneda embedding is forced by this universal property to
+identify $\mathcal{C}$ with the generators.
+
+\emph{Construction (3)} is the most concrete and computational, generalizing
+Riehl–Verity's exposition. Each cosimplicial space gives a functor
+$\mathbf{sSet}^{\mathcal{C}^{\mathrm{op}}} \to \mathbf{sSet}$, and the
+specific cosimplicial $N(\mathcal{C}^{\mathrm{op}}_{/\bullet, [n]})$
+recovers Yoneda.
+\qed
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The $\infty$-Yoneda Lemma}
+\label{sec:yoneda-lemma-statement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[$\infty$-Yoneda Lemma]
+\label{thm:infty-yoneda}
+For any small $\infty$-category $\mathcal{C}$ and any $F \in
+\mathcal{P}(\mathcal{C})$, there is a weak equivalence of Kan complexes
+\begin{equation*}
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \;\simeq\; F(x),
+\end{equation*}
+natural in $x \in \mathcal{C}$ and $F \in \mathcal{P}(\mathcal{C})$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The strategy mirrors the $1$-categorical Yoneda proof (Chapter~9), but
+all sets become spaces.
+
+\emph{Construct the comparison map.} Given a natural transformation
+$\eta : y(x) \to F$, take $\eta_x(\mathrm{id}_x) \in F(x)$ — the image of
+the universal element. This defines $\Phi : \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F)
+\to F(x)$.
+
+\emph{Construct the inverse.} Given $\xi \in F(x)$, define
+$\widetilde \xi : y(x) \to F$ pointwise: $\widetilde \xi_z : \mathrm{Map}_\mathcal{C}(z, x)
+\to F(z)$ sends $f$ to $F(f)(\xi)$. Coherence of $\widetilde \xi$ as a
+natural transformation requires $\infty$-categorical functoriality of $F$,
+which is built in.
+
+\emph{Verify mutual inverse.} The two compositions are: $\xi \mapsto
+\widetilde \xi \mapsto \widetilde \xi_x(\mathrm{id}_x) = F(\mathrm{id}_x)(\xi)
+\simeq \xi$ (functoriality). The other composition $\eta \mapsto \eta_x(\mathrm{id}_x)
+\mapsto \widetilde{\eta_x(\mathrm{id}_x)}$ recovers $\eta$ by naturality.
+The required coherences (at $2$-simplex level and above) are checked
+combinatorially.
+\qed
+\end{proof}
+
+\begin{corollary}[Yoneda for representables]
+\label{cor:yoneda-representables}
+For $x, y \in \mathcal{C}$:
+\begin{equation*}
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), y(y)) \;\simeq\; \mathrm{Map}_\mathcal{C}(x, y).
+\end{equation*}
+\end{corollary}
+
+\begin{proof}
+Apply $\infty$-Yoneda to $F = y(y)$:
+\begin{equation*}
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), y(y)) \simeq y(y)(x) = \mathrm{Map}_\mathcal{C}(x, y). \qed
+\end{equation*}
+\end{proof}
+
+\begin{theorem}[Yoneda embedding is fully faithful]
+\label{thm:yoneda-ff}
+The functor $y : \mathcal{C} \to \mathcal{P}(\mathcal{C})$ is fully
+faithful: $\mathrm{Map}_\mathcal{C}(x, y) \xrightarrow{\sim}
+\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), y(y))$ is a weak homotopy
+equivalence of Kan complexes for all $x, y$.
+\end{theorem}
+
+\begin{proof}
+By Corollary~\ref{cor:yoneda-representables} the comparison map is a
+weak equivalence; this is exactly full faithfulness in the
+$\infty$-categorical sense (Theorem~44.\ref{thm:whitehead-qcat}).
+\qed
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Free Cocompletion}
+\label{sec:free-cocompletion}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Universal property of $\mathcal{P}(\mathcal{C})$]
+\label{thm:free-cocompletion}
+For every cocomplete $\infty$-category $\mathcal{D}$, the restriction
+functor
+\begin{equation*}
+  \mathrm{Fun}^{\mathrm{cc}}(\mathcal{P}(\mathcal{C}), \mathcal{D}) \;\xrightarrow{\;y^*\;}\; \mathrm{Fun}(\mathcal{C}, \mathcal{D})
+\end{equation*}
+(from colimit-preserving functors $\mathcal{P}(\mathcal{C}) \to \mathcal{D}$
+to functors $\mathcal{C} \to \mathcal{D}$, via precomposition with the
+Yoneda embedding) is an equivalence.
+
+In words: $\mathcal{P}(\mathcal{C})$ is the \term{free cocompletion} of
+$\mathcal{C}$. Every functor $F : \mathcal{C} \to \mathcal{D}$ to a
+cocomplete $\infty$-category extends uniquely (up to coherent homotopy)
+to a colimit-preserving functor $\bar F : \mathcal{P}(\mathcal{C}) \to
+\mathcal{D}$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\emph{Construction of $\bar F$.} Every $P \in \mathcal{P}(\mathcal{C})$
+is a colimit of representables (\term{density theorem}, below). Set
+$\bar F(P) := \mathrm{colim}\,(F \circ p)$ where $p : \mathcal{C}_{/P} \to \mathcal{C}$
+is the canonical diagram of representables.
+
+\emph{Uniqueness of $\bar F$.} A colimit-preserving functor is determined
+by its restriction to a generating set; representables generate
+$\mathcal{P}(\mathcal{C})$ under colimits.
+
+\emph{Equivalence.} The equivalence is established by checking
+fully-faithfulness and essential surjectivity of $y^*$, both of which
+follow from the density theorem.
+\qed
+\end{proof}
+
+\begin{theorem}[Density theorem]
+\label{thm:density}
+Every $P \in \mathcal{P}(\mathcal{C})$ is canonically a colimit of
+representables: there is an equivalence
+\begin{equation*}
+  P \;\simeq\; \mathrm{colim}_{(x, \xi) \in \mathcal{C}_{/P}}\, y(x),
+\end{equation*}
+where $\mathcal{C}_{/P}$ is the slice of $\mathcal{C}$ over $P$
+(via $y$), and the colimit is computed in $\mathcal{P}(\mathcal{C})$.
+\end{theorem}
+
+\begin{remark}[Foreshadowing Chapter~49]
+The density theorem is the cornerstone of $\infty$-categorical limit
+and colimit theory. It says: in $\mathcal{P}(\mathcal{C})$, representables
+form a \emph{dense generator}. Constructing functors out of
+$\mathcal{P}(\mathcal{C})$ that preserve colimits is the same as
+specifying their values on representables — a powerful technique used
+throughout Chapter~49 to construct $\infty$-(co)limits in general
+$\infty$-categories.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Comparison with the Earlier Yonedas}
+\label{sec:yoneda-comparison}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Reorganizing}
+
+\begin{remark}[The Yoneda quartet, revisited]
+\label{rem:yoneda-quartet}
+The $\infty$-Yoneda lemma (Theorem~\ref{thm:infty-yoneda}) is the
+common ancestor of the four earlier appearances:
+\begin{itemize}
+  \item \textbf{Chapter~9 (ordinary Yoneda).} For $\mathcal{C}$ an
+        ordinary category, $\mathcal{P}(\mathrm{N}(\mathcal{C}))$ contains
+        $\widehat{\mathcal{C}} = \mathbf{Set}^{\mathcal{C}^{\mathrm{op}}}$
+        as the full subcategory of $\pi_0$-valued presheaves (presheaves
+        of \emph{discrete} spaces). Restricting $\infty$-Yoneda to this
+        subcategory recovers $\mathrm{Hom}(y(x), F) \cong F(x)$.
+  \item \textbf{Chapter~15 (representability).} The $\infty$-statement
+        ``every presheaf of spaces is a colimit of representables''
+        (Density theorem) is the higher version of Chapter~15's
+        ``representability principle.''
+  \item \textbf{Chapter~20 (enriched Yoneda).} For $\mathcal{V}$-enriched
+        categories, the $\mathcal{V}$-Yoneda lemma is a special case of
+        $\infty$-Yoneda by setting $\mathcal{C}$ to the $\infty$-category
+        underlying $\mathcal{V}\mathrm{Cat}$.
+  \item \textbf{Chapter~28 (formal Yoneda via ends).} The end formula
+        $[\mathcal{C}, \mathcal{V}](y(-), F) \cong F$ in coend form
+        generalizes to $\infty$-end form
+        $\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(-), F) \simeq F$
+        — the precise $\infty$-statement we have just proved.
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Phase-2 milestone]
+\label{rem:phase2-milestone}
+With $\infty$-Yoneda in hand, the reader has the central organizing
+theorem of $\infty$-category theory. Chapter~49 will use it to develop
+$\infty$-(co)limits in general $\infty$-categories. Chapter~50 will
+develop $\infty$-adjunctions, building on the representability that
+$\infty$-Yoneda provides. The literature (Lurie HTT, Riehl–Verity, Land)
+is now accessible.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:yoneda-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is $\mathcal{P}(\mathcal{C})$?}{$\mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$ — the $\infty$-category of presheaves of spaces on $\mathcal{C}$.}
+\qaitem{Why values in $\mathcal{S}$ and not $\mathcal{C}\mathrm{at}_\infty$?}{Because $\mathrm{Map}_\mathcal{C}(-, x)$ takes values in Kan complexes (Theorem~44.2). For the Yoneda embedding to land in the natural target, presheaves of spaces is the right notion.}
+\qaitem{State the Yoneda embedding.}{$y : \mathcal{C} \to \mathcal{P}(\mathcal{C})$, $y(x) = \mathrm{Map}_\mathcal{C}(-, x)$.}
+\qaitem{Three constructions of $y$?}{Via straightening of the slice fibration; via universal property (free cocompletion); via cosimplicial-space Kan extension.}
+\qaitem{State the $\infty$-Yoneda lemma.}{$\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \simeq F(x)$, natural in $x$ and $F$.}
+\qaitem{What is the comparison map in the Yoneda proof?}{$\eta \mapsto \eta_x(\mathrm{id}_x)$ — evaluation at the universal element.}
+\qaitem{What is the inverse map?}{$\xi \mapsto \widetilde \xi$ where $\widetilde \xi_z(f) = F(f)(\xi)$ — transporting $\xi$ along $F$'s contravariant action.}
+\qaitem{State the corollary for representables.}{$\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), y(y)) \simeq \mathrm{Map}_\mathcal{C}(x, y)$.}
+\qaitem{Why does the corollary imply full faithfulness of $y$?}{Full faithfulness of an $\infty$-functor $=$ weak equivalence on each mapping space (Whitehead, Theorem~44.10). The corollary is exactly this for $y$.}
+\qaitem{State the free cocompletion property.}{$\mathrm{Fun}^{\mathrm{cc}}(\mathcal{P}(\mathcal{C}), \mathcal{D}) \xrightarrow{y^*} \mathrm{Fun}(\mathcal{C}, \mathcal{D})$ is an equivalence — every $F : \mathcal{C} \to \mathcal{D}$ to cocomplete $\mathcal{D}$ extends uniquely to a colimit-preserving $\bar F$.}
+\qaitem{State the density theorem.}{Every $P \in \mathcal{P}(\mathcal{C})$ is canonically the colimit of representables: $P \simeq \mathrm{colim}_{(x, \xi)} y(x)$ over $(x, \xi) \in \mathcal{C}_{/P}$.}
+\qaitem{How does Chapter~9's Yoneda fit?}{For $\mathcal{C}$ a $1$-category, $\mathcal{P}(\mathrm{N}(\mathcal{C}))$ contains $\widehat{\mathcal{C}}$ as the $\pi_0$-valued subcategory; restricting $\infty$-Yoneda there recovers Chapter~9.}
+\qaitem{How does Chapter~28's formal Yoneda fit?}{The end formula $\mathrm{Nat}(y(-), F) \cong F$ becomes $\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(-), F) \simeq F$ in $\infty$-categorical form.}
+\qaitem{What is the categorical content of ``free cocompletion''?}{$\mathcal{P}(\mathcal{C})$ is universal among cocomplete $\infty$-categories containing $\mathcal{C}$: any other such cocomplete embedding factors through it via a colimit-preserving functor.}
+\qaitem{Why does the density theorem hold?}{Because every presheaf $P : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ is determined by its values at all objects of $\mathcal{C}$ via Yoneda; the canonical colimit over $\mathcal{C}_{/P}$ reconstructs $P$.}
+\qaitem{What is the slice $\mathcal{C}_{/P}$ when $P \in \mathcal{P}(\mathcal{C})$?}{The $\infty$-category of pairs $(x, \xi)$ where $x \in \mathcal{C}$ and $\xi \in P(x)$, with morphisms in $\mathcal{C}$ compatible with $P$'s action on $\xi$.}
+\qaitem{What's the relationship to Cartesian fibrations?}{$\mathcal{C}_{/P} \to \mathcal{C}$ is a right fibration, classified under straightening by the presheaf $P$ itself.}
+\qaitem{Why is $\mathcal{P}(\mathcal{C})$ presentable?}{It is cocomplete (pointwise from $\mathcal{S}$), accessible (small generated under filtered colimits), and locally small. Chapter~52 develops presentability.}
+\qaitem{What property does Yoneda preserve?}{$y$ preserves all limits that exist in $\mathcal{C}$ (since representables preserve limits). It does \emph{not} in general preserve colimits — that's exactly the failure that makes $\mathcal{P}(\mathcal{C})$ the \emph{free} cocompletion.}
+\qaitem{When does Yoneda preserve colimits?}{Never in general — that's the point of free cocompletion. It would only happen if $\mathcal{C}$ already had all colimits and they were preserved by the embedding, which is essentially never.}
+\qaitem{What does ``representable presheaf'' mean?}{$y(x) = \mathrm{Map}_\mathcal{C}(-, x)$ for some $x \in \mathcal{C}$. A presheaf is representable iff it is in the essential image of $y$.}
+\qaitem{What's the standard reading of the Yoneda philosophy?}{An object is determined by its incoming morphisms (its representable). Two objects are equivalent iff their representables are. This generalizes from $\mathbf{Cat}$ to $\mathcal{C}\mathrm{at}_\infty$ without change.}
+\qaitem{Why is this chapter the milestone?}{Because with $\infty$-Yoneda in hand, the reader can use the foundation in any $\infty$-categorical reference (Lurie's HTT especially), which assumes Yoneda freely from the outset. The bridge to literature is now fully built.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Presheaves of spaces.}\quad $\mathcal{P}(\mathcal{C}) =
+\mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$. Cocomplete and
+presentable; complete; the $\infty$-categorical refinement of ordinary
+presheaf categories.
+
+\textbf{Yoneda embedding.}\quad $y : \mathcal{C} \hookrightarrow
+\mathcal{P}(\mathcal{C})$, $y(x) = \mathrm{Map}_\mathcal{C}(-, x)$.
+Constructed via straightening of slice fibrations.
+
+\textbf{$\infty$-Yoneda lemma.}\quad For all $x \in \mathcal{C}$, $F \in
+\mathcal{P}(\mathcal{C})$:
+$\mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \simeq F(x)$,
+natural in both. Corollary: $y$ is fully faithful.
+
+\textbf{Free cocompletion.}\quad $\mathcal{P}(\mathcal{C})$ is universal:
+$\mathrm{Fun}^{\mathrm{cc}}(\mathcal{P}(\mathcal{C}), \mathcal{D}) \simeq
+\mathrm{Fun}(\mathcal{C}, \mathcal{D})$ for cocomplete $\mathcal{D}$.
+
+\textbf{Density theorem.}\quad Every $P \in \mathcal{P}(\mathcal{C})$ is
+canonically a colimit of representables.
+
+\textbf{Bridge to literature.}\quad With $\infty$-Yoneda established,
+Lurie HTT, Riehl–Verity, Cisinski, and Kerodon are now accessible. The
+remaining $\infty$-categorical theorems of Volume~IV (limits,
+adjunctions, monads, Kan extensions, presentability, stability, operads)
+all derive from this foundation.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Presheaves of spaces.}\quad $\mathcal{P}(\mathcal{C}) :=
+\mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S})$. Cocomplete and
+locally small; (co)limits pointwise from $\mathcal{S}$.
+
+\medskip
+\textbf{Yoneda embedding.}\quad $y : \mathcal{C} \hookrightarrow
+\mathcal{P}(\mathcal{C})$, $y(x) = \mathrm{Map}_\mathcal{C}(-, x)$.
+
+\medskip
+\textbf{$\infty$-Yoneda lemma.}\quad
+\begin{equation*}
+  \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), F) \;\simeq\; F(x),
+  \qquad \text{natural in } x \in \mathcal{C}, F \in \mathcal{P}(\mathcal{C}).
+\end{equation*}
+
+\medskip
+\textbf{Full faithfulness.}\quad $y$ induces weak equivalences
+$\mathrm{Map}_\mathcal{C}(x, y) \xrightarrow{\sim} \mathrm{Map}_{\mathcal{P}(\mathcal{C})}(y(x), y(y))$.
+
+\medskip
+\textbf{Free cocompletion.}\quad For cocomplete $\mathcal{D}$:
+\begin{equation*}
+  \mathrm{Fun}^{\mathrm{cc}}(\mathcal{P}(\mathcal{C}), \mathcal{D}) \;\xrightarrow{\;y^*\;}\; \mathrm{Fun}(\mathcal{C}, \mathcal{D})
+\end{equation*}
+is an equivalence. The unique extension of $F : \mathcal{C} \to \mathcal{D}$
+is $\bar F(P) = \mathrm{colim}_{(x, \xi) \in \mathcal{C}_{/P}} F(x)$.
+
+\medskip
+\textbf{Density.}\quad Every $P \in \mathcal{P}(\mathcal{C})$ satisfies
+\begin{equation*}
+  P \;\simeq\; \mathrm{colim}_{(x, \xi) \in \mathcal{C}_{/P}} \, y(x).
+\end{equation*}
+
+\medskip
+\textbf{Bridge.}\quad With $\infty$-Yoneda available, the higher-CT
+literature (Lurie HTT, Riehl–Verity, Cisinski, Kerodon, Land) is
+accessible. Phase~2 of Volume~IV closes here.
+\end{formalrestatement}

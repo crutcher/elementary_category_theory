@@ -1,0 +1,359 @@
+% ch46_fibrations.tex — Volume IV Chapter 10
+
+\chapter{Cartesian and coCartesian Fibrations}
+
+\begin{overviewbox}
+The Grothendieck construction in ordinary category theory packages a
+pseudofunctor $F : \mathcal{S}^{\mathrm{op}} \to \mathbf{Cat}$ as a single
+category $\int F$ together with a \term{fibration} $\int F \to \mathcal{S}$
+whose fibres are the categories $F(s)$ and whose ``transport'' is the
+functoriality of $F$. The $\infty$-categorical version is
+\term{Cartesian} (and \term{coCartesian}) \term{fibrations}: morphisms
+$p : \mathcal{X} \to \mathcal{S}$ between quasi-categories satisfying a
+combinatorial lifting property that encodes coherent transport up the
+fibres.
+
+This chapter introduces the definitions and works through the foundational
+examples. The technical heart is the notion of a \term{$p$-Cartesian
+morphism}: a $1$-simplex $\alpha : x \to y$ in $\mathcal{X}$ such that
+restricting along $\alpha$ gives a homotopy equivalence on mapping
+spaces. Cartesian morphisms supply the transport data; Cartesian
+fibrations are those $p$ in which enough Cartesian morphisms exist.
+
+Examples organize the chapter:
+\begin{itemize}
+  \item The \term{family fibration}: for a coCartesian fibration, the
+        fibres $\mathcal{X}_s$ form a functor $\mathcal{S} \to
+        \mathbf{QCat}$.
+  \item The \term{arrow fibration} $\mathcal{C}^{\Delta^1} \to \mathcal{C}$
+        (evaluation at the source or target): target evaluation is a
+        Cartesian fibration; source evaluation is a coCartesian
+        fibration.
+  \item The \term{universal Cartesian fibration}: a Cartesian fibration
+        $\mathcal{U} \to \mathcal{S}$ classifying functors
+        $\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$.
+        Existence is the content of Chapter~47's straightening theorem.
+\end{itemize}
+
+After this chapter, Chapter~47's straightening/unstraightening equivalence
+between Cartesian fibrations and functors $\mathcal{S}^{\mathrm{op}} \to
+\mathcal{C}\mathrm{at}_\infty$ closes the loop.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cartesian Morphisms}
+\label{sec:cartesian-morphisms}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+Let $p : \mathcal{X} \to \mathcal{S}$ be a map of quasi-categories. A
+morphism $\alpha : x \to y$ in $\mathcal{X}$ is \term{$p$-Cartesian} if
+it presents $y$ as ``the image of $x$ along $\alpha$ in a universal way
+relative to the base $\mathcal{S}$.'' Equivalently: $\alpha$ is
+$p$-Cartesian when any morphism $z \to y$ in $\mathcal{X}$ that lies over
+a factorization $p(z) \to p(x) \to p(y)$ in $\mathcal{S}$ lifts uniquely
+to a factorization $z \to x \to y$ in $\mathcal{X}$.
+
+The intuition is direct from $1$-categorical Grothendieck fibrations:
+$\alpha$ is the \term{transport} of $x$ along $p(\alpha)$, and any other
+morphism into $y$ should ``factor through'' $\alpha$ in a unique way.
+
+\subsection{Formalizing}
+
+\begin{definition}[$p$-Cartesian morphism]
+\label{def:p-cartesian}
+Let $p : \mathcal{X} \to \mathcal{S}$ be a map of simplicial sets and
+$\alpha : x \to y$ a $1$-simplex in $\mathcal{X}$. We say $\alpha$ is
+\term{$p$-Cartesian} if for every $n \geq 2$, every commutative diagram
+of solid arrows
+\begin{equation*}
+  \begin{tikzcd}[column sep=large]
+    \Lambda^n_n \arrow[r] \arrow[d] & \mathcal{X} \arrow[d, "p"] \\
+    \Delta^n \arrow[r] \arrow[ur, dashed] & \mathcal{S}
+  \end{tikzcd}
+\end{equation*}
+in which the restriction of the upper map to the final edge $\Delta^{\{n-1,
+n\}}$ of $\Lambda^n_n$ is $\alpha$, admits a (dashed) lift.
+\end{definition}
+
+\begin{howtosay}
+$\alpha$ \sayit{``a $p$-Cartesian morphism'' or ``$p$-Cartesian''}; the
+condition specifies a \emph{lifting} property against outer horns
+$\Lambda^n_n \hookrightarrow \Delta^n$ that have $\alpha$ on the final
+edge. The dual coCartesian condition uses initial-edge horns
+$\Lambda^n_0$.
+\end{howtosay}
+
+\begin{theorem}[Equivalent characterizations]
+\label{thm:cartesian-equiv}
+For $\alpha : x \to y$ in $\mathcal{X}$ over $f : s' \to s$ in
+$\mathcal{S}$, the following are equivalent:
+\begin{enumerate}
+  \item $\alpha$ is $p$-Cartesian.
+  \item For every $z \in \mathcal{X}$, the canonical map
+        \begin{equation*}
+          \mathrm{Map}_\mathcal{X}(z, x) \;\longrightarrow\;
+          \mathrm{Map}_\mathcal{X}(z, y) \times_{\mathrm{Map}_\mathcal{S}(p(z), p(y))} \mathrm{Map}_\mathcal{S}(p(z), p(x))
+        \end{equation*}
+        is a weak homotopy equivalence of Kan complexes.
+  \item Every diagram
+        \begin{equation*}
+          \begin{tikzcd}
+            z \arrow[rr, bend left] \arrow[r, dashed, "g"'] & x \arrow[r, "\alpha"] & y
+          \end{tikzcd}
+        \end{equation*}
+        admits a unique (up to coherent homotopy) lift $g$ for any
+        compatible $z \to y$ in $\mathcal{X}$ and $p(z) \to p(x)$ in
+        $\mathcal{S}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{remark}[Cartesian for ordinary categories]
+For an ordinary functor $p : \mathbf{C} \to \mathbf{S}$ regarded as a map
+of nerves, the condition collapses: $\alpha$ is $p$-Cartesian iff for
+every $g : z \to y$ in $\mathbf{C}$ and every factorization $p(z) \to p(x)
+\to p(y)$ of $p(g)$ in $\mathbf{S}$, there is a unique $\bar g : z \to x$
+making both pieces commute. This is the standard $1$-categorical
+definition of Grothendieck-Cartesian.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cartesian Fibrations}
+\label{sec:cartesian-fibrations}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Cartesian fibration]
+\label{def:cartesian-fibration}
+A map $p : \mathcal{X} \to \mathcal{S}$ of simplicial sets is a
+\term{Cartesian fibration} if:
+\begin{itemize}
+  \item $p$ is an inner fibration (RLP against inner horns; equivalently,
+        the fibres $\mathcal{X}_s = \mathcal{X} \times_\mathcal{S} \{s\}$ are
+        quasi-categories).
+  \item For every edge $f : s' \to s$ in $\mathcal{S}$ and every $y \in
+        \mathcal{X}$ with $p(y) = s$, there exists a $p$-Cartesian
+        morphism $\alpha : x \to y$ in $\mathcal{X}$ with $p(\alpha) = f$.
+\end{itemize}
+\end{definition}
+
+\begin{definition}[coCartesian fibration]
+\label{def:cocartesian-fibration}
+$p$ is a \term{coCartesian fibration} if it is an inner fibration and
+for every $f : s \to s'$ and every $x$ with $p(x) = s$, there exists a
+$p$-coCartesian morphism $\alpha : x \to y$ (defined dually) with
+$p(\alpha) = f$.
+\end{definition}
+
+\begin{example_thm}[Trivial fibrations are Cartesian and coCartesian]
+\label{ex:trivial-fib-cart}
+A trivial Kan fibration (RLP against all $\partial\Delta^n \hookrightarrow
+\Delta^n$) is automatically both Cartesian and coCartesian. The
+transport along any base edge is via the lifting property; every morphism
+in the total space is both Cartesian and coCartesian.
+\end{example_thm}
+
+\begin{example_thm}[The target evaluation $\mathcal{C}^{\Delta^1} \to \mathcal{C}$]
+\label{ex:target-eval}
+For any quasi-category $\mathcal{C}$, the target evaluation
+$\mathrm{ev}_1 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$ (which sends
+an arrow $f : a \to b$ to $b$) is a Cartesian fibration. The Cartesian
+lift of $g : b' \to b$ over an object $f : a \to b$ is the precomposition
+$g^* f = f \circ g : a \to b'$, presented as a $2$-simplex.
+\end{example_thm}
+
+\begin{example_thm}[Source evaluation $\mathcal{C}^{\Delta^1} \to \mathcal{C}$]
+\label{ex:source-eval}
+Dually, $\mathrm{ev}_0 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$ (sending
+$f : a \to b$ to $a$) is a \emph{coCartesian} fibration: along $h : a \to
+a'$, transport an arrow $f : a \to b$ to its postcomposition $h_* f$.
+\end{example_thm}
+
+\begin{example_thm}[Right fibrations]
+\label{ex:right-fib}
+A \term{right fibration} is a Cartesian fibration in which every morphism
+of $\mathcal{X}$ is $p$-Cartesian. Equivalently, $p$ has RLP against
+all outer horns $\Lambda^n_n$ — a stronger condition than RLP against
+just final-edge horns. Right fibrations are the $\infty$-categorical
+analogue of ordinary discrete fibrations (a slice $\mathcal{C}_{/x} \to
+\mathcal{C}$ is a right fibration).
+\end{example_thm}
+
+\subsection{Reorganizing: fibres are functorial}
+
+\begin{theorem}[Functoriality of fibres]
+\label{thm:fibres-functorial}
+For a Cartesian fibration $p : \mathcal{X} \to \mathcal{S}$, the assignment
+$s \mapsto \mathcal{X}_s$ extends to a functor
+\begin{equation*}
+  \mathcal{S}^{\mathrm{op}} \;\longrightarrow\; \mathcal{C}\mathrm{at}_\infty
+\end{equation*}
+(into the $\infty$-category of small $\infty$-categories), called the
+\term{functor classified by} $p$. The transport along an edge $f : s' \to
+s$ in $\mathcal{S}$ is the functor $f^* : \mathcal{X}_s \to \mathcal{X}_{s'}$
+sending $y \mapsto x$, where $\alpha : x \to y$ is the chosen Cartesian
+lift.
+\end{theorem}
+
+\begin{remark}[Choice issue]
+The transport functor $f^*$ depends on choices of Cartesian lifts.
+Different choices give homotopic functors, but to make the assignment
+\emph{strictly} functorial in $f$ requires the $\infty$-categorical
+straightening of Chapter~47.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Examples in the Wild}
+\label{sec:fibration-examples}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{The arrow $\infty$-category}
+
+\begin{example_thm}[The arrow $\infty$-category]
+\label{ex:arrow-infty-cat}
+$\mathcal{C}^{\Delta^1}$ is the $\infty$-category of arrows of
+$\mathcal{C}$. Together with $(\mathrm{ev}_0, \mathrm{ev}_1) :
+\mathcal{C}^{\Delta^1} \to \mathcal{C} \times \mathcal{C}$, it is the
+universal $\infty$-category over $\mathcal{C} \times \mathcal{C}$
+classifying ``data of an arrow.''
+
+The product map $(\mathrm{ev}_0, \mathrm{ev}_1)$ is \emph{not} a
+Cartesian fibration in general — the joint conditions on source and
+target are too restrictive — but each component is a Cartesian
+fibration (target) or coCartesian fibration (source).
+\end{example_thm}
+
+\subsection{Free fibrations}
+
+\begin{example_thm}[Free fibration generated by a vertex]
+\label{ex:free-fib}
+For any quasi-category $\mathcal{C}$ and object $x \in \mathcal{C}_0$,
+the slice $\mathcal{C}_{/x} \to \mathcal{C}$ is a right fibration. It
+classifies the representable presheaf $\mathrm{Map}_\mathcal{C}(-, x) :
+\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ — a presheaf of spaces (Chapter~48).
+\end{example_thm}
+
+\subsection{Universal Cartesian fibration}
+
+\begin{remark}[The universal example, foreshadowed]
+\label{rem:universal-cart}
+There is a Cartesian fibration $\mathcal{U} \to \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$
+whose fibre over an $\infty$-category $\mathcal{D}$ is $\mathcal{D}$
+itself, classifying the identity functor
+$\mathrm{id} : \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}} \to
+\mathcal{C}\mathrm{at}_\infty$. Every Cartesian fibration $\mathcal{X} \to
+\mathcal{S}$ is the pullback of $\mathcal{U}$ along the classifying functor
+$\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$. This is
+the universal property of $\mathcal{C}\mathrm{at}_\infty$, made precise
+by the straightening theorem of Chapter~47.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:fibration-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a $p$-Cartesian morphism.}{A $1$-simplex $\alpha : x \to y$ in $\mathcal{X}$ that lifts every outer horn $\Lambda^n_n$ ending on $\alpha$. Equivalently: restriction along $\alpha$ gives a homotopy equivalence on mapping spaces.}
+\qaitem{Why is the lifting condition specifically against $\Lambda^n_n$?}{Because that horn shape leaves the final edge ($\alpha$) free and demands the lift to fit a Cartesian-square diagram of $p(\alpha)$.}
+\qaitem{Define a Cartesian fibration.}{An inner fibration $p : \mathcal{X} \to \mathcal{S}$ such that for every edge in $\mathcal{S}$ and every object over its target, there is a $p$-Cartesian morphism over that edge with that target.}
+\qaitem{Define a coCartesian fibration.}{Dually: $p$-coCartesian morphisms exist for every edge in $\mathcal{S}$ and object over its source.}
+\qaitem{Why are Cartesian fibrations the higher analogue of Grothendieck fibrations?}{Because Cartesian morphisms supply the transport data, and the totality of Cartesian lifts encodes the action of the base on the fibres — functorially up to coherent homotopy.}
+\qaitem{What's a right fibration?}{A Cartesian fibration in which every morphism is $p$-Cartesian. Equivalently: RLP against all outer horns $\Lambda^n_n$ (no constraint on which final edge).}
+\qaitem{When is $\mathrm{ev}_1 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$ Cartesian?}{Always, for any quasi-category $\mathcal{C}$. The Cartesian lift over $g : b' \to b$ at $f : a \to b$ is the precomposition $f \circ g$.}
+\qaitem{When is $\mathrm{ev}_0 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$ coCartesian?}{Always — dually. coCartesian lifts over $h : a \to a'$ at $f : a \to b$ are postcompositions $h^* f$.}
+\qaitem{Is $\mathrm{ev}_0$ Cartesian?}{No in general — postcomposing along an arrow in the base is the natural direction; precomposing requires inverses, which may not exist.}
+\qaitem{What's a slice as a right fibration?}{$\mathcal{C}_{/x} \to \mathcal{C}$ is a right fibration for any object $x$ of $\mathcal{C}$. It classifies the representable presheaf $\mathrm{Map}_\mathcal{C}(-, x)$.}
+\qaitem{What does ``$\mathcal{X}_s$ is the fibre over $s$'' mean?}{$\mathcal{X}_s := \mathcal{X} \times_\mathcal{S} \{s\}$ — the pullback of $\mathcal{X} \to \mathcal{S}$ along $\{s\} \hookrightarrow \mathcal{S}$.}
+\qaitem{What's the functor classified by a Cartesian fibration $p$?}{$\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$, $s \mapsto \mathcal{X}_s$. Transport along $f : s' \to s$: $\mathcal{X}_s \to \mathcal{X}_{s'}$ via Cartesian lifts.}
+\qaitem{Why is the transport functor only well-defined up to homotopy?}{Because the choice of Cartesian lift over $f$ is only unique up to a contractible space of choices. Strict functoriality requires straightening.}
+\qaitem{What is the universal Cartesian fibration?}{$\mathcal{U} \to \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$ classifying the identity functor. Every Cartesian fibration is a pullback of $\mathcal{U}$ — content of straightening.}
+\qaitem{Difference between Cartesian and inner fibration?}{Inner fibrations have RLP against inner horns only (giving quasi-category fibres but no transport). Cartesian fibrations additionally have the Cartesian lift property (existence of transport data).}
+\qaitem{How does Cartesian fibration relate to right fibration?}{Right fibration $\Rightarrow$ Cartesian (in particular). Right fibration: ALL morphisms are Cartesian. General Cartesian: only enough Cartesian lifts to handle base-edge transport.}
+\qaitem{What's a left fibration?}{Dual of right: every morphism is $p$-coCartesian. Equivalently, RLP against $\Lambda^n_0$ horns.}
+\qaitem{Are right fibrations Kan fibrations?}{Restricted to fibres over a Kan complex, yes — the fibrewise structure forces it. In general, no: right fibrations are RLP against $\Lambda^n_n$ but not $\Lambda^n_k$ for $0 < k < n$.}
+\qaitem{What does a Cartesian fibration $p$ over $\Delta^1$ look like?}{Two fibres $\mathcal{X}_0$ and $\mathcal{X}_1$ together with a functor $\mathcal{X}_1 \to \mathcal{X}_0$ given by the Cartesian lifts of the single edge $0 \to 1$.}
+\qaitem{And over $\Delta^0$?}{A Cartesian fibration over a point is just a quasi-category $\mathcal{X}_0$ (the single fibre); the Cartesian condition is vacuous.}
+\qaitem{Why are Cartesian fibrations the right notion (vs.\ strict pseudofunctors)?}{Because $\infty$-categorical functoriality is strict only up to coherent homotopy; encoding it via Cartesian lifts captures all the coherences without forcing strict commutativity.}
+\qaitem{What's the relationship between Cartesian and coCartesian for the same $p$?}{$p^{\mathrm{op}}$ is Cartesian iff $p$ is coCartesian. (Take opposites.) A self-dual map is called a \emph{bifibration} or \emph{biCartesian}.}
+\qaitem{What is $\mathcal{C}\mathrm{at}_\infty$?}{The $\infty$-category of small $\infty$-categories. Its objects are quasi-categories; mapping spaces are spaces of functors (equivalences as $1$-cells); the universal Cartesian fibration $\mathcal{U} \to \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$ has fibres themselves.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Cartesian morphism.}\quad A $1$-simplex $\alpha$ in $\mathcal{X}$
+over $p : \mathcal{X} \to \mathcal{S}$ such that outer horn lifts
+$\Lambda^n_n \to \mathcal{X}$ ending on $\alpha$ extend to $\Delta^n$.
+Equivalently, restriction along $\alpha$ is a weak equivalence on mapping
+spaces.
+
+\textbf{Cartesian and coCartesian fibrations.}\quad Inner fibrations
+admitting enough Cartesian (resp.\ coCartesian) lifts. Right fibration:
+every morphism Cartesian (so all of $\mathcal{X}$ lies over $\mathcal{S}$
+``co-discretely''). Left fibration: every morphism coCartesian.
+
+\textbf{Functoriality of fibres.}\quad A Cartesian fibration $p$ gives
+a functor $\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$,
+$s \mapsto \mathcal{X}_s$, with transport along edges via Cartesian
+lifts. The choice of lifts is unique up to coherent homotopy.
+
+\textbf{Examples.}\quad Target evaluation $\mathcal{C}^{\Delta^1} \to
+\mathcal{C}$ (Cartesian); source evaluation (coCartesian); slices
+$\mathcal{C}_{/x}$ (right fibration); universal Cartesian fibration
+$\mathcal{U} \to \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$
+(classifying the identity).
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Cartesian morphism.}\quad $\alpha : x \to y$ in $\mathcal{X}$
+over $p$ is Cartesian iff $\forall n \geq 2$, $\Lambda^n_n \to \mathcal{X}$
+restricting to $\alpha$ on the final edge extends to $\Delta^n$.
+
+\medskip
+\textbf{Equivalent characterization.}\quad $\alpha$ is Cartesian iff for
+all $z \in \mathcal{X}$:
+\begin{equation*}
+  \mathrm{Map}_\mathcal{X}(z, x) \to \mathrm{Map}_\mathcal{X}(z, y) \times_{\mathrm{Map}_\mathcal{S}(p(z), p(y))} \mathrm{Map}_\mathcal{S}(p(z), p(x))
+\end{equation*}
+is a weak equivalence of Kan complexes.
+
+\medskip
+\textbf{Cartesian fibration.}\quad $p : \mathcal{X} \to \mathcal{S}$,
+inner fibration, with: $\forall (f : s' \to s) \in \mathcal{S}_1, \, \forall y
+\in \mathcal{X}_s, \, \exists \alpha \in \mathcal{X}_1 \text{ with } d_0 \alpha = y,
+p(\alpha) = f, \alpha \text{ Cartesian}$.
+
+\medskip
+\textbf{coCartesian fibration.}\quad Dual: lift over source rather than target.
+
+\medskip
+\textbf{Right / left fibration.}\quad Cartesian (resp.\ coCartesian) with
+\emph{every} morphism Cartesian (resp.\ coCartesian). Equivalent: RLP
+against $\Lambda^n_n$ (resp.\ $\Lambda^n_0$) horns.
+
+\medskip
+\textbf{Universal Cartesian fibration.}\quad $\mathcal{U} \to
+\mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$, fibre over $\mathcal{D}$
+equals $\mathcal{D}$; classifies $\mathrm{id} :
+\mathcal{C}\mathrm{at}_\infty^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$.
+Every Cartesian fibration is a pullback (Chapter~47).
+\end{formalrestatement}

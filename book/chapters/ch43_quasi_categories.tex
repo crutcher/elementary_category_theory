@@ -1,0 +1,412 @@
+% ch43_quasi_categories.tex — Volume IV Chapter 7
+
+\chapter{Quasi-Categories: Definition and First Examples}
+
+\begin{overviewbox}
+A \term{quasi-category} is a simplicial set in which every inner horn
+admits a filler. The condition is one weakening of the nerve
+characterization (Theorem~39.\ref{thm:nerve-characterization}) — drop
+the uniqueness; keep only existence — and the resulting structure is
+the working model of an $\infty$-category that organizes Volume~IV's
+remaining chapters.
+
+This chapter introduces the definition, builds the dictionary between
+quasi-categorical and ordinary-categorical vocabulary, and works through
+the first examples. We meet:
+\begin{itemize}
+  \item Nerves of ordinary categories (Chapter~39): quasi-categories with
+        unique fillers.
+  \item Kan complexes (Chapter~39): quasi-categories whose mapping spaces
+        are all $\infty$-groupoids.
+  \item Differential graded categories (locally) and topological
+        categories (after a coherent-nerve construction): the bridge to
+        practice.
+\end{itemize}
+
+The technical heart of the chapter is the construction of the
+\term{homotopy category} $\mathrm{ho}(\mathcal{C})$ of a quasi-category
+$\mathcal{C}$, an ordinary category whose objects are the $0$-simplices of
+$\mathcal{C}$ and whose morphisms are equivalence classes of $1$-simplices
+under a specific homotopy relation defined via $2$-simplex fillers. The
+adjunction $\tau_1 \dashv \mathrm{N}$ of Chapter~39 restricts to a
+functor $\mathrm{ho} : \mathbf{QCat} \to \mathbf{Cat}$ — the first
+descent from the $\infty$-categorical to the $1$-categorical world.
+
+Mapping spaces, equivalences, the Joyal model structure, joins/slices,
+and the fibrations of Cluster~D all build on the basic combinatorics
+established here.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Quasi-Categories}
+\label{sec:quasi-categories}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Informally}
+
+A quasi-category is what one gets when ``a category up to coherent
+homotopy'' is presented combinatorially. Take a simplicial set and read
+its $1$-simplices as morphisms, its $0$-simplices as objects. The
+\emph{composition} of two composable $1$-simplices $f, g$ is not a single
+$1$-simplex but a $2$-simplex whose two short edges are $f, g$ and whose
+long edge is the composite. Such a $2$-simplex always exists (this is
+exactly the inner-horn filling condition), but it is not unique — different
+fillers give different composites, all related by higher-dimensional
+simplices.
+
+\subsection{Formalizing}
+
+\begin{definition}[Quasi-category]
+\label{def:quasi-category}
+A \term{quasi-category} (also called an \term{$\infty$-category} or, in
+older literature, \term{weak Kan complex}) is a simplicial set
+$\mathcal{C}$ in which every inner horn admits a filler: for $n \geq 2$
+and $0 < k < n$, every map $\Lambda^n_k \to \mathcal{C}$ extends to
+$\Delta^n \to \mathcal{C}$.
+\end{definition}
+
+\begin{howtosay}
+$\mathcal{C}$ \sayit{``a quasi-category $\mathcal{C}$''} or
+\sayit{``an $\infty$-category $\mathcal{C}$''}; we use both interchangeably,
+preferring ``quasi-category'' when emphasizing the simplicial-set
+combinatorics and ``$\infty$-category'' when emphasizing the categorical
+content. The category $\mathbf{QCat}$ is the full subcategory of
+$\mathbf{sSet}$ on quasi-categories.
+\end{howtosay}
+
+\begin{example_thm}[Nerves of categories]
+\label{ex:nerves-quasi}
+Every nerve $\mathrm{N}(\mathcal{D})$ of an ordinary category $\mathcal{D}$
+is a quasi-category. The inner-horn filler is in fact unique
+(Theorem~39.\ref{thm:nerve-characterization}), so nerves are
+``$1$-truncated'' quasi-categories. Conversely, a quasi-category with
+unique inner-horn fillers is a nerve.
+\end{example_thm}
+
+\begin{example_thm}[Kan complexes]
+\label{ex:kan-quasi}
+Every Kan complex (Definition~39.\ref{def:kan-complex}) is a
+quasi-category: inner horns are a subset of all horns. In particular,
+$\mathrm{Sing}(T)$ for any topological space $T$ is a quasi-category —
+specifically, an $\infty$-groupoid (every morphism is invertible up to
+coherent homotopy).
+\end{example_thm}
+
+\begin{example_thm}[Joyal model fibrant simplicial sets]
+\label{ex:joyal-fibrant}
+The fibrant objects of the Joyal model structure on $\mathbf{sSet}$
+(Remark~41.\ref{rem:joyal-preview}) are exactly the quasi-categories.
+This is the precise sense in which $\mathbf{sSet}$ ``presents''
+$\infty$-categories: $\mathrm{Ho}(\mathbf{sSet}_{\mathrm{Joyal}})$ is
+the homotopy category of $\infty$-categories.
+\end{example_thm}
+
+\begin{remark}[Why drop uniqueness?]
+Ordinary category theory enforces that composites are unique by axiom.
+In ``higher-dimensional'' settings — chain complexes up to chain homotopy,
+spaces up to coherent homotopy, derived categories with their triangulated
+structure — composites are unique only up to a higher-dimensional
+equivalence, which itself is unique up to a still-higher equivalence,
+and so on. Quasi-categories present this entire tower with a single
+combinatorial structure: the simplices of dimension $\geq 2$ are the
+witnesses to all the higher coherences.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Homotopy Category}
+\label{sec:homotopy-category-qcat}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+A quasi-category has too much higher-dimensional data to be a category in
+the ordinary sense — but it has a quotient that is.
+
+\begin{definition}[Homotopy between $1$-simplices]
+\label{def:homotopy-1simplex}
+Let $\mathcal{C}$ be a quasi-category and $f, g : x \to y$ two
+$1$-simplices with the same source $x$ and target $y$ (i.e., $d_1 f =
+d_1 g = x$, $d_0 f = d_0 g = y$). We say $f$ is \term{homotopic} to $g$,
+written $f \sim g$, if there exists a $2$-simplex $\sigma : \Delta^2 \to
+\mathcal{C}$ whose boundary is
+\begin{equation*}
+  d_0 \sigma = g, \quad d_1 \sigma = f, \quad d_2 \sigma = s_0 x,
+\end{equation*}
+i.e., a $2$-simplex with edges $g$ (face opposite $0$), $f$ (face opposite
+$1$), and the degenerate identity $s_0 x$ on $x$ (face opposite $2$).
+\end{definition}
+
+\begin{lemma}[Homotopy is an equivalence relation]
+\label{lem:homotopy-eq-rel}
+The relation $\sim$ on $1$-simplices with fixed source and target is an
+equivalence relation: reflexive, symmetric, and transitive.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+\emph{Reflexive.} Use the degenerate $s_1 f : \Delta^2 \to \mathcal{C}$
+with $d_0(s_1 f) = f$, $d_1(s_1 f) = f$, $d_2(s_1 f) = s_0 x$.
+
+\emph{Symmetric.} Given a witnessing $2$-simplex for $f \sim g$ together
+with the degenerate $s_1 g$ for $g \sim g$, fill the inner horn
+$\Lambda^3_2$ they form to produce a witness for $g \sim f$.
+
+\emph{Transitive.} Given witnesses for $f \sim g$ and $g \sim h$,
+together with $s_0 x$, fill the inner horn $\Lambda^3_1$ to produce a
+witness for $f \sim h$. \qed
+\end{proof}
+
+\begin{definition}[Homotopy category]
+\label{def:ho-cat}
+The \term{homotopy category} $\mathrm{ho}(\mathcal{C})$ of a
+quasi-category $\mathcal{C}$ is the ordinary category with:
+\begin{itemize}
+  \item Objects: $\mathrm{Ob}(\mathrm{ho}(\mathcal{C})) = \mathcal{C}_0$.
+  \item Morphisms $\mathrm{ho}(\mathcal{C})(x, y) = \mathcal{C}_1(x, y) / \sim$,
+        equivalence classes of $1$-simplices with source $x$, target $y$.
+  \item Composition: for $[f] : x \to y$ and $[g] : y \to z$, choose
+        $2$-simplex fillers of the inner horn $\Lambda^2_1 \to \mathcal{C}$
+        on $(f, g)$ and set $[g] \circ [f] = [d_1 \sigma]$ where $\sigma$
+        is any such filler.
+  \item Identity: $[s_0 x] : x \to x$.
+\end{itemize}
+\end{definition}
+
+\begin{theorem}[Well-definedness of $\mathrm{ho}$]
+\label{thm:ho-welldef}
+Composition in $\mathrm{ho}(\mathcal{C})$ does not depend on the choice
+of $2$-simplex filler, nor on the representatives $f, g$ within
+equivalence classes. Associativity and unit laws hold strictly in
+$\mathrm{ho}(\mathcal{C})$.
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+\emph{Filler-independence.} Two fillers $\sigma, \sigma'$ of the same
+inner horn glue into an inner horn $\Lambda^3_1$ whose filling witnesses
+$d_1 \sigma \sim d_1 \sigma'$.
+
+\emph{Representative-independence.} Replacing $f$ by $f'$ with $f \sim f'$
+substitutes the relevant $2$-simplex faces by homotopic ones; the
+$\Lambda^3$ horn-filling argument transports the conclusion.
+
+\emph{Associativity.} Given three composable $1$-simplices, fill a
+$\Lambda^4_2$ horn with the relevant $2$-cells as faces. The $4$-simplex
+filler witnesses associativity.
+
+\emph{Units.} Degenerate $1$-simplices $s_0 x$ are units for the
+composition by direct simplex-counting.
+\qed
+\end{proof}
+
+\begin{corollary}[Functor $\mathrm{ho} : \mathbf{QCat} \to \mathbf{Cat}$]
+\label{cor:ho-functor}
+The assignment $\mathcal{C} \mapsto \mathrm{ho}(\mathcal{C})$ extends to a
+functor $\mathrm{ho} : \mathbf{QCat} \to \mathbf{Cat}$, left adjoint to
+the nerve $\mathrm{N} : \mathbf{Cat} \to \mathbf{QCat}$.
+\end{corollary}
+
+\begin{proof}[Proof sketch]
+Extend $\tau_1 \dashv \mathrm{N}$ of Theorem~39.\ref{thm:nerve-tau1-adj}
+to the full subcategory $\mathbf{QCat}$; the adjunction restricts.
+$\mathrm{ho}(\mathcal{C}) = \tau_1(\mathcal{C})$ for $\mathcal{C}$ a
+quasi-category. \qed
+\end{proof}
+
+\begin{remark}[``Homotopy $1$-category'']
+The functor $\mathrm{ho}$ flattens an $\infty$-category to its underlying
+$1$-category by collapsing all higher coherence data. The kernel of this
+flattening is exactly the higher-categorical content that
+distinguishes quasi-categories from ordinary categories.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Bridges and Working Examples}
+\label{sec:qcat-bridges}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Differential graded categories}
+
+\begin{remark}[The dg-nerve]
+\label{rem:dg-nerve}
+For a differential graded (dg) category $\mathcal{D}$ over a ring $k$, the
+\term{dg-nerve} $\mathrm{N}^{\mathrm{dg}}(\mathcal{D})$ is a quasi-category
+whose $n$-simplices are coherent diagrams in $\mathcal{D}$ together with
+$\mathbb{E}_\infty$-multiplicative homotopies between their composites.
+This construction sends dg-categories to quasi-categories in a way
+compatible with the homotopy theory of dg-categories. It is the standard
+source of \emph{stable} quasi-categories arising in homological algebra
+(Chapter~53).
+\end{remark}
+
+\subsection{Topological categories}
+
+\begin{remark}[The coherent nerve]
+\label{rem:coherent-nerve}
+A \term{topological category} (or \term{simplicial category}) is a
+category enriched in $\mathbf{Top}$ (or $\mathbf{sSet}$). Lurie's
+\term{coherent nerve}
+$\mathrm{N}^{\mathrm{coh}} : \mathbf{sCat} \to \mathbf{sSet}$ sends each
+simplicial category to a simplicial set whose $n$-simplices are
+``coherent'' chains of morphisms. The image of the coherent nerve lands
+in quasi-categories, and the functor descends to an equivalence of
+$\infty$-categories
+\begin{equation*}
+  \mathbf{sCat} \;\simeq_{\mathrm{Q}}\; \mathbf{sSet}_{\mathrm{Joyal}}
+\end{equation*}
+(a Quillen equivalence) — saying that the two definitions of
+``$\infty$-category'' (simplicial categories vs.\ quasi-categories)
+agree.
+\end{remark}
+
+\subsection{The $\infty$-category of spaces}
+
+\begin{example_thm}[The $\infty$-category $\mathcal{S}$ of spaces (anima)]
+\label{ex:infty-spaces}
+The \term{$\infty$-category of spaces} (or \term{anima}) is the
+quasi-category
+\begin{equation*}
+  \mathcal{S} \;=\; \mathrm{N}^{\mathrm{coh}}(\mathbf{Kan}),
+\end{equation*}
+the coherent nerve of the simplicial category of Kan complexes (with
+mapping spaces $\mathrm{Map}_{\mathbf{sSet}}(X, Y)$). Equivalently,
+$\mathcal{S}$ is the $\infty$-categorical localization of $\mathbf{sSet}$
+at weak equivalences. Its homotopy category $\mathrm{ho}(\mathcal{S})
+\simeq \mathrm{Ho}(\mathbf{Top})$ is the classical homotopy category of
+spaces.
+\end{example_thm}
+
+\begin{remark}[Notation for spaces in $\mathcal{S}$]
+We will write objects of $\mathcal{S}$ as \emph{anima} (Lurie's term),
+\emph{spaces}, or simply ``$\infty$-groupoids,'' depending on emphasis.
+The notation $\mathcal{S}$ for the $\infty$-category of spaces is
+standard in Lurie's \emph{Higher Topos Theory} and \emph{Kerodon}.
+\end{remark}
+
+\subsection{Three pictures of an $\infty$-category}
+
+\begin{remark}[Three models, one homotopy theory]
+There are at least three established combinatorial models for
+$\infty$-categories:
+\begin{itemize}
+  \item \emph{Quasi-categories} (Joyal–Lurie): simplicial sets with
+        inner-horn fillers. Our working model in Volume~IV.
+  \item \emph{Simplicial categories} ($\mathbf{sCat}$): categories
+        enriched in $\mathbf{sSet}$.
+  \item \emph{Complete Segal spaces} (Rezk): bisimplicial sets satisfying
+        completeness conditions.
+\end{itemize}
+All three are connected by Quillen equivalences (Bergner, Joyal–Tierney,
+Lurie); the choice of model is a matter of which combinatorics is most
+convenient. Volume~IV exclusively uses quasi-categories; readers
+graduating to Lurie's \emph{Higher Topos Theory} encounter all three.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:qcat-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{Define a quasi-category.}{A simplicial set in which every inner horn $\Lambda^n_k \to \mathcal{C}$ (with $0 < k < n$) extends to $\Delta^n \to \mathcal{C}$.}
+\qaitem{What's the relation to nerves?}{Nerves of ordinary categories are exactly the quasi-categories with \emph{unique} inner-horn fillers. Dropping uniqueness gives quasi-categories proper.}
+\qaitem{Why are Kan complexes quasi-categories?}{Inner horns are a subset of all horns; if every horn fills, in particular every inner one does.}
+\qaitem{What's the heuristic for inner-horn filling?}{Composition: $\Lambda^2_1 \to \mathcal{C}$ is two composable $1$-simplices; the filler $\Delta^2 \to \mathcal{C}$ provides a composite as the long edge, plus a $2$-cell witnessing it.}
+\qaitem{When is composition unique?}{Never strictly — only up to a $\Lambda^3_1$-filler-witnessed homotopy. In the nerve of an ordinary category, this homotopy is forced to be the identity by the uniqueness of fillers.}
+\qaitem{Define homotopy of $1$-simplices.}{$f \sim g$ iff there is a $\Delta^2 \to \mathcal{C}$ with edges $f$, $g$, and $s_0 x$ on $x = d_1 f$.}
+\qaitem{Why is $\sim$ an equivalence relation?}{Reflexivity uses degenerate $2$-simplices; symmetry and transitivity use $\Lambda^3$-filler arguments built from the given witnesses plus degeneracies.}
+\qaitem{Construct $\mathrm{ho}(\mathcal{C})$.}{Objects $\mathcal{C}_0$, morphisms $\mathcal{C}_1/\sim$, composition by inner-horn filler (well-defined up to $\sim$), identities $[s_0 x]$.}
+\qaitem{Why is composition in $\mathrm{ho}(\mathcal{C})$ well-defined?}{Two fillers of the same horn produce homotopic long edges (by a $\Lambda^3_1$ filler); replacing $f, g$ by homotopic representatives also produces homotopic composites.}
+\qaitem{Why does associativity hold in $\mathrm{ho}(\mathcal{C})$?}{Three composable $1$-simplices plus their two composites give the data for a $\Lambda^4_2$-horn, whose filler is a $4$-simplex witnessing associativity at the homotopy level.}
+\qaitem{State the adjunction $\mathrm{ho} \dashv \mathrm{N}$.}{$\mathbf{Cat}(\mathrm{ho}(\mathcal{C}), \mathcal{D}) \cong \mathbf{QCat}(\mathcal{C}, \mathrm{N}(\mathcal{D}))$. Maps into a $1$-category factor through the homotopy $1$-category.}
+\qaitem{What does $\mathrm{ho}$ destroy?}{All higher-dimensional simplices beyond their incidence with $1$-simplices — i.e., all higher coherence data.}
+\qaitem{Name three models of $\infty$-categories.}{Quasi-categories (Joyal–Lurie); simplicial categories ($\mathbf{sSet}$-enriched); complete Segal spaces (Rezk).}
+\qaitem{Why does Volume~IV use quasi-categories?}{They are the most combinatorially direct: simplicial sets with a single horn-filling condition. The other models are Quillen-equivalent but require more setup.}
+\qaitem{What is the dg-nerve?}{$\mathrm{N}^{\mathrm{dg}}(\mathcal{D})$: a quasi-category from a dg-category, whose simplices encode coherent chain homotopies. The source of stable $\infty$-categories in homological algebra.}
+\qaitem{What is the coherent nerve?}{$\mathrm{N}^{\mathrm{coh}} : \mathbf{sCat} \to \mathbf{sSet}$ sending a simplicial category to a quasi-category. Lands in $\mathbf{QCat}$; descends to a Quillen equivalence $\mathbf{sCat} \simeq_{\mathrm{Q}} \mathbf{sSet}_{\mathrm{Joyal}}$.}
+\qaitem{What is $\mathcal{S}$?}{The $\infty$-category of spaces (anima); $\mathcal{S} = \mathrm{N}^{\mathrm{coh}}(\mathbf{Kan})$. Equivalently, the $\infty$-localization of $\mathbf{sSet}$ at weak equivalences.}
+\qaitem{What's $\mathrm{ho}(\mathcal{S})$?}{The classical homotopy category $\mathrm{Ho}(\mathbf{Top})$ of topological spaces (or equivalently, $\mathrm{Ho}(\mathbf{sSet})$).}
+\qaitem{Distinguish ``$\infty$-category'' and ``quasi-category.''}{Same thing in this book. ``Quasi-category'' emphasizes simplicial-set combinatorics; ``$\infty$-category'' emphasizes the categorical content.}
+\qaitem{What is an ``$\infty$-groupoid''?}{A quasi-category in which every morphism is an equivalence — equivalently, a Kan complex. The objects of $\mathcal{S}$.}
+\qaitem{Why doesn't quasi-category composition simply pick a chosen filler?}{Functoriality would require coherent choice across all horns, and no such global choice exists in general — choosing strictly would specialize to nerves of categories.}
+\qaitem{What's the next chapter's contribution?}{Mapping spaces $\mathrm{Map}_\mathcal{C}(x, y)$ as Kan complexes; equivalences of quasi-categories; the Joyal model structure that organizes them.}
+\qaitem{What's the philosophical takeaway?}{The same simplicial set $\mathbf{sSet}$ supports two model structures: Kan–Quillen (for spaces) and Joyal (for $\infty$-categories). The combinatorics is shared; the homotopy theory differs in which class of morphisms is inverted.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Quasi-category.}\quad A simplicial set in which every inner horn
+$\Lambda^n_k \to \mathcal{C}$ ($0 < k < n$) extends to $\Delta^n \to
+\mathcal{C}$. Nerves of categories: unique inner fillers. Kan complexes:
+all horn fillers. Quasi-categories sit between: existence-only for inner
+horns.
+
+\textbf{Homotopy of $1$-simplices.}\quad $f \sim g$ iff there is a
+$2$-simplex with edges $f, g, s_0 x$. The relation is an equivalence by
+$\Lambda^3$-horn arguments.
+
+\textbf{Homotopy category $\mathrm{ho}(\mathcal{C})$.}\quad Objects
+$\mathcal{C}_0$; morphisms $\mathcal{C}_1/\sim$; composition via
+inner-horn filler (well-defined modulo $\sim$). $\mathrm{ho}$ is left
+adjoint to the nerve.
+
+\textbf{Bridges.}\quad Differential-graded categories (via $\mathrm{N}^{\mathrm{dg}}$)
+yield stable quasi-categories; topological / simplicial categories (via
+$\mathrm{N}^{\mathrm{coh}}$) yield general quasi-categories. The
+$\infty$-category $\mathcal{S}$ of spaces, $\mathcal{S} =
+\mathrm{N}^{\mathrm{coh}}(\mathbf{Kan})$, is the universal example.
+
+\textbf{Three models.}\quad Quasi-categories (this book); simplicial
+categories; complete Segal spaces. All Quillen-equivalent.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Quasi-category.}\quad $\mathcal{C} \in \mathbf{sSet}$ with the
+property: $\forall n \geq 2, \forall 0 < k < n, \forall \alpha :
+\Lambda^n_k \to \mathcal{C}, \exists \tilde\alpha : \Delta^n \to
+\mathcal{C}$ extending $\alpha$.
+
+\medskip
+\textbf{Horn-type hierarchy.}\quad
+\begin{itemize}
+  \item Inner horns fill uniquely: $\mathcal{C} = \mathrm{N}(\mathcal{D})$
+        for some category $\mathcal{D}$.
+  \item Inner horns fill (existence): $\mathcal{C}$ is a quasi-category.
+  \item All horns fill: $\mathcal{C}$ is a Kan complex ($\infty$-groupoid).
+\end{itemize}
+
+\medskip
+\textbf{Homotopy relation.}\quad For $f, g \in \mathcal{C}_1(x, y)$:
+$f \sim g \iff \exists \sigma \in \mathcal{C}_2 \text{ with } d_0\sigma = g,
+d_1\sigma = f, d_2\sigma = s_0 x$. Equivalence relation.
+
+\medskip
+\textbf{Homotopy category.}\quad $\mathrm{ho}(\mathcal{C})$:
+$\mathrm{Ob} = \mathcal{C}_0$, $\mathrm{Hom}(x, y) = \mathcal{C}_1(x, y) / \sim$,
+$[g] \circ [f] = [d_1 \sigma]$ for any filler $\sigma : \Delta^2 \to \mathcal{C}$
+of $(f, g)$, $\mathrm{id}_x = [s_0 x]$.
+
+\medskip
+\textbf{Adjunction.}\quad $\mathrm{ho} : \mathbf{QCat}
+\rightleftarrows \mathbf{Cat} : \mathrm{N}$, $\mathrm{ho} \dashv \mathrm{N}$.
+
+\medskip
+\textbf{$\infty$-category of spaces.}\quad $\mathcal{S} =
+\mathrm{N}^{\mathrm{coh}}(\mathbf{Kan})$; $\mathrm{ho}(\mathcal{S}) =
+\mathrm{Ho}(\mathbf{Top}) = \mathrm{Ho}(\mathbf{sSet})$.
+\end{formalrestatement}

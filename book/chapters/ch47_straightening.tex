@@ -1,0 +1,401 @@
+% ch47_straightening.tex — Volume IV Chapter 11
+
+\chapter{Straightening and Unstraightening}
+
+\begin{overviewbox}
+The \term{straightening} and \term{unstraightening} constructions of Joyal
+and Lurie make precise the relationship previewed in Chapter~46: Cartesian
+fibrations over a simplicial set $\mathcal{S}$ are equivalent, in a
+homotopy-coherent sense, to functors $\mathcal{S}^{\mathrm{op}} \to
+\mathcal{C}\mathrm{at}_\infty$.
+
+The full theorem is one of the heaviest technical results in $\infty$-category
+theory — Lurie's \emph{Higher Topos Theory} devotes Chapter~2 to it,
+roughly 100 pages of dense combinatorial argument. We follow the chapter's
+proof-depth policy: state the theorem clearly, work the low-dimensional
+cases explicitly, sketch the technical strategy, and refer to HTT §2.2
+for the full apparatus. The reader who has digested this chapter is then
+prepared to consult HTT directly.
+
+The chapter introduces:
+\begin{itemize}
+  \item \term{Marked simplicial sets} $\mathbf{sSet}^+$: simplicial sets
+        together with a marked subset $M \subseteq X_1$ containing
+        degeneracies. The marked edges are the ``would-be Cartesian
+        morphisms.''
+  \item The \term{Cartesian model structure} on $\mathbf{sSet}^+\!/\mathcal{S}$
+        whose fibrant objects are Cartesian fibrations over $\mathcal{S}$
+        (with their Cartesian edges as the marking).
+  \item The \term{straightening functor} $\mathrm{St}_\mathcal{S} :
+        \mathbf{sSet}^+\!/\mathcal{S} \to \mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}},
+        \mathbf{sSet}^+)$, where $\mathfrak{C}[\mathcal{S}]$ is the
+        simplicial category rigidification of $\mathcal{S}$.
+  \item The \term{unstraightening} $\mathrm{Un}_\mathcal{S}$ as right adjoint.
+\end{itemize}
+
+Theorem~\ref{thm:straightening}: $\mathrm{St}_\mathcal{S} \dashv \mathrm{Un}_\mathcal{S}$
+is a Quillen equivalence between the Cartesian model structure on
+$\mathbf{sSet}^+\!/\mathcal{S}$ and the projective model structure on
+$\mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+)$.
+On homotopy categories, this gives the equivalence
+\begin{equation*}
+  \mathrm{Cart}(\mathcal{S}) \;\simeq\; \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty),
+\end{equation*}
+the precise statement of ``Cartesian fibrations $=$ presheaves of
+$\infty$-categories.''
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Straightening Equivalence}
+\label{sec:straightening-statement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Marked simplicial set]
+\label{def:marked-sset}
+A \term{marked simplicial set} is a pair $(X, M)$ where $X \in \mathbf{sSet}$
+and $M \subseteq X_1$ is a subset containing all degenerate $1$-simplices.
+A morphism $(X, M) \to (Y, N)$ is a simplicial-set map $X \to Y$ sending
+$M$ into $N$. The category is $\mathbf{sSet}^+$.
+\end{definition}
+
+\begin{howtosay}
+$\mathbf{sSet}^+$ \sayit{``marked simplicial sets''}; $(X, M)$ has $M$ as
+the ``marked edges'' or ``would-be equivalences/Cartesian morphisms.'' For
+a quasi-category $\mathcal{C}$, the natural marking is its equivalences;
+for a Cartesian fibration $p : \mathcal{X} \to \mathcal{S}$, the natural
+marking on $\mathcal{X}$ is its Cartesian morphisms.
+\end{howtosay}
+
+\begin{definition}[Rigidification $\mathfrak{C}$]
+\label{def:rigidification}
+The \term{rigidification} functor $\mathfrak{C} : \mathbf{sSet} \to
+\mathbf{sCat}$ sends a simplicial set $\mathcal{S}$ to a simplicial category
+whose objects are the vertices of $\mathcal{S}$ and whose mapping
+simplicial sets $\mathfrak{C}[\mathcal{S}](x, y)$ are specific Kan
+complexes built from the simplices of $\mathcal{S}$ with appropriate
+end-conditions.
+
+For $\mathcal{S} = \mathrm{N}(\mathcal{D})$ the nerve of an ordinary
+category, $\mathfrak{C}[\mathcal{S}]$ is the trivial simplicial enrichment
+of $\mathcal{D}$ (mapping sets are discrete simplicial sets).
+\end{definition}
+
+\begin{theorem}[Straightening--Unstraightening Equivalence]
+\label{thm:straightening}
+For every simplicial set $\mathcal{S}$, there is a Quillen adjunction
+\begin{equation*}
+  \mathrm{St}_\mathcal{S} : \mathbf{sSet}^+ \!/ \mathcal{S} \;\;\rightleftarrows\;\;
+  \mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+) : \mathrm{Un}_\mathcal{S}
+\end{equation*}
+between the Cartesian model structure on $\mathbf{sSet}^+\!/\mathcal{S}$
+and the projective model structure on $\mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}},
+\mathbf{sSet}^+)$. The adjunction is a Quillen equivalence.
+
+On homotopy categories, after restricting to fibrant objects, this gives
+\begin{equation*}
+  \mathrm{Cart}(\mathcal{S}) \;\simeq\; \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}[Proof strategy]
+The full proof spans HTT §2.2 (about 100 pages of dense combinatorics).
+The strategy:
+
+\emph{Step 1: Construct $\mathrm{St}_\mathcal{S}$ explicitly.} For
+$(\mathcal{X}, M) \to \mathcal{S}$ a marked simplicial set over
+$\mathcal{S}$, define $\mathrm{St}_\mathcal{S}(\mathcal{X}, M)(s)$ as a
+specific simplicial set built from the marked $n$-simplices over chains
+starting at $s$.
+
+\emph{Step 2: Verify the adjunction.} The right adjoint $\mathrm{Un}_\mathcal{S}$
+has an explicit formula as a certain limit; the unit and counit are
+checked combinatorially.
+
+\emph{Step 3: Prove Quillen.} Use the cofibrant generation of both model
+structures and check that $\mathrm{St}_\mathcal{S}$ sends generating
+(trivial) cofibrations to (trivial) cofibrations.
+
+\emph{Step 4: Prove Quillen equivalence.} The hardest step. Verify that
+unit and counit on cofibrant–fibrant objects are weak equivalences.
+This uses the rigidification's good behavior and a detailed analysis of
+how marked simplicial sets present Cartesian fibrations.
+
+We will work through the low-dimensional cases in
+\S\ref{sec:straightening-low-dim} below. \qed
+\end{proof}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Low-Dimensional Warm-Up}
+\label{sec:straightening-low-dim}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally: $\mathcal{S} = \Delta^0$}
+
+\begin{example_thm}[Straightening over a point]
+\label{ex:straighten-point}
+When $\mathcal{S} = \Delta^0$, $\mathfrak{C}[\Delta^0]$ is the trivial
+simplicial category with one object and one morphism. Then:
+\begin{itemize}
+  \item $\mathbf{sSet}^+\!/\Delta^0 = \mathbf{sSet}^+$.
+  \item Cartesian fibrations over $\Delta^0$ are simply quasi-categories
+        (with their natural marking by equivalences).
+  \item $\mathrm{Fun}(\mathfrak{C}[\Delta^0]^{\mathrm{op}}, \mathbf{sSet}^+) =
+        \mathbf{sSet}^+$.
+\end{itemize}
+The straightening is the identity on the underlying $\mathbf{sSet}$.
+The equivalence trivially holds.
+\end{example_thm}
+
+\subsection{Formally: $\mathcal{S} = \Delta^1$}
+
+\begin{example_thm}[Straightening over the walking arrow]
+\label{ex:straighten-arrow}
+When $\mathcal{S} = \Delta^1$, $\mathfrak{C}[\Delta^1]$ is a simplicial
+category with two objects $0, 1$ and one non-trivial morphism $0 \to 1$
+(plus identities). The mapping simplicial set $\mathfrak{C}[\Delta^1](0, 1)$
+is $\Delta^0$.
+
+A Cartesian fibration $p : \mathcal{X} \to \Delta^1$ has fibres $\mathcal{X}_0$
+and $\mathcal{X}_1$, and the Cartesian condition gives a transport functor
+$\phi : \mathcal{X}_1 \to \mathcal{X}_0$ (over the edge $0 \to 1$ in
+$\Delta^1$). The data is captured by:
+\begin{itemize}
+  \item Two quasi-categories: $\mathcal{X}_0, \mathcal{X}_1$.
+  \item A functor: $\phi : \mathcal{X}_1 \to \mathcal{X}_0$.
+\end{itemize}
+
+A functor $\mathfrak{C}[\Delta^1]^{\mathrm{op}} \to \mathbf{sSet}^+$ is
+also exactly the data of: $F(1), F(0)$ (two marked simplicial sets) and
+a morphism $F(0 \to 1)^{\mathrm{op}} = \phi : F(1) \to F(0)$.
+
+So $\mathrm{St}_{\Delta^1}$ assigns $(\mathcal{X}_0, \mathcal{X}_1, \phi)$
+to $\mathcal{X} \to \Delta^1$, which is the same data on both sides. The
+straightening is essentially the identity. \qed
+\end{example_thm}
+
+\subsection{Formally: general low-dimensional pattern}
+
+\begin{remark}[Why low-dimensional examples are easy]
+For $\mathcal{S}$ a $1$-dimensional simplicial set (so $\mathfrak{C}[\mathcal{S}]$
+is a trivial simplicial category), the straightening reduces to ordinary
+$1$-categorical Grothendieck unstraightening. Coherence comes for free
+because all mapping simplicial sets in $\mathfrak{C}[\mathcal{S}]$ are
+$\Delta^0$.
+
+The non-trivial content of $\mathrm{St}_\mathcal{S}$ appears for
+$\mathcal{S}$ of dimension $\geq 2$ (where $\mathfrak{C}[\mathcal{S}]$ has
+non-trivial mapping simplicial sets) and especially for $\mathcal{S}$
+a general quasi-category (where the rigidification injects
+infinite-dimensional combinatorics from $2$-simplices and above).
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Cartesian Model Structure}
+\label{sec:cartesian-model}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{theorem}[Cartesian model structure on $\mathbf{sSet}^+\!/\mathcal{S}$]
+\label{thm:cartesian-model}
+The category $\mathbf{sSet}^+\!/\mathcal{S}$ admits a model structure —
+the \term{Cartesian model structure} — characterized by:
+\begin{itemize}
+  \item Cofibrations: monomorphisms (of underlying simplicial sets).
+  \item Fibrant objects: Cartesian fibrations $(\mathcal{X}, M_{\mathrm{Cart}}) \to \mathcal{S}$,
+        marked by their Cartesian edges.
+  \item Weak equivalences: maps inducing equivalences on the corresponding
+        $\infty$-categories of straightened functors.
+\end{itemize}
+\end{theorem}
+
+\begin{remark}[Two markings on a quasi-category]
+A quasi-category $\mathcal{C}$ has two natural markings:
+\begin{itemize}
+  \item Maximal marking $\mathcal{C}^\sharp$: every $1$-simplex marked.
+  \item Minimal (equivalence) marking $\mathcal{C}^\flat$: only
+        equivalences marked.
+\end{itemize}
+The maximal marking corresponds to viewing $\mathcal{C}$ as a Kan complex
+(every edge is "an equivalence" by fiat); the minimal marking is the
+``honest'' one for $\infty$-category theory. The Cartesian model structure
+sees them differently.
+\end{remark}
+
+\subsection{Reorganizing: presheaves as a model}
+
+\begin{theorem}[Equivalence with presheaves of $\infty$-categories]
+\label{thm:equiv-presheaves}
+On homotopy categories, the straightening induces an equivalence
+\begin{equation*}
+  \mathrm{Ho}(\mathbf{sSet}^+\!/\mathcal{S})_{\mathrm{Cart}} \;\simeq\;
+  \mathrm{Ho}\bigl(\mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+)\bigr)_{\mathrm{proj}}.
+\end{equation*}
+Both sides are models for the homotopy category of presheaves of
+$\infty$-categories on $\mathcal{S}$. Cartesian fibrations are an
+``encoded form'' of such presheaves.
+\end{theorem}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Computational Use}
+\label{sec:straightening-computational}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally}
+
+\begin{example_thm}[Pulling back classifying functors]
+\label{ex:pullback-classifying}
+Given a functor $F : \mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$,
+the corresponding Cartesian fibration $\mathcal{X}_F \to \mathcal{S}$
+satisfies: for every $s \in \mathcal{S}_0$, the fibre $(\mathcal{X}_F)_s
+\simeq F(s)$ in $\mathcal{C}\mathrm{at}_\infty$. The unstraightening
+$\mathrm{Un}_\mathcal{S}$ implements this passage.
+
+Pullback: for $f : \mathcal{T} \to \mathcal{S}$, the composition
+$\mathrm{Un}_\mathcal{T}(F \circ f^{\mathrm{op}}) = \mathcal{X}_F \times_\mathcal{S}
+\mathcal{T}$.
+\end{example_thm}
+
+\begin{example_thm}[Representable presheaves and slices]
+\label{ex:representable-slice}
+For an object $x$ of a quasi-category $\mathcal{C}$, the slice fibration
+$\mathcal{C}_{/x} \to \mathcal{C}$ is a right fibration whose classifying
+functor under straightening is the representable presheaf
+\begin{equation*}
+  \mathrm{Map}_\mathcal{C}(-, x) : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}.
+\end{equation*}
+Right fibrations land in the subcategory of \emph{$\infty$-groupoid-valued}
+functors $\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$. The straightening
+gives, in particular, a precise sense in which ``every right fibration
+is a presheaf of spaces.''
+\end{example_thm}
+
+\subsection{Reorganizing: where this goes}
+
+\begin{remark}[Phase-2 milestone]
+With straightening in place, Chapter~48 will state and prove the
+$\infty$-categorical Yoneda lemma in the form
+\begin{equation*}
+  \mathcal{C} \;\hookrightarrow\; \mathcal{P}(\mathcal{C}) := \mathrm{Fun}(\mathcal{C}^{\mathrm{op}}, \mathcal{S}),
+\end{equation*}
+a fully faithful embedding into presheaves of spaces. This is the
+$\infty$-categorical avatar of the classical Yoneda embedding (Chapter~9,
+15, 20, 28), and it organizes the rest of Volume~IV.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:straightening-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What does the straightening theorem say in one sentence?}{Cartesian fibrations over $\mathcal{S}$ are equivalent (as $\infty$-categories) to functors $\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$.}
+\qaitem{What is a marked simplicial set?}{A pair $(X, M)$ with $X \in \mathbf{sSet}$ and $M \subseteq X_1$ containing degeneracies. The marking is the would-be Cartesian/equivalence morphisms.}
+\qaitem{Why mark simplicial sets at all?}{Because Cartesian fibrations and their morphisms are best handled when the Cartesian edges are explicitly tracked. The Cartesian model structure on $\mathbf{sSet}^+$ uses this marking.}
+\qaitem{What is the rigidification $\mathfrak{C}[\mathcal{S}]$?}{A simplicial category with the same objects as $\mathcal{S}$, whose mapping simplicial sets are explicit Kan complexes built from $\mathcal{S}$'s simplices. Reduces to discrete enrichment when $\mathcal{S} = \mathrm{N}(\mathcal{D})$.}
+\qaitem{State the straightening adjunction.}{$\mathrm{St}_\mathcal{S} : \mathbf{sSet}^+\!/\mathcal{S} \rightleftarrows \mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+) : \mathrm{Un}_\mathcal{S}$, Quillen equivalence.}
+\qaitem{What do the fibres of a Cartesian fibration become under straightening?}{The value of the corresponding functor $\mathcal{S}^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$ at each vertex.}
+\qaitem{What's the straightening over $\Delta^0$?}{Trivially the identity: Cartesian fibrations over a point are quasi-categories, and functors from the one-object category to $\mathbf{sSet}^+$ are just $\mathbf{sSet}^+$.}
+\qaitem{What's the straightening over $\Delta^1$?}{The data of a Cartesian fibration $p : \mathcal{X} \to \Delta^1$ — two fibres $\mathcal{X}_0, \mathcal{X}_1$ and a functor $\mathcal{X}_1 \to \mathcal{X}_0$ — equals the data of a functor $\mathfrak{C}[\Delta^1]^{\mathrm{op}} \to \mathbf{sSet}^+$. Both are: ``two marked simplicial sets and a morphism between them.''}
+\qaitem{Why is straightening hard for higher-dimensional $\mathcal{S}$?}{Because $\mathfrak{C}[\mathcal{S}]$ has non-trivial mapping simplicial sets when $\mathcal{S}$ has $2$-simplices and above. The combinatorics of comparing fibrations and functors then becomes substantial.}
+\qaitem{What are the two natural markings on a quasi-category $\mathcal{C}$?}{Maximal ($\mathcal{C}^\sharp$): all edges marked. Minimal ($\mathcal{C}^\flat$): only equivalences marked. The two correspond to different categorical pictures (Kan-complex view vs.\ honest $\infty$-category view).}
+\qaitem{What is the Cartesian model structure on $\mathbf{sSet}^+\!/\mathcal{S}$?}{Cofibrations: monomorphisms; fibrant objects: Cartesian fibrations with their Cartesian markings; weak equivalences: fibrewise equivalences plus base.}
+\qaitem{How does the equivalence read at the level of homotopy categories?}{$\mathrm{Cart}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty)$ — the homotopy category of Cartesian fibrations over $\mathcal{S}$ is the same as the homotopy category of $\mathcal{S}^{\mathrm{op}}$-indexed diagrams of $\infty$-categories.}
+\qaitem{What about coCartesian fibrations?}{The dual theorem: coCartesian fibrations over $\mathcal{S}$ are equivalent to functors $\mathcal{S} \to \mathcal{C}\mathrm{at}_\infty$ (covariant). Symmetric under $\mathcal{S} \leftrightarrow \mathcal{S}^{\mathrm{op}}$.}
+\qaitem{And right fibrations?}{Right fibrations correspond to functors $\mathcal{S}^{\mathrm{op}} \to \mathcal{S}$ (into the $\infty$-category of spaces). Because right fibrations have all-Cartesian morphisms and Kan-complex fibres.}
+\qaitem{What does the slice $\mathcal{C}_{/x}$ straighten to?}{The representable presheaf $\mathrm{Map}_\mathcal{C}(-, x) : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$.}
+\qaitem{How is straightening used in practice?}{To convert between fibration-form and functor-form of structured $\infty$-categorical data. Many constructions are easier to describe as fibrations (universal example: limits, colimits) but easier to manipulate as functors (universal example: adjoint functor existence).}
+\qaitem{What's the universal Cartesian fibration?}{$\mathcal{U} \to \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}}$, whose fibre over $\mathcal{D}$ is $\mathcal{D}$. Straightens to $\mathrm{id} : \mathcal{C}\mathrm{at}_\infty^{\mathrm{op}} \to \mathcal{C}\mathrm{at}_\infty$.}
+\qaitem{Why is the full proof of straightening so long?}{Because verifying that $\mathrm{St}_\mathcal{S}$ is a Quillen equivalence requires checking unit and counit on fibrant–cofibrant objects involve intricate combinatorial decomposition of marked simplicial sets and their relationship to the rigidification.}
+\qaitem{Where in the literature is the full proof?}{Lurie, \emph{Higher Topos Theory}, §2.2 (about 100 pages). Riehl–Verity, \emph{Elements of $\infty$-Category Theory}, gives an alternative model-independent treatment.}
+\qaitem{Can one avoid straightening?}{Yes — Riehl–Verity develop $\infty$-category theory model-independently, using comma constructions and never explicitly invoking the straightening equivalence. Practical for many purposes, but the equivalence itself is a fundamental structural fact.}
+\qaitem{Why does this chapter sketch rather than prove?}{Per the Volume~IV proof-depth policy (selective full proofs, otherwise sketches). The straightening proof itself fills a textbook chapter and would dilute the bridge-to-literature mission.}
+\qaitem{What chapter uses straightening crucially?}{Chapter~48 ($\infty$-Yoneda) --- the embedding $\mathcal{C} \to \mathcal{P}(\mathcal{C})$ is via straightening of the slice fibrations.}
+\qaitem{What is the homotopy-categorical statement to take away?}{$\mathrm{Cart}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty)$. This is the $\infty$-categorical Grothendieck construction.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Marked simplicial sets.}\quad $\mathbf{sSet}^+ = $ pairs $(X, M)$
+with $M \subseteq X_1$ containing degeneracies; the marking encodes
+Cartesian/equivalence edges.
+
+\textbf{Rigidification.}\quad $\mathfrak{C} : \mathbf{sSet} \to
+\mathbf{sCat}$; sends a simplicial set to a simplicial category with
+specific Kan-complex mapping spaces. Trivial on nerves of $1$-categories.
+
+\textbf{Straightening--unstraightening.}\quad For every $\mathcal{S}$,
+$\mathrm{St}_\mathcal{S} \dashv \mathrm{Un}_\mathcal{S}$ is a Quillen
+equivalence between $(\mathbf{sSet}^+\!/\mathcal{S})_{\mathrm{Cart}}$
+and $\mathrm{Fun}(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+)_{\mathrm{proj}}$.
+
+\textbf{Homotopy-category statement.}\quad
+\begin{equation*}
+  \mathrm{Cart}(\mathcal{S}) \;\simeq\; \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty).
+\end{equation*}
+``Cartesian fibrations $=$ presheaves of $\infty$-categories.''
+
+\textbf{Low-dimensional reduction.}\quad For $\mathcal{S}$ a nerve of a
+$1$-category, straightening reduces to ordinary Grothendieck construction.
+The full $\infty$-categorical content appears for $\mathcal{S}$ with
+non-trivial mapping simplicial sets in its rigidification.
+
+\textbf{Use.}\quad Chapter~48 uses straightening to construct the
+$\infty$-Yoneda embedding $\mathcal{C} \hookrightarrow \mathcal{P}(\mathcal{C})$.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Marked simplicial sets.}\quad $\mathbf{sSet}^+ = $ category of pairs
+$(X, M)$, $M \supseteq \{\text{degenerate } 1\text{-simplices of } X\}$.
+
+\medskip
+\textbf{Rigidification.}\quad $\mathfrak{C} : \mathbf{sSet} \to \mathbf{sCat}$,
+the left adjoint to the simplicial nerve $\mathrm{N}^{\mathrm{coh}}$.
+
+\medskip
+\textbf{Cartesian model structure on $\mathbf{sSet}^+\!/\mathcal{S}$.}\quad
+\begin{itemize}
+  \item Cofibrations: monomorphisms.
+  \item Fibrant: Cartesian fibrations $(\mathcal{X}, M_{\mathrm{Cart}}) \to \mathcal{S}$.
+  \item Weak equivalences: maps inducing equivalences on classifying functors.
+\end{itemize}
+
+\medskip
+\textbf{Straightening--unstraightening (Theorem~\ref{thm:straightening}).}\quad
+$\mathrm{St}_\mathcal{S} \dashv \mathrm{Un}_\mathcal{S}$, Quillen equivalence:
+\begin{equation*}
+  \mathbf{sSet}^+\!/\mathcal{S} \;\simeq_{\mathrm{Q}}\; \mathrm{Fun}\bigl(\mathfrak{C}[\mathcal{S}]^{\mathrm{op}}, \mathbf{sSet}^+\bigr).
+\end{equation*}
+
+\medskip
+\textbf{Homotopy-category statement.}\quad
+$\mathrm{Cart}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{C}\mathrm{at}_\infty)$;
+$\mathrm{coCart}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}, \mathcal{C}\mathrm{at}_\infty)$;
+$\mathrm{Right}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}^{\mathrm{op}}, \mathcal{S})$;
+$\mathrm{Left}(\mathcal{S}) \simeq \mathrm{Fun}(\mathcal{S}, \mathcal{S})$.
+
+\medskip
+\textbf{Slice as representable.}\quad $\mathcal{C}_{/x} \to \mathcal{C}$
+corresponds under straightening to $\mathrm{Map}_\mathcal{C}(-, x) :
+\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$.
+\end{formalrestatement}
