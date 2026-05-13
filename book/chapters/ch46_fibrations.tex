@@ -1,4 +1,5 @@
 % ch46_fibrations.tex — Volume IV Chapter 10
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Cartesian and coCartesian Fibrations}
 
@@ -61,6 +62,20 @@ $\alpha$ is the \term{transport} of $x$ along $p(\alpha)$, and any other
 morphism into $y$ should ``factor through'' $\alpha$ in a unique way.
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Cartesian} (as in ``Cartesian morphism,'' ``Cartesian fibration'')
+is from \emph{Grothendieck} via the standard categorical
+\term{Cartesian square} (= pullback square). A Cartesian morphism is
+one that fits into a universal pullback-style square with respect to
+the base; a Cartesian fibration is a family of categories with enough
+Cartesian morphisms to encode the contravariant action of the base.
+The term ``Cartesian'' goes back to Descartes (1596--1650) via
+``Cartesian product'' — the original universal-product construction
+in set theory. Grothendieck (1960s) lifted the terminology to fibred
+categories; Lurie (HTT 2009) extended it to the $\infty$-categorical
+setting.
+\end{nameorigin}
 
 \begin{definition}[$p$-Cartesian morphism]
 \label{def:p-cartesian}
@@ -127,6 +142,17 @@ definition of Grothendieck-Cartesian.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+The dichotomy \term{Cartesian} vs.\ \term{coCartesian} reflects the
+direction of transport: \emph{Cartesian} fibrations have transport
+\emph{against} the base direction (over $f : s \to s'$, transport sends
+fibre$_{s'}$ to fibre$_{s}$), so the fibres form a \emph{contravariant}
+functor $\mathcal{S}^{\mathrm{op}} \to \mathrm{Cat}_\infty$.
+\emph{coCartesian} fibrations have transport \emph{with} the base
+direction, so the fibres form a covariant functor. The dual prefix
+``co-'' is standard category-theoretic convention.
+\end{nameorigin}
+
 \begin{definition}[Cartesian fibration]
 \label{def:cartesian-fibration}
 A map $p : \mathcal{X} \to \mathcal{S}$ of simplicial sets is a
@@ -172,6 +198,15 @@ Dually, $\mathrm{ev}_0 : \mathcal{C}^{\Delta^1} \to \mathcal{C}$ (sending
 $f : a \to b$ to $a$) is a \emph{coCartesian} fibration: along $h : a \to
 a'$, transport an arrow $f : a \to b$ to its postcomposition $h_* f$.
 \end{example_thm}
+
+\begin{nameorigin}
+The \term{right fibration} / \term{left fibration} terminology denotes
+the directionality of the lifting condition: a right fibration has
+\emph{right} lifting against outer horns $\Lambda^n_n$ (final-vertex
+horns, on the right), giving the contravariant fibre functor; a left
+fibration has right lifting against $\Lambda^n_0$ (initial-vertex
+horns), giving the covariant fibre functor. The terminology is Joyal's.
+\end{nameorigin}
 
 \begin{example_thm}[Right fibrations]
 \label{ex:right-fib}
