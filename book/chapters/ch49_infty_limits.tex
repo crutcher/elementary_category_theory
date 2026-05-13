@@ -1,4 +1,5 @@
 % ch49_infty_limits.tex — Volume IV Chapter 13
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$\infty$-Limits and $\infty$-Colimits}
 
@@ -38,6 +39,17 @@ finite limits and colimits intertwined via the fibre/cofibre construction.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Limit} and \term{colimit} are the central universal-property
+constructions of category theory (Vol~I Ch.~6, Vol~II Ch.~16). The
+$\infty$-categorical versions retain the same names and the same
+universal-property intuition; the differences come from replacing
+\emph{set} of cones by \emph{space} of cones (a Kan complex), and
+\emph{unique} cone by \emph{contractible space of cones}. The
+prefix ``co-'' in ``colimit'' is standard categorical convention for
+duality: a colimit in $\mathcal{C}$ is a limit in $\mathcal{C}^{\mathrm{op}}$.
+\end{nameorigin}
 
 \begin{definition}[Constant-diagram functor]
 \label{def:constant-diagram}
@@ -210,6 +222,16 @@ $F \circ p$ in $\mathcal{D}$. $F$ \term{reflects} $\infty$-limits if
 $F(\lim p) \simeq \lim F \circ p$ implies $\lim p$ exists in $\mathcal{C}$.
 \end{definition}
 
+\begin{readernote}
+The slogan \emph{Right Adjoints Preserve Limits} (RAPL) and its dual
+\emph{Left Adjoints Preserve Colimits} (LAPC) were central in Vol~I
+Ch.~7 and Vol~II Ch.~17. They generalize verbatim to the
+$\infty$-setting: limits commute with right-adjoint functors, colimits
+with left-adjoint functors. The proof is a one-line Yoneda calculation
+(Theorem~\ref{thm:RAPL-infty} below), unchanged in spirit from its
+$1$-categorical ancestor.
+\end{readernote}
+
 \begin{theorem}[Right adjoints preserve $\infty$-limits]
 \label{thm:RAPL-infty}
 If $L \dashv R : \mathcal{D} \to \mathcal{C}$ is an $\infty$-adjunction
@@ -236,6 +258,29 @@ By $\infty$-Yoneda, $R(\lim p) \simeq \lim R \circ p$. \qed
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Filtered colimit} is the $\infty$-categorical generalization of
+the classical \emph{filtered colimit} in $1$-categories (also called
+\emph{directed colimit}). The term \emph{filtered} comes from set
+theory and order theory: a partially ordered set is \emph{filtered} if
+every finite subset has an upper bound. The pattern abstracts to
+categories: a category $\mathcal{K}$ is \emph{filtered} if every finite
+diagram into $\mathcal{K}$ has a cocone. Filtered colimits are
+ubiquitous because they commute with finite limits — a property that
+fails for general colimits but is essential for many applications
+(e.g., the colimit of a directed system of modules is again a module).
+\end{nameorigin}
+
+\begin{nameorigin}
+\term{Sifted} (also: \emph{sift}) is from the verb ``to sift'' — to
+separate using a sieve. A category $\mathcal{K}$ is \emph{sifted} if
+the colimit-over-$\mathcal{K}$ functor preserves finite products
+(weaker than ``preserves finite limits,'' which would be filtered).
+Sifted colimits include filtered colimits and reflexive coequalizers;
+they are exactly the colimits that play well with finite-product
+structure, making them central to algebraic theories (Lurie HA Ch.~5).
+\end{nameorigin}
 
 \begin{definition}[Filtered $\infty$-category]
 \label{def:filtered-qcat}

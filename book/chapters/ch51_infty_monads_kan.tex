@@ -1,4 +1,5 @@
 % ch51_infty_monads_kan.tex — Volume IV Chapter 15
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$\infty$-Monads and $\infty$-Kan Extensions}
 
@@ -42,6 +43,16 @@ practical apparatus on this foundation.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Monad} (cross-ref Vol~I Ch.~8) is from Greek \emph{monos} (single,
+alone) — the categorical version of ``a single algebraic structure on
+the endo-functor monoid.'' The term was introduced by Saunders Mac Lane,
+displacing earlier names ``triple'' (Eilenberg-Moore) and ``standard
+construction'' (Godement). The $\infty$-monad is the same data lifted
+to the homotopy-coherent setting: a monoid in $\mathrm{End}(\mathcal{C})$
+where the monoid axioms hold up to coherent homotopy.
+\end{nameorigin}
 
 \begin{definition}[$\infty$-monad]
 \label{def:infty-monad}
@@ -110,6 +121,18 @@ recovers $T$ as $U_T F_T$.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+The \term{bar resolution} (cross-ref Ch.~37 bar construction) goes back
+to Eilenberg-MacLane's 1953 paper on the homology of cyclic groups. The
+vertical bars in the original notation $[a_1 | a_2 | \cdots | a_n]$
+gave the construction its name. In the monad setting, the bar resolution
+$\mathrm{Bar}_\bullet(L, T, x)$ is the simplicial-object version: the
+free $T$-algebra resolution of $x$ assembled into a single simplicial
+diagram. Lurie's $\infty$-monadicity criterion uses the bar resolution
+to characterize when an adjunction is monadic — generalizing Beck
+(1967) to the $\infty$-categorical setting.
+\end{nameorigin}
+
 \begin{definition}[Bar simplicial object]
 \label{def:bar-simplicial}
 For an $\infty$-adjunction $L \dashv R$ and an object $x \in \mathcal{C}$,
@@ -168,6 +191,19 @@ structured objects.''
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Kan extension} (cross-ref Vol~I Ch.~11, Vol~II Ch.~18, Vol~III
+Ch.~31) is named for \emph{Daniel Kan} again (his ubiquity in
+$\infty$-category theory's foundations is unsurpassed). Kan introduced
+the construction in 1958: given a functor $p : \mathcal{C} \to
+\mathcal{E}$ and another $F : \mathcal{C} \to \mathcal{D}$, the
+\term{left Kan extension} $\mathrm{Lan}_p F$ is the ``best''
+extension of $F$ along $p$ — the universal cocontinuous extension. The
+$\infty$-version preserves the universal property and adds the coherence
+data; the pointwise formula via comma categories carries over without
+change.
+\end{nameorigin}
 
 \begin{definition}[$\infty$-Kan extensions]
 \label{def:infty-kan}
@@ -240,6 +276,18 @@ The last equivalence is the density theorem. \qed
 \end{proof}
 
 \subsection{Codensity monads}
+
+\begin{nameorigin}
+\term{Codensity monad} comes from \emph{co-} (dual to) + \emph{density}
+(cross-ref Ch.~48). A functor $F : \mathcal{C} \to \mathcal{D}$ is
+\emph{dense} if its left Kan extension $\mathrm{Lan}_F F$ recovers the
+identity on $\mathcal{P}(\mathcal{C})$ (every object is a colimit of
+$F$-images). The \emph{codensity monad} $\mathrm{Ran}_F F$ is the
+right-Kan-extension analogue — the universal monad on $\mathcal{D}$ for
+which the unit measures the failure of $F$ to be dense. The terminology
+is due to \emph{Anders Kock} (1966), with the classical ultrafilter
+example traced to \emph{Manes} (1976).
+\end{nameorigin}
 
 \begin{definition}[Codensity monad]
 \label{def:codensity}

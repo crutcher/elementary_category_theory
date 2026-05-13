@@ -1,4 +1,5 @@
 % ch50_infty_adjunctions.tex — Volume IV Chapter 14
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$\infty$-Adjunctions}
 
@@ -49,6 +50,21 @@ the $\infty$-setting as in the $1$-setting.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Adjunction} (cross-ref Vol~I Ch.~7) is one of the foundational
+concepts of category theory, introduced by Kan (1958) under the
+name ``adjoint functors.'' The word \emph{adjoint} is from linear
+algebra (Hilbert space adjoint $T^*$: the unique operator satisfying
+$\langle Tx, y\rangle = \langle x, T^*y\rangle$). Kan's insight was
+that the categorical version of this pairing — a bijection
+$\mathcal{D}(L X, Y) \cong \mathcal{C}(X, R Y)$ — is so fundamental
+that it organizes a vast amount of mathematics. The $\infty$-version
+replaces the bijection by an equivalence of mapping spaces and adds an
+infinite tower of higher coherences. The terminology, the symbols
+$\dashv$ ``left adjoint to,'' and the unit/counit decomposition are
+all preserved from the classical case.
+\end{nameorigin}
 
 \begin{definition}[$\infty$-Adjunction: hom-equivalence form]
 \label{def:adjunction-hom}
@@ -202,6 +218,17 @@ derived algebraic geometry.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+The \term{Adjoint Functor Theorem} (AFT) appeared in Vol~II Ch.~23 in
+its $1$-categorical form (Freyd 1964): a functor between locally
+small categories has a left/right adjoint iff it preserves limits/colimits
+and satisfies a smallness ``solution-set'' condition. The
+$\infty$-version (Lurie HTT Ch.~5) replaces ``locally small'' with
+``presentable'' and ``solution-set'' with ``accessible.'' The historical
+lineage runs Freyd 1964 $\to$ Adámek-Rosický 1994 (presentable
+categories) $\to$ Lurie 2009 ($\infty$-version).
+\end{nameorigin}
 
 \begin{theorem}[$\infty$-Adjoint Functor Theorem: presentable case]
 \label{thm:aft-presentable}
