@@ -1,0 +1,333 @@
+% ch58_toward_dag.tex — Volume IV Chapter 22
+
+\chapter{Toward Derived Algebraic Geometry}
+
+\begin{overviewbox}
+\term{Derived algebraic geometry} (DAG) is the application of
+$\infty$-category theory to algebraic geometry: schemes, stacks, and
+moduli problems all promoted to coherent-homotopy versions over
+$\mathbb{E}_\infty$-rings or simplicial commutative rings. The result
+captures phenomena that classical algebraic geometry can only describe
+imperfectly — virtual fundamental classes, derived intersection
+numbers, deformation theory in characteristic-$p$ — and provides the
+right setting for modern moduli problems in physics and number theory.
+
+This chapter is a \emph{preview}. We define the basic objects (spectral
+schemes, derived schemes, formal moduli problems) and state the
+principal theorems, but full development is beyond the scope of
+Volume~IV — these would be the content of an entire volume of their
+own, modeled on Lurie's \emph{Higher Algebra} and \emph{Higher Topos
+Theory}.
+
+The chapter introduces:
+\begin{itemize}
+  \item Spectral and derived schemes via $\mathbb{E}_\infty$-rings (resp.\
+        simplicial commutative rings).
+  \item The cotangent complex.
+  \item Formal moduli problems and Lurie's classification theorem
+        (moduli $\sim$ $L_\infty$-algebras).
+  \item Stacks: $\infty$-categorical generalization of sheaves of
+        groupoids.
+  \item Reading recommendations: Toën–Vezzosi, Lurie's HAG II, recent
+        survey papers.
+\end{itemize}
+
+After Chapter~58, the reader should be able to open Toën–Vezzosi or the
+relevant chapters of HA and follow.
+\end{overviewbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Spectral and Derived Schemes}
+\label{sec:spectral-derived}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Spectral and derived rings]
+\label{def:spectral-rings}
+There are two principal approaches to the ``derived'' generalization of
+commutative rings:
+\begin{itemize}
+  \item \term{Spectral} approach: commutative rings replaced by
+        \term{$\mathbb{E}_\infty$-ring spectra}, the category $\mathrm{CAlg}(\mathrm{Sp})$.
+        Foundational example: $\mathbb{S}$, the sphere spectrum;
+        $H\mathbb{Z}$ is the Eilenberg–MacLane $\mathbb{E}_\infty$-ring
+        of integers.
+  \item \term{Derived} approach: commutative rings replaced by
+        \term{simplicial commutative rings} $\mathrm{sCRing}$, the
+        opposite of derived affine schemes.
+\end{itemize}
+Over $\mathbb{Q}$, the two approaches agree; for arithmetic applications
+(positive characteristic), spectral methods are preferred.
+\end{definition}
+
+\begin{definition}[Spectral scheme]
+\label{def:spectral-scheme}
+A \term{spectral scheme} is an $\infty$-category-valued sheaf $\mathcal{X}$
+on the (small) Zariski site of $\mathbb{E}_\infty$-rings — equivalently,
+an object of $\mathrm{Sh}(\mathrm{CAlg}^{\mathrm{op}})$ valued in
+$\mathcal{S}$ and locally affine.
+
+A \term{derived scheme} is the simplicial-commutative-ring analogue.
+\end{definition}
+
+\begin{example_thm}[$\mathrm{Spec}\,\mathbb{S}$]
+\label{ex:spec-sphere}
+$\mathrm{Spec}\,\mathbb{S}$ is the spectral scheme associated to the
+sphere spectrum. It is the ``unit'' object: every spectral scheme has a
+unique morphism to $\mathrm{Spec}\,\mathbb{S}$.
+\end{example_thm}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Cotangent Complex}
+\label{sec:cotangent}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Cotangent complex]
+\label{def:cotangent}
+For an $\mathbb{E}_\infty$-ring map $A \to B$, the \term{cotangent complex}
+$L_{B/A} \in \mathrm{Mod}_B$ is the left derived functor of $\Omega^1$
+(Kähler differentials), evaluated in the $\infty$-categorical setting:
+\begin{equation*}
+  L_{B/A} \;=\; \mathbb{L}_{B/A}(\mathbb{L} \Omega^1).
+\end{equation*}
+$L_{B/A}$ controls deformation theory and obstruction theory for the
+morphism $A \to B$.
+\end{definition}
+
+\begin{theorem}[Properties of the cotangent complex]
+\label{thm:cotangent-properties}
+\begin{itemize}
+  \item For $A \to B$ a smooth morphism of ordinary rings, $L_{B/A} =
+        \Omega^1_{B/A}$ concentrated in degree zero (classical limit).
+  \item For $A \to B$ a closed immersion of derived schemes,
+        $L_{B/A} = $ conormal complex shifted by one.
+  \item Fundamental triangle: $L_{C/A} \to L_{C/B} \to L_{B/A}[1]$ for
+        composable $A \to B \to C$.
+\end{itemize}
+\end{theorem}
+
+\begin{remark}[Why derived?]
+The classical Kähler differentials are only well-defined for smooth
+morphisms; for general morphisms, derived information is required to
+capture the deformation theory. The cotangent complex is the canonical
+``derived'' answer.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Formal Moduli Problems}
+\label{sec:moduli}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[Formal moduli problem]
+\label{def:formal-moduli}
+A \term{formal moduli problem} over a field $k$ is a functor
+$F : \mathrm{Art}_k^{\mathrm{aug}} \to \mathcal{S}_*$ from augmented
+Artin local $k$-algebras (in derived sense) to pointed spaces, such that:
+\begin{enumerate}
+  \item $F(k) = \mathrm{pt}$ (the point).
+  \item $F$ preserves certain pullback squares (a Schlessinger-type condition).
+\end{enumerate}
+\end{definition}
+
+\begin{theorem}[Lurie's classification of formal moduli problems]
+\label{thm:lurie-fmp}
+For a field $k$ of characteristic zero, the $\infty$-category of formal
+moduli problems over $k$ is equivalent to the $\infty$-category of
+$L_\infty$-algebras over $k$:
+\begin{equation*}
+  \mathrm{FMP}_k \;\simeq\; \mathrm{Alg}_{\mathrm{Lie}_\infty}(\mathrm{Mod}_k).
+\end{equation*}
+
+In positive characteristic, the corresponding theorem replaces
+$L_\infty$-algebras with \term{partition Lie algebras}.
+\end{theorem}
+
+\begin{remark}[Maurer–Cartan and moduli]
+By Theorem~\ref{thm:lurie-fmp}, solutions to a formal moduli problem
+$F$ over a Artin ring $A$ correspond to Maurer–Cartan elements of the
+associated $L_\infty$-algebra (Chapter~57). Deformation theory is thus
+controlled by $L_\infty$-algebras.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Stacks}
+\label{sec:stacks}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formalizing}
+
+\begin{definition}[$\infty$-stack]
+\label{def:infty-stack}
+For a site $(\mathcal{C}, J)$ — a Grothendieck topology on a small
+$\infty$-category — an \term{$\infty$-stack} is a sheaf
+$F : \mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ satisfying the descent
+condition: for every covering family $\{U_i \to U\}_J$,
+\begin{equation*}
+  F(U) \;\simeq\; \lim \bigl( \prod_i F(U_i) \rightrightarrows \prod_{ij} F(U_{ij}) \,\to\,\cdots \bigr).
+\end{equation*}
+The $\infty$-category of $\infty$-stacks is $\mathrm{Sh}^\infty(\mathcal{C}, J)$.
+\end{definition}
+
+\begin{example_thm}[Foundational $\infty$-stacks]
+\label{ex:infty-stacks}
+\textbf{$B G$ as an $\infty$-stack:} the classifying $\infty$-stack of a
+group scheme $G$, with $BG(R) = \mathrm{Map}_*(\mathrm{Spec}\, R, BG)$
+the $\infty$-groupoid of $G$-torsors on $\mathrm{Spec}\, R$.
+
+\textbf{Moduli of elliptic curves $\mathcal{M}_{\mathrm{ell}}$:} an
+$\infty$-stack whose points classify elliptic curves up to isomorphism;
+the derived enhancement records automorphism data.
+
+\textbf{$\mathrm{Spec}\,\mathbb{S}$:} the affine $\infty$-stack of the
+sphere spectrum, the universal example.
+\end{example_thm}
+
+\begin{remark}[Why $\infty$-stacks?]
+Classical stacks (Deligne–Mumford, Artin) are $1$-truncated $\infty$-stacks
+— sheaves of groupoids rather than of spaces. $\infty$-stacks add the
+ability to encode \emph{higher automorphisms}, essential when working
+with derived categories, perfect complexes, or moduli of higher-categorical
+structures.
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Reading Recommendations}
+\label{sec:dag-reading}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Formally}
+
+\begin{remark}[Where to go from here]
+For derived algebraic geometry proper, the canonical references are:
+\begin{itemize}
+  \item Toën–Vezzosi, \emph{Homotopical Algebraic Geometry} (HAG I, II)
+        — the foundational text developing DAG over simplicial commutative
+        rings.
+  \item Lurie, \emph{Higher Algebra} (Chapters 7–8) — DAG over
+        $\mathbb{E}_\infty$-rings.
+  \item Lurie, \emph{Spectral Algebraic Geometry} (online book) — the
+        spectral approach in dedicated form.
+  \item Khan, \emph{Lectures on derived and spectral algebraic geometry}
+        — modern survey.
+\end{itemize}
+
+Key applications and current research:
+\begin{itemize}
+  \item Gaitsgory–Rozenblyum, \emph{A study in derived algebraic geometry}
+        — derived Langlands.
+  \item Pantev–Toën–Vaquié–Vezzosi, \emph{Shifted symplectic structures}
+        — derived symplectic geometry.
+  \item Recent work on $p$-adic Hodge theory, prismatic cohomology,
+        condensed mathematics — all build on derived foundations.
+\end{itemize}
+\end{remark}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Exercises}
+\label{sec:dag-exercises}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{exercisesbox}
+\begin{qa}
+\qaitem{What is the goal of derived algebraic geometry?}{To extend algebraic geometry to allow $\mathbb{E}_\infty$-ring spectra (or simplicial commutative rings) as ``coordinate rings,'' capturing derived intersection numbers and higher coherence data.}
+\qaitem{Two approaches?}{Spectral (over $\mathbb{E}_\infty$-rings); derived (over simplicial commutative rings). Over $\mathbb{Q}$, equivalent.}
+\qaitem{What is $\mathrm{CAlg}(\mathrm{Sp})$?}{The $\infty$-category of $\mathbb{E}_\infty$-ring spectra. The home for spectral DAG.}
+\qaitem{What is the cotangent complex?}{$L_{B/A} = \mathbb{L} \Omega^1$ for an $\mathbb{E}_\infty$-ring map $A \to B$. Controls deformation theory.}
+\qaitem{Smooth case for the cotangent complex?}{For a smooth ordinary morphism, $L_{B/A} = \Omega^1_{B/A}$ concentrated in degree zero.}
+\qaitem{State the fundamental triangle.}{$L_{C/A} \to L_{C/B} \to L_{B/A}[1]$ for composable $A \to B \to C$, in $\mathrm{Mod}_C$.}
+\qaitem{What's a formal moduli problem?}{A functor $F : \mathrm{Art}_k^{\mathrm{aug}} \to \mathcal{S}_*$ on augmented Artin local $k$-algebras with $F(k) = \mathrm{pt}$ and certain pullback preservation.}
+\qaitem{State Lurie's classification.}{$\mathrm{FMP}_k \simeq \mathrm{Alg}_{\mathrm{Lie}_\infty}(\mathrm{Mod}_k)$ in characteristic zero. Formal moduli $=$ $L_\infty$-algebras.}
+\qaitem{Why $L_\infty$?}{Because the natural infinitesimal structure of a derived deformation is governed by a tangent complex with an $L_\infty$-structure (the higher analogue of a Lie algebra of vector fields).}
+\qaitem{What's an $\infty$-stack?}{A sheaf $\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$ on a site, satisfying $\infty$-categorical descent: gluing along covers is a homotopy limit.}
+\qaitem{What's $BG$?}{Classifying $\infty$-stack of a group scheme $G$: $BG(R) = $ $G$-torsors on $\mathrm{Spec}\, R$, as an $\infty$-groupoid.}
+\qaitem{What's the moduli stack of elliptic curves?}{$\mathcal{M}_{\mathrm{ell}}$: $\infty$-stack whose points classify elliptic curves. Derived enhancement captures automorphism groups and higher structure.}
+\qaitem{Why $\infty$-stacks rather than $1$-stacks?}{Because higher automorphisms (e.g., perfect complexes, derived categories of modules) require the full $\infty$-categorical data; classical stacks lose information.}
+\qaitem{What's the moduli of perfect complexes?}{An $\infty$-stack $\mathrm{Perf}$ whose points are perfect complexes on a scheme. Classical version is a $2$-stack (objects up to automorphisms up to automorphisms of automorphisms); $\infty$-stack captures all higher.}
+\qaitem{What's the role of derived intersections?}{Derived intersection of subschemes is naturally a derived scheme; the cotangent complex encodes virtual intersection numbers, generalizing classical excess intersection formulas.}
+\qaitem{What's prismatic cohomology?}{A modern $p$-adic cohomology theory introduced by Bhatt–Scholze, building on derived algebraic geometry to handle integral $p$-adic phenomena.}
+\qaitem{What's condensed mathematics?}{Scholze and Clausen's framework for analytical geometry using a derived/$\infty$-categorical foundation for topological spaces and rings.}
+\qaitem{What's shifted symplectic geometry?}{Pantev–Toën–Vaquié–Vezzosi's extension of symplectic geometry to derived stacks; shifted symplectic forms generalize the classical symplectic form.}
+\qaitem{Is DAG developed in this chapter?}{No — only previewed. Full development requires its own volume; see Lurie, Toën–Vezzosi, Khan.}
+\qaitem{What does this chapter prepare the reader for?}{Toën–Vezzosi's HAG II, Lurie's Spectral Algebraic Geometry, current literature on derived/spectral geometry.}
+\qaitem{What's the next chapter?}{Ch~59: Toward Homotopy Type Theory. The intersection of $\infty$-category theory and dependent type theory.}
+\qaitem{Where do DAG and HoTT meet?}{In Lurie's vision of $\infty$-topoi as classifying $\infty$-toposes for homotopy types; the univalence axiom of HoTT corresponds to the Yoneda philosophy at the level of higher categories.}
+\end{qa}
+\end{exercisesbox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Chapter Summary}
+\addcontentsline{toc}{section}{Chapter Summary}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{summarybox}
+\textbf{Two approaches.}\quad Spectral (over $\mathbb{E}_\infty$-rings)
+vs.\ derived (over simplicial commutative rings); equivalent over
+$\mathbb{Q}$.
+
+\textbf{Spectral/derived schemes.}\quad $\infty$-stack-valued sheaves on
+the Zariski/étale site of $\mathbb{E}_\infty$-rings or sCRings; locally
+affine.
+
+\textbf{Cotangent complex.}\quad $L_{B/A}$ controls deformation theory.
+Smooth limit: $\Omega^1$; closed immersion: shifted conormal. Fundamental
+triangle for compositions.
+
+\textbf{Formal moduli (Lurie).}\quad
+$\mathrm{FMP}_k \simeq \mathrm{Alg}_{\mathrm{Lie}_\infty}(\mathrm{Mod}_k)$
+in char 0; partition Lie algebras in char $p$. Deformations are
+Maurer–Cartan elements.
+
+\textbf{$\infty$-stacks.}\quad Sheaves on a site valued in $\mathcal{S}$,
+with $\infty$-categorical descent. Generalize classical stacks by
+encoding higher automorphisms.
+
+\textbf{Preview only.}\quad Full DAG is the content of its own volume.
+Reading: Toën–Vezzosi, Lurie's HA/SAG, Khan.
+\end{summarybox}
+
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section*{Formal Restatement}
+\addcontentsline{toc}{section}{Formal Restatement}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{formalrestatement}
+\textbf{Derived rings.}\quad
+$\mathrm{CAlg}(\mathrm{Sp})$ (spectral) or $\mathrm{sCRing}$ (derived).
+
+\medskip
+\textbf{Spectral/derived scheme.}\quad
+$\infty$-stack on the small Zariski site of $\mathbb{E}_\infty$-rings or
+sCRings, locally affine.
+
+\medskip
+\textbf{Cotangent complex.}\quad $L_{B/A} = \mathbb{L} \Omega^1$ for
+$A \to B$ in $\mathrm{CAlg}(\mathrm{Sp})$. Smooth: $= \Omega^1_{B/A}[0]$.
+Closed immersion: shifted conormal complex.
+
+\medskip
+\textbf{Formal moduli problem.}\quad
+$F : \mathrm{Art}_k^{\mathrm{aug}} \to \mathcal{S}_*$, $F(k) = \mathrm{pt}$,
+Schlessinger pullback.
+
+\medskip
+\textbf{Lurie's classification.}\quad
+$\mathrm{FMP}_k \simeq \mathrm{Alg}_{\mathrm{Lie}_\infty}(\mathrm{Mod}_k)$ (char 0);
+$\mathrm{FMP}_k \simeq \mathrm{PartLie}_k$ (char $p$).
+
+\medskip
+\textbf{$\infty$-stack.}\quad Sheaf $\mathcal{C}^{\mathrm{op}} \to \mathcal{S}$
+on a site satisfying $\infty$-categorical descent.
+\end{formalrestatement}
