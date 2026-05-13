@@ -1,4 +1,5 @@
 % ch57_ainf_linf.tex — Volume IV Chapter 21
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$A_\infty$- and $L_\infty$-Algebras}
 
@@ -41,6 +42,20 @@ of Volume~IV.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{$A_\infty$-algebra} was introduced by \emph{Jim Stasheff} in his
+1963 thesis (Princeton, advisor: John Milnor). The name reads ``A
+infinity algebra'' or ``A-sub-infinity algebra'' and stands for
+\emph{associative up to coherent homotopy of all orders} (the
+infinitely many higher coherences encoded in the operations $m_n$).
+Stasheff's original motivation was to characterize the homotopy
+associativity of H-spaces; the operadic interpretation as algebras over
+the topological associahedra-operad came later. The notation has
+spawned a whole family: $A_\infty$ (associative), $L_\infty$ (Lie),
+$C_\infty$ (commutative), $E_\infty$ (Stasheff's original
+``everything''-symmetric).
+\end{nameorigin}
 
 \begin{definition}[$A_\infty$-algebra]
 \label{def:Ainf-algebra}
@@ -93,6 +108,19 @@ is exactly a homotopy associative algebra in $\mathbf{Ch}(k)$.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+The \term{Stasheff associahedra} $K_n$ are convex polytopes named for
+\emph{Jim Stasheff}, who introduced them in his 1963 PhD thesis as
+the topological structure encoding higher associativity. The $n$-th
+associahedron $K_n$ is a polytope of dimension $n - 2$ whose vertices
+correspond to the $C_{n-1}$ Catalan-number-many parenthesizations of an
+$n$-fold product. Tamari (1962) studied the combinatorics of these
+polytopes independently — the \emph{Tamari lattice} of bracketings is
+the $1$-skeleton of an associahedron. The associahedra organize the
+higher coherence data of $A_\infty$-algebras: $K_4 = $ Mac Lane's
+pentagon, $K_5 = $ a $3$-dimensional polytope, etc.
+\end{nameorigin}
+
 \begin{definition}[Associahedron $K_n$]
 \label{def:associahedron}
 The \term{$n$-th Stasheff associahedron} $K_n$ ($n \geq 2$) is a convex
@@ -142,6 +170,17 @@ encode all higher coherences.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{$L_\infty$-algebra} (``L infinity'') was introduced by
+\emph{Tom Lada} and \emph{Jim Stasheff} (1992), generalizing
+$A_\infty$-algebras to the \emph{Lie} setting: a graded vector space
+with symmetric brackets $l_n$ satisfying a generalized Jacobi identity
+up to coherent homotopy. $L_\infty$-algebras play the central role in
+derived deformation theory (every formal moduli problem is governed by
+an $L_\infty$-algebra, Lurie HA / Pridham). The parallel naming with
+$A_\infty$ is intentional; the two are Koszul-dual operads.
+\end{nameorigin}
 
 \begin{definition}[$L_\infty$-algebra]
 \label{def:Linf-algebra}
@@ -204,6 +243,17 @@ $B \dashv \Omega$ is an adjunction; for connected $A_\infty$-algebras,
 $\Omega B A \xrightarrow{\sim} A$ is a quasi-isomorphism.
 \end{definition}
 
+\begin{nameorigin}
+\term{Koszul duality} is named for \emph{Jean-Louis Koszul} (1921--2018,
+French mathematician). Koszul (1950) studied the homology of Lie
+algebras via a complex now called the \emph{Koszul complex}, exhibiting
+a remarkable duality between associative and Lie structures at the
+level of homology. The modern operadic formulation —
+$\mathrm{Assoc}^! \simeq \mathrm{Lie}$ — was made precise by Ginzburg
+and Kapranov (1994); the chain-level bar/cobar implementation is due to
+Quillen, Adams, and others stretching back to the 1960s.
+\end{nameorigin}
+
 \begin{theorem}[Koszul duality, $A_\infty \leftrightarrow L_\infty^{\mathrm{coalg}}$]
 \label{thm:koszul-duality-Ainf-Linf}
 There is a Quillen-equivalent pair of adjoint functors connecting
@@ -214,6 +264,18 @@ associative and Lie operads:
   \mathrm{Assoc}^! \simeq \mathrm{Lie}, \quad \mathrm{Lie}^! \simeq \mathrm{Assoc}.
 \end{equation*}
 \end{theorem}
+
+\begin{nameorigin}
+\term{Maurer-Cartan} equations are named for \emph{Ludwig Maurer}
+(1859--1927, German mathematician) and \emph{Élie Cartan}
+(1869--1951, French mathematician). The classical
+Maurer-Cartan equation $d\omega + \tfrac12 [\omega, \omega] = 0$ for
+a Lie-algebra-valued $1$-form on a Lie group dates to the late 19th
+century (Maurer 1879, Cartan 1880s) and is central to differential
+geometry. The $L_\infty$-version $\sum_n \tfrac1{n!} l_n(x^{\otimes n}) = 0$
+extends the classical equation to infinitely many brackets — exactly
+the data of a solution to a formal moduli problem (Lurie HA Ch.~1).
+\end{nameorigin}
 
 \begin{remark}[Maurer–Cartan in deformation theory]
 $L_\infty$-algebras govern derived deformation theory: a deformation

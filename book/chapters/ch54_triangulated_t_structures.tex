@@ -1,4 +1,5 @@
 % ch54_triangulated_t_structures.tex — Volume IV Chapter 18
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Triangulated Categories and t-Structures}
 
@@ -45,6 +46,29 @@ $\infty$-categorical home for homological algebra and its applications.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Triangulated category} was introduced by \emph{Jean-Louis Verdier}
+(1935--1989) in his 1967 PhD thesis (advisor: Grothendieck). The name
+comes from \emph{distinguished triangles} — sequences $a \to b \to c
+\to \Sigma a$ that play the role in triangulated categories that exact
+sequences play in abelian categories. The triangle is a tightening of
+the long exact sequence $\cdots \to a \to b \to c \to \Sigma a \to \cdots$
+into a single rotating triple. Verdier's axiomatization captures the
+structure of derived categories of abelian categories abstractly; the
+$\infty$-categorical lift via stable $\infty$-cats was Lurie (HA 2017).
+\end{nameorigin}
+
+\begin{nameorigin}
+The \term{octahedron axiom} (TR4) is the most distinctive — and most
+delicate — axiom of triangulated categories. The name comes from the
+geometric shape of the diagram: given two composable morphisms $a \to b \to c$,
+the resulting four distinguished triangles fit into an octahedron with
+eight triangular faces. The axiom expresses a compatibility between the
+three composable cones. Verdier's original 1967 formulation; many
+authors have rewritten the axiom over the years (e.g., Beilinson-Bernstein-Deligne
+introduced a cleaner $9$-diagram version).
+\end{nameorigin}
 
 \begin{definition}[Triangulated category]
 \label{def:triangulated}
@@ -127,6 +151,20 @@ $\mathcal{D}^\infty(\mathcal{A})$.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{t-structure} was introduced by \emph{Beilinson, Bernstein, and
+Deligne} (\emph{Faisceaux Pervers}, 1982) in their development of
+perverse sheaves. The letter ``t'' originally stood for \emph{topology}
+— BBD's t-structures generalize the Postnikov truncation of topological
+spaces, where the bounded-above and bounded-below subcategories
+correspond to ``everything above'' and ``everything below'' a given
+degree. The \emph{heart} of a t-structure (the intersection of the two
+parts) is an abelian category — a remarkable recovery of abelian
+structure from triangulated data. The terminology has stuck despite
+the more modern view that t-structures generalize \emph{many} kinds of
+truncations (Postnikov, étale, perverse, etc.).
+\end{nameorigin}
+
 \begin{definition}[t-structure]
 \label{def:t-structure}
 A \term{t-structure} on a stable $\infty$-category $\mathcal{C}$ is a
@@ -152,6 +190,16 @@ $\mathcal{C}_{\geq 0}$ \sayit{``the connective part of $\mathcal{C}$''} or
 \sayit{``coconnective''}. $\tau_{\geq 0}, \tau_{\leq 0}$ are
 \term{truncation functors}.
 \end{howtosay}
+
+\begin{nameorigin}
+The \term{heart} $\mathcal{C}^\heartsuit$ of a t-structure is the
+abelian category at the ``center'' of the triangulated structure — the
+intersection of the connective and coconnective parts. The terminology
+is BBD (1982): the heart is the ``heart'' of the structure, the central
+part from which everything else can be reconstructed via cohomology
+functors. The symbol $\heartsuit$ (heart suit) is universal across the
+literature.
+\end{nameorigin}
 
 \begin{theorem}[Heart of a t-structure]
 \label{thm:heart}

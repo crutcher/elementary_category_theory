@@ -1,4 +1,5 @@
 % ch55_infty_operads.tex — Volume IV Chapter 19
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{$\infty$-Operads}
 
@@ -43,6 +44,18 @@ associahedra), and $L_\infty$-algebras (the Lie analogue).
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Operad} was coined by \emph{Peter May} (1972) as a portmanteau of
+\emph{operations} + \emph{monad}: an operad generalizes the structure of
+a monoid (one binary operation) to handle \emph{operations of multiple
+arities} simultaneously (binary, ternary, $n$-ary). May's original
+motivation was to formalize the structure of iterated loop spaces, but
+operads have since become a unifying language for algebraic structures
+across mathematics. The classical (set-valued) operad has $\Sigma_n$-actions
+on each $\mathcal{O}(n)$ and substitution maps; the $\infty$-categorical
+version (Lurie) packages the same structure as a coCartesian fibration.
+\end{nameorigin}
 
 \begin{definition}[Operad in a symmetric monoidal category]
 \label{def:operad-classical}
@@ -97,6 +110,18 @@ Lie algebras.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{$\mathrm{Fin}_*$} is the category of pointed finite sets,
+introduced by \emph{Graeme Segal} (1974) in his work on classifying
+spaces of $\Gamma$-spaces. Segal's insight: a symmetric monoidal
+category can be encoded as a functor $\mathrm{Fin}_* \to \mathcal{C}$
+satisfying a coherence condition (the ``Segal condition''). Lurie's
+$\infty$-operad framework lifts this to the coCartesian-fibration
+setting. The basepoint $*$ in each $\langle n \rangle$ represents the
+``output'' or ``trivial slot'' in an operation; non-basepoint elements
+are ``inputs.''
+\end{nameorigin}
 
 \begin{definition}[$\mathrm{Fin}_*$]
 \label{def:fin-star}

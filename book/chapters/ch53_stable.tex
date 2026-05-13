@@ -1,4 +1,5 @@
 % ch53_stable.tex — Volume IV Chapter 17
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Stable $\infty$-Categories}
 
@@ -40,6 +41,15 @@ product, and serves as the universal home for stable phenomena.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Pointed} (as in ``pointed $\infty$-category'') is from algebraic
+topology, where a \emph{pointed space} has a distinguished basepoint.
+A pointed $\infty$-category has a distinguished \emph{zero object}
+(both initial and terminal). The zero object plays the role of the
+basepoint at the categorical level — and is exactly what's needed to
+define fibre/cofibre constructions.
+\end{nameorigin}
+
 \begin{definition}[Pointed $\infty$-category]
 \label{def:pointed-qcat}
 An $\infty$-category $\mathcal{C}$ is \term{pointed} if it admits a
@@ -77,6 +87,19 @@ pointify, and is left adjoint to the forgetful $\mathcal{S}_* \to \mathcal{S}$.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Fibre} and \term{cofibre} sequences come from algebraic topology.
+A \emph{fibre sequence} $F \to E \to B$ is the long-exact-sequence
+data of a fibration; the fibre $F$ is the preimage of the basepoint.
+A \emph{cofibre sequence} is the dual: $A \to X \to X/A$ for a cofibration
+$A \hookrightarrow X$, with $X/A$ the quotient (cofibre). The
+$\infty$-categorical versions are pullback/pushout against the zero
+object: $\mathrm{fib}(f) = 0 \times_y x$, $\mathrm{cofib}(f) = 0
+\sqcup_x y$. The duality between fibre and cofibre is what makes
+\emph{stable} $\infty$-categories interesting: stability means the two
+notions coincide.
+\end{nameorigin}
 
 \begin{definition}[Fibre and cofibre]
 \label{def:fibre-cofibre}
@@ -122,6 +145,20 @@ adjunction.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Stable} comes from \emph{stable homotopy theory}: a phenomenon in
+algebraic topology is \emph{stable} if it persists after sufficient
+iterations of suspension $\Sigma$ (and is hence detected by spectra
+rather than spaces). For example, $\pi_n(S^k)$ are unstable in general
+but stabilize as $k \to \infty$ to the stable homotopy groups of spheres.
+The categorical version: an $\infty$-category $\mathcal{C}$ is
+\emph{stable} if $\Sigma : \mathcal{C} \to \mathcal{C}$ is an
+equivalence — i.e., suspension has reached a fixed point, and homotopy
+is ``stabilized.'' The $\infty$-category of spectra $\mathrm{Sp}$ is
+the universal stable $\infty$-category, just as it was the universal
+stable phenomenon in classical algebraic topology.
+\end{nameorigin}
+
 \begin{definition}[Stable $\infty$-category]
 \label{def:stable-qcat}
 An $\infty$-category $\mathcal{C}$ is \term{stable} if it is pointed,
@@ -145,6 +182,17 @@ For a pointed cocomplete $\mathcal{C}$, the following are equivalent:
         which is also a long cofibre sequence.
 \end{enumerate}
 \end{theorem}
+
+\begin{nameorigin}
+\term{Spectra} (singular: \emph{spectrum}) was introduced by
+\emph{Edwin Spanier} and \emph{J.H.C.\ Whitehead} (1953) — a
+\emph{spectrum} in the topological sense is a sequence of pointed
+spaces $\{E_n\}$ with structure maps $\Sigma E_n \to E_{n+1}$. The
+name comes from the spectral-sequence machinery of algebraic topology,
+which spectra naturally produce. The modern $\infty$-category
+$\mathrm{Sp}$ is the homotopy-coherent version of this concept, with
+$\mathbb{S}$ the sphere spectrum being the unit object.
+\end{nameorigin}
 
 \begin{example_thm}[Spectra]
 \label{ex:spectra}
