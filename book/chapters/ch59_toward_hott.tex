@@ -1,4 +1,5 @@
 % ch59_toward_hott.tex — Volume IV Chapter 23
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Toward Homotopy Type Theory}
 
@@ -58,6 +59,19 @@ These generalize $A \to B$ (when $B$ is constant) and $A \times B$
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Type theory} dates to \emph{Bertrand Russell}'s 1903 attempt to
+resolve set-theoretic paradoxes by stratifying mathematical objects
+into a hierarchy of types. The modern computational version is
+\emph{Alonzo Church}'s simply-typed lambda calculus (1940); the
+\emph{dependent} extension is due to \emph{Per Martin-Löf} (1972),
+adding types that depend on terms. The Curry-Howard-Lambek correspondence
+(see Vol~I Ch.~46 / Vol~V) identifies type-theoretic proofs with
+categorical morphisms, with dependent types corresponding to indexed
+products/coproducts. The $\infty$-categorical Martin-Löf type theory
+(Univalent Foundations, HoTT) is the modern synthesis.
+\end{nameorigin}
+
 \begin{definition}[Dependent type theory, informally]
 \label{def:dtt}
 A \term{dependent type theory} consists of:
@@ -97,6 +111,17 @@ adjoints.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Identity type} was introduced by \emph{Per Martin-Löf} (1972) as
+part of his intuitionistic type theory. The classical view: $a =_A b$
+is a type whose inhabitants are \emph{proofs of equality} between $a$
+and $b$. The radical move of HoTT (Awodey-Warren 2009, Voevodsky $\sim$
+2010): take seriously the structure of identity types as
+\emph{$\infty$-groupoids}. The path interpretation — $a = b$ is the
+mapping space $\mathrm{Path}(a, b)$ — connects type theory to homotopy
+theory in a way that has reshaped foundations.
+\end{nameorigin}
 
 \begin{definition}[Identity type]
 \label{def:identity-type}
@@ -139,6 +164,17 @@ has both a left and a right homotopy inverse.
 contractible, equivalent to ``invertible up to coherent homotopy.'')
 \end{definition}
 
+\begin{nameorigin}
+The \term{univalence axiom} was introduced by \emph{Vladimir Voevodsky}
+(2010) as part of his \emph{Univalent Foundations} program. Voevodsky
+(1966--2017) was a Fields Medalist (2002) primarily known for motivic
+cohomology, and in his final decade turned to foundations of mathematics
+in HoTT. The univalence axiom — that equivalent types are equal — is
+the formal expression of the structural identity principle: ``isomorphic
+structures should be treated as identical.'' The HoTT Book (Univalent
+Foundations Project 2013) is the canonical reference.
+\end{nameorigin}
+
 \begin{theorem}[Univalence axiom, Voevodsky]
 \label{thm:univalence}
 For all types $A, B : \mathcal{U}$, the canonical map
@@ -177,6 +213,17 @@ but follows from univalence. This is one of the deep payoffs.
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{$\infty$-topos} extends \emph{Grothendieck topos} (1957--1963) to
+the homotopy-coherent setting. A classical Grothendieck topos is a
+category of sheaves on a site; an $\infty$-topos is a category of
+$\infty$-sheaves on an $\infty$-site, with the sheaf condition phrased
+in $\infty$-categorical descent. The development is largely due to
+\emph{Lurie} (HTT Ch.~6), building on \emph{Charles Rezk}, \emph{Bertrand
+Toën}, and others. The semantic claim: $\infty$-toposes are exactly
+the categories of mathematical structures definable in HoTT.
+\end{nameorigin}
 
 \begin{definition}[$\infty$-topos]
 \label{def:infty-topos}

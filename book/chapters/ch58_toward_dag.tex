@@ -1,4 +1,5 @@
 % ch58_toward_dag.tex — Volume IV Chapter 22
+% Retrofitted with full Vol I-III pedagogy: cycle stages, etymology, dialogs.
 
 \chapter{Toward Derived Algebraic Geometry}
 
@@ -44,6 +45,19 @@ relevant chapters of HA and follow.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+\term{Derived algebraic geometry} (DAG) was developed in two parallel
+streams: \emph{Bertrand Toën} and \emph{Gabriele Vezzosi} ($\sim$2002--2008,
+``Homotopical Algebraic Geometry I, II'') working over simplicial
+commutative rings, and \emph{Jacob Lurie} (HTT 2009, HA 2017, SAG ongoing)
+working over $\mathbb{E}_\infty$-ring spectra. Over $\mathbb{Q}$ the two
+streams agree; in positive characteristic the spectral approach has
+better behavior. The ``derived'' modifier signals that the framework
+naturally handles derived intersections, virtual classes, and the
+deformation-theoretic phenomena that classical algebraic geometry can
+only approximate.
+\end{nameorigin}
+
 \begin{definition}[Spectral and derived rings]
 \label{def:spectral-rings}
 There are two principal approaches to the ``derived'' generalization of
@@ -87,6 +101,17 @@ unique morphism to $\mathrm{Spec}\,\mathbb{S}$.
 
 \subsection{Formalizing}
 
+\begin{nameorigin}
+The \term{cotangent complex} was introduced by \emph{Daniel Quillen}
+(1970) and developed extensively by \emph{Luc Illusie} (1971,
+\emph{Complexe Cotangent et Déformations}). The motivation was
+algebraic-geometric deformation theory: the cotangent complex
+$\mathbb{L}_{B/A}$ classifies infinitesimal deformations and obstructions
+of a ring morphism $A \to B$. The name \emph{cotangent} reflects that
+$\Omega^1_{B/A}$ (Kähler differentials) is the cotangent module — and
+$\mathbb{L}_{B/A}$ is its derived analogue.
+\end{nameorigin}
+
 \begin{definition}[Cotangent complex]
 \label{def:cotangent}
 For an $\mathbb{E}_\infty$-ring map $A \to B$, the \term{cotangent complex}
@@ -125,6 +150,18 @@ capture the deformation theory. The cotangent complex is the canonical
 % ═══════════════════════════════════════════════════════════════════════════
 
 \subsection{Formalizing}
+
+\begin{nameorigin}
+\term{Formal moduli problem} terminology dates to \emph{Michael
+Schlessinger}'s 1968 paper ``Functors of Artin Rings,'' which set up
+the formal framework for studying infinitesimal deformations.
+``Formal'' because the problem is studied over \emph{formal} (=
+infinitesimal) artin rings, capturing the local-to-first-order behavior
+of moduli problems. Lurie's classification theorem (FMPs equivalent to
+$L_\infty$-algebras in char 0) is the modern higher-categorical
+generalization, with the ``moduli space'' replaced by the underlying
+$L_\infty$-algebra (Maurer-Cartan elements as deformations).
+\end{nameorigin}
 
 \begin{definition}[Formal moduli problem]
 \label{def:formal-moduli}
